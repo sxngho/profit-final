@@ -1,7 +1,6 @@
 <template>
   <div class="MainPage">
     <Banner />
-    <ProfileRegister />
     <Filters />
     <PortfolioList />
     <!-- <button class="mainMoreBtn">MORE</button> -->
