@@ -780,5 +780,18 @@ export default {
         //console.log(docSnapshots.data(), '맞냐??')
         return docSnapshots.data();
       });
-  }
+  },
+
+  // Function :: 모든 웹로그를 가져옵니다.
+  async SELECT_ALLWebLog() {
+    return firestore
+      .collection("weblog")
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+          let data = doc.data();
+          return data;
+        });
+      });
+  },
 };
