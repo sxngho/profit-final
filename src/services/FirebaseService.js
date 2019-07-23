@@ -66,6 +66,17 @@ export default {
       alert("등록 완료!");
       location.reload();
     },
+    async reload_userskill(userId,projects) {
+      let a = new Set([]);
+      for(let i=0; i<projects.length; i++) {
+        let b = new Set(projects[i].data.projecttech);
+        a = new Set([...a, ...b]);
+      }
+      var arr = Array.from(a);
+      firestore.collection("users").doc(userId).update({
+        userSkills : arr
+      });
+    },
 
 
   // Function :: 개인 프로젝트를 가져옵니다.
