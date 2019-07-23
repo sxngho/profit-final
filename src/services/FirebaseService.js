@@ -50,22 +50,34 @@ export default {
     projectrank,
     session_id
   ) {
-    firestore.collection("projects").add({
-      projecttitle,
-      projectdescription,
-      projectterm,
-      projectcontent,
-      projecttech,
-      projectimage,
-      projectrank,
-      session_id,
-      date: firebase.firestore.FieldValue.serverTimestamp(),
-      comments: [],
-      likeit: []
-    });
-    alert("등록 완료!");
-    location.reload();
-  },
+      firestore.collection("projects").add({
+        projecttitle,
+        projectdescription,
+        projectterm,
+        projectcontent,
+        projecttech,
+        projectimage,
+        projectrank,
+        session_id,
+        date: firebase.firestore.FieldValue.serverTimestamp(),
+        comments: [],
+        likeit: []
+      });
+      alert("등록 완료!");
+      location.reload();
+    },
+    async reload_userskill(userId,projects) {
+      let a = new Set([]);
+      for(let i=0; i<projects.length; i++) {
+        let b = new Set(projects[i].data.projecttech);
+        a = new Set([...a, ...b]);
+      }
+      var arr = Array.from(a);
+      firestore.collection("users").doc(userId).update({
+        userSkills : arr
+      });
+    },
+
 
   // Function :: 개인 프로젝트를 가져옵니다.
   // Parameter :: Story 페이지의 주인의 아이디를 가져와서 개인프로젝트를 검색합니다.

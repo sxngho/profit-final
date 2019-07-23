@@ -92,8 +92,13 @@ export default {
       DELETE_Project(project_id) {
         if (confirm("알림 : 삭제된 프로젝트는 복구가 불가능합니다. 삭제하시겠습니까?")) {
           FirebaseService.DELETE_project(project_id)
+          this.reload_userskill(this.login)
         }
       },
+      async reload_userskill(session_id) {
+      var projects =  await FirebaseService.SELECT_Projects(session_id);
+      await FirebaseService.reload_userskill(session_id,projects);
+    },
   },
 
   created() {
