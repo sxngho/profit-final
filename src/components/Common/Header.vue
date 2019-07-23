@@ -11,7 +11,6 @@
         <i class="fa fa-globe" aria-hidden="true"></i>
       </v-btn>
       <v-btn flat class="font-bold-light" href="/Manager">Manager</v-btn>
-      <v-btn flat class="font-bold-light" href="/story">Story</v-btn>
       <v-btn flat class="font-bold-light" href="/companyIntro">Company</v-btn>
     </div>
     <hr />
@@ -32,20 +31,20 @@ export default {
 </script>
 
 <style scoped>
-  .content {
-    margin-left: 30px;
-  }
-  a {
-    text-decoration: none;
-    color: #2c2c2c;
-  }
-  .headerBar {
-    position: fixed;
-    z-index: 10;
-    width: 100%;
-  }
-  .toolBar {
-    display: flex;
-    align-items: center;
-  }
+.content {
+  margin-left: 30px;
+}
+a {
+  text-decoration: none;
+  color: #2c2c2c;
+}
+.headerBar {
+  position: fixed;
+  z-index: 10;
+  width: 100%;
+}
+.toolBar {
+  display: flex;
+  align-items: center;
+}
 </style>

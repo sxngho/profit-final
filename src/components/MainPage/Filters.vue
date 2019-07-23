@@ -1,48 +1,41 @@
 <template>
-  <v-container style="height:60px">
-    <v-layout row>
-      <v-flex xs3 sm2 style="margin-top:-30px">
-        <v-overflow-btn :items="category" label="분류" target="#dropdown-example"></v-overflow-btn>
-      </v-flex>
-
-      <v-spacer class="hidden-sm-and-up"></v-spacer>
-      <v-layout class="hidden-xs-only">
-        <v-flex column>
-          <!-- <v-btn v-for="t in tags">{{ t.tag }}</v-btn> -->
-        </v-flex>
-
-        <v-spacer class="hidden-sm-and-up"></v-spacer>
-        <v-layout class="hidden-xs-only">
-          <v-flex column></v-flex>
-        </v-layout>
-
-        <v-flex xs3 sm2 style="margin-top:-30px">
-          <v-overflow-btn :items="filter" label="필터" target="#dropdown-example"></v-overflow-btn>
-        </v-flex>
-      </v-layout>
-
-      <v-layout row class="hidden-sm-and-up">
-        <v-flex>
-          <!-- <v-btn v-for="t in tags">{{ t.tag }}</v-btn> -->
-        </v-flex>
-      </v-layout>
-    </v-layout>
-  </v-container>
+  <div class="filter__Container">
+    <div class="filter__content">
+      <button v-for="(tech,index) in this.techs" class="techBtn" @click="addTech(index)">{{tech}}</button>
+    </div>
+  </div>
 </template>
-
-
 
 <script>
 export default {
-  data: () => ({
-    category: ["HOT", "POPULAR", "Controversial", "NEW"],
-    filter: ["Team Name", "Developer Name", "Language"],
-    tags: [
-      { tag: "C" },
-      { tag: "C++" },
-      { tag: "Java" },
-      { tag: "Java Script" }
-    ]
-  })
+  data() {
+    return {
+      techs: ["C", "C#", "JavaScript", "Android", "JQuery"]
+    };
+  },
+  methods: {
+    addTech: function(index) {}
+  }
 };
 </script>
+
+<style>
+.filter__Container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 80px;
+  background-color: white;
+}
+/* .filter__content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+} */
+.techBtn {
+  color: #858585;
+  font-size: 15px;
+  margin-right: 25px;
+}
+</style>

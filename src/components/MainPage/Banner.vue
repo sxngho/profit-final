@@ -1,6 +1,6 @@
 <template>
   <div class="banner__container">
-    <span class="banner__content">프로젝트를 공유하세요. 그리고 면접제안을 받아보세요.</span>
+    <span class="banner__content">프로젝트를 쉽게 공유할 수 있습니다.</span>
   </div>
 </template>
 
