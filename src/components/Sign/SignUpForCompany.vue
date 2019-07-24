@@ -72,8 +72,9 @@ import FirebaseService from "@/services/FirebaseService";
       async SignupCompany(company_name, id, password, interests) {
       var result = await FirebaseService.SignupCompany(company_name, id, password, interests)
         if (result == true) {
-          this.$session.set('session_id', id)
-          this.$store.commit('setSession', id)
+          this.$emit('signup')
+          // this.$session.set('session_id', id)
+          // this.$store.commit('setSession', id)
           // console.log(this.$store.getters.getSession, "setSession")
           // console.log(this.$session.get('session_id'))
         }

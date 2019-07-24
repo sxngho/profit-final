@@ -236,6 +236,37 @@ export default {
       });
   },
 
+
+  async SELECT_Recruit() {
+    return firestore
+      .collection("recruit")
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+            return doc.id;
+          });
+      });
+  },
+  SELECT_AllCharRoom() {
+    return firestore
+      .collection("chat")
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+            return doc.data();
+          });
+      });
+  },
+  INSERT_ChatRoom(recruit,userId) {
+    firestore
+      .collection("chat")
+      .add({
+        recruitPK : recruit,
+        userId,
+        messages : "",
+      });
+  },
+
   // -----------------------------------------------------------------
 
   // seulgi's Function
@@ -435,91 +466,104 @@ export default {
     userName,
     userIntro,
     userCareers,
-    userEducations
+    userEducations,
+    nickname
   ) {
-    return firebase
-      .auth()
-      .createUserWithEmailAndPassword(id, password)
-      .then(function() {
-        // console.log(`${id}`)
-        firestore
-          .collection("users")
-          .doc(id)
-          .set({
-            email: id,
-            first_name: first_name,
-            last_name: last_name,
-            phonenumber: phonenumber,
-            userSkills: userSkills,
-            userImage: userImage,
-            userName: first_name + last_name,
-            userIntro: userIntro,
-            userCareers: userCareers,
-            userEducations: userEducations,
-            followerlist: [],
-            followinglist: [],
-            likeitProject: []
-          });
-        firestore
-          .collection("user_addon")
-          .doc(id)
-          .set({
-            toggleView: false
-          });
-        alert(`${id}님, 회원가입이 완료되었습니다.`);
-        return true;
-      })
-      .catch(function(error) {
-        // Handle Errors here.
-        // var errorCode = error.code;
-        // var errorMessage = error.message;
-        alert(error);
-      });
-    return firebase
-      .auth()
-      .createUserWithEmailAndPassword(id, password)
-      .then(function() {
-        // console.log(`${id}`)
-        firestore
-          .collection("user_addon")
-          .doc(id)
-          .set({
-            toggleView: false
-          });
-        return true;
-      })
-      .catch(function(error) {
-        alert(error);
-      });
-    return false;
+    return firestore.collection('users').doc(nickname)
+    .get()
+    .then((docSnapshot) => {
+      if (docSnapshot.exists) {
+        alert(`${nickname}이 이미 존재합니다. 수정해주세요`)
+        return false;
+      } else {
+        var pattern_spc = /[~!@#$%^&*()_+|<>?:{}]/; //특수문자 체크
+        if ( pattern_spc.test(nickname) ) {
+          alert('nickname에 특수문자는 제외해주세요. ex : ~!@#$%^&*()_+|<>?:{}')
+          return false;
+        } else {
+          // 여기에서 회원가입 시켜야한다..
+          return firebase
+            .auth()
+            .createUserWithEmailAndPassword(id, password)
+            .then(function() {
+              // console.log(`${id}`)
+              firestore
+                .collection("users")
+                .doc(nickname)
+                .set({
+                  email: id,
+                  first_name: first_name,
+                  last_name: last_name,
+                  phonenumber: phonenumber,
+                  userSkills: userSkills,
+                  userImage: userImage,
+                  userName: first_name + last_name,
+                  userIntro: userIntro,
+                  userCareers: userCareers,
+                  userEducations: userEducations,
+                  followerlist: [],
+                  followinglist: [],
+                  likeitProject: [],
+                  nickname : nickname
+                });
+              firestore
+                .collection("user_addon")
+                .doc(nickname)
+                .set({
+                  toggleView: false
+                });
+              // alert(`${nickname}님, 회원가입이 완료되었습니다.`);
+              return true;
+            })
+            .catch(function(error) {
+              // Handle Errors here.
+              // var errorCode = error.code;
+              // var errorMessage = error.message;
+              alert(error);
+              return false;
+            });
+        }
+      }
+    })
+
   },
 
   async SignupCompany(company_name, id, password, interests) {
-    return firebase
-      .auth()
-      .createUserWithEmailAndPassword(id, password)
-      .then(function() {
-        // console.log(`${id}`)
-        firestore
-          .collection("companys")
-          .doc(id)
-          .set({
-            company_name: company_name,
-            id: id,
-            interests: interests,
-            followerlist: [],
-            followinglist: []
+    return firestore.collection('companys').doc(company_name)
+    .get()
+    .then((docSnapshot) => {
+      if (docSnapshot.exists) {
+        alert(`${company_name}은 이미 존재합니다.`)
+        return false;
+      } else {
+        return firebase
+          .auth()
+          .createUserWithEmailAndPassword(id, password)
+          .then(function() {
+            // console.log(`${id}`)
+            firestore
+              .collection("companys")
+              .doc(company_name)
+              .set({
+                company_name: company_name,
+                id: id,
+                interests: interests,
+                followerlist: [],
+                followinglist: []
+              });
+            // alert(`${id}님, 회원가입이 완료되었습니다.`);
+            return true;
+          })
+          .catch(function(error) {
+            // Handle Errors here.
+            // var errorCode = error.code;
+            // var errorMessage = error.message;
+            alert(error);
+            return false;
           });
-        alert(`${id}님, 회원가입이 완료되었습니다.`);
-        return true;
-      })
-      .catch(function(error) {
-        // Handle Errors here.
-        // var errorCode = error.code;
-        // var errorMessage = error.message;
-        alert(error);
-      });
-    return false;
+      }
+    })
+
   },
 
   async Signin(id, password) {
@@ -527,7 +571,18 @@ export default {
       .auth()
       .signInWithEmailAndPassword(id, password)
       .then(function() {
-        return true; // 유저 관련된 결과값은 성공한 경우가 True
+        console.log(id, '이건 머지')
+        firestore.collection('users').where('email', '==', id)
+        .get()
+        .then((docSnapshot) => {
+          // 여기 진행중입니다.
+          var result = { result :true, data : docSnapshot.docs[0].id}
+          console.log(result)
+          // console.log(docSnapshot.docs[0].id)
+          return true
+        })
+
+        // return true; // 유저 관련된 결과값은 성공한 경우가 True
       })
       .catch(function(error) {
         // Handle Errors here.
@@ -715,7 +770,16 @@ export default {
         });
       });
   },
+  async amount_Projects(user) {
+    return firestore
+    .collection('projects')
+    .where('session_id','==',user)
+    .get()
+    .then(docSnapshots => {
+      return docSnapshots.size
+    })
 
+  },
   // -----------------------------------------------------------------
   //hyoya
   // Function :: 팔로우를 추가합니다.
