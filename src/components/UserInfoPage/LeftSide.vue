@@ -231,6 +231,7 @@ export default {
     receiveIntro(intro) {
       FirebaseService.UPDATE_userIntro(intro,this.$route.params.id);
       this.userdata[0].userIntro = intro;
+
     },
     receiveSkill(skill) {
       FirebaseService.UPDATE_userSkill(skill,this.$route.params.id);

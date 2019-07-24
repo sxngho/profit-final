@@ -236,6 +236,37 @@ export default {
       });
   },
 
+
+  async SELECT_Recruit() {
+    return firestore
+      .collection("recruit")
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+            return doc.id;
+          });
+      });
+  },
+  SELECT_AllCharRoom() {
+    return firestore
+      .collection("chat")
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+            return doc.data();
+          });
+      });
+  },
+  INSERT_ChatRoom(recruit,userId) {
+    firestore
+      .collection("chat")
+      .add({
+        recruitPK : recruit,
+        userId,
+        messages : "",
+      });
+  },
+
   // -----------------------------------------------------------------
 
   // seulgi's Function

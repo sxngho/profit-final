@@ -9,6 +9,7 @@ import Project from "./views/Project.vue";
 import Vuex from 'vuex';
 import store from './store';
 import Manager from './views/Manager.vue';
+import Chat from './views/chat.vue';
 
 Vue.use(Vuex);
 Vue.use(store);
@@ -25,11 +26,6 @@ export default new Router({
       path: "/",
       name: "main",
       component: Main
-    },
-    {
-      path: "/story",
-      name: "story",
-      component: Story
     },
     {
       path: "/story/:id",
@@ -60,6 +56,11 @@ export default new Router({
       path:"/manager",
       name:"manager",
       component:Manager
+    },
+    {
+      path:"/chat",
+      name:"chat",
+      component:Chat
     }
   ]
 });
