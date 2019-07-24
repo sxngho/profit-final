@@ -54,7 +54,9 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-btn class="black--text" flat @click="GetUserinfo(user)" v-if="user!=='' && user!==undefined">{{user}}</v-btn>
+    <v-btn class="black--text" flat v-if="user!=='' && user!==undefined">
+      <router-link style="text-decoration:none; color:black" :to="{ name: 'story', params: { id: user }}"> {{user}} </router-link>
+    </v-btn>
     <v-btn class="black--text" flat @click="Logout()" v-if="user!=='' && user!==undefined">Log Out</v-btn>
   </v-layout>
 </template>
@@ -72,7 +74,7 @@ export default {
 
     dialog: false,
     signupmodal: false,
-
+    userpage : "",
     LoginId: "",
     LoginPassword: "",
 
@@ -85,6 +87,7 @@ export default {
   },
   mounted() {
     this.user = this.$session.get("session_id");
+    this.userpage = "/story/" + this.user;
   },
   methods: {
     showNotification (group, type ,title, text) {
@@ -104,10 +107,6 @@ export default {
         // console.log(this.$store.getters.getSession,"setSession")
         // console.log(this.$session.get('session_id'))
       }
-    },
-
-    GetUserinfo(user) {
-      FirebaseService.GetUserinfo(user);
     },
     async Signin(id, password) {
       this.check = await FirebaseService.Signin(id, password);
