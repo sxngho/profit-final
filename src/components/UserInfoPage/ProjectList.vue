@@ -100,6 +100,7 @@ export default {
     } else {
       this.isMine = false;
     }
+    this.amount_Projects();
   },
   props: {
     layout : {type:String},
@@ -157,9 +158,13 @@ export default {
         }
       } else {
         return false;
+        }
       }
+    },
+    async amount_Projects() {
+      var projects =  await FirebaseService.amount_Projects(this.user)
+      this.max_project = projects
     }
-  },
   },
   watch: {
     toFilter: function(newVal, oldVal) { // watch it

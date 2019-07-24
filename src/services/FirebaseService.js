@@ -540,7 +540,18 @@ export default {
       .auth()
       .signInWithEmailAndPassword(id, password)
       .then(function() {
-        return true; // 유저 관련된 결과값은 성공한 경우가 True
+        console.log(id, '이건 머지')
+        firestore.collection('users').where('email', '==', id)
+        .get()
+        .then((docSnapshot) => {
+          // 여기 진행중입니다.
+          var result = { result :true, data : docSnapshot.docs[0].id}
+          console.log(result)
+          // console.log(docSnapshot.docs[0].id)
+          return true
+        })
+
+        // return true; // 유저 관련된 결과값은 성공한 경우가 True
       })
       .catch(function(error) {
         // Handle Errors here.
@@ -728,7 +739,16 @@ export default {
         });
       });
   },
+  async amount_Projects(user) {
+    return firestore
+    .collection('projects')
+    .where('session_id','==',user)
+    .get()
+    .then(docSnapshots => {
+      return docSnapshots.size
+    })
 
+  },
   // -----------------------------------------------------------------
   //hyoya
   // Function :: 팔로우를 추가합니다.
