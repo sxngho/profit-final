@@ -438,7 +438,7 @@ export default {
     userEducations,
     nickname
   ) {
-    var check_user = firestore.collection('users').doc(nickname)
+    return firestore.collection('users').doc(nickname)
     .get()
     .then((docSnapshot) => {
       if (docSnapshot.exists) {
@@ -481,7 +481,7 @@ export default {
                 .set({
                   toggleView: false
                 });
-              alert(`${nickname}님, 회원가입이 완료되었습니다.`);
+              // alert(`${nickname}님, 회원가입이 완료되었습니다.`);
               return true;
             })
             .catch(function(error) {
@@ -498,31 +498,41 @@ export default {
   },
 
   async SignupCompany(company_name, id, password, interests) {
-    return firebase
-      .auth()
-      .createUserWithEmailAndPassword(id, password)
-      .then(function() {
-        // console.log(`${id}`)
-        firestore
-          .collection("companys")
-          .doc(id)
-          .set({
-            company_name: company_name,
-            id: id,
-            interests: interests,
-            followerlist: [],
-            followinglist: []
+    return firestore.collection('companys').doc(company_name)
+    .get()
+    .then((docSnapshot) => {
+      if (docSnapshot.exists) {
+        alert(`${company_name}은 이미 존재합니다.`)
+        return false;
+      } else {
+        return firebase
+          .auth()
+          .createUserWithEmailAndPassword(id, password)
+          .then(function() {
+            // console.log(`${id}`)
+            firestore
+              .collection("companys")
+              .doc(company_name)
+              .set({
+                company_name: company_name,
+                id: id,
+                interests: interests,
+                followerlist: [],
+                followinglist: []
+              });
+            // alert(`${id}님, 회원가입이 완료되었습니다.`);
+            return true;
+          })
+          .catch(function(error) {
+            // Handle Errors here.
+            // var errorCode = error.code;
+            // var errorMessage = error.message;
+            alert(error);
+            return false;
           });
-        alert(`${id}님, 회원가입이 완료되었습니다.`);
-        return true;
-      })
-      .catch(function(error) {
-        // Handle Errors here.
-        // var errorCode = error.code;
-        // var errorMessage = error.message;
-        alert(error);
-      });
-    return false;
+      }
+    })
+
   },
 
   async Signin(id, password) {

@@ -107,6 +107,14 @@ export default {
     nickname : '',
   }),
   methods: {
+    showNotification (group, type ,title, text) {
+       this.$notify({
+         group,
+         title,
+         text,
+         type,
+       })
+     },
     addNewCareer() {
       this.careers.push(this.career);
     },
@@ -142,9 +150,11 @@ export default {
         nickname
       );
       if (result == true) {
-        this.$session.set("session_id", id);
-        this.$store.commit("setSession", id);
+        // this.$session.set("session_id", id);
+        // this.$store.commit("setSession", id);
+        this.$emit('signup')
         // console.log(this.$store.getters.getSession,"setSession")
+        // this.showNotification("foo-css","success",`${nickname}님`,`회원가입 완료!`);
       }
     }
   }
