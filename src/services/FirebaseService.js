@@ -435,63 +435,66 @@ export default {
     userName,
     userIntro,
     userCareers,
-    userEducations
+    userEducations,
+    nickname
   ) {
-    return firebase
-      .auth()
-      .createUserWithEmailAndPassword(id, password)
-      .then(function() {
-        // console.log(`${id}`)
-        firestore
-          .collection("users")
-          .doc(id)
-          .set({
-            email: id,
-            first_name: first_name,
-            last_name: last_name,
-            phonenumber: phonenumber,
-            userSkills: userSkills,
-            userImage: userImage,
-            userName: first_name + last_name,
-            userIntro: userIntro,
-            userCareers: userCareers,
-            userEducations: userEducations,
-            followerlist: [],
-            followinglist: [],
-            likeitProject: []
-          });
-        firestore
-          .collection("user_addon")
-          .doc(id)
-          .set({
-            toggleView: false
-          });
-        alert(`${id}님, 회원가입이 완료되었습니다.`);
-        return true;
-      })
-      .catch(function(error) {
-        // Handle Errors here.
-        // var errorCode = error.code;
-        // var errorMessage = error.message;
-        alert(error);
-      });
-    return firebase
-      .auth()
-      .createUserWithEmailAndPassword(id, password)
-      .then(function() {
-        // console.log(`${id}`)
-        firestore
-          .collection("user_addon")
-          .doc(id)
-          .set({
-            toggleView: false
-          });
-        return true;
-      })
-      .catch(function(error) {
-        alert(error);
-      });
-    return false;
+    var check_user = firestore.collection('users').doc(nickname)
+    .get()
+    .then((docSnapshot) => {
+      if (docSnapshot.exists) {
+        alert(`${nickname}이 이미 존재합니다. 수정해주세요`)
+        return false;
+      } else {
+        var pattern_spc = /[~!@#$%^&*()_+|<>?:{}]/; //특수문자 체크
+        if ( pattern_spc.test(nickname) ) {
+          alert('nickname에 특수문자는 제외해주세요. ex : ~!@#$%^&*()_+|<>?:{}')
+          return false;
+        } else {
+          // 여기에서 회원가입 시켜야한다..
+          return firebase
+            .auth()
+            .createUserWithEmailAndPassword(id, password)
+            .then(function() {
+              // console.log(`${id}`)
+              firestore
+                .collection("users")
+                .doc(nickname)
+                .set({
+                  email: id,
+                  first_name: first_name,
+                  last_name: last_name,
+                  phonenumber: phonenumber,
+                  userSkills: userSkills,
+                  userImage: userImage,
+                  userName: first_name + last_name,
+                  userIntro: userIntro,
+                  userCareers: userCareers,
+                  userEducations: userEducations,
+                  followerlist: [],
+                  followinglist: [],
+                  likeitProject: [],
+                  nickname : nickname
+                });
+              firestore
+                .collection("user_addon")
+                .doc(nickname)
+                .set({
+                  toggleView: false
+                });
+              alert(`${nickname}님, 회원가입이 완료되었습니다.`);
+              return true;
+            })
+            .catch(function(error) {
+              // Handle Errors here.
+              // var errorCode = error.code;
+              // var errorMessage = error.message;
+              alert(error);
+              return false;
+            });
+        }
+      }
+    })
+
   },
 
   async SignupCompany(company_name, id, password, interests) {

@@ -21,6 +21,10 @@
               <v-text-field label="last name*" required v-model="last_name"></v-text-field>
             </v-flex>
 
+            <v-flex xs12 sm6>
+              <v-text-field label="nickname*" required v-model="nickname"></v-text-field>
+            </v-flex>
+
             <!-- email -->
             <v-flex xs12>
               <v-text-field label="Email*" required v-model="signup_id"></v-text-field>
@@ -74,7 +78,7 @@
         <v-btn
           color="blue darken-1"
           flat
-          @click="signupforusermodal = false, SignupUser(signup_id, signup_password, first_name, last_name, phonenumber, userSkills, userImage, userName, userIntro, userCareers, userEducations)"
+          @click="signupforusermodal = false, SignupUser(signup_id, signup_password, first_name, last_name, phonenumber, userSkills, userImage, userName, userIntro, userCareers, userEducations, nickname)"
         >SignUp</v-btn>
       </v-card-actions>
     </v-card>
@@ -99,7 +103,8 @@ export default {
     userName: "",
     userIntro: "",
     userCareers: [],
-    userEducations: []
+    userEducations: [],
+    nickname : '',
   }),
   methods: {
     addNewCareer() {
@@ -119,7 +124,8 @@ export default {
       userName,
       userIntro,
       userCareers,
-      userEducations
+      userEducations,
+      nickname
     ) {
       var result = await FirebaseService.SignupUser(
         id,
@@ -132,7 +138,8 @@ export default {
         userName,
         userIntro,
         userCareers,
-        userEducations
+        userEducations,
+        nickname
       );
       if (result == true) {
         this.$session.set("session_id", id);
