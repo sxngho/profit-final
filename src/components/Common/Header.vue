@@ -2,7 +2,7 @@
   <div class="headerBar">
     <div style="background:white" class="toolBar">
       <v-toolbar-title>
-        <a class="font-bold-light content" href="/">Sharefolio</a>
+        <v-btn flat class="font-bold-light title" to="/">Sharefolio</v-btn>
       </v-toolbar-title>
       <v-spacer />
       <!-- <div id="google_translate_element"></div> -->
@@ -10,9 +10,9 @@
       <v-btn flat>
         <i class="fa fa-globe" aria-hidden="true"></i>
       </v-btn>
-      <v-btn flat class="font-bold-light" to="/Chat">chat</v-btn>
-      <v-btn flat class="font-bold-light" to="/Manager">Manager</v-btn>
-      <v-btn flat class="font-bold-light" to="/companyIntro">Company</v-btn>
+        <v-btn flat class="font-bold-light" to="/Chat">chat</v-btn>
+        <v-btn flat class="font-bold-light" to="/Manager">Manager</v-btn>
+        <v-btn flat class="font-bold-light" to="/companyIntro">Company</v-btn>
     </div>
     <hr />
   </div>

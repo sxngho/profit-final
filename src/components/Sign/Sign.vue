@@ -54,8 +54,11 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-btn class="black--text" flat v-if="user !=='' && user !== undefined">
+    <v-btn class="black--text" flat v-if="user !=='' && user !== undefined && Level !== '3' " >
       <router-link style="text-decoration:none; color:black" :to="{ name: 'story', params: { id: user }}"> {{user}} </router-link>
+    </v-btn>
+    <v-btn class="black--text" flat v-if="user !=='' && user !== undefined && Level == '3' " >
+      <router-link style="text-decoration:none; color:black"> {{user}} </router-link>
     </v-btn>
     <v-btn class="black--text" flat @click="Logout()" v-if="user!=='' && user!==undefined">Log Out</v-btn>
   </v-layout>
@@ -80,7 +83,7 @@ export default {
 
     signupforuser: false,
     signupforcompany: false,
-
+    Level : "",
   }),
   components: {
     SignupforCompanyModal,
@@ -89,6 +92,7 @@ export default {
   mounted() {
     this.user = this.$session.get("session_id");
     this.userpage = "/story/" + this.user;
+    this.Level = this.$session.get('level');
   },
   methods: {
     showNotification (group, type ,title, text) {
@@ -121,9 +125,9 @@ export default {
       var level = -1;
 
       if (this.check == true) {
-        var user_nickname = await FirebaseService.SELECT_Userdata(id);
+        var user_nickname = await FirebaseService.SELECT_UserdataEmail(id);
         var company_nickname = await FirebaseService.SELECT_Companydata(id);
-        console.log(user_nickname[0])
+        // console.log(user_nickname[0])
         if ( user_nickname[0] !== undefined ) {
             this.$session.set("session_id", user_nickname[0].nickname);
             this.user = this.$session.get("session_id");
