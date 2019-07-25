@@ -198,6 +198,31 @@ export default {
         userCareers: old
       });
   },
+
+  // Function :: 유저의 정보를 가져옵니다.
+  async SELECT_AllUserdata() {
+    return firestore
+      .collection("users")
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+          let data = doc.data();
+          return { level : data.level , name : data.email };
+        });
+      });
+  },
+  // Function :: 기업의 정보를 가져옵니다.
+  async SELECT_AllCompanydata() {
+    return firestore
+      .collection("companys")
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+          let data = doc.data();
+          return { level : data.level , name : data.id };
+        });
+      });
+  },
   UPDATE_userImage(image, userId) {
     return firestore
       .collection("users")

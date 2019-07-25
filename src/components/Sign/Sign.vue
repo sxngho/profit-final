@@ -110,17 +110,40 @@ export default {
         // console.log(this.$session.get('session_id'))
       }
     },
+
+
     async Signin(id, password) {
       this.check = await FirebaseService.Signin(id, password);
-      if (this.check == true) {
-        this.$session.set("session_id", id);
-        this.user = this.$session.get("session_id");
-        this.showNotification("foo-css","success",`${this.user}님`,`로그인 완료!`);
-        this.LoginId='';
-        this.LoginPassword='';
 
+      var userlist = await FirebaseService.SELECT_AllUserdata();
+      var companylist = await FirebaseService.SELECT_AllCompanydata();
+
+      var level = -1;
+
+      if (this.check == true) {
+        var user_nickname = await FirebaseService.SELECT_Userdata(id);
+        this.$session.set("session_id", user_nickname[0].nickname);
+        this.user = this.$session.get("session_id");
+
+        for(var user in userlist) {
+          if ( userlist[user].name == id ) {
+            this.$session.set("level",userlist[user].level);
+            level = userlist[user].level;
+          }
+        }
+        for(var company in companylist) {
+          if ( companylist[company].name == id ) {
+            this.$session.set("level",companylist[company].level);
+            level = companylist[company].level;
+          }
+        }
+        this.showNotification("foo-css","success",level+`레벨의 `+`${this.user}님 `,`로그인 완료!`);
+        this.LoginId = '';
+        this.LoginPassword= '';
       }
     },
+
+
     async SigninFacebook() {
       var answer = await FirebaseService.SigninFacebook();
       this.check = answer.result;
@@ -136,7 +159,6 @@ export default {
     signupsuccess() {
       this.signupmodal = false;
       this.showNotification("foo-css","success",`회원가입 완료!`,`로그인 해주세요!`);
-
     }
   }
 };
