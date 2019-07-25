@@ -571,18 +571,18 @@ export default {
       .auth()
       .signInWithEmailAndPassword(id, password)
       .then(function() {
-        console.log(id, '이건 머지')
-        firestore.collection('users').where('email', '==', id)
-        .get()
-        .then((docSnapshot) => {
-          // 여기 진행중입니다.
-          var result = { result :true, data : docSnapshot.docs[0].id}
-          console.log(result)
-          // console.log(docSnapshot.docs[0].id)
-          return true
-        })
+        // console.log(id, '이건 머지')
+        // firestore.collection('users').where('email', '==', id)
+        // .get()
+        // .then((docSnapshot) => {
+        //   // 여기 진행중입니다.
+        //   var result = { result :true, data : docSnapshot.docs[0].id}
+        //   console.log(result)
+        //   // console.log(docSnapshot.docs[0].id)
+        //   return true
+        // })
 
-        // return true; // 유저 관련된 결과값은 성공한 경우가 True
+        return true; // 유저 관련된 결과값은 성공한 경우가 True
       })
       .catch(function(error) {
         // Handle Errors here.
@@ -599,7 +599,7 @@ export default {
       .signInWithPopup(provider)
       .then(function(result) {
         var user = result.user.email;
-        alert(`페이스북 로그인 완료!, ${result.user.email}`);
+        // alert(`페이스북 로그인 완료!, ${result.user.email}`);
         var answer = { user: user, result: true };
         return answer;
       })

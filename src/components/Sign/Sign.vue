@@ -105,6 +105,7 @@ export default {
         this.showNotification("foo-css","error",`${this.$session.get("session_id")}님`,`로그아웃 완료!`);
         this.$session.set("session_id", "");
         this.user = "";
+
         // console.log(this.$store.getters.getSession,"setSession")
         // console.log(this.$session.get('session_id'))
       }
@@ -115,6 +116,9 @@ export default {
         this.$session.set("session_id", id);
         this.user = this.$session.get("session_id");
         this.showNotification("foo-css","success",`${this.user}님`,`로그인 완료!`);
+        this.LoginId='';
+        this.LoginPassword='';
+
       }
     },
     async SigninFacebook() {
@@ -123,6 +127,8 @@ export default {
       if (this.check == true) {
         this.$session.set("session_id", answer.user);
         this.user = this.$session.get("session_id");
+        this.showNotification("foo-css","success",`${this.user}님`,`로그인 완료!`);
+        this.dialog = false;
         // console.log(this.$store.getters.getSession,"setSession")
         // console.log(this.$session.get('session_id'))
       }
