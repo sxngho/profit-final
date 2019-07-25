@@ -1,7 +1,14 @@
 <template>
   <div class="filter__Container">
     <div class="filter__content">
-      <button v-for="(tech,index) in this.techs" class="techBtn" @click="addTech(index)">{{tech}}</button>
+      <button
+        v-for="(tech,index) in this.techs"
+        @click="addTech(index)"
+        style="
+          color: #858585;
+          font-size: 15px;
+          margin-right: 25px;">
+        {{tech}}</button>
     </div>
   </div>
 </template>

@@ -230,14 +230,6 @@ export default {
       });
     },
 
-    async SELECT_UserdataEmail(id) {
-      return firestore.collection("users").where("email", "==", id).get().then(docSnapshots => {
-        return docSnapshots.docs.map(doc => {
-          return doc.data();
-        });
-      });
-    },
-
     // Function :: 유저의 정보를 가져옵니다.
     async SELECT_AllUserdata() {
       return firestore.collection("users").get().then(docSnapshots => {
@@ -247,6 +239,24 @@ export default {
           });
         });
     },
+
+    // Function :: 유저 정보를 가져옵니다
+    async SELECT_ALLUser(){
+      return firestore.collection("users").get().then(docSnapshots => {
+          return docSnapshots.docs.map(doc => {
+            let data = doc.data();
+            return data;
+          });
+        });
+    },
+
+      async SELECT_UserdataEmail(id) {
+        return firestore.collection("users").where("email", "==", id).get().then(docSnapshots => {
+          return docSnapshots.docs.map(doc => {
+            return doc.data();
+          });
+        });
+      },
 
     // -----------------------------------------------------------------------USER
     // ---------------------------------------------------------------------------------------------------------------------------------
@@ -494,9 +504,6 @@ export default {
     // ---------------------------------------------------------------------------------------------------------------------------------
 
 
-
-
-
     // ---------------------------------------------------------------------------------------------------------------------------------
     // LIKE--------------------------------------------------------------------
 
@@ -569,4 +576,24 @@ export default {
     // --------------------------------------------------------------------REPORT
     // ---------------------------------------------------------------------------------------------------------------------------------
 
+
+
+    // ---------------------------------------------------------------------------------------------------------------------------------
+    // Weblog--------------------------------------------------------------------
+      // Function :: 모든 웹로그를 가져옵니다.
+      async SELECT_ALLWebLog() {
+        return firestore
+          .collection("weblog")
+          .get()
+          .then(docSnapshots => {
+            return docSnapshots.docs.map(doc => {
+              let data = doc.data();
+              return data;
+            });
+          });
+      },
+
+
+    // --------------------------------------------------------------------Weblog
+    // ---------------------------------------------------------------------------------------------------------------------------------
   };
