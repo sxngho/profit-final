@@ -243,7 +243,7 @@ export default {
       .get()
       .then(docSnapshots => {
         return docSnapshots.docs.map(doc => {
-            return doc.id;
+            return { data : doc.data(), id : doc.id };
           });
       });
   },
