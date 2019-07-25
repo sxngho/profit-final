@@ -186,6 +186,7 @@
               v-on:toStoryUpdate="UPDATE_Project"
               :toFilter="Filter" v-on:toStoryList="resetFilter"
             />
+
             <ProjectEditor v-if="stateAdd && !statedetail && !stateupdate" />
             <Project v-if="statedetail" :pcode="pcode" v-on:goBackpage="gbp" />
             <ProjectUpdator v-if="stateupdate" :project_id="pcode2" v-on:goBackpage="gbp2" />

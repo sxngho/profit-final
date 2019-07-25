@@ -143,7 +143,7 @@ export default {
   async SELECT_Userdata(id) {
     return firestore
       .collection("users")
-      .where("email", "==", id)
+      .where("nickname", "==", id)
       .get()
       .then(docSnapshots => {
         return docSnapshots.docs.map(doc => {
