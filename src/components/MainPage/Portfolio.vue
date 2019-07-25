@@ -1,7 +1,8 @@
 <template>
   <div class="Portfolio__container">
+    <!-- {{portfolio.project_id}} -->
     <div class="Portfolio__container__content">
-      <button class="Portfolio__box" @click="popdetail(portfolioId)">
+      <button class="Portfolio__box" @click="popdetail(portfolio.portfolioId)">
         <img :src="protfolioImg" style="height:280px; width:330px" />
       </button>
     </div>
@@ -10,8 +11,14 @@
 
 <script>
 import FirebaseService from "@/services/FirebaseService";
+import { mapState } from "vuex";
 export default {
   props: ["portfolio"],
+  watch: {
+    portfolio(to, from) {
+      this.SELECT_Project();
+    }
+  },
   data() {
     return {
       portfolioId: "",
@@ -22,6 +29,9 @@ export default {
   created() {
     this.SELECT_Project();
   },
+  // updated() {
+  //   this.SELECT_Project();
+  // },
   methods: {
     async SELECT_Project() {
       this.portfolioId = this.portfolio.project_id;
@@ -29,8 +39,6 @@ export default {
         this.portfolio.project_id
       );
       this.protfolioImg = this.portfolioInfo.projectimage;
-      // console.log(this.protfolioImg);
-      // console.log(this.portfolioId);
     },
     popdetail(pcode) {
       window.open("../project/" + pcode);
