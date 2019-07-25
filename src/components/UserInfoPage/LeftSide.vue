@@ -70,7 +70,7 @@
          <v-flex
           v-for="s in userdata[0].showSkillList"
           d-inline-block
-          style="cursor:pointer;border:1px solid #cecece; padding:2px 10px; border-radius:8px; margin:2px 4px;"  v-on:click="toStoryFilter(s)">
+          style="zzcursor:pointer;border:1px solid #cecece; padding:2px 10px; border-radius:8px; margin:2px 4px;"  v-on:click="toStoryFilter(s)">
            {{s}}
          </v-flex>
        </div>

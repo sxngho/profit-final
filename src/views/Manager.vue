@@ -48,7 +48,7 @@ export default {
   },
   data() {
     return {
-      compo:5,
+      compo:1,
     };
   },
 };
