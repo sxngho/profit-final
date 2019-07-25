@@ -6,10 +6,11 @@ import CompanyIntro from "./views/CompanyIntro.vue";
 import Git from "./views/Git.vue";
 import Followers from "./views/Followers.vue";
 import Project from "./views/Project.vue";
-import Vuex from 'vuex';
-import store from './store';
-import Manager from './views/Manager.vue';
-import Chat from './views/chat.vue';
+import Vuex from "vuex";
+import store from "./store";
+import Manager from "./views/Manager.vue";
+import Chat from "./views/chat.vue";
+import Recruit from "./views/Recruit.vue";
 
 Vue.use(Vuex);
 Vue.use(store);
@@ -48,19 +49,24 @@ export default new Router({
       component: Followers
     },
     {
-      path:"/project/:pcode",
-      name:"project",
-      component:Project
+      path: "/project/:pcode",
+      name: "project",
+      component: Project
     },
     {
-      path:"/manager",
-      name:"manager",
-      component:Manager
+      path: "/manager",
+      name: "manager",
+      component: Manager
     },
     {
-      path:"/chat",
-      name:"chat",
-      component:Chat
+      path: "/chat",
+      name: "chat",
+      component: Chat
+    },
+    {
+      path: "/recruit",
+      name: "recruit",
+      component: Recruit
     }
   ]
 });
