@@ -63,8 +63,7 @@
                   <v-text-field label="Comment" v-model="comment"></v-text-field>
 
                   <v-btn @click="INSERT_Comment(comment)">submit</v-btn>
-                  <v-btn @click="InfoProject()">파일위치(관리자용)</v-btn>
-                </form>
+                  </form>
 
                 <!-- comment sort -->
                 <v-flex>
@@ -76,15 +75,22 @@
 
                 <!-- comment list -->
                 <v-list>
-                  <v-list-tile v-for="(com, index) in comments" style="border-bottom: 1px solid #9E6E2E; margin:5px; padding:5px;">
+                  <v-list-tile v-for="(com, index) in comments" style="border-bottom: 1px solid #9E6E2E; margin:10px; padding:10px;">
 
-                    <v-list-tile-content>
-                      <div class="comment_{index}">
+                    <!-- 수정 전에 보여주는 댓글리스트 -->
+                    <v-list-tile-content v-bind:class="[`before_${index}`]" style="width:70%;">
                       <v-list-tile-title v-html="com.Comment"></v-list-tile-title>
                       <v-list-tile-title v-html="com.User"></v-list-tile-title>
-                      </div>
-
                     </v-list-tile-content>
+                    <!--  -->
+
+                    <!-- 수정 그림을 누르면 보여주는 구역 , 바로 비동기적으로 구현됨.-->
+                    <div v-bind:class="[`after_${index}`]" style="display:none; width:100%; margin:10px; padding:10px; ">
+                      <input v-bind:class="[`aftertext_${index}`]" style="display:inline-block; width:100%; border: 1px solid #ff0000;" v-model="update_commenttext"><br>
+                      <v-btn @click="change_comment(pcode, comments, index, update_commenttext)">수정</v-btn>
+                      <v-btn @click="cancel(pcode, comments, index)">취소</v-btn>
+                    </div>
+                    <!--  -->
 
                     <v-list-tile-action>
                       <div style='display:inline-block;'>
@@ -143,6 +149,8 @@ export default {
     user:"",
     comments:[],
     comment:"",
+    update_comment: false,
+    update_commenttext:'',
   }
   },
   props : {
@@ -158,14 +166,19 @@ export default {
     this.get_comments();
   },
   methods: {
+    showNotification (group, type ,title, text) {
+       this.$notify({
+         group,
+         title,
+         text,
+         type,
+       })
+     },
     async bindData(){
       this.$loading(true)
       this.project = await FirebaseService.SELECT_ProjectsByPcode(this.project_id);
       // console.log(this.project);
       this.$loading(false)
-    },
-    InfoProject(){
-      alert("이 파일의 위치는 components/project/project.vue");
     },
     // seulgi function
     async INSERT_Comment(comment){
@@ -204,9 +217,26 @@ export default {
       FirebaseService.DELETE_comment(project_id, comments, comment_index)
     },
     UPDATE_comment(pcode, comments, index) {
-      // 아직 만들지 않음.
-      alert('아직 진행중입니다.')
-      // console.log(1)
+      var before = document.querySelector(`.before_${index}`)
+      var after = document.querySelector(`.after_${index}`)
+      var aftertext = document.querySelector(`.aftertext_${index}`)
+      aftertext.value = comments[index].Comment
+      before.style.display = 'none';
+      after.style.display = 'block';
+      this.update_commenttext = comments[index].Comment;
+    },
+    cancel(pcode, comments, index) {
+      var before = document.querySelector(`.before_${index}`)
+      var after = document.querySelector(`.after_${index}`)
+      before.style.display = 'block';
+      after.style.display = 'none';
+    },
+    change_comment(pcode, comments, index, update_commenttext) {
+      FirebaseService.UPDATE_comment(pcode, comments, index, update_commenttext)
+      var before = document.querySelector(`.before_${index}`)
+      var after = document.querySelector(`.after_${index}`)
+      before.style.display = 'block';
+      after.style.display = 'none';
     },
     likeit(com, index) {
       // if (com.like.includes(this.user)) {
