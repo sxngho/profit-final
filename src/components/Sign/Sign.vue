@@ -54,7 +54,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-btn class="black--text" flat v-if="user!=='' && user!==undefined">
+    <v-btn class="black--text" flat v-if="user !=='' && user !== undefined">
       <router-link style="text-decoration:none; color:black" :to="{ name: 'story', params: { id: user }}"> {{user}} </router-link>
     </v-btn>
     <v-btn class="black--text" flat @click="Logout()" v-if="user!=='' && user!==undefined">Log Out</v-btn>
@@ -122,8 +122,15 @@ export default {
 
       if (this.check == true) {
         var user_nickname = await FirebaseService.SELECT_Userdata(id);
-        this.$session.set("session_id", user_nickname[0].nickname);
-        this.user = this.$session.get("session_id");
+        var company_nickname = await FirebaseService.SELECT_Companydata(id);
+        console.log(user_nickname[0])
+        if ( user_nickname[0] !== undefined ) {
+            this.$session.set("session_id", user_nickname[0].nickname);
+            this.user = this.$session.get("session_id");
+        } else if ( company_nickname[0] !== undefined ) {
+            this.$session.set("session_id", company_nickname[0].company_name);
+            this.user = this.$session.get("session_id");
+        }
 
         for(var user in userlist) {
           if ( userlist[user].name == id ) {
@@ -137,6 +144,7 @@ export default {
             level = companylist[company].level;
           }
         }
+        this.$session.set("level", level);
         this.showNotification("foo-css","success",level+`레벨의 `+`${this.user}님 `,`로그인 완료!`);
         this.LoginId = '';
         this.LoginPassword= '';

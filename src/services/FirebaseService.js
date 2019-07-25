@@ -28,11 +28,11 @@ auth().onAuthStateChanged(function(user) {
     login_user = "익명";
   }
 
-  // firestore.collection('weblog').add({
-  //   login_user,
-  //   url,
-  //   date: firebase.firestore.FieldValue.serverTimestamp()
-  // })
+  firestore.collection('weblog').add({
+    login_user,
+    url,
+    date: firebase.firestore.FieldValue.serverTimestamp()
+  })
 });
 
 export default {
@@ -153,6 +153,18 @@ export default {
       });
   },
 
+  async SELECT_Companydata(id) {
+    return firestore
+      .collection("companys")
+      .where("id", "==", id)
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+          let data = doc.data();
+          return data;
+        });
+      });
+  },
   // Function :: 유저의 자기소개 정보를 업데이트합니다.
   // Parameter :: Story 페이지의 주인의 아이디와 새로운 인트로 정보를 가져옵니다.
   UPDATE_userIntro(intro, userId) {
@@ -268,10 +280,20 @@ export default {
       .get()
       .then(docSnapshots => {
         return docSnapshots.docs.map(doc => {
-            return doc.id;
+            return { data : doc.data(), id : doc.id };
           });
       });
   },
+
+  async SELECT_RecruitByCompany(id) {
+      return firestore.collection("recruit").where("companyId","==",id).get()
+      .then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+            return { data : doc.data(), id : doc.id };
+          });
+      });
+  },
+
   SELECT_AllCharRoom() {
     return firestore
       .collection("chat")
@@ -291,6 +313,7 @@ export default {
         messages : "",
       });
   },
+
 
   // -----------------------------------------------------------------
 
@@ -576,7 +599,7 @@ export default {
                 interests: interests,
                 followerlist: [],
                 followinglist: [],
-                level : 3,
+                level : "3",
               });
             // alert(`${id}님, 회원가입이 완료되었습니다.`);
             return true;
