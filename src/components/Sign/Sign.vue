@@ -121,7 +121,7 @@ export default {
       var level = -1;
 
       if (this.check == true) {
-        var user_nickname = await FirebaseService.SELECT_Userdata(id);
+        var user_nickname = await FirebaseService.SELECT_UserdataEmail(id);
         var company_nickname = await FirebaseService.SELECT_Companydata(id);
         console.log(user_nickname[0])
         if ( user_nickname[0] !== undefined ) {
