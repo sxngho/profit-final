@@ -51,7 +51,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" flat @click="signupforcompanymodal = false">Close</v-btn>
-          <v-btn color="blue darken-1" flat @click="signupforcompanymodal = false, SignupCompany(company_name, signup_id, signup_password, interests)">SignUp</v-btn>
+          <v-btn color="blue darken-1" flat @click="SignupCompany(company_name, signup_id, signup_password, interests)">SignUp</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -72,6 +72,11 @@ import FirebaseService from "@/services/FirebaseService";
       async SignupCompany(company_name, id, password, interests) {
       var result = await FirebaseService.SignupCompany(company_name, id, password, interests)
         if (result == true) {
+          this.signupforcompanymodal = false;
+          this.company_name='';
+          this.signup_id='';
+          this.signup_password='';
+          this.interests=[];
           this.$emit('signup')
           // this.$session.set('session_id', id)
           // this.$store.commit('setSession', id)
