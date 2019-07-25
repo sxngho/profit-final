@@ -78,7 +78,7 @@
         <v-btn
           color="blue darken-1"
           flat
-          @click="signupforusermodal = false, SignupUser(signup_id, signup_password, first_name, last_name, phonenumber, userSkills, userImage, userName, userIntro, userCareers, userEducations, nickname)"
+          @click="SignupUser(signup_id, signup_password, first_name, last_name, phonenumber, userSkills, userImage, userName, userIntro, userCareers, userEducations, nickname)"
         >SignUp</v-btn>
       </v-card-actions>
     </v-card>
@@ -152,6 +152,13 @@ export default {
       if (result == true) {
         // this.$session.set("session_id", id);
         // this.$store.commit("setSession", id);
+        this.signupforusermodal = false;
+        this.first_name='';
+        this.last_name='';
+        this.nickname='';
+        this.signup_id='';
+        this.signup_password='';
+        this.phonenumber='';
         this.$emit('signup')
         // console.log(this.$store.getters.getSession,"setSession")
         // this.showNotification("foo-css","success",`${nickname}님`,`회원가입 완료!`);

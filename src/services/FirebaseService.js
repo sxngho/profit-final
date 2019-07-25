@@ -143,7 +143,7 @@ export default {
   async SELECT_Userdata(id) {
     return firestore
       .collection("users")
-      .where("email", "==", id)
+      .where("nickname", "==", id)
       .get()
       .then(docSnapshots => {
         return docSnapshots.docs.map(doc => {
@@ -488,7 +488,7 @@ export default {
     old.projecttech = data.projecttech;
     old.projectimage = data.projectimage;
     old.projectrank = data.projectrank;
-    alert("진행중?");
+    // alert("진행중?");
     return firestore
       .collection("projects")
       .doc(project_id)
@@ -552,7 +552,8 @@ export default {
                   followerlist: [],
                   followinglist: [],
                   likeitProject: [],
-                  nickname : nickname
+                  nickname : nickname,
+                  level : 0,
                 });
               firestore
                 .collection("user_addon")
@@ -648,8 +649,12 @@ export default {
       .signInWithPopup(provider)
       .then(function(result) {
         var user = result.user.email;
-        alert(`페이스북 로그인 완료!, ${result.user.email}`);
+        var time = String(Date.now()) // nickname을 임시로 넣기 위한 숫자변수 역할
         var answer = { user: user, result: true };
+        // alert(`페이스북 로그인 완료!, ${result.user.email}`);
+        // console.log(time)
+        // return firestore.collection('users')
+        // console.log(time)
         return answer;
       })
       .catch(function(error) {
