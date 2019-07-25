@@ -111,10 +111,38 @@ export default {
     },
     async Signin(id, password) {
       this.check = await FirebaseService.Signin(id, password);
+
+      var userlist = await FirebaseService.SELECT_AllUserdata();
+      var companylist = await FirebaseService.SELECT_AllCompanydata();
+
+      var level = -1;
+
       if (this.check == true) {
-        this.$session.set("session_id", id);
-        this.user = this.$session.get("session_id");
-        this.showNotification("foo-css","success",`${this.user}님`,`로그인 완료!`);
+        var user_nickname = await FirebaseService.SELECT_Userdata(id);
+        var company_nickname = await FirebaseService.SELECT_Companydata(id);
+        console.log(user_nickname[0])
+        if ( user_nickname[0] !== undefined ) {
+            this.$session.set("session_id", user_nickname[0].nickname);
+            this.user = this.$session.get("session_id");
+        } else if ( company_nickname[0] !== undefined ) {
+            this.$session.set("session_id", company_nickname[0].company_name);
+            this.user = this.$session.get("session_id");
+        }
+
+        for(var user in userlist) {
+          if ( userlist[user].name == id ) {
+            this.$session.set("level",userlist[user].level);
+            level = userlist[user].level;
+          }
+        }
+        for(var company in companylist) {
+          if ( companylist[company].name == id ) {
+            this.$session.set("level",companylist[company].level);
+            level = companylist[company].level;
+          }
+        }
+        this.$session.set("level", level);
+        this.showNotification("foo-css","success",level+`레벨의 `+`${this.user}님 `,`로그인 완료!`);
       }
     },
     async SigninFacebook() {

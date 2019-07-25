@@ -2,7 +2,12 @@
   <div>
     <!-- TODO 여백 -->
     <v-layout><v-flex style="margin:30px;" /></v-layout>
-    <div>
+
+    <!-- 다른 공고보기를 누르는 등 다른 행동을 취했을때 초기화를해주는것이 아무것도 없음!!! 나중에 추가해야함!!! 내가할거같긴한데!!1 -->
+
+    <!-- 이곳은 유저가 보는 곳이에오 -->
+    <div v-if="nowLevel == 2">
+      <p> 유저 페이지 </p>
       <v-layout col wrap>
       <v-flex v-for="recruit in recruits" d-inline-block
       style="cursor:pointer;border:1px solid #cecece; padding:2px 10px; border-radius:8px; margin:2px 4px;"
@@ -21,21 +26,42 @@
 
       <v-layout row wrap v-if='nowChatRoom !== "" '>
         <v-flex xs12 v-for="message in messages" v-if='message.chatId !== "" && message.chatMsg !== "" '>
-         {{ message.chatMsg }} - {{ message.chatId }}
+         [{{ message.chatId }}] : {{ message.chatMsg }}
         </v-flex>
         <v-flex xs12>
         <v-text-field single-line outline required v-model="myMessage" v-on:keyup.enter="pushMessage(myMessage)" > </v-text-field>
       </v-flex>
       </v-layout>
+    </div>
 
-<!--
-      <p> -----------------------------</p>
-      {{recruits}}
-        <p> -----------------------------</p>
-      {{myChatRooms}}
-        <p> -----------------------------</p>
-      {{messages}}
-        <p> -----------------------------</p> -->
+    <!-- 이곳은 기업이 보는 곳이에오 -->
+    <div v-if="nowLevel == 3">
+      <p> 기업 페이지 </p>
+      <v-layout col wrap>
+      <v-flex v-for="recruit in recruitsbyCompany" d-inline-block
+      style="cursor:pointer;border:1px solid #cecece; padding:2px 10px; border-radius:8px; margin:2px 4px;"
+      v-on:click="enterMyRecruit(recruit)">
+        {{recruit.data.title}}라는 제목의 외주 공고
+      </v-flex>
+      </v-layout>
+
+
+      <v-layout row wrap>
+      <v-flex xs12 v-for="myChatRoom in myChatRooms" d-inline-block
+      style="cursor:pointer;border:1px solid #cecece; padding:2px 10px; border-radius:8px; margin:2px 4px;"
+      v-on:click="EnterChatRoom(myChatRoom)">
+        {{myChatRoom.userId}}의 채팅방
+      </v-flex>
+      </v-layout>
+
+      <v-layout row wrap v-if='nowChatRoom !== "" '>
+        <v-flex xs12 v-for="message in messages" v-if='message.chatId !== "" && message.chatMsg !== "" '>
+         [{{ message.chatId }}] : {{ message.chatMsg }}
+        </v-flex>
+        <v-flex xs12>
+        <v-text-field single-line outline required v-model="myMessage" v-on:keyup.enter="pushMessage(myMessage)" > </v-text-field>
+      </v-flex>
+      </v-layout>
     </div>
   </div>
 
@@ -55,37 +81,73 @@ export default {
   name: "chat",
   data() {
     return {
-      recruits : "",
-      chatRooms : "",
-      myChatRooms : [],
-      chas : "",
-      recruitPK : "",
-      nowChatRoom : "",
-      messages : "",
-      myMessage : "",
+      nowLevel : "",
+
+      recruits : "", // 모든 공고 리스트
+      chatRooms : "", // 모든 공고 리스트
+      myChatRooms : [], // 내가 볼 수 있는 공고 리스트
+      nowChatRoom : "", // 내가 현재 접속중인 공고의 채팅방
+      messages : "", // 채팅방 메시지들
+      myMessage : "", // 내가 입력하는 메시지
+
+      recruitsbyCompany : "",
+
+
+
+
     };
   },
   components: {
   },
   mounted() {
-    this.fetchData();
+    this.fetchData()
   },
   methods: {
     async fetchData() {
-      this.recruits = await FirebaseService.SELECT_Recruit();
-      var ChatRef = firebase.database().ref('/chat/')
-      ChatRef.on('value', snapshot => {
-          this.chatRooms = snapshot.val();
-          this.myChatRooms = [];
-          for(var i in this.chatRooms) {
-            if(this.chatRooms[i].userId == this.$session.get('session_id')) {
-              this.myChatRooms.push(this.chatRooms[i]);
+      this.nowLevel = this.$session.get('level');
+
+      //COMPANY fetchData
+      if ( this.nowLevel == "3" ) {
+        this.recruitsbyCompany = await FirebaseService.SELECT_RecruitByCompany(this.$session.get('session_id'));
+        var ChatRef = firebase.database().ref('/chat/')
+        ChatRef.on('value', snapshot => {
+            this.chatRooms = snapshot.val();
+          },function(error) {
+            console.error(error,"채팅방 에러");
+        });
+
+      } else if ( this.nowLevel == "2" ) {
+        //USER fetchData -->
+        this.recruits = await FirebaseService.SELECT_Recruit();
+        var ChatRef = firebase.database().ref('/chat/')
+        ChatRef.on('value', snapshot => {
+            this.chatRooms = snapshot.val();
+            this.myChatRooms = [];
+            for(var i in this.chatRooms) {
+              if(this.chatRooms[i].userId == this.$session.get('session_id')) {
+                this.myChatRooms.push(this.chatRooms[i]);
+              }
             }
-          }
-        },function(error) {
-          console.error(error,"채팅방 에러");
-      });
+          },function(error) {
+            console.error(error,"채팅방 에러");
+        });
+      }
     },
+
+    // COMPANY METHOD -->
+      enterMyRecruit(recruit) {
+        console.log("여기까진오지?")
+        this.myChatRooms = [];
+        for(var i in this.chatRooms) {
+          console.log(recruit.data.title, " ?/ ",this.chatRooms[i].recruitPK)
+          if( this.chatRooms[i].recruitPK == recruit.id ) {
+            this.myChatRooms.push(this.chatRooms[i]);
+          }
+        }
+      },
+
+
+    // USER METHOD -->
     async existChatRoom(recruit,nickname,userId) {
       firebase.database().ref('/chat/').once('value').then(function(snapshot) {
         var chats = snapshot.val();
@@ -101,10 +163,8 @@ export default {
       });
     },
     async createChatRoom(recruit) {
-      var userId = this.$session.get('session_id');
-      var nicknameIndex = userId.indexOf("@");
-      var nickname = userId.substring(0,nicknameIndex);
-      var exist = await this.existChatRoom(recruit.id,nickname,userId);
+      var nickname = this.$session.get('session_id');
+      var exist = await this.existChatRoom(recruit.id,nickname);
       if ( !exist ) {
         firebase.database().ref('chat/'+recruit.id+nickname).set({
           link : 'chat/'+recruit.id+nickname,
@@ -140,6 +200,7 @@ export default {
       });
       this.myMessage = "";
     },
+
   },
 };
 </script>
