@@ -3,11 +3,9 @@
     <v-flex xs2 class="text-md-center">
       <span>{{company.name}}</span>
     </v-flex>
-
-    <!-- <v-flex xs2 class="text-md-center">
-      <button class="btn">star</button>
-      <span>99</span>
-    </v-flex>-->
+    <div class="recruitBtnContainer">
+      <a href="/recruit" class="recruitBtn">Recruit 등록하기</a>
+    </div>
   </v-layout>
 </template>
 
@@ -22,3 +20,14 @@ export default {
   }
 };
 </script>
+<style scoped>
+.recruitBtn {
+  background-color: blueviolet;
+  color: white;
+  text-decoration: none;
+}
+.recruitBtnContainer {
+  display: flex;
+  justify-content: flex-end;
+}
+</style>

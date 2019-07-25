@@ -15,7 +15,10 @@ export default new Vuex.Store({
     projectViewToggle: false,
     no_header: false,
     followerView: false,
-    followingView: false
+    followingView: false,
+    techFilterList: [],
+    allPortfolioList: [],
+    showPortfolioList: []
   },
   // Getter : get 함수 정의
   // 정의 -> return state.변수명
@@ -43,6 +46,57 @@ export default new Vuex.Store({
     },
     setFollowingView: (state, val) => {
       state.followingView = val;
+    },
+    addFilterTech: function(state, payload) {
+      state.techFilterList.push(payload);
+      state.showPortfolioList = state.allPortfolioList;
+      const all = state.allPortfolioList;
+      const bottle = [];
+      for (let i = 0; i < all.length; i++) {
+        const isPush = false;
+        for (let j = 0; j < state.techFilterList.length; j++) {
+          if (isPush) {
+            break;
+          }
+          for (let k = 0; k < all[i].projecttech.length; k++) {
+            if (state.techFilterList[j].title === all[i].projecttech[k]) {
+              bottle.push(all[i]);
+              isPush = true;
+              break;
+            }
+          }
+        }
+      }
+      state.showPortfolioList = bottle;
+    },
+    deleteFilterTech: function(state, payload) {
+      const index = state.techFilterList.indexOf(payload);
+      state.techFilterList.splice(index, 1);
+      state.showPortfolioList = state.allPortfolioList;
+      if (state.techFilterList.length !== 0) {
+        const all = state.allPortfolioList;
+        const bottle = [];
+        for (let i = 0; i < all.length; i++) {
+          const isPush = false;
+          for (let j = 0; j < state.techFilterList.length; j++) {
+            if (isPush) {
+              break;
+            }
+            for (let k = 0; k < all[i].projecttech.length; k++) {
+              if (state.techFilterList[j].title === all[i].projecttech[k]) {
+                bottle.push(all[i]);
+                isPush = true;
+                break;
+              }
+            }
+          }
+        }
+        state.showPortfolioList = bottle;
+      }
+    },
+    selectAllPortfolioList: function(state, payload) {
+      state.allPortfolioList = payload;
+      state.showPortfolioList = payload;
     }
   },
 

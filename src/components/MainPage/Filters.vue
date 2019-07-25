@@ -3,12 +3,10 @@
     <div class="filter__content">
       <button
         v-for="(tech,index) in this.techs"
+        class="techBtn"
         @click="addTech(index)"
-        style="
-          color: #858585;
-          font-size: 15px;
-          margin-right: 25px;">
-        {{tech}}</button>
+        v-bind:class="{selectedBtn : tech.isCheck}"
+      >{{tech.title}}</button>
     </div>
   </div>
 </template>
@@ -17,11 +15,52 @@
 export default {
   data() {
     return {
-      techs: ["C", "C#", "JavaScript", "Android", "JQuery"]
+      techs: [
+        {
+          title: "c",
+          isCheck: false
+        },
+        {
+          title: "c#",
+          isCheck: false
+        },
+        {
+          title: "javascript",
+          isCheck: false
+        },
+        {
+          title: "android",
+          isCheck: false
+        },
+        {
+          title: "jquery",
+          isCheck: false
+        },
+        {
+          title: "vue",
+          isCheck: false
+        },
+        {
+          title: "python",
+          isCheck: false
+        },
+        {
+          title: "java",
+          isCheck: false
+        }
+      ]
     };
   },
   methods: {
-    addTech: function(index) {}
+    addTech: function(index) {
+      if (!this.techs[index].isCheck) {
+        this.techs[index].isCheck = true;
+        this.$store.commit("addFilterTech", this.techs[index]);
+      } else {
+        this.techs[index].isCheck = false;
+        this.$store.commit("deleteFilterTech", this.techs[index]);
+      }
+    }
   }
 };
 </script>
@@ -35,14 +74,17 @@ export default {
   height: 80px;
   background-color: white;
 }
-/* .filter__content {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-} */
 .techBtn {
   color: #858585;
-  font-size: 15px;
+  width: 110px;
+  height: 40px;
   margin-right: 25px;
+  font-size: 19px;
+  padding: 5px;
+}
+.selectedBtn {
+  color: white;
+  background: blueviolet;
+  border-radius: 5%;
 }
 </style>
