@@ -63,8 +63,7 @@
                   <v-text-field label="Comment" v-model="comment"></v-text-field>
 
                   <v-btn @click="INSERT_Comment(comment)">submit</v-btn>
-                  <v-btn @click="InfoProject()">파일위치(관리자용)</v-btn>
-                </form>
+                  </form>
 
                 <!-- comment sort -->
                 <v-flex>
@@ -167,14 +166,19 @@ export default {
     this.get_comments();
   },
   methods: {
+    showNotification (group, type ,title, text) {
+       this.$notify({
+         group,
+         title,
+         text,
+         type,
+       })
+     },
     async bindData(){
       this.$loading(true)
       this.project = await FirebaseService.SELECT_ProjectsByPcode(this.project_id);
       // console.log(this.project);
       this.$loading(false)
-    },
-    InfoProject(){
-      alert("이 파일의 위치는 components/project/project.vue");
     },
     // seulgi function
     async INSERT_Comment(comment){
@@ -213,7 +217,6 @@ export default {
       FirebaseService.DELETE_comment(project_id, comments, comment_index)
     },
     UPDATE_comment(pcode, comments, index) {
-      // 아직 만들지 않음.
       var before = document.querySelector(`.before_${index}`)
       var after = document.querySelector(`.after_${index}`)
       var aftertext = document.querySelector(`.aftertext_${index}`)
