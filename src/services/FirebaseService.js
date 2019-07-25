@@ -465,7 +465,7 @@ export default {
     old.projecttech = data.projecttech;
     old.projectimage = data.projectimage;
     old.projectrank = data.projectrank;
-    alert("진행중?");
+    // alert("진행중?");
     return firestore
       .collection("projects")
       .doc(project_id)
