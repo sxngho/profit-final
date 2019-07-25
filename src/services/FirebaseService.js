@@ -28,11 +28,11 @@ auth().onAuthStateChanged(function(user) {
     login_user = "익명";
   }
 
-  // firestore.collection('weblog').add({
-  //   login_user,
-  //   url,
-  //   date: firebase.firestore.FieldValue.serverTimestamp()
-  // })
+  firestore.collection('weblog').add({
+    login_user,
+    url,
+    date: firebase.firestore.FieldValue.serverTimestamp()
+  })
 });
 
 export default {
@@ -153,6 +153,18 @@ export default {
       });
   },
 
+  async SELECT_Companydata(id) {
+    return firestore
+      .collection("companys")
+      .where("id", "==", id)
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+          let data = doc.data();
+          return data;
+        });
+      });
+  },
   // Function :: 유저의 자기소개 정보를 업데이트합니다.
   // Parameter :: Story 페이지의 주인의 아이디와 새로운 인트로 정보를 가져옵니다.
   UPDATE_userIntro(intro, userId) {
@@ -196,6 +208,31 @@ export default {
       .doc(userId)
       .update({
         userCareers: old
+      });
+  },
+
+  // Function :: 유저의 정보를 가져옵니다.
+  async SELECT_AllUserdata() {
+    return firestore
+      .collection("users")
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+          let data = doc.data();
+          return { level : data.level , name : data.email };
+        });
+      });
+  },
+  // Function :: 기업의 정보를 가져옵니다.
+  async SELECT_AllCompanydata() {
+    return firestore
+      .collection("companys")
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+          let data = doc.data();
+          return { level : data.level , name : data.id };
+        });
       });
   },
   UPDATE_userImage(image, userId) {
@@ -247,6 +284,16 @@ export default {
           });
       });
   },
+
+  async SELECT_RecruitByCompany(id) {
+      return firestore.collection("recruit").where("companyId","==",id).get()
+      .then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+            return { data : doc.data(), id : doc.id };
+          });
+      });
+  },
+
   SELECT_AllCharRoom() {
     return firestore
       .collection("chat")
@@ -266,6 +313,7 @@ export default {
         messages : "",
       });
   },
+
 
   // -----------------------------------------------------------------
 
@@ -549,7 +597,8 @@ export default {
                 id: id,
                 interests: interests,
                 followerlist: [],
-                followinglist: []
+                followinglist: [],
+                level : "3",
               });
             // alert(`${id}님, 회원가입이 완료되었습니다.`);
             return true;
@@ -571,18 +620,18 @@ export default {
       .auth()
       .signInWithEmailAndPassword(id, password)
       .then(function() {
-        console.log(id, '이건 머지')
-        firestore.collection('users').where('email', '==', id)
-        .get()
-        .then((docSnapshot) => {
-          // 여기 진행중입니다.
-          var result = { result :true, data : docSnapshot.docs[0].id}
-          console.log(result)
-          // console.log(docSnapshot.docs[0].id)
-          return true
-        })
+        // console.log(id, '이건 머지')
+        // firestore.collection('users').where('email', '==', id)
+        // .get()
+        // .then((docSnapshot) => {
+        //   // 여기 진행중입니다.
+        //   var result = { result :true, data : docSnapshot.docs[0].id}
+        //   console.log(result)
+        //   // console.log(docSnapshot.docs[0].id)
+        //   return true
+        // })
 
-        // return true; // 유저 관련된 결과값은 성공한 경우가 True
+        return true; // 유저 관련된 결과값은 성공한 경우가 True
       })
       .catch(function(error) {
         // Handle Errors here.
