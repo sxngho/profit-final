@@ -571,16 +571,16 @@ export default {
       .auth()
       .signInWithEmailAndPassword(id, password)
       .then(function() {
-        console.log(id, '이건 머지')
-        firestore.collection('users').where('email', '==', id)
-        .get()
-        .then((docSnapshot) => {
-          // 여기 진행중입니다.
-          var result = { result :true, data : docSnapshot.docs[0].id}
-          console.log(result)
-          // console.log(docSnapshot.docs[0].id)
-          return true
-        })
+        // console.log(id, '이건 머지')
+        // firestore.collection('users').where('email', '==', id)
+        // .get()
+        // .then((docSnapshot) => {
+        //   // 여기 진행중입니다.
+        //   var result = { result :true, data : docSnapshot.docs[0].id}
+        //   console.log(result)
+        //   // console.log(docSnapshot.docs[0].id)
+        //   return true
+        // })
 
         // return true; // 유저 관련된 결과값은 성공한 경우가 True
       })
@@ -879,6 +879,34 @@ export default {
   async SELECT_ALLWebLog() {
     return firestore
       .collection("weblog")
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+          let data = doc.data();
+          return data;
+        });
+      });
+  },
+
+  // Function :: 유저의 정보를 가져옵니다.
+  // Parameter :: Story 페이지의 주인의 아이디를 개인정보를 가져옵니다.
+  async SELECT_AllUserdata() {
+    return firestore
+      .collection("users")
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+          let data = doc.data();
+          return data;
+        });
+      });
+  },
+
+  // Function :: 유저의 정보를 가져옵니다.
+  // Parameter :: Story 페이지의 주인의 아이디를 개인정보를 가져옵니다.
+  async SELECT_AllReport() {
+    return firestore
+      .collection("report")
       .get()
       .then(docSnapshots => {
         return docSnapshots.docs.map(doc => {

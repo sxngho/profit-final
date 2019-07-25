@@ -13,6 +13,7 @@
           'followers',
           'project',
           'manager',
+          'chat',
         ],
         datacollection: {
           labels: [],

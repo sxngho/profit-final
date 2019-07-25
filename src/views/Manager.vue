@@ -48,7 +48,7 @@ export default {
   },
   data() {
     return {
-      compo:2,
+      compo:5,
     };
   },
 };
@@ -57,14 +57,14 @@ export default {
 
 <style>
 .sidetoolbar{
-  height: 100%; /* Full-height: remove this if you want "auto" height */
-  width: 65px; /* Set the width of the sidebar */
-  position: fixed; /* Fixed Sidebar (stay in place on scroll) */
-  z-index: 1; /* Stay on top */
-  top: 0; /* Stay at the top */
+  height: 100%;
+  width: 65px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
   left: 0;
-  background-color: #111; /* Black */
-  overflow-x: hidden; /* Disable horizontal scroll */
+  background-color: #111;
+  overflow-x: hidden;
   padding-top: 60px;
 }
 

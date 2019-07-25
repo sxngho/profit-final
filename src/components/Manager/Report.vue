@@ -11,7 +11,7 @@ import FirebaseService from "@/services/FirebaseService";
 export default {
   data() {
     return {
-
+      reportlist:[],
     }
   },
   props: {
@@ -21,8 +21,13 @@ export default {
 
   },
   created() {
+    this.filldata();
   },
   methods: {
+    async filldata(){
+      this.reportlist = await FirebaseService.SELECT_AllReport();
+      console.log(this.reportlist);
+    }
   },
   watch: {
   }
