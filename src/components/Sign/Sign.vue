@@ -46,8 +46,8 @@
       <v-card>
         <v-card-title>Sign Up</v-card-title>
         <v-card-text>
-          <SignupforUserModal />
-          <SignupforCompanyModal />
+          <SignupforUserModal v-on:signup="signupsuccess" />
+          <SignupforCompanyModal v-on:signup="signupsuccess" />
         </v-card-text>
         <v-card-actions>
           <v-btn color="primary" flat @click="signupmodal=false">Close</v-btn>
@@ -80,6 +80,7 @@ export default {
 
     signupforuser: false,
     signupforcompany: false,
+
   }),
   components: {
     SignupforCompanyModal,
@@ -125,6 +126,11 @@ export default {
         // console.log(this.$store.getters.getSession,"setSession")
         // console.log(this.$session.get('session_id'))
       }
+    },
+    signupsuccess() {
+      this.signupmodal = false;
+      this.showNotification("foo-css","success",`회원가입 완료!`,`로그인 해주세요!`);
+
     }
   }
 };
