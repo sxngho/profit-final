@@ -31,11 +31,11 @@ auth().onAuthStateChanged(function(user) {
     login_user = "익명";
   }
 
-  firestore.collection('weblog').add({
-    login_user,
-    url,
-    date: firebase.firestore.FieldValue.serverTimestamp()
-  })
+  // firestore.collection('weblog').add({
+  //   login_user,
+  //   url,
+  //   date: firebase.firestore.FieldValue.serverTimestamp()
+  // })
 });
 // --------------------------------------------------------INIT FIREBASE SERVICE
 
@@ -440,7 +440,7 @@ export default {
               firestore.collection("users").doc(nickname).set({
                 email: id, first_name: first_name, last_name: last_name, phonenumber: phonenumber, userSkills: userSkills,
                 userImage: userImage, userName: first_name + last_name, userIntro: userIntro, userCareers: userCareers,
-                userEducations: userEducations, followerlist: [], followinglist: [], likeitProject: [], nickname : nickname, level : 0,
+                userEducations: userEducations, followerlist: [], followinglist: [], likeitProject: [], nickname : nickname, level : 0, showSkillList : [],
               });
               firestore.collection("user_addon").doc(nickname).set({
                 toggleView: false
