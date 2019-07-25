@@ -504,7 +504,8 @@ export default {
                   followerlist: [],
                   followinglist: [],
                   likeitProject: [],
-                  nickname : nickname
+                  nickname : nickname,
+                  level : 0,
                 });
               firestore
                 .collection("user_addon")
@@ -549,7 +550,8 @@ export default {
                 id: id,
                 interests: interests,
                 followerlist: [],
-                followinglist: []
+                followinglist: [],
+                level : 3,
               });
             // alert(`${id}님, 회원가입이 완료되었습니다.`);
             return true;
@@ -599,8 +601,12 @@ export default {
       .signInWithPopup(provider)
       .then(function(result) {
         var user = result.user.email;
-        // alert(`페이스북 로그인 완료!, ${result.user.email}`);
+        var time = String(Date.now()) // nickname을 임시로 넣기 위한 숫자변수 역할
         var answer = { user: user, result: true };
+        // alert(`페이스북 로그인 완료!, ${result.user.email}`);
+        // console.log(time)
+        // return firestore.collection('users')
+        // console.log(time)
         return answer;
       })
       .catch(function(error) {
