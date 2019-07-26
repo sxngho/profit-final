@@ -31,11 +31,11 @@ auth().onAuthStateChanged(function(user) {
     login_user = "익명";
   }
 
-  firestore.collection('weblog').add({
-    login_user,
-    url,
-    date: firebase.firestore.FieldValue.serverTimestamp()
-  })
+  // firestore.collection('weblog').add({
+  //   login_user,
+  //   url,
+  //   date: firebase.firestore.FieldValue.serverTimestamp()
+  // })
 });
 // --------------------------------------------------------INIT FIREBASE SERVICE
 
