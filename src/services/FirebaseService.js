@@ -516,8 +516,7 @@ export default {
     // LIKE--------------------------------------------------------------------
 
 
-    // Function :: 프로젝트를 좋아요 누른다 , like_users 는  프로젝트를 좋아하는 사람들
-    // 현재 seulgi 가 진행중입니다.
+    // Function :: 프로젝트를 좋아요 는 else문 취소는 if문 , like_users : 프로젝트를 좋아하는 사람들
     async like_project(user, project_id, like_users) {
       // 각 상황별로.
       // 1. 프로젝트의 좋아요 들 안에 user를 넣는다.
@@ -528,7 +527,7 @@ export default {
         firestore.collection('users').doc(user).get()
         .then((docSnapshot) => { // 그 사람이 좋아하는 프로젝트 리스트를 가져온 다음
           var users_likeprojects = docSnapshot.data().likeitProject
-          var lndex2 = users_likeprojects.indexOf(project_id)
+          var index2 = users_likeprojects.indexOf(project_id)
           users_likeprojects.splice(index2, 1)
           firestore.collection('users').doc(user).update({
             likeitProject : users_likeprojects
@@ -541,9 +540,8 @@ export default {
         like_users.push(user)
         firestore.collection('users').doc(user).get()
         .then((docSnapshot) => {
-          var users_likeproject = docSnapshot.data().likeitProject
+          var users_likeprojects = docSnapshot.data().likeitProject
           users_likeprojects.push(project_id)
-          console.log(users_likeprojects, '들어갔냐~')
           firestore.collection('users').doc(user).update({
             likeitProject : users_likeprojects
           })
