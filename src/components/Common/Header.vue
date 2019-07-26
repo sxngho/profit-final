@@ -2,15 +2,15 @@
   <div class="headerBar">
     <div style="background:white" class="toolBar">
       <v-toolbar-title>
-        <v-btn flat class="font-bold-light title" to="/">Sharefolio</v-btn>
+        <v-btn text class="font-bold-light title" to="/">Sharefolio</v-btn>
       </v-toolbar-title>
       <v-spacer />
       <!-- <div id="google_translate_element"></div> -->
       <Sign />
-      <v-btn flat>
+      <v-btn text>
         <i class="fa fa-globe" aria-hidden="true"></i>
       </v-btn>
-      <v-btn flat class="font-bold-light" to="/Chat">chat</v-btn>
+      <v-btn text class="font-bold-light" to="/Chat">chat</v-btn>
       <v-btn flat class="font-bold-light" to="/Manager">Manager</v-btn>
       <v-btn flat class="font-bold-light" to="/companyIntro">Company</v-btn>
     </div>
@@ -19,7 +19,6 @@
 </template>
 
 <script>
-import FirebaseService from "@/services/FirebaseService";
 import Sign from "../Sign/Sign";
 
 export default {

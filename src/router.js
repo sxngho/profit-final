@@ -11,6 +11,12 @@ import store from "./store";
 import Manager from "./views/Manager.vue";
 import Chat from "./views/chat.vue";
 import Recruit from "./views/Recruit.vue";
+import RecruitDetail from "./components/Recruit/RecruitDetail.vue";
+import Studio from "./views/Studio.vue";
+import ReChat from "./components/Recruit/Chat.vue";
+import Consult from "./components/Recruit/Consult.vue";
+import Contract from "./components/Recruit/Contract.vue";
+import RecuritEditorPage from "./views/RecuritEditorPage.vue";
 
 Vue.use(Vuex);
 Vue.use(store);
@@ -67,6 +73,36 @@ export default new Router({
       path: "/recruit",
       name: "recruit",
       component: Recruit
+    },
+    {
+      path: "/recruit/:rcode",
+      name: "recruit",
+      component: RecruitDetail
+    },
+    {
+      path: "/studio",
+      name: "studio",
+      component: Studio
+    },
+    {
+      path: "/chat/:ccode",
+      name: "chat",
+      component: ReChat
+    },
+    {
+      path: "/consult/:ccode",
+      name: "consult",
+      component: Consult
+    },
+    {
+      path: "/contract/:ccode",
+      name: "contract",
+      component: Contract
+    },
+    {
+      path: "/recuriteditorpage",
+      name: "recuriteditorpage",
+      component: RecuritEditorPage
     }
   ]
 });

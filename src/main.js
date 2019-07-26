@@ -34,9 +34,9 @@ Vue.use(Vuetify, {
 Vue.use(Vuetify, {
   iconfont: 'mdi' // 'md' || 'mdi' || 'fa' || 'fa4'
 })
-
 new Vue({
   router,
   store,
   render: h => h(App),
+	vuetify: new Vuetify()
 }).$mount('#app')

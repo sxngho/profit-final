@@ -326,9 +326,10 @@ import FirebaseService from "@/services/FirebaseService";
         this.session_id);
         this.reload_userskill(this.session_id);
         this.showNotification('foo-css','success','업로드 성공','프로젝트가 정상적으로 수정되었습니다.')
+        this.$emit('insert_success')
         },
         async reload_userskill(session_id) {
-          console.log('asdasd')
+          // console.log('asdasd')
         var projects =  await FirebaseService.SELECT_Projects(session_id);
         await FirebaseService.reload_userskill(session_id,projects);
       },

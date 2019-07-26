@@ -2,6 +2,8 @@
   <div class="MainPage">
     <Banner />
     <Filters />
+    <v-btn to="/recruit">Go To Recruit Page</v-btn>
+    <v-btn to="/studio">Studio</v-btn>
     <PortfolioList />
     <!-- <button class="mainMoreBtn">MORE</button> -->
   </div>
@@ -15,7 +17,6 @@ import Filters from "../components/MainPage/Filters";
 import PortfolioList from "../components/MainPage/PortfolioList";
 import ProfileRegister from "../components/MainPage/ProfileRegister";
 import Vue from "vue";
-// import Projects from "../components/MainPage/Projects";
 
 export default {
   name: "Main",
