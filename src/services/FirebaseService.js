@@ -89,8 +89,6 @@ export default {
         date: firebase.firestore.FieldValue.serverTimestamp(),
         comments: [], likeit: []
       });
-      alert("등록 완료!");
-      location.reload();
     },
 
     UPDATE_Project(data, old, project_id) {
@@ -518,28 +516,40 @@ export default {
     // LIKE--------------------------------------------------------------------
 
 
-    // Function :: 프로젝트를 좋아요 누른다
-    async likeit(targetProject, user, targetlikeitlist, userlikeitlist) {
-      targetlikeitlist.push(user);
-      userlikeitlist.push(targetProject);
-      firestore.collection("users").doc(user).update({
-        likeitProject: userlikeitlist
-      });
-      firestore.collection("projects").doc(targetProject).update({
-        likeit: targetlikeitlist
-      });
-    },
-
-    // Function :: 프로젝트를 좋아요를 취소한다.
-    async unlikeit(targetProject, user, targetlikeitlist, userlikeitlist) {
-      targetlikeitlist.splice(targetlikeitlist.indexOf(user), 1);
-      userlikeitlist.splice(userlikeitlist.indexOf(targetProject), 1);
-      firestore.collection("users").doc(user).update({
-        likeitProject: userlikeitlist
-      });
-      firestore.collection("projects").doc(targetProject).update({
-        likeit: targetlikeitlist
-      });
+    // Function :: 프로젝트를 좋아요 는 else문 취소는 if문 , like_users : 프로젝트를 좋아하는 사람들
+    async like_project(user, project_id, like_users) {
+      // 각 상황별로.
+      // 1. 프로젝트의 좋아요 들 안에 user를 넣는다.
+      // 2. user의 likeitProject에 project_id를 넣는다.
+      if (like_users.includes(user)) { // 이미 좋아요를 눌렀다면.
+        var index = like_users.indexOf(user)
+        like_users.splice(index, 1)
+        firestore.collection('users').doc(user).get()
+        .then((docSnapshot) => { // 그 사람이 좋아하는 프로젝트 리스트를 가져온 다음
+          var users_likeprojects = docSnapshot.data().likeitProject
+          var index2 = users_likeprojects.indexOf(project_id)
+          users_likeprojects.splice(index2, 1)
+          firestore.collection('users').doc(user).update({
+            likeitProject : users_likeprojects
+          })
+          firestore.collection('projects').doc(project_id).update({
+            likeit : like_users
+          })
+        })
+      } else {
+        like_users.push(user)
+        firestore.collection('users').doc(user).get()
+        .then((docSnapshot) => {
+          var users_likeprojects = docSnapshot.data().likeitProject
+          users_likeprojects.push(project_id)
+          firestore.collection('users').doc(user).update({
+            likeitProject : users_likeprojects
+          })
+          firestore.collection('projects').doc(project_id).update({
+            likeit : like_users
+          })
+        })
+      }
     },
 
 

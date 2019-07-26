@@ -19,7 +19,6 @@
 </template>
 
 <script>
-import FirebaseService from "@/services/FirebaseService";
 import Sign from "../Sign/Sign";
 
 export default {

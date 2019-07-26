@@ -12,16 +12,14 @@
        </v-toolbar-title>
       <v-spacer/>
 
-      <v-btn flat icon color="gray" @click="likeit()" v-if="!this.islikeit">
-        <i class="fa fa-heart fa-2x"></i>
+      <v-btn flat icon color="pink">
+        <i id="likecheck" class="far fa-heart fa-2x" @click="like_project(project_id)"></i>
+        <!-- 이미 좋아요 눌렀다면 다른 fa 를 보여주는 것도 좋겠다. -->
       </v-btn>
-      <v-btn flat icon color="pink" @click="unlikeit()" v-if="this.islikeit">
-        <i class="fa fa-heart fa-2x"></i>
-      </v-btn>
-
       <v-btn flat icon color="yellow">
         <i class="fa fa-star fa-2x"></i>
       </v-btn>
+
     </v-toolbar>
 
     <!-- card -->
@@ -163,6 +161,7 @@ export default {
     this.$store.state.no_header = true;
     this.isLikeItCheck();
     this.get_comments();
+    this.like_check();
   },
   methods: {
     showNotification (group, type ,title, text) {
@@ -256,6 +255,29 @@ export default {
       var after = document.querySelector(`.after_${index}`)
       before.style.display = 'block';
       after.style.display = 'none';
+    },
+    async like_project(project_id) {
+      var result = await FirebaseService.like_project(this.user, project_id, this.project.likeit)
+      var userdata = await FirebaseService.SELECT_Userdata(this.user)
+      var heart = document.querySelector('#likecheck')
+      if (userdata[0].likeitProject.includes(this.project_id)) {
+        heart.classList.remove('fa')
+        heart.classList.add('far')
+      } else {
+        heart.classList.remove('far')
+        heart.classList.add('fa')
+      }
+    },
+    async like_check() {
+      var userdata = await FirebaseService.SELECT_Userdata(this.user)
+      var heart = document.querySelector('#likecheck')
+      if (userdata[0].likeitProject.includes(this.project_id)) {
+        heart.classList.remove('far')
+        heart.classList.add('fa')
+      } else {
+        heart.classList.remove('fa')
+        heart.classList.add('far')
+      }
     },
   }
 }
