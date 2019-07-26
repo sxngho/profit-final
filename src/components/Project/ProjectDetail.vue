@@ -102,7 +102,6 @@ export default {
       await FirebaseService.reload_userskill(session_id,projects);
     },
   },
-
   created() {
     this.user = this.$route.params.id;
     this.login = this.$session.get("session_id");

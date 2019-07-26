@@ -54,12 +54,12 @@ export default {
     Barchart,
   },
   created() {
-    this.filldata();
+    // this.filldata();
   },
   methods: {
-    async filldata(){
-      this.loglist = await FirebaseService.SELECT_ALLWebLog();
-    }
+    // async filldata(){
+    //   this.loglist = await FirebaseService.SELECT_ALLWebLog();
+    // }
   },
 
 };

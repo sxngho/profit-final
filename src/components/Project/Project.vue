@@ -14,7 +14,8 @@
        </v-toolbar-title>
       <v-spacer/>
       <v-btn flat icon color="pink">
-        <i class="fa fa-heart fa-2x"></i>
+        <i class="fa fa-heart fa-2x" @click="like_project(project_id)"></i>
+        <!-- 이미 좋아요 눌렀다면 다른 fa 를 보여주는 것도 좋겠다. -->
       </v-btn>
       <v-btn flat icon color="yellow">
         <i class="fa fa-star fa-2x"></i>
@@ -238,6 +239,12 @@ export default {
       before.style.display = 'block';
       after.style.display = 'none';
     },
+    like_project(project_id) {
+      console.log(project_id, '이거 떳냐..?')
+      console.log(this.user, '유저 떳을 거고..?')
+      console.log(this.project.likeit, '안들어갔으면 공백~')
+      FirebaseService.like_project(this.user, project_id, this.project.likeit)
+    },
     likeit(com, index) {
       // if (com.like.includes(this.user)) {
       //   console.log('이미 눌렀구나???')
@@ -252,7 +259,7 @@ export default {
       //   com.likecount += 1
       // }
       // FirebaseService.UPDATE_Comment(this.comments, com, index)
-    }
+    },
   },
 };
 </script>

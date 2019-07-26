@@ -138,7 +138,7 @@
               </div>
 
               <div style="position: absolute; display: inline; right: 0px; top:7px;">
-                <div style="display:inline!important; float:right; right:50%;" v-if="!stateAdd">
+                <div style="display:inline!important; float:right; right:50%;" v-if="!stateAdd ">
                   <toggle-button
                     d-inline
                     v-if="!stateAdd && !stateupdate && !statedetail"
@@ -149,7 +149,7 @@
                   />
                 </div>
 
-                <div style="display:inline!important; float:right; right:50%;" v-if="!stateAdd">
+                <div style="display:inline!important; float:right; right:50%;" v-if="!stateAdd && !stateupdate && !statedetail">
                   <div class="d-inline" @click="layout1()">
                     <img
                       id="toggletext"
@@ -266,6 +266,7 @@ export default {
       this.pcode = pcode;
       this.statedetail = true;
       this.loading = false;
+      // this.stateAdd = false;
     },
     gbp() {
       this.statedetail = false;
