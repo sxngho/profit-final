@@ -30,10 +30,10 @@
 
             <v-card>
               <v-card-text>
-                <v-btn flat outline>운영자</v-btn>
-                <v-btn flat outline>관리자</v-btn>
-                <v-btn flat outline>일반유저</v-btn>
-                <v-btn flat outline class="red--text">탈퇴시키기</v-btn>
+                <v-btn text outlined>운영자</v-btn>
+                <v-btn text outlined>관리자</v-btn>
+                <v-btn text outlined>일반유저</v-btn>
+                <v-btn text outlined class="red--text">탈퇴시키기</v-btn>
               </v-card-text>
             </v-card>
 

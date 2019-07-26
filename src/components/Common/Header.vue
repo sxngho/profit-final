@@ -11,8 +11,8 @@
         <i class="fa fa-globe" aria-hidden="true"></i>
       </v-btn>
       <v-btn text class="font-bold-light" to="/Chat">chat</v-btn>
-      <v-btn flat class="font-bold-light" to="/Manager">Manager</v-btn>
-      <v-btn flat class="font-bold-light" to="/companyIntro">Company</v-btn>
+      <v-btn text class="font-bold-light" to="/Manager">Manager</v-btn>
+      <v-btn text class="font-bold-light" to="/companyIntro">Company</v-btn>
     </div>
     <hr />
   </div>

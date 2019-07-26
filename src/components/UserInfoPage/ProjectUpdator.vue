@@ -20,7 +20,7 @@
       <!-- 탭 아이템들 -->
       <!-- Step 1 :: ProjectTitle -->
       <v-tab-item :key="1">
-        <v-card flat>
+        <v-card text>
           <v-card-text>
             <v-container>
               <v-flex>
@@ -33,7 +33,7 @@
                 <v-text-field
                 label="프로젝트 제목*"
                 single-line
-                outline
+                outlined
                 v-model="projecttitle"
                 required
                 ></v-text-field>
@@ -42,7 +42,7 @@
               <v-flex>
                 <span>프로젝트 설명~~~~</span>
                 <v-textarea
-                outline
+                outlined
                 name="input-7-4"
                 label="프로젝트 설명"
                 v-model="projectdescription"
@@ -58,12 +58,12 @@
               </div>
             </v-container>
           </v-card-text>
-        </v-card flat>
+        </v-card text>
       </v-tab-item>
 
       <!-- Step 2 :: ProjecStruct -->
       <v-tab-item :key="2">
-        <v-card flat>
+        <v-card text>
           <v-card-text>
             <!-- 프로젝트 기간 세팅 -->
             <v-container>
@@ -81,7 +81,7 @@
                 <v-flex xs12>
                   <ul row style="list-style:none;">
                     <li v-for="item in pterm" style="float:left">
-                      <v-btn small flat outline round @click="termselect(item)">{{ item }}</v-btn>
+                      <v-btn small text outlined rounded @click="termselect(item)">{{ item }}</v-btn>
                     </li>
                   </ul>
                 </v-flex>
@@ -99,7 +99,7 @@
                   <v-flex xs12>
                     <ul row style="list-style:none;">
                       <li v-for="(item, index) in projecttech" style="float:left">
-                        <v-btn small flat outline round @click="deleteTech()">{{ item }}</v-btn>
+                        <v-btn small text outlined rounded @click="deleteTech()">{{ item }}</v-btn>
                       </li>
                     </ul>
                   </v-flex>
@@ -120,7 +120,7 @@
                   <v-flex xs12>
                     <ul row style="list-style:none;">
                       <li v-for="(item, index) in techlist" style="float:left">
-                        <v-btn small flat outline round @click="addTech(item)">{{ item }}</v-btn>
+                        <v-btn small text outlined rounded @click="addTech(item)">{{ item }}</v-btn>
                       </li>
                     </ul>
                   </v-flex>
@@ -161,7 +161,7 @@
                   <v-flex xs12>
                     <ul row style="list-style:none;">
                       <li v-for="item in ranklist" style="float:left">
-                        <v-btn small flat outline round @click="selectRank(item)">{{ item }}</v-btn>
+                        <v-btn small text outlined rounded @click="selectRank(item)">{{ item }}</v-btn>
                       </li>
                     </ul>
                   </v-flex>
@@ -174,12 +174,12 @@
               <v-btn @click="next">다음단계로</v-btn>
             </div>
           </v-card-text>
-        </v-card flat>
+        </v-card text>
       </v-tab-item>
 
       <!-- Step 3 :: Set Project main Img, Thumbnail, description -->
       <v-tab-item :key="3">
-        <v-card flat>
+        <v-card text>
           <v-card-text style="overflow:auto">
             <vue-editor v-model="projectcontent"></vue-editor>
 
@@ -197,7 +197,7 @@
               <small>*언제든지 수정할 수 있습니다!</small>
             </div>
           </v-card-text>
-        </v-card flat>
+        </v-card text>
       </v-tab-item>
 
     </v-tabs>

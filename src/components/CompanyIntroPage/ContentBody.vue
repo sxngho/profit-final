@@ -5,7 +5,7 @@
         <v-card-text>
           <p class="text-md-center">기술스택</p>
           <v-flex>
-            <v-btn v-for="skill in skills" flat small round outline>{{ skill.name }}</v-btn>
+            <v-btn v-for="skill in skills" text small rounded outlined>{{ skill.name }}</v-btn>
           </v-flex>
         </v-card-text>
       </v-layout>
@@ -26,7 +26,7 @@
     <v-layout style="background:white;">
       <v-card-text>
         <v-flex>
-          <v-btn block v-for="job in jobs" flat outline>{{ job.title }}</v-btn>
+          <v-btn block v-for="job in jobs" text outlined>{{ job.title }}</v-btn>
         </v-flex>
       </v-card-text>
     </v-layout>

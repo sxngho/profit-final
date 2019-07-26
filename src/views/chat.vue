@@ -27,13 +27,19 @@
   <v-layout row wrap v-if='nowChatRoom !== "" '>
     <v-flex xs1>
     </v-flex>
-    <v-flex xs5>
+    <v-flex xs4>
+      <div>
+        <v-divider/>
+        <h1> 채팅창 </h1>
+        <v-divider/>
+      </div>
       <v-flex xs12 v-for="message in messages" v-if='message.chatId !== "" && message.chatMsg !== "" '>
         [{{ message.chatId }}] : {{ message.chatMsg }}
       </v-flex>
-      <v-text-field single-line outline required v-model="myMessage" v-on:keyup.enter="pushMessage(myMessage)" > </v-text-field>
+      <v-text-field single-line outlined required v-model="myMessage" v-on:keyup.enter="pushMessage(myMessage)" > </v-text-field>
     </v-flex>
-
+    <v-flex xs1>
+    </v-flex>
     <v-flex xs6>
       <div>
         <v-divider/>
@@ -64,7 +70,7 @@
              <tr v-if="!toggleProjectTitle">
                <td>프로젝트 이름</td>
                <td>
-                 <v-text-field single-line outline required v-model="inputProjectTitle" v-on:keyup.enter="completeProjectTitle(inputProjectTitle)" > </v-text-field>
+                 <v-text-field single-line outlined required v-model="inputProjectTitle" v-on:keyup.enter="completeProjectTitle(inputProjectTitle)" > </v-text-field>
                </td>
              </tr>
 
@@ -75,7 +81,7 @@
              <tr v-if="!toggleProjectTerm">
                <td>프로젝트 기간</td>
                <td>
-                 <v-text-field single-line outline required v-model="inputProjectTerm" v-on:keyup.enter="completeProjectTerm(inputProjectTerm)" > </v-text-field>
+                 <v-text-field single-line outlined required v-model="inputProjectTerm" v-on:keyup.enter="completeProjectTerm(inputProjectTerm)" > </v-text-field>
                </td>
              </tr>
 
@@ -86,7 +92,7 @@
              <tr v-if="!togglePay">
                <td> 급여 </td>
                <td>
-                 <v-text-field single-line outline required v-model="inputPay" v-on:keyup.enter="completePay(inputPay)" > </v-text-field>
+                 <v-text-field single-line outlined required v-model="inputPay" v-on:keyup.enter="completePay(inputPay)" > </v-text-field>
                </td>
              </tr>
 
@@ -97,7 +103,7 @@
              <tr v-if="!toggleDownPayment">
                <td></td>
                <td>
-                 <v-text-field single-line outline required v-model="inputDownPayment" v-on:keyup.enter="completeDownPayment(inputDownPayment)" > </v-text-field>
+                 <v-text-field single-line outlined required v-model="inputDownPayment" v-on:keyup.enter="completeDownPayment(inputDownPayment)" > </v-text-field>
                </td>
              </tr>
 
@@ -108,7 +114,7 @@
              <tr >
                <td>잔금</td>
                <td v-if="!toggleBalance">
-                 <v-text-field single-line outline required v-model="inputBalance" v-on:keyup.enter="completeBalance(inputBalance)" > </v-text-field>
+                 <v-text-field single-line outlined required v-model="inputBalance" v-on:keyup.enter="completeBalance(inputBalance)" > </v-text-field>
                </td>
              </tr>
 
@@ -119,7 +125,7 @@
              <tr v-if="!togglePenalty" >
                <td> 위약금 </td>
                <td>
-                 <v-text-field single-line outline required v-model="inputPenalty" v-on:keyup.enter="completePenalty(inputPenalty)" > </v-text-field>
+                 <v-text-field single-line outlined required v-model="inputPenalty" v-on:keyup.enter="completePenalty(inputPenalty)" > </v-text-field>
                </td>
              </tr>
 
@@ -131,7 +137,7 @@
              <tr v-if="!toggleContractDate">
                <td> 계약금</td>
                <td>
-                 <v-text-field single-line outline required v-model="inputContractDate" v-on:keyup.enter="completeContractDate(inputContractDate)" > </v-text-field>
+                 <v-text-field single-line outlined required v-model="inputContractDate" v-on:keyup.enter="completeContractDate(inputContractDate)" > </v-text-field>
                </td>
              </tr>
 
@@ -142,7 +148,7 @@
               <tr v-if="!toggleCompanyId">
                 <td> 기업명 </td>
                 <td>
-                  <v-text-field single-line outline required v-model="inputCompanyId" v-on:keyup.enter="completeCompanyId(inputCompanyId)" > </v-text-field>
+                  <v-text-field single-line outlined required v-model="inputCompanyId" v-on:keyup.enter="completeCompanyId(inputCompanyId)" > </v-text-field>
                 </td>
               </tr>
 
@@ -154,7 +160,7 @@
               <tr >
                 <td>기업주소</td>
                 <td v-if="!toggleCompanyAddr">
-                  <v-text-field single-line outline required v-model="inputCompanyAddr" v-on:keyup.enter="completeCompanyAddr(inputCompanyAddr)" > </v-text-field>
+                  <v-text-field single-line outlined required v-model="inputCompanyAddr" v-on:keyup.enter="completeCompanyAddr(inputCompanyAddr)" > </v-text-field>
                 </td>
               </tr>
 
@@ -166,7 +172,7 @@
               <tr v-if="!toggleCompany">
                 <td> 책임자 </td>
                 <td>
-                  <v-text-field single-line outline required v-model="inputCompany" v-on:keyup.enter="completeCompany(inputCompany)" > </v-text-field>
+                  <v-text-field single-line outlined required v-model="inputCompany" v-on:keyup.enter="completeCompany(inputCompany)" > </v-text-field>
                 </td>
               </tr>
 
@@ -177,7 +183,7 @@
               <tr v-if="!toggleAddr">
                 <td> 유저주소 </td>
                 <td>
-                  <v-text-field single-line outline required v-model="inputAddr" v-on:keyup.enter="completeAddr(inputAddr)" > </v-text-field>
+                  <v-text-field single-line outlined required v-model="inputAddr" v-on:keyup.enter="completeAddr(inputAddr)" > </v-text-field>
                 </td>
               </tr>
 
@@ -188,7 +194,7 @@
               <tr v-if="!toggleRrn" >
                 <td> 유저주민번호 </td>
                 <td>
-                  <v-text-field single-line outline required v-model="inputRrn" v-on:keyup.enter="completeRrn(inputRrn)" > </v-text-field>
+                  <v-text-field single-line outlined required v-model="inputRrn" v-on:keyup.enter="completeRrn(inputRrn)" > </v-text-field>
                 </td>
               </tr>
 
@@ -199,7 +205,7 @@
               <tr v-if="!toggleUserId">
                 <td> 유저이름 </td>
                 <td>
-                  <v-text-field single-line outline required v-model="inputUserId" v-on:keyup.enter="completeUserId(inputUserId)" > </v-text-field>
+                  <v-text-field single-line outlined required v-model="inputUserId" v-on:keyup.enter="completeUserId(inputUserId)" > </v-text-field>
                 </td>
               </tr>
            </tbody>
@@ -234,11 +240,18 @@
 <v-layout row wrap v-if='nowChatRoom !== "" '>
   <v-flex xs1>
   </v-flex>
-  <v-flex xs5>
+  <v-flex xs4>
+    <div>
+      <v-divider/>
+      <h1> 채팅창 </h1>
+      <v-divider/>
+    </div>
     <v-flex xs12 v-for="message in messages" v-if='message.chatId !== "" && message.chatMsg !== "" '>
       [{{ message.chatId }}] : {{ message.chatMsg }}
     </v-flex>
-    <v-text-field single-line outline required v-model="myMessage" v-on:keyup.enter="pushMessage(myMessage)" > </v-text-field>
+    <v-text-field single-line outlined required v-model="myMessage" v-on:keyup.enter="pushMessage(myMessage)" > </v-text-field>
+  </v-flex>
+  <v-flex xs1>
   </v-flex>
     <v-flex xs6>
       <div>
@@ -270,7 +283,7 @@
            <tr v-if="!toggleProjectTitle">
              <td>프로젝트 이름</td>
              <td>
-               <v-text-field single-line outline required v-model="inputProjectTitle" v-on:keyup.enter="completeProjectTitle(inputProjectTitle)" > </v-text-field>
+               <v-text-field single-line outlined required v-model="inputProjectTitle" v-on:keyup.enter="completeProjectTitle(inputProjectTitle)" > </v-text-field>
              </td>
            </tr>
 
@@ -281,7 +294,7 @@
            <tr v-if="!toggleProjectTerm">
              <td>프로젝트 기간</td>
              <td>
-               <v-text-field single-line outline required v-model="inputProjectTerm" v-on:keyup.enter="completeProjectTerm(inputProjectTerm)" > </v-text-field>
+               <v-text-field single-line outlined required v-model="inputProjectTerm" v-on:keyup.enter="completeProjectTerm(inputProjectTerm)" > </v-text-field>
              </td>
            </tr>
 
@@ -292,7 +305,7 @@
            <tr v-if="!togglePay">
              <td> 급여 </td>
              <td>
-               <v-text-field single-line outline required v-model="inputPay" v-on:keyup.enter="completePay(inputPay)" > </v-text-field>
+               <v-text-field single-line outlined required v-model="inputPay" v-on:keyup.enter="completePay(inputPay)" > </v-text-field>
              </td>
            </tr>
 
@@ -303,7 +316,7 @@
            <tr v-if="!toggleDownPayment">
              <td></td>
              <td>
-               <v-text-field single-line outline required v-model="inputDownPayment" v-on:keyup.enter="completeDownPayment(inputDownPayment)" > </v-text-field>
+               <v-text-field single-line outlined required v-model="inputDownPayment" v-on:keyup.enter="completeDownPayment(inputDownPayment)" > </v-text-field>
              </td>
            </tr>
 
@@ -314,7 +327,7 @@
            <tr >
              <td>잔금</td>
              <td v-if="!toggleBalance">
-               <v-text-field single-line outline required v-model="inputBalance" v-on:keyup.enter="completeBalance(inputBalance)" > </v-text-field>
+               <v-text-field single-line outlined required v-model="inputBalance" v-on:keyup.enter="completeBalance(inputBalance)" > </v-text-field>
              </td>
            </tr>
 
@@ -325,7 +338,7 @@
            <tr v-if="!togglePenalty" >
              <td> 위약금 </td>
              <td>
-               <v-text-field single-line outline required v-model="inputPenalty" v-on:keyup.enter="completePenalty(inputPenalty)" > </v-text-field>
+               <v-text-field single-line outlined required v-model="inputPenalty" v-on:keyup.enter="completePenalty(inputPenalty)" > </v-text-field>
              </td>
            </tr>
 
@@ -337,7 +350,7 @@
            <tr v-if="!toggleContractDate">
              <td> 계약금</td>
              <td>
-               <v-text-field single-line outline required v-model="inputContractDate" v-on:keyup.enter="completeContractDate(inputContractDate)" > </v-text-field>
+               <v-text-field single-line outlined required v-model="inputContractDate" v-on:keyup.enter="completeContractDate(inputContractDate)" > </v-text-field>
              </td>
            </tr>
 
@@ -348,7 +361,7 @@
             <tr v-if="!toggleCompanyId">
               <td> 기업명 </td>
               <td>
-                <v-text-field single-line outline required v-model="inputCompanyId" v-on:keyup.enter="completeCompanyId(inputCompanyId)" > </v-text-field>
+                <v-text-field single-line outlined required v-model="inputCompanyId" v-on:keyup.enter="completeCompanyId(inputCompanyId)" > </v-text-field>
               </td>
             </tr>
 
@@ -360,7 +373,7 @@
             <tr >
               <td>기업주소</td>
               <td v-if="!toggleCompanyAddr">
-                <v-text-field single-line outline required v-model="inputCompanyAddr" v-on:keyup.enter="completeCompanyAddr(inputCompanyAddr)" > </v-text-field>
+                <v-text-field single-line outlined required v-model="inputCompanyAddr" v-on:keyup.enter="completeCompanyAddr(inputCompanyAddr)" > </v-text-field>
               </td>
             </tr>
 
@@ -372,7 +385,7 @@
             <tr v-if="!toggleCompany">
               <td> 책임자 </td>
               <td>
-                <v-text-field single-line outline required v-model="inputCompany" v-on:keyup.enter="completeCompany(inputCompany)" > </v-text-field>
+                <v-text-field single-line outlined required v-model="inputCompany" v-on:keyup.enter="completeCompany(inputCompany)" > </v-text-field>
               </td>
             </tr>
 
@@ -383,7 +396,7 @@
             <tr v-if="!toggleAddr">
               <td> 유저주소 </td>
               <td>
-                <v-text-field single-line outline required v-model="inputAddr" v-on:keyup.enter="completeAddr(inputAddr)" > </v-text-field>
+                <v-text-field single-line outlined required v-model="inputAddr" v-on:keyup.enter="completeAddr(inputAddr)" > </v-text-field>
               </td>
             </tr>
 
@@ -394,7 +407,7 @@
             <tr v-if="!toggleRrn" >
               <td> 유저주민번호 </td>
               <td>
-                <v-text-field single-line outline required v-model="inputRrn" v-on:keyup.enter="completeRrn(inputRrn)" > </v-text-field>
+                <v-text-field single-line outlined required v-model="inputRrn" v-on:keyup.enter="completeRrn(inputRrn)" > </v-text-field>
               </td>
             </tr>
 
@@ -405,7 +418,7 @@
             <tr v-if="!toggleUserId">
               <td> 유저이름 </td>
               <td>
-                <v-text-field single-line outline required v-model="inputUserId" v-on:keyup.enter="completeUserId(inputUserId)" > </v-text-field>
+                <v-text-field single-line outlined required v-model="inputUserId" v-on:keyup.enter="completeUserId(inputUserId)" > </v-text-field>
               </td>
             </tr>
          </tbody>

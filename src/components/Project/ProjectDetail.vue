@@ -1,7 +1,7 @@
 <template>
   <v-flex class="text-xs-center" style=" padding: 10px 5px;">
     <v-flex hidden-xs-only>
-      <button flat class="white--text" @click="popdetail(project_id)" style="height:80%;width:80%;">
+      <button text class="white--text" @click="popdetail(project_id)" style="height:80%;width:80%;">
         <v-img :src="projectimage" height="20vw" width="100%"></v-img>
         <div>
           <div class="black--text">{{projecttitle}}</div>
@@ -29,7 +29,7 @@
     </v-flex>
 
     <v-flex hidden-sm-and-up>
-      <button flat class="white--text" @click="popdetail(project_id)" style="height:80%;width:80%;">
+      <button text class="white--text" @click="popdetail(project_id)" style="height:80%;width:80%;">
         <v-img :src="projectimage" height="45vw" width="100%"></v-img>
         <div>
           <div class="black--text">{{projecttitle}}</div>

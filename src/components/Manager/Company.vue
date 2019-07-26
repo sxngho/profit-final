@@ -22,8 +22,8 @@
 
                   <v-list-tile-action>
                     <div>
-                      <v-btn flat outline color="#00f" small>승인</v-btn>
-                      <v-btn flat outline color="#f00" small>거절</v-btn>
+                      <v-btn text outlined color="#00f" small>승인</v-btn>
+                      <v-btn text outlined color="#f00" small>거절</v-btn>
                     </div>
                   </v-list-tile-action>
 
@@ -66,8 +66,8 @@
 
               <v-card>
                 <v-card-text>
-                  <v-btn flat outline>뭔가하기</v-btn>
-                  <v-btn flat outline color="red">탈퇴시키기</v-btn>
+                  <v-btn text outlined>뭔가하기</v-btn>
+                  <v-btn text outlined color="red">탈퇴시키기</v-btn>
                 </v-card-text>
               </v-card>
 

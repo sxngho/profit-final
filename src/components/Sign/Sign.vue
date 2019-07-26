@@ -2,7 +2,7 @@
   <v-layout row justify-center>
     <v-dialog v-model="dialog" max-width="600px" v-if=" user== '' || user == undefined ">
       <template v-slot:activator="{ on }">
-        <v-btn flat class="black--text" v-on="on">Sign In</v-btn>
+        <v-btn text class="black--text" v-on="on">Sign In</v-btn>
       </template>
 
       <v-card>
@@ -22,16 +22,16 @@
               </v-flex>
             </v-layout>
           </v-container>
-          <v-btn round color="#4267b2" dark @click="SigninFacebook()" style="width:100%;">
+          <v-btn rounded color="#4267b2" dark @click="SigninFacebook()" style="width:100%;">
             <v-icon size="25" class="mr-2">fa-facebook</v-icon>Facebook으로 로그인하기
           </v-btn>
         </v-card-text>
 
         <v-card-actions>
-          <v-btn color="blue darken-1" flat @click="dialog = false">Close</v-btn>
+          <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
           <v-btn
             color="blue darken-1"
-            flat
+            text
             @click="dialog = false, Signin(LoginId, LoginPassword)"
           >Login</v-btn>
           <br />
@@ -41,7 +41,7 @@
 
     <v-dialog v-model="signupmodal" max-width="500px" v-if=" user== '' || user == undefined ">
       <template v-slot:activator="{ on: { click } }">
-        <v-btn flat class="black--text" v-on:click="click">Sign Up</v-btn>
+        <v-btn text class="black--text" v-on:click="click">Sign Up</v-btn>
       </template>
       <v-card>
         <v-card-title>Sign Up</v-card-title>
@@ -50,14 +50,14 @@
           <SignupforCompanyModal v-on:signup="signupsuccess" />
         </v-card-text>
         <v-card-actions>
-          <v-btn color="primary" flat @click="signupmodal=false">Close</v-btn>
+          <v-btn color="primary" text @click="signupmodal=false">Close</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-btn class="black--text" flat v-if="user !=='' && user !== undefined" >
+    <v-btn class="black--text" text v-if="user !=='' && user !== undefined" >
       <router-link style="text-decoration:none; color:black" :to="{ name: 'story', params: { id: user }}"> {{user}} </router-link>
     </v-btn>
-    <v-btn class="black--text" flat @click="Logout()" v-if="user!=='' && user!==undefined">Log Out</v-btn>
+    <v-btn class="black--text" text @click="Logout()" v-if="user!=='' && user!==undefined">Log Out</v-btn>
   </v-layout>
 </template>
 

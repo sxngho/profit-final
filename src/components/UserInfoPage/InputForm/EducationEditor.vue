@@ -19,7 +19,7 @@
                 <span class="subheading font-weight-bold">*기관명</span>
                 <v-text-field
                   single-line
-                  outline
+                  outlined
                   required
                   v-model="eduagency"
                   ></v-text-field>
@@ -29,7 +29,7 @@
                 <span class="subheading font-weight-bold">학위</span>
                 <v-text-field
                   single-line
-                  outline
+                  outlined
                   v-model="edudegree"
                   ></v-text-field>
               </v-flex>
@@ -40,7 +40,7 @@
                 <span class="subheading font-weight-bold">시작일</span>
                 <div><input type="date"
                   single-line
-                  outline
+                  outlined
                   v-model="edustartday"
                   ></input></div>
               </v-flex>
@@ -49,14 +49,14 @@
                 <span class="subheading font-weight-bold">종료일</span>
                 <div><input type="date"
                   single-line
-                  outline
+                  outlined
                   v-model="eduendday"
                   ></input></div>
               </v-flex>
             </v-layout>
 
           <v-layout row wrap justify-center>
-            <v-btn v-on:click="sendEdu(eduagency,edudegree,edustartday,eduendday)"  flat outline>등록</v-btn>
+            <v-btn v-on:click="sendEdu(eduagency,edudegree,edustartday,eduendday)"  text outlined>등록</v-btn>
           </v-layout>
         </v-card-text>
 

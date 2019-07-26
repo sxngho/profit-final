@@ -16,7 +16,7 @@
             <v-flex xs10>
               <span class="subheading font-weight-bold">설명</span>
               <v-textarea
-              outline
+              outlined
               clearable
               v-model="intro"
               v-on:keyup.enter="sendIntro(intro)"
@@ -27,7 +27,7 @@
         </v-card-text>
 
         <v-layout row wrap justify-center>
-          <v-btn v-on:click="sendIntro(intro)"  flat outline> 등록 </v-btn>
+          <v-btn v-on:click="sendIntro(intro)"  text outlined> 등록 </v-btn>
         </v-layout>
 
       </v-card>
