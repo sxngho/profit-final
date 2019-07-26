@@ -9,7 +9,7 @@
         <h1>작업중인 리스트</h1>
         <v-layout row wrap>
           <v-flex xs4 style="background:white;">
-            <v-card outlined>
+            <v-card outlinedd>
               <v-card-title>
                 프젝이름
               </v-card-title>

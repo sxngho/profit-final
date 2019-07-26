@@ -21,7 +21,7 @@
               <span class="subheading font-weight-bold">Show</span><br/>
               <v-btn
               v-for="item in this.selectList"
-              small flat outline round
+              small text outlined round
               @click="deleteTech(item)">
                 {{ item }}
               </v-btn>
@@ -36,7 +36,7 @@
             <v-flex xs12>
               <span class="subheading font-weight-bold">보유스킬</span><br/>
               <v-btn v-for="item in this.unselectList"
-               small flat outline round
+               small text outlined round
                 @click="addTech(item)">
                 {{ item }}
               </v-btn>
@@ -47,7 +47,7 @@
 
         <!-- action -->
         <v-layout row wrap justify-center>
-          <v-btn v-on:click="sendSkill(selectList)" flat outline> 등록 </v-btn>
+          <v-btn v-on:click="sendSkill(selectList)" text outlined> 등록 </v-btn>
         </v-layout>
 
       </v-card>

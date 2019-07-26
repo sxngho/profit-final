@@ -12,11 +12,11 @@
        </v-toolbar-title>
       <v-spacer/>
 
-      <v-btn flat icon color="pink">
+      <v-btn text icon color="pink">
         <i id="likecheck" class="far fa-heart fa-2x" @click="like_project(project_id)"></i>
         <!-- 이미 좋아요 눌렀다면 다른 fa 를 보여주는 것도 좋겠다. -->
       </v-btn>
-      <v-btn flat icon color="yellow">
+      <v-btn text icon color="yellow">
         <i class="fa fa-star fa-2x"></i>
       </v-btn>
 
@@ -40,8 +40,8 @@
               <!--comment -->
                 <v-flex>
                   <span class="title">{{project.projecttitle}}</span>
-                  <v-flex class="d-inline caption tag" round outline>{{ project.projectterm }}</v-flex>
-                  <v-flex class="d-inline caption tag" round outline>{{ project.projectrank }}</v-flex>
+                  <v-flex class="d-inline caption tag" rounded outlined>{{ project.projectterm }}</v-flex>
+                  <v-flex class="d-inline caption tag" rounded outlined>{{ project.projectrank }}</v-flex>
                   <br />
                   <v-layout class="d-block" style="padding: 1vw 0vw;">
                     <v-flex
@@ -66,9 +66,9 @@
                 <!-- comment sort -->
                 <v-flex>
                   <span>sort</span>
-                  <v-btn flat depressed small>oldest</v-btn>
-                  <v-btn flat depressed small>newest</v-btn>
-                  <v-btn flat depressed small>liked</v-btn>
+                  <v-btn text depressed small>oldest</v-btn>
+                  <v-btn text depressed small>newest</v-btn>
+                  <v-btn text depressed small>liked</v-btn>
                 </v-flex>
 
                 <!-- comment list -->

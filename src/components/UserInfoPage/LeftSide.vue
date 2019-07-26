@@ -29,14 +29,14 @@
       <v-flex class="text-md-center">
         <span class="title text-md-center">{{userdata[0].userName}}  </span>
         <v-flex
-        fab flat outline small
+        fab text outlined small
         v-if="!isMine && !isFollow"
         @click="follow()"
         >
           <img src="../../assets/icon_set/add-user.png" alt="follow" style="cursor:pointer; width:25px;height:25px;"/>
         </v-flex>
         <v-flex
-        fab flat outline small
+        fab text outlined small
         v-if="!isMine && isFollow"
         @click="unfollow()"
         >
@@ -132,7 +132,7 @@
           <v-flex
             v-on:click="rmEducation(userdata[0].userEducations,e,userdata[0].email,reload)"
             v-show:false
-            flat outline small absolute fab
+            text outlined small absolute fab
             class ="edubtn"  v-if="isMine"
             style="z-index:2; right:0; top:35%; position: absolute; display: none;">
             <img

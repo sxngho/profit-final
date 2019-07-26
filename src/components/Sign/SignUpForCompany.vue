@@ -3,7 +3,7 @@
     <v-dialog v-model="signupforcompanymodal" max-width="600px" xs6>
 
       <template v-slot:activator="{ on }" >
-        <v-btn flat outline color="indigo" v-on="on" style="padding: 100px 80px;">회사용</v-btn>
+        <v-btn text outlined color="indigo" v-on="on" style="padding: 100px 80px;">회사용</v-btn>
       </template>
 
 
@@ -50,8 +50,8 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" flat @click="signupforcompanymodal = false">Close</v-btn>
-          <v-btn color="blue darken-1" flat @click="SignupCompany(company_name, signup_id, signup_password, interests)">SignUp</v-btn>
+          <v-btn color="blue darken-1" text @click="signupforcompanymodal = false">Close</v-btn>
+          <v-btn color="blue darken-1" text @click="SignupCompany(company_name, signup_id, signup_password, interests)">SignUp</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
