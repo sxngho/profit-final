@@ -4,7 +4,7 @@
     <v-layout row wrap justify-center>
       <v-flex
         v-for="i in max_project" xs12 sm6 lg4 v-if="layout==1 && filtering(i,techfilter)"
-        style="padding:10px 5px;">
+        style="padding:10px 5px;" v-bind:class="[`project_${i-1}`]">
 
         <ProjectDetail v-on:popdetail="toStory"
           v-on:UPDATE_Project="toStoryUpdate"
@@ -13,6 +13,8 @@
           :projectdescription="projects[i-1].data.projectdescription"
           :project_id="projects[i-1].project_id"
           :project_writer="projects[i-1].data.session_id"
+          :index="i-1"
+          v-on:delete="DELETE_project"
           >
         </ProjectDetail>
       </v-flex>
@@ -107,21 +109,20 @@ export default {
     toFilter : {type:String, default:"aasdasnkdasdaskl"},
   },
   methods: {
+    showNotification (group, type ,title, text) {
+       this.$notify({
+         group,
+         title,
+         text,
+         type,
+       })
+     },
     async SELECT_Projects() {
       this.id = this.$route.params.id;
       this.projects = await FirebaseService.SELECT_Projects(this.id);
-      // console.log(this.projects,'나옴?')
     },
     toStory(pcode) {
-      // console.log("여기까지왔다.",pcode)
       this.$emit('toStory',pcode);
-    },
-    DELETE_project(index, project) {
-      if (confirm("알림 : 삭제된 프로젝트는 복구가 불가능합니다. 삭제하시겠습니까?")) {
-        console.log(project.project_id)
-        this.projects.splice(index, 1);
-        FirebaseService.DELETE_project(project.project_id)
-      }
     },
     moreproject(max_project) {
       var interval = 2
@@ -164,13 +165,21 @@ export default {
     async amount_Projects() {
       var projects =  await FirebaseService.amount_Projects(this.user)
       this.max_project = projects
+    },
+    DELETE_project(project_id, index) {
+      // 1. 단순한 방법인데 안돼서 2안으로 진행중.
+      // this.projects.splice(index, 1);
+
+      // 2. 자체 클래스를 통해 display:none 으로 해결했습니다.
+      var box = document.querySelector(`.project_${index}`)
+      box.style.display = 'none';
+      this.showNotification('foo-css','success','Project 삭제','프로젝트 삭제를 완료하였습니다.')
     }
   },
   watch: {
     toFilter: function(newVal, oldVal) { // watch it
       console.log('Prop changed: ', newVal, ' | was: ', oldVal)
       this.filterFunction();
-
     }
   }
 };
