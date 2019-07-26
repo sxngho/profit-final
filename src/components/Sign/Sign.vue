@@ -1,8 +1,8 @@
 <template>
-  <v-layout row justify-center>
+  <div class="display:inline">
     <v-dialog v-model="dialog" max-width="600px" v-if=" user== '' || user == undefined ">
       <template v-slot:activator="{ on }">
-        <v-btn text class="black--text" v-on="on">Sign In</v-btn>
+        <v-btn text v-on="on" style="height:100%;">Sign In</v-btn>
       </template>
 
       <v-card>
@@ -18,7 +18,12 @@
               </v-flex>
 
               <v-flex xs12>
-                <v-text-field label="Password*" type="password" required v-model="LoginPassword"></v-text-field>
+                <v-text-field
+                  label="Password*"
+                  type="password"
+                  required
+                  v-model="LoginPassword"
+                  @keyup.enter="dialog = false, Signin(LoginId, LoginPassword)"></v-text-field>
               </v-flex>
             </v-layout>
           </v-container>
@@ -41,7 +46,7 @@
 
     <v-dialog v-model="signupmodal" max-width="500px" v-if=" user== '' || user == undefined ">
       <template v-slot:activator="{ on: { click } }">
-        <v-btn text class="black--text" v-on:click="click">Sign Up</v-btn>
+        <v-btn text v-on:click="click" style="height:100%;">Sign Up</v-btn>
       </template>
       <v-card>
         <v-card-title>Sign Up</v-card-title>
@@ -54,11 +59,22 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-btn class="black--text" text v-if="user !=='' && user !== undefined" >
-      <router-link style="text-decoration:none; color:black" :to="{ name: 'story', params: { id: user }}"> {{user}} </router-link>
+
+    <v-btn
+      text
+      v-if="user !=='' && user !== undefined"
+      :to="{ name: 'story', params: { id: user }}"
+      style="height:100%;">
+      {{user}}
     </v-btn>
-    <v-btn class="black--text" text @click="Logout()" v-if="user!=='' && user!==undefined">Log Out</v-btn>
-  </v-layout>
+
+    <v-btn
+      text
+      @click="Logout()"
+      v-if="user!=='' && user!==undefined"
+      style="height:100%;">
+      Log Out</v-btn>
+  </div>
 </template>
 
 
