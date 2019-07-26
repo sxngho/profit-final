@@ -46,7 +46,7 @@
       }
     },
     mounted () {
-      this.datafetch();
+      // this.datafetch();
       console.log("data collection! ",this.datacollection);
       // this.renderChart(this.datacollection, this.options);
     },

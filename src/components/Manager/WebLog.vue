@@ -54,7 +54,7 @@ export default {
     Barchart,
   },
   created() {
-    this.filldata();
+    // this.filldata();
   },
   methods: {
     async filldata(){

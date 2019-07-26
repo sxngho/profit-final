@@ -219,7 +219,6 @@ export default {
       } else {
         this.careerToggle = false;
       }
-
       if ( this.userdata[0].userSkills.length == 0 ) {
         this.skillToggle = true;
       } else {
@@ -227,7 +226,6 @@ export default {
       }
       this.toStory(false);
     },
-
     receiveIntro(intro) {
       FirebaseService.UPDATE_userIntro(intro,this.$route.params.id);
       this.userdata[0].userIntro = intro;

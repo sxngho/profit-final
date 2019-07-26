@@ -55,7 +55,7 @@
       }
     },
     mounted () {
-      this.datafetch();
+      // this.datafetch();
     },
     methods:{
       async datafetch(){
