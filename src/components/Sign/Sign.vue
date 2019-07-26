@@ -54,11 +54,8 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-btn class="black--text" flat v-if="user !=='' && user !== undefined && Level !== '3' " >
+    <v-btn class="black--text" flat v-if="user !=='' && user !== undefined" >
       <router-link style="text-decoration:none; color:black" :to="{ name: 'story', params: { id: user }}"> {{user}} </router-link>
-    </v-btn>
-    <v-btn class="black--text" flat v-if="user !=='' && user !== undefined && Level == '3' " >
-      <router-link style="text-decoration:none; color:black"> {{user}} </router-link>
     </v-btn>
     <v-btn class="black--text" flat @click="Logout()" v-if="user!=='' && user!==undefined">Log Out</v-btn>
   </v-layout>
@@ -132,6 +129,7 @@ export default {
             this.$session.set("session_id", user_nickname[0].nickname);
             this.user = this.$session.get("session_id");
         } else if ( company_nickname[0] !== undefined ) {
+          console.log(company_nickname[0].company_name)
             this.$session.set("session_id", company_nickname[0].company_name);
             this.user = this.$session.get("session_id");
         }
