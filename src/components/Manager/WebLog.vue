@@ -22,44 +22,21 @@
       </v-flex>
     </v-layout>
 
-    <!-- <v-layout row wrap>
-      <v-flex xs4 v-for="item in loglist" >
-        <h3>{{item.date}}</h3>
-        {{item.date.seconds}}<br/>
-        {{item.date.nanoseconds}}<br/>
-        {{item.login_user}}<br/>
-        {{item.url}}<br/>
-        <v-btn v-if="item.date != null" @click="timestampToDate(item.date.seconds)">
-          시간
-        </v-btn>
-        <br/>
-      </v-flex>
-    </v-layout> -->
   </div>
 </template>
 
 <script>
-import FirebaseService from "@/services/FirebaseService";
 import Linechart from "./Chart/LineChart";
 import Barchart from "./Chart/BarChart"
 
 export default {
   data() {
     return{
-      loglist:[],
     };
   },
   components:{
     Linechart,
     Barchart,
-  },
-  created() {
-    this.filldata();
-  },
-  methods: {
-    async filldata(){
-      this.loglist = await FirebaseService.SELECT_ALLWebLog();
-    }
   },
 
 };
