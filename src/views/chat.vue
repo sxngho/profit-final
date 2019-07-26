@@ -25,7 +25,9 @@
   </v-layout>
 
   <v-layout row wrap v-if='nowChatRoom !== "" '>
-    <v-flex xs6>
+    <v-flex xs1>
+    </v-flex>
+    <v-flex xs5>
       <v-flex xs12 v-for="message in messages" v-if='message.chatId !== "" && message.chatMsg !== "" '>
         [{{ message.chatId }}] : {{ message.chatMsg }}
       </v-flex>
@@ -38,134 +40,170 @@
         <h1> 간이 계약서 </h1>
         <v-divider/>
       </div>
-      <div>
-        갑 : {{nowChatRoom.company}}
-        <v-divider/>
-      </div>
+      <v-simple-table>
+           <thead>
+             <tr>
+               <th class="text-center">항목</th>
+               <th class="text-center">내용</th>
+             </tr>
+           </thead>
+           <tbody>
+             <tr>
+               <td>갑</td>
+               <td>{{nowChatRoom.companyId}}</td>
+             </tr>
+             <tr>
+               <td>을</td>
+               <td>{{nowChatRoom.userId}}</td>
+             </tr>
 
-      <div>
-        을 : {{nowChatRoom.userId}}
-        <v-divider/>
-      </div>
+             <tr @click="changeProjectTitle()" v-if="toggleProjectTitle">
+               <td>프로젝트 이름</td>
+               <td>{{nowChatRoom.projectTitle}}</td>
+             </tr>
+             <tr v-if="!toggleProjectTitle">
+               <td>프로젝트 이름</td>
+               <td>
+                 <v-text-field single-line outline required v-model="inputProjectTitle" v-on:keyup.enter="completeProjectTitle(inputProjectTitle)" > </v-text-field>
+               </td>
+             </tr>
+
+             <tr @click="changeProjectTerm()" v-if="toggleProjectTerm">
+               <td>프로젝트 기간</td>
+               <td>{{nowChatRoom.projectTerm}}</td>
+             </tr>
+             <tr v-if="!toggleProjectTerm">
+               <td>프로젝트 기간</td>
+               <td>
+                 <v-text-field single-line outline required v-model="inputProjectTerm" v-on:keyup.enter="completeProjectTerm(inputProjectTerm)" > </v-text-field>
+               </td>
+             </tr>
+
+             <tr @click="changePay()" v-if="togglePay">
+               <td> 급여 </td>
+               <td> {{nowChatRoom.pay}} </td>
+             </tr>
+             <tr v-if="!togglePay">
+               <td> 급여 </td>
+               <td>
+                 <v-text-field single-line outline required v-model="inputPay" v-on:keyup.enter="completePay(inputPay)" > </v-text-field>
+               </td>
+             </tr>
+
+             <tr @click="changeDownPayment()" v-if="toggleDownPayment">
+               <td> 계약금 </td>
+               <td> {{nowChatRoom.downPayment}} </td>
+             </tr>
+             <tr v-if="!toggleDownPayment">
+               <td></td>
+               <td>
+                 <v-text-field single-line outline required v-model="inputDownPayment" v-on:keyup.enter="completeDownPayment(inputDownPayment)" > </v-text-field>
+               </td>
+             </tr>
+
+             <tr @click="changeBalance()" v-if="toggleBalance">
+               <td>잔금 </td>
+               <td>{{nowChatRoom.balance}} </td>
+             </tr>
+             <tr >
+               <td>잔금</td>
+               <td v-if="!toggleBalance">
+                 <v-text-field single-line outline required v-model="inputBalance" v-on:keyup.enter="completeBalance(inputBalance)" > </v-text-field>
+               </td>
+             </tr>
+
+             <tr @click="changePenalty()" v-if="togglePenalty">
+               <td> 위약금 </td>
+               <td> {{nowChatRoom.penalty}} </td>
+             </tr>
+             <tr v-if="!togglePenalty" >
+               <td> 위약금 </td>
+               <td>
+                 <v-text-field single-line outline required v-model="inputPenalty" v-on:keyup.enter="completePenalty(inputPenalty)" > </v-text-field>
+               </td>
+             </tr>
 
 
-      <div @click="changeProjectTitle()" v-if="toggleProjectTitle">
-        프로젝트 이름 : {{nowChatRoom.projectTitle}}
-        <v-divider/>
-      </div>
-      <div v-if="!toggleProjectTitle">
-        <v-text-field single-line outline required v-model="inputProjectTitle" v-on:keyup.enter="completeProjectTitle(inputProjectTitle)" > </v-text-field>
-        <v-divider/>
-      </div>
+             <tr @click="changeContractDate()" v-if="toggleContractDate">
+               <td> 계약일 </td>
+               <td> {{nowChatRoom.contractDate}} </td>
+             </tr>
+             <tr v-if="!toggleContractDate">
+               <td> 계약금</td>
+               <td>
+                 <v-text-field single-line outline required v-model="inputContractDate" v-on:keyup.enter="completeContractDate(inputContractDate)" > </v-text-field>
+               </td>
+             </tr>
+
+              <tr @click="changeCompanyId()" v-if="toggleCompanyId">
+                <td> 기업명 </td>
+                <td> {{nowChatRoom.companyId}} </td>
+              </tr>
+              <tr v-if="!toggleCompanyId">
+                <td> 기업명 </td>
+                <td>
+                  <v-text-field single-line outline required v-model="inputCompanyId" v-on:keyup.enter="completeCompanyId(inputCompanyId)" > </v-text-field>
+                </td>
+              </tr>
 
 
-      <div @click="changeProjectTerm()" v-if="toggleProjectTerm">
-        프로젝트 기간 : {{nowChatRoom.projectTerm}}
-        <v-divider/>
-      </div>
-      <div v-if="!toggleProjectTerm">
-        <v-text-field single-line outline required v-model="inputProjectTerm" v-on:keyup.enter="completeProjectTerm(inputProjectTerm)" > </v-text-field>
-        <v-divider/>
-      </div>
+              <tr @click="changeCompanyAddr()" v-if="toggleCompanyAddr">
+                <td>기업주소</td>
+                <td>{{nowChatRoom.companyAddr}}</td>
+              </tr>
+              <tr >
+                <td>기업주소</td>
+                <td v-if="!toggleCompanyAddr">
+                  <v-text-field single-line outline required v-model="inputCompanyAddr" v-on:keyup.enter="completeCompanyAddr(inputCompanyAddr)" > </v-text-field>
+                </td>
+              </tr>
 
-      <div @click="changePay()" v-if="togglePay">
-        급여 : {{nowChatRoom.pay}}
-        <v-divider/>
-      </div>
-      <div v-if="!togglePay">
-        <v-text-field single-line outline required v-model="inputPay" v-on:keyup.enter="completePay(inputPay)" > </v-text-field>
-        <v-divider/>
-      </div>
 
-      <div @click="changeDownPayment()" v-if="toggleDownPayment">
-        계약금 : {{nowChatRoom.downPayment}}
-        <v-divider/>
-      </div>
-      <div v-if="!toggleDownPayment">
-        <v-text-field single-line outline required v-model="inputDownPayment" v-on:keyup.enter="completeDownPayment(inputDownPayment)" > </v-text-field>
-        <v-divider/>
-      </div>
+              <tr @click="changeCompany()" v-if="toggleCompany">
+                <td> 책임자 </td>
+                <td> {{nowChatRoom.company}} </td>
+              </tr>
+              <tr v-if="!toggleCompany">
+                <td> 책임자 </td>
+                <td>
+                  <v-text-field single-line outline required v-model="inputCompany" v-on:keyup.enter="completeCompany(inputCompany)" > </v-text-field>
+                </td>
+              </tr>
 
-      <div @click="changeBalance()" v-if="toggleBalance">
-        잔금 : {{nowChatRoom.balance}}
-        <v-divider/>
-      </div>
-      <div v-if="!toggleBalance">
-        <v-text-field single-line outline required v-model="inputBalance" v-on:keyup.enter="completeBalance(inputBalance)" > </v-text-field>
-        <v-divider/>
-      </div>
+              <tr @click="changeAddr()" v-if="toggleAddr" >
+                <td> 유저주소 </td>
+                <td> {{nowChatRoom.addr}} </td>
+              </tr>
+              <tr v-if="!toggleAddr">
+                <td> 유저주소 </td>
+                <td>
+                  <v-text-field single-line outline required v-model="inputAddr" v-on:keyup.enter="completeAddr(inputAddr)" > </v-text-field>
+                </td>
+              </tr>
 
-      <div @click="changePenalty()" v-if="togglePenalty">
-        위약금 : {{nowChatRoom.penalty}}
-        <v-divider/>
-      </div>
-      <div v-if="!togglePenalty">
-        <v-text-field single-line outline required v-model="inputPenalty" v-on:keyup.enter="completePenalty(inputPenalty)" > </v-text-field>
-        <v-divider/>
-      </div>
+              <tr @click="changeRrn()" v-if="toggleRrn">
+                <td> 유저주민번호 </td>
+                <td> {{nowChatRoom.rrn}} </td>
+              </tr>
+              <tr v-if="!toggleRrn" >
+                <td> 유저주민번호 </td>
+                <td>
+                  <v-text-field single-line outline required v-model="inputRrn" v-on:keyup.enter="completeRrn(inputRrn)" > </v-text-field>
+                </td>
+              </tr>
 
-      <div @click="changeContractDate()" v-if="toggleContractDate">
-        계약일 : {{nowChatRoom.contractDate}}
-        <v-divider/>
-      </div>
-      <div v-if="!toggleContractDate">
-        <v-text-field single-line outline required v-model="inputContractDate" v-on:keyup.enter="completeContractDate(inputContractDate)" > </v-text-field>
-        <v-divider/>
-      </div>
-
-      <div @click="changeCompanyId()" v-if="toggleCompanyId">
-        기업명 : {{nowChatRoom.companyId}}
-        <v-divider/>
-      </div>
-      <div v-if="!toggleCompanyId">
-        <v-text-field single-line outline required v-model="inputCompanyId" v-on:keyup.enter="completeCompanyId(inputCompanyId)" > </v-text-field>
-        <v-divider/>
-      </div>
-
-      <div @click="changeCompanyAddr()" v-if="toggleCompanyAddr">
-        기업주소 : {{nowChatRoom.companyAddr}}
-        <v-divider/>
-      </div>
-      <div v-if="!toggleCompanyAddr">
-        <v-text-field single-line outline required v-model="inputCompanyAddr" v-on:keyup.enter="completeCompanyAddr(inputCompanyAddr)" > </v-text-field>
-      <v-divider/>
-      </div>
-
-      <div @click="changeCompany()" v-if="toggleCompany">
-        책임자 : {{nowChatRoom.company}}
-        <v-divider/>
-      </div>
-      <div v-if="!toggleCompany">
-        <v-text-field single-line outline required v-model="inputCompany" v-on:keyup.enter="completeCompany(inputCompany)" > </v-text-field>
-    <v-divider/>
-      </div>
-
-      <div @click="changeAddr()" v-if="toggleAddr">
-        유저주소 :{{nowChatRoom.addr}}
-      <v-divider/>
-      </div>
-      <div v-if="!toggleAddr">
-        <v-text-field single-line outline required v-model="inputAddr" v-on:keyup.enter="completeAddr(inputAddr)" > </v-text-field>
-        <v-divider/>
-      </div>
-
-      <div @click="changeRrn()" v-if="toggleRrn">
-        유저주민번호 :{{nowChatRoom.rrn}}
-        <v-divider/>
-      </div>
-      <div v-if="!toggleRrn">
-        <v-text-field single-line outline required v-model="inputRrn" v-on:keyup.enter="completeRrn(inputRrn)" > </v-text-field>
-        <v-divider/>
-      </div>
-
-      <div @click="changeUserId()" v-if="toggleUserId">
-        유저이름 : {{nowChatRoom.userId}}
-        <v-divider/>
-      </div>
-      <div v-if="!toggleUserId">
-        <v-text-field single-line outline required v-model="inputUserId" v-on:keyup.enter="completeUserId(inputUserId)" > </v-text-field>
-        <v-divider/>
-      </div>
+              <tr @click="changeUserId()" v-if="toggleUserId">
+                <td> 유저이름 </td>
+                <td> {{nowChatRoom.userId}} </td>
+              </tr>
+              <tr v-if="!toggleUserId">
+                <td> 유저이름 </td>
+                <td>
+                  <v-text-field single-line outline required v-model="inputUserId" v-on:keyup.enter="completeUserId(inputUserId)" > </v-text-field>
+                </td>
+              </tr>
+           </tbody>
+      </v-simple-table>
 
     </v-flex>
   </v-layout>
@@ -175,9 +213,7 @@
 <div v-if="nowLevel == 3">
   <p> 기업 페이지 </p>
   <v-layout col wrap>
-    <v-flex xs12>
     - 우리 기업이 진행중인 외주 -
-    </v-flex>
     <v-flex v-for="recruit in recruitsbyCompany" d-inline-block
     style="cursor:pointer;border:1px solid #cecece; padding:2px 10px; border-radius:8px; margin:2px 4px;"
     v-on:click="enterMyRecruit(recruit)">
@@ -187,9 +223,7 @@
 
 
 <v-layout row wrap>
-  <v-flex xs12>
-  - 프로젝트를 진행중인 유저와의 채팅방 -
-  </v-flex>
+
   <v-flex xs12 v-for="myChatRoom in myChatRooms" d-inline-block
   style="cursor:pointer;border:1px solid #cecece; padding:2px 10px; border-radius:8px; margin:2px 4px;"
   v-on:click="EnterChatRoom(myChatRoom)">
@@ -198,143 +232,184 @@
 </v-layout>
 
 <v-layout row wrap v-if='nowChatRoom !== "" '>
-  <v-flex xs6>
+  <v-flex xs1>
+  </v-flex>
+  <v-flex xs5>
     <v-flex xs12 v-for="message in messages" v-if='message.chatId !== "" && message.chatMsg !== "" '>
       [{{ message.chatId }}] : {{ message.chatMsg }}
     </v-flex>
     <v-text-field single-line outline required v-model="myMessage" v-on:keyup.enter="pushMessage(myMessage)" > </v-text-field>
   </v-flex>
-  <v-flex xs6>
+    <v-flex xs6>
+      <div>
+      <v-divider/>
+      <h1> 간이 계약서 </h1>
+      <v-divider/>
+    </div>
+    <v-simple-table>
+         <thead>
+           <tr>
+             <th class="text-center">항목</th>
+             <th class="text-center">내용</th>
+           </tr>
+         </thead>
+         <tbody>
+           <tr>
+             <td>갑</td>
+             <td>{{nowChatRoom.companyId}}</td>
+           </tr>
+           <tr>
+             <td>을</td>
+             <td>{{nowChatRoom.userId}}</td>
+           </tr>
 
-    <div>
-      갑 : {{nowChatRoom.company}}
-      <v-divider/>
-    </div>
+           <tr @click="changeProjectTitle()" v-if="toggleProjectTitle">
+             <td>프로젝트 이름</td>
+             <td>{{nowChatRoom.projectTitle}}</td>
+           </tr>
+           <tr v-if="!toggleProjectTitle">
+             <td>프로젝트 이름</td>
+             <td>
+               <v-text-field single-line outline required v-model="inputProjectTitle" v-on:keyup.enter="completeProjectTitle(inputProjectTitle)" > </v-text-field>
+             </td>
+           </tr>
 
-    <div>
-      을 : {{nowChatRoom.userId}}
-      <v-divider/>
-    </div>
+           <tr @click="changeProjectTerm()" v-if="toggleProjectTerm">
+             <td>프로젝트 기간</td>
+             <td>{{nowChatRoom.projectTerm}}</td>
+           </tr>
+           <tr v-if="!toggleProjectTerm">
+             <td>프로젝트 기간</td>
+             <td>
+               <v-text-field single-line outline required v-model="inputProjectTerm" v-on:keyup.enter="completeProjectTerm(inputProjectTerm)" > </v-text-field>
+             </td>
+           </tr>
+
+           <tr @click="changePay()" v-if="togglePay">
+             <td> 급여 </td>
+             <td> {{nowChatRoom.pay}} </td>
+           </tr>
+           <tr v-if="!togglePay">
+             <td> 급여 </td>
+             <td>
+               <v-text-field single-line outline required v-model="inputPay" v-on:keyup.enter="completePay(inputPay)" > </v-text-field>
+             </td>
+           </tr>
+
+           <tr @click="changeDownPayment()" v-if="toggleDownPayment">
+             <td> 계약금 </td>
+             <td> {{nowChatRoom.downPayment}} </td>
+           </tr>
+           <tr v-if="!toggleDownPayment">
+             <td></td>
+             <td>
+               <v-text-field single-line outline required v-model="inputDownPayment" v-on:keyup.enter="completeDownPayment(inputDownPayment)" > </v-text-field>
+             </td>
+           </tr>
+
+           <tr @click="changeBalance()" v-if="toggleBalance">
+             <td>잔금 </td>
+             <td>{{nowChatRoom.balance}} </td>
+           </tr>
+           <tr >
+             <td>잔금</td>
+             <td v-if="!toggleBalance">
+               <v-text-field single-line outline required v-model="inputBalance" v-on:keyup.enter="completeBalance(inputBalance)" > </v-text-field>
+             </td>
+           </tr>
+
+           <tr @click="changePenalty()" v-if="togglePenalty">
+             <td> 위약금 </td>
+             <td> {{nowChatRoom.penalty}} </td>
+           </tr>
+           <tr v-if="!togglePenalty" >
+             <td> 위약금 </td>
+             <td>
+               <v-text-field single-line outline required v-model="inputPenalty" v-on:keyup.enter="completePenalty(inputPenalty)" > </v-text-field>
+             </td>
+           </tr>
 
 
-    <div @click="changeProjectTitle()" v-if="toggleProjectTitle">
-      프로젝트 이름 : {{nowChatRoom.projectTitle}}
-      <v-divider/>
-    </div>
-    <div v-if="!toggleProjectTitle">
-      <v-text-field single-line outline required v-model="inputProjectTitle" v-on:keyup.enter="completeProjectTitle(inputProjectTitle)" > </v-text-field>
-      <v-divider/>
-    </div>
+           <tr @click="changeContractDate()" v-if="toggleContractDate">
+             <td> 계약일 </td>
+             <td> {{nowChatRoom.contractDate}} </td>
+           </tr>
+           <tr v-if="!toggleContractDate">
+             <td> 계약금</td>
+             <td>
+               <v-text-field single-line outline required v-model="inputContractDate" v-on:keyup.enter="completeContractDate(inputContractDate)" > </v-text-field>
+             </td>
+           </tr>
+
+            <tr @click="changeCompanyId()" v-if="toggleCompanyId">
+              <td> 기업명 </td>
+              <td> {{nowChatRoom.companyId}} </td>
+            </tr>
+            <tr v-if="!toggleCompanyId">
+              <td> 기업명 </td>
+              <td>
+                <v-text-field single-line outline required v-model="inputCompanyId" v-on:keyup.enter="completeCompanyId(inputCompanyId)" > </v-text-field>
+              </td>
+            </tr>
 
 
-    <div @click="changeProjectTerm()" v-if="toggleProjectTerm">
-      프로젝트 기간 : {{nowChatRoom.projectTerm}}
-      <v-divider/>
-    </div>
-    <div v-if="!toggleProjectTerm">
-      <v-text-field single-line outline required v-model="inputProjectTerm" v-on:keyup.enter="completeProjectTerm(inputProjectTerm)" > </v-text-field>
-      <v-divider/>
-    </div>
+            <tr @click="changeCompanyAddr()" v-if="toggleCompanyAddr">
+              <td>기업주소</td>
+              <td>{{nowChatRoom.companyAddr}}</td>
+            </tr>
+            <tr >
+              <td>기업주소</td>
+              <td v-if="!toggleCompanyAddr">
+                <v-text-field single-line outline required v-model="inputCompanyAddr" v-on:keyup.enter="completeCompanyAddr(inputCompanyAddr)" > </v-text-field>
+              </td>
+            </tr>
 
-    <div @click="changePay()" v-if="togglePay">
-      급여 : {{nowChatRoom.pay}}
-      <v-divider/>
-    </div>
-    <div v-if="!togglePay">
-      <v-text-field single-line outline required v-model="inputPay" v-on:keyup.enter="completePay(inputPay)" > </v-text-field>
-      <v-divider/>
-    </div>
 
-    <div @click="changeDownPayment()" v-if="toggleDownPayment">
-      계약금 : {{nowChatRoom.downPayment}}
-      <v-divider/>
-    </div>
-    <div v-if="!toggleDownPayment">
-      <v-text-field single-line outline required v-model="inputDownPayment" v-on:keyup.enter="completeDownPayment(inputDownPayment)" > </v-text-field>
-      <v-divider/>
-    </div>
+            <tr @click="changeCompany()" v-if="toggleCompany">
+              <td> 책임자 </td>
+              <td> {{nowChatRoom.company}} </td>
+            </tr>
+            <tr v-if="!toggleCompany">
+              <td> 책임자 </td>
+              <td>
+                <v-text-field single-line outline required v-model="inputCompany" v-on:keyup.enter="completeCompany(inputCompany)" > </v-text-field>
+              </td>
+            </tr>
 
-    <div @click="changeBalance()" v-if="toggleBalance">
-      잔금 : {{nowChatRoom.balance}}
-      <v-divider/>
-    </div>
-    <div v-if="!toggleBalance">
-      <v-text-field single-line outline required v-model="inputBalance" v-on:keyup.enter="completeBalance(inputBalance)" > </v-text-field>
-      <v-divider/>
-    </div>
+            <tr @click="changeAddr()" v-if="toggleAddr" >
+              <td> 유저주소 </td>
+              <td> {{nowChatRoom.addr}} </td>
+            </tr>
+            <tr v-if="!toggleAddr">
+              <td> 유저주소 </td>
+              <td>
+                <v-text-field single-line outline required v-model="inputAddr" v-on:keyup.enter="completeAddr(inputAddr)" > </v-text-field>
+              </td>
+            </tr>
 
-    <div @click="changePenalty()" v-if="togglePenalty">
-      위약금 : {{nowChatRoom.penalty}}
-      <v-divider/>
-    </div>
-    <div v-if="!togglePenalty">
-      <v-text-field single-line outline required v-model="inputPenalty" v-on:keyup.enter="completePenalty(inputPenalty)" > </v-text-field>
-      <v-divider/>
-    </div>
+            <tr @click="changeRrn()" v-if="toggleRrn">
+              <td> 유저주민번호 </td>
+              <td> {{nowChatRoom.rrn}} </td>
+            </tr>
+            <tr v-if="!toggleRrn" >
+              <td> 유저주민번호 </td>
+              <td>
+                <v-text-field single-line outline required v-model="inputRrn" v-on:keyup.enter="completeRrn(inputRrn)" > </v-text-field>
+              </td>
+            </tr>
 
-    <div @click="changeContractDate()" v-if="toggleContractDate">
-      계약일 : {{nowChatRoom.contractDate}}
-      <v-divider/>
-    </div>
-    <div v-if="!toggleContractDate">
-      <v-text-field single-line outline required v-model="inputContractDate" v-on:keyup.enter="completeContractDate(inputContractDate)" > </v-text-field>
-      <v-divider/>
-    </div>
-
-    <div @click="changeCompanyId()" v-if="toggleCompanyId">
-      기업명 : {{nowChatRoom.companyId}}
-      <v-divider/>
-    </div>
-    <div v-if="!toggleCompanyId">
-      <v-text-field single-line outline required v-model="inputCompanyId" v-on:keyup.enter="completeCompanyId(inputCompanyId)" > </v-text-field>
-      <v-divider/>
-    </div>
-
-    <div @click="changeCompanyAddr()" v-if="toggleCompanyAddr">
-      기업주소 : {{nowChatRoom.companyAddr}}
-      <v-divider/>
-    </div>
-    <div v-if="!toggleCompanyAddr">
-      <v-text-field single-line outline required v-model="inputCompanyAddr" v-on:keyup.enter="completeCompanyAddr(inputCompanyAddr)" > </v-text-field>
-    <v-divider/>
-    </div>
-
-    <div @click="changeCompany()" v-if="toggleCompany">
-      책임자 : {{nowChatRoom.company}}
-      <v-divider/>
-    </div>
-    <div v-if="!toggleCompany">
-      <v-text-field single-line outline required v-model="inputCompany" v-on:keyup.enter="completeCompany(inputCompany)" > </v-text-field>
-  <v-divider/>
-    </div>
-
-    <div @click="changeAddr()" v-if="toggleAddr">
-      유저주소 :{{nowChatRoom.addr}}
-    <v-divider/>
-    </div>
-    <div v-if="!toggleAddr">
-      <v-text-field single-line outline required v-model="inputAddr" v-on:keyup.enter="completeAddr(inputAddr)" > </v-text-field>
-      <v-divider/>
-    </div>
-
-    <div @click="changeRrn()" v-if="toggleRrn">
-      유저주민번호 :{{nowChatRoom.rrn}}
-      <v-divider/>
-    </div>
-    <div v-if="!toggleRrn">
-      <v-text-field single-line outline required v-model="inputRrn" v-on:keyup.enter="completeRrn(inputRrn)" > </v-text-field>
-      <v-divider/>
-    </div>
-
-    <div @click="changeUserId()" v-if="toggleUserId">
-      유저이름 : {{nowChatRoom.userId}}
-      <v-divider/>
-    </div>
-    <div v-if="!toggleUserId">
-      <v-text-field single-line outline required v-model="inputUserId" v-on:keyup.enter="completeUserId(inputUserId)" > </v-text-field>
-      <v-divider/>
-    </div>
-
+            <tr @click="changeUserId()" v-if="toggleUserId">
+              <td> 유저이름 </td>
+              <td> {{nowChatRoom.userId}} </td>
+            </tr>
+            <tr v-if="!toggleUserId">
+              <td> 유저이름 </td>
+              <td>
+                <v-text-field single-line outline required v-model="inputUserId" v-on:keyup.enter="completeUserId(inputUserId)" > </v-text-field>
+              </td>
+            </tr>
+         </tbody>
+    </v-simple-table>
   </v-flex>
 </v-layout>
 </div>
@@ -677,169 +752,3 @@ export default {
   },
 };
 </script>
-
-<!-- <v-simple-table>
-     <thead>
-       <tr>
-         <th class="text-center">항목</th>
-         <th class="text-center">내용</th>
-       </tr>
-     </thead>
-     <tbody>
-       <tr>
-         <td>갑</td>
-         <td>{{nowChatRoom.companyId}}</td>
-       </tr>
-       <tr>
-         <td>을</td>
-         <td>{{nowChatRoom.userId}}</td>
-       </tr>
-
-       <tr @click="changeProjectTitle()" v-if="toggleProjectTitle">
-         <td>프로젝트 이름</td>
-         <td>{{nowChatRoom.projectTitle}}</td>
-       </tr>
-       <tr v-if="!toggleProjectTitle">
-         <td>프로젝트 이름</td>
-         <td>
-           <v-text-field single-line outline required v-model="inputProjectTitle" v-on:keyup.enter="completeProjectTitle(inputProjectTitle)" > </v-text-field>
-         </td>
-       </tr>
-
-       <tr @click="changeProjectTerm()" v-if="toggleProjectTerm">
-         <td>프로젝트 기간</td>
-         <td>{{nowChatRoom.projectTerm}}</td>
-       </tr>
-       <tr v-if="!toggleProjectTerm">
-         <td>프로젝트 기간</td>
-         <td>
-           <v-text-field single-line outline required v-model="inputProjectTerm" v-on:keyup.enter="completeProjectTerm(inputProjectTerm)" > </v-text-field>
-         </td>
-       </tr>
-
-       <tr @click="changePay()" v-if="togglePay">
-         <td> 급여 </td>
-         <td> {{nowChatRoom.pay}} </td>
-       </tr>
-       <tr v-if="!togglePay">
-         <td> 급여 </td>
-         <td>
-           <v-text-field single-line outline required v-model="inputPay" v-on:keyup.enter="completePay(inputPay)" > </v-text-field>
-         </td>
-       </tr>
-
-       <tr @click="changeDownPayment()" v-if="toggleDownPayment">
-         <td> 계약금 </td>
-         <td> {{nowChatRoom.downPayment}} </td>
-       </tr>
-       <tr v-if="!toggleDownPayment">
-         <td></td>
-         <td>
-           <v-text-field single-line outline required v-model="inputDownPayment" v-on:keyup.enter="completeDownPayment(inputDownPayment)" > </v-text-field>
-         </td>
-       </tr>
-
-       <tr @click="changeBalance()" v-if="toggleBalance">
-         <td>잔금 </td>
-         <td>{{nowChatRoom.balance}} </td>
-       </tr>
-       <tr >
-         <td>잔금</td>
-         <td v-if="!toggleBalance">
-           <v-text-field single-line outline required v-model="inputBalance" v-on:keyup.enter="completeBalance(inputBalance)" > </v-text-field>
-         </td>
-       </tr>
-
-       <tr @click="changePenalty()" v-if="togglePenalty">
-         <td> 위약금 </td>
-         <td> {{nowChatRoom.penalty}} </td>
-       </tr>
-       <tr v-if="!togglePenalty" >
-         <td> 위약금 </td>
-         <td>
-           <v-text-field single-line outline required v-model="inputPenalty" v-on:keyup.enter="completePenalty(inputPenalty)" > </v-text-field>
-         </td>
-       </tr>
-
-
-       <tr @click="changeContractDate()" v-if="toggleContractDate">
-         <td> 계약일 </td>
-         <td> {{nowChatRoom.contractDate}} </td>
-       </tr>
-       <tr v-if="!toggleContractDate">
-         <td> 계약금</td>
-         <td>
-           <v-text-field single-line outline required v-model="inputContractDate" v-on:keyup.enter="completeContractDate(inputContractDate)" > </v-text-field>
-         </td>
-       </tr>
-
-        <tr @click="changeCompanyId()" v-if="toggleCompanyId">
-          <td> 기업명 </td>
-          <td> {{nowChatRoom.companyId}} </td>
-        </tr>
-        <tr v-if="!toggleCompanyId">
-          <td> 기업명 </td>
-          <td>
-            <v-text-field single-line outline required v-model="inputCompanyId" v-on:keyup.enter="completeCompanyId(inputCompanyId)" > </v-text-field>
-          </td>
-        </tr>
-
-
-        <tr @click="changeCompanyAddr()" v-if="toggleCompanyAddr">
-          <td>기업주소</td>
-          <td>{{nowChatRoom.companyAddr}}</td>
-        </tr>
-        <tr >
-          <td>기업주소</td>
-          <td v-if="!toggleCompanyAddr">
-            <v-text-field single-line outline required v-model="inputCompanyAddr" v-on:keyup.enter="completeCompanyAddr(inputCompanyAddr)" > </v-text-field>
-          </td>
-        </tr>
-
-
-        <tr @click="changeCompany()" v-if="toggleCompany">
-          <td> 책임자 </td>
-          <td> {{nowChatRoom.company}} </td>
-        </tr>
-        <tr v-if="!toggleCompany">
-          <td> 책임자 </td>
-          <td>
-            <v-text-field single-line outline required v-model="inputCompany" v-on:keyup.enter="completeCompany(inputCompany)" > </v-text-field>
-          </td>
-        </tr>
-
-        <tr @click="changeAddr()" v-if="toggleAddr" >
-          <td> 유저주소 </td>
-          <td> {{nowChatRoom.addr}} </td>
-        </tr>
-        <tr v-if="!toggleAddr">
-          <td> 유저주소 </td>
-          <td>
-            <v-text-field single-line outline required v-model="inputAddr" v-on:keyup.enter="completeAddr(inputAddr)" > </v-text-field>
-          </td>
-        </tr>
-
-        <tr @click="changeRrn()" v-if="toggleRrn">
-          <td> 유저주민번호 </td>
-          <td> {{nowChatRoom.rrn}} </td>
-        </tr>
-        <tr >
-          <td> 유저주민번호 </td>
-          <td>
-            <v-text-field single-line outline required v-model="inputRrn" v-on:keyup.enter="completeRrn(inputRrn)" > </v-text-field>
-          </td>
-        </tr>
-
-
-        <tr @click="changeUserId()" v-if="toggleUserId">
-          <td> 유저이름 </td>
-          <td> {{nowChatRoom.userId}} </td>
-        </tr>
-        <tr v-if="!toggleUserId">
-          <td> 유저이름 </td>
-          <td>
-            <v-text-field single-line outline required v-model="inputUserId" v-on:keyup.enter="completeUserId(inputUserId)" > </v-text-field>
-          </td>
-        </tr>
-     </tbody>
-</v-simple-table> -->
