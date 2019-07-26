@@ -10,6 +10,8 @@ import Vuex from 'vuex';
 import store from './store';
 import Manager from './views/Manager.vue';
 import Chat from './views/chat.vue';
+import Recruit from "./views/Recruit.vue";
+import RecruitDetail from "./components/Recruit/RecruitDetail.vue";
 
 Vue.use(Vuex);
 Vue.use(store);
@@ -61,6 +63,16 @@ export default new Router({
       path:"/chat",
       name:"chat",
       component:Chat
+    },
+    {
+      path:"/recruit",
+      name:"recruit",
+      component:Recruit
+    },
+    {
+      path:"/recruit/:rcode",
+      name:"recruit",
+      component:RecruitDetail
     }
   ]
 });
