@@ -187,7 +187,7 @@
               :toFilter="Filter" v-on:toStoryList="resetFilter"
             />
 
-            <ProjectEditor v-if="stateAdd && !statedetail && !stateupdate" />
+            <ProjectEditor v-if="stateAdd && !statedetail && !stateupdate" v-on:insert_success="gbp4" />
             <Project v-if="statedetail" :pcode="pcode" v-on:goBackpage="gbp" />
             <ProjectUpdator v-if="stateupdate" :project_id="pcode2" v-on:goBackpage="gbp2" v-on:update_success="gbp3" />
             <!-- <v-btn @click="check_stateupdate(state)"></v-btn> -->
@@ -270,19 +270,19 @@ export default {
     gbp() {
       this.statedetail = false;
     },
-
-    update_project(pcode2) {
-      this.pcode2 = pcode2;
-      this.stateupdate = true;
-    },
     gbp2() {
       this.stateupdate = false;
     },
     gbp3() {
       this.stateupdate = false;
-      // this.
     },
-
+    gbp4() {
+      this.stateAdd = false;
+    },
+    update_project(pcode2) {
+      this.pcode2 = pcode2;
+      this.stateupdate = true;
+    },
     fromLeftSide(load) {
       this.loading = load;
       if (this.loading == true) {

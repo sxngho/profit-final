@@ -18,7 +18,7 @@
         </v-flex>
         <v-flex
           v-if="isMine"
-          @click="DELETE_Project(project_id)"
+          @click="DELETE_Project(project_id, index)"
           class="d-inline"
           style="margin-right:1vw;">
           <img src="../../assets/icon_set/delete.png" alt="Smiley" style="cursor: pointer; height:30px;"/>
@@ -59,6 +59,7 @@ export default {
     projectdescription: { type: String }, //프로젝트 간단 설명
     project_id: { type: String },
     project_writer: {type: String},
+    index : {type:Number}, // 프로젝트의 인덱스
   },
   data: () => ({
     popol: false,
@@ -89,8 +90,9 @@ export default {
       UPDATE_Project(pcode) {
         this.$emit('UPDATE_Project',pcode);
       },
-      DELETE_Project(project_id) {
+      DELETE_Project(project_id, index) {
         if (confirm("알림 : 삭제된 프로젝트는 복구가 불가능합니다. 삭제하시겠습니까?")) {
+          this.$emit('delete', project_id, index)
           FirebaseService.DELETE_project(project_id)
           this.reload_userskill(this.login)
         }

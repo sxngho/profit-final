@@ -31,11 +31,11 @@ auth().onAuthStateChanged(function(user) {
     login_user = "익명";
   }
 
-  // firestore.collection('weblog').add({
-  //   login_user,
-  //   url,
-  //   date: firebase.firestore.FieldValue.serverTimestamp()
-  // })
+  firestore.collection('weblog').add({
+    login_user,
+    url,
+    date: firebase.firestore.FieldValue.serverTimestamp()
+  })
 });
 // --------------------------------------------------------INIT FIREBASE SERVICE
 
@@ -89,8 +89,6 @@ export default {
         date: firebase.firestore.FieldValue.serverTimestamp(),
         comments: [], likeit: []
       });
-      alert("등록 완료!");
-      location.reload();
     },
 
     UPDATE_Project(data, old, project_id) {
