@@ -57,7 +57,7 @@
       <v-btn
         v-if="more"
         @click="moreproject(max_project)"
-        outline flat
+        outlined text
         >
         더보기
       </v-btn>

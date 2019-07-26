@@ -3,7 +3,7 @@
   <div id="graph-container"></div>
     <v-layout>
       <v-flex xs12>
-        <v-btn flat @click="gotorepo(repos.path_with_namespace)">
+        <v-btn text @click="gotorepo(repos.path_with_namespace)">
           <h2 class="font-weight-regular cutoneline">
               {{repos.path_with_namespace}}
           </h2>

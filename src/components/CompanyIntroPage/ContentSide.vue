@@ -9,7 +9,7 @@
           </v-flex>
           <v-spacer></v-spacer>
           {{company.name}}
-          <v-btn flat small href="http://www.multicampus.com/">바로가기</v-btn>
+          <v-btn text small href="http://www.multicampus.com/">바로가기</v-btn>
         </v-card-text>
         <v-card-text>
           <span>사원수</span>
@@ -25,7 +25,7 @@
         <v-card-text>
           <span>복지</span>
           <v-flex>
-            <v-btn v-for="item in company.welfare" flat outline>{{item.title}}</v-btn>
+            <v-btn v-for="item in company.welfare" text outlined>{{item.title}}</v-btn>
           </v-flex>
         </v-card-text>
 
@@ -36,7 +36,7 @@
         </v-flex>
         <!-- <v-card-text>
           <v-flex>
-            <v-btn block v-for="job in jobs" flat outline>{{ job.title }}</v-btn>
+            <v-btn block v-for="job in jobs" text outlined>{{ job.title }}</v-btn>
           </v-flex>
         </v-card-text>-->
       </v-flex>

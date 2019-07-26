@@ -1,7 +1,7 @@
 <template>
   <div>
   <v-flex class="text-xs-center">
-      <button flat class="white--text" @click="popdetail(project_id)" style="height:80%;width:80%;">
+      <button text class="white--text" @click="popdetail(project_id)" style="height:80%;width:80%;">
         <v-layout>
         <v-flex xs4 hidden-xs-only >
         <v-img :src="projectimage" height="20vw" width="100%"></v-img>

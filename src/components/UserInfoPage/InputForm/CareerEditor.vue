@@ -19,7 +19,7 @@
             <span class="subheading font-weight-bold">*회사명</span>
             <v-text-field
             single-line
-            outline
+            outlined
             v-model="carcompany"
             ></v-text-field>
           </v-flex>
@@ -28,7 +28,7 @@
             <span class="subheading font-weight-bold">직책/직무</span>
             <v-text-field
             single-line
-            outline
+            outlined
             v-model="carposition"
             ></v-text-field>
           </v-flex>
@@ -39,7 +39,7 @@
             <span class="subheading font-weight-bold">시작일</span>
             <div><input type="date"
               single-line
-              outline
+              outlined
               v-model="carstartday"
               ></input></div>
             </v-flex>
@@ -48,7 +48,7 @@
               <span class="subheading font-weight-bold">종료일</span>
               <div><input type="date"
                 single-line
-                outline
+                outlined
                 v-model="carendday"
                 ></input></div>
               </v-flex>
@@ -60,7 +60,7 @@
               <v-flex xs10 sm11>
                 <span class="subheading font-weight-bold">설명</span>
                 <v-textarea
-                outline
+                outlined
                 v-model="cardescription"
                 >
               </v-textarea>
@@ -68,7 +68,7 @@
           </v-layout>
         </v-card-text>
         <v-layout row wrap justify-center>
-          <v-btn v-on:click="sendCar(carcompany,carposition,carstartday,carendday,cardescription)" flat outline>등록</v-btn>
+          <v-btn v-on:click="sendCar(carcompany,carposition,carstartday,carendday,cardescription)" text outlined>등록</v-btn>
         </v-layout>
       </v-card>
     </v-dialog>

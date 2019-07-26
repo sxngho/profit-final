@@ -1,7 +1,7 @@
 <template>
   <v-flex class="text-xs-center">
     <v-flex hidden-xs-only>
-      <button flat class="white--text" @click="popdetail(project_id)" style="height:80%;width:80%;">
+      <button text class="white--text" @click="popdetail(project_id)" style="height:80%;width:80%;">
         <div>
           <div class="black--text"> {{projecttitle}} / {{project_writer}} / {{projectterm}} / {{projectrank}}</div>
           <span class="grey--text">{{projectdescription}} /
@@ -17,7 +17,7 @@
     </v-flex>
 
     <v-flex hidden-sm-and-up>
-      <button flat class="white--text" @click="popdetail(project_id)" style="height:80%;width:80%;">
+      <button text class="white--text" @click="popdetail(project_id)" style="height:80%;width:80%;">
         <div>
           <div class="black--text">{{projecttitle}} / {{project_writer}} / {{projectterm}} / {{projectrank}}</div>
           <span class="grey--text">{{projectdescription}} / {{projecttech}}

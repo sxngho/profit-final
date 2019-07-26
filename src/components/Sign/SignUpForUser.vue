@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="signupforusermodal" max-width="600px" xs6>
     <template v-slot:activator="{ on }">
-      <v-btn flat outline color="indigo" v-on="on" style="padding: 100px 80px;">개인용</v-btn>
+      <v-btn text outlined color="indigo" v-on="on" style="padding: 100px 80px;">개인용</v-btn>
     </template>
 
     <v-card>
@@ -44,7 +44,7 @@
             <!--
               <v-flex xs12>
                 <v-text-field label="경력을 입력하세요" v-model="career"></v-text-field>
-                <v-btn flat @click="addNewCareer"> ADD </v-btn>
+                <v-btn text @click="addNewCareer"> ADD </v-btn>
                 <v-list subheader>
                   <v-list-tile    v-for="(career, index) in careers" >
                     <v-list-tile-content>
@@ -74,10 +74,10 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="blue darken-1" flat @click="signupforusermodal = false">Close</v-btn>
+        <v-btn color="blue darken-1" text @click="signupforusermodal = false">Close</v-btn>
         <v-btn
           color="blue darken-1"
-          flat
+          text
           @click="SignupUser(signup_id, signup_password, first_name, last_name, phonenumber, userSkills, userImage, userName, userIntro, userCareers, userEducations, nickname)"
         >SignUp</v-btn>
       </v-card-actions>
