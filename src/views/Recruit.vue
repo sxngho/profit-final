@@ -26,7 +26,7 @@
                 회사명, 기술 스택들, 요약, 마감기간
               </v-card-text>
               <v-card-actions>
-                <v-btn>자세히보기</v-btn>
+                <v-btn @click="popRecruitDetail('test')">자세히보기</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -50,7 +50,13 @@ export default {
   components: {
   },
   methods: {
-
+    popRecruitDetail(rdcode){
+      window.open(
+        "../recruit/" + rdcode,
+        "name(이름지정)",
+        "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=700,height=600"
+      );
+    },
   },
   data() {
     return {

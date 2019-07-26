@@ -2,7 +2,7 @@
   <div>
     <!-- TODO 여백 -->
     <v-layout><v-flex style="margin:30px;" /></v-layout>
-    
+
     <v-container row wrap >
       <!-- 작업중 리스트 -->
       <div>
@@ -18,8 +18,8 @@
               </v-card-text>
               <v-card-actions>
                 <v-btn>완료</v-btn>
-                <v-btn>채팅창</v-btn>
-                <v-btn>계약서</v-btn>
+                <v-btn @click="popChat('test')">채팅창</v-btn>
+                <v-btn @click="popContract('test')">계약서</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -41,8 +41,8 @@
                 회사명, 기술 스택들, 요약, 마감기간
               </v-card-text>
               <v-card-actions>
-                <v-btn>채팅방</v-btn>
-                <v-btn>협의내용</v-btn>
+                <v-btn @click="popChat('test')">채팅방</v-btn>
+                <v-btn @click="popConsult('test')">협의내용</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -62,7 +62,27 @@ export default {
   components: {
   },
   methods: {
-
+    popChat(ccode){
+      window.open(
+        "../chat/" + ccode,
+        "name(이름지정)",
+        "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=700,height=600"
+      );
+    },
+    popConsult(ccode){
+      window.open(
+        "../consult/" + ccode,
+        "name(이름지정)",
+        "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=700,height=600"
+      );
+    },
+    popContract(ccode){
+      window.open(
+        "../contract/" + ccode,
+        "name(이름지정)",
+        "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=700,height=600"
+      );
+    },
   },
   data() {
     return {
