@@ -1,21 +1,25 @@
 <template>
   <v-toolbar flat color="#fff">
-      <v-toolbar-title>
-        <v-btn text class="font-bold-light title" to="/" style="height:100%;">Sharefolio</v-btn>
-      </v-toolbar-title>
-      <v-spacer />
-      <!-- <div id="google_translate_element"></div> -->
-      <v-toolbar-items>
-        <Sign />
+    <v-toolbar-title>
+      <v-btn
+        text
+        class="font-bold-light title"
+        to="/"
+        style="height:100%; color:blueviolet"
+      >Sharefolio</v-btn>
+    </v-toolbar-title>
+    <v-spacer />
+    <!-- <div id="google_translate_element"></div> -->
+    <v-toolbar-items>
+      <Sign />
 
-        <v-btn text>
-          <i class="fa fa-globe" aria-hidden="true"></i>
-        </v-btn>
-
-        <v-btn text class="font-bold-light" to="/Chat">chat</v-btn>
-        <v-btn text class="font-bold-light" to="/Manager">Manager</v-btn>
-        <v-btn text class="font-bold-light" to="/companyIntro">Company</v-btn>
-      </v-toolbar-items>
+      <v-btn text>
+        <i class="fa fa-globe" aria-hidden="true"></i>
+      </v-btn>
+      <v-btn text class="font-bold-light" to="/Chat">chat</v-btn>
+      <v-btn text class="font-bold-light" to="/Manager">Manager</v-btn>
+      <v-btn text class="font-bold-light" to="/companyIntro">Company</v-btn>
+    </v-toolbar-items>
   </v-toolbar>
 </template>
 
