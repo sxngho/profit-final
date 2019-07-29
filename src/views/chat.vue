@@ -34,7 +34,12 @@
         <v-divider/>
       </div>
       <v-flex xs12 v-for="message in messages" v-if='message.chatId !== "" && message.chatMsg !== "" '>
-        [{{ message.chatId }}] : {{ message.chatMsg }}
+        <div class="messageBox">
+          [{{ message.chatId }}] : {{ message.chatMsg }}
+          <div v-if="!message.isReadCompany">
+            &nbsp;1
+          </div>
+        </div>
       </v-flex>
       <v-text-field single-line outlined required v-model="myMessage" v-on:keyup.enter="pushMessage(myMessage)" > </v-text-field>
     </v-flex>
@@ -111,7 +116,7 @@
                <td>잔금 </td>
                <td>{{nowChatRoom.balance}} </td>
              </tr>
-             <tr >
+             <tr v-if="!toggleBalance">
                <td>잔금</td>
                <td v-if="!toggleBalance">
                  <v-text-field single-line outlined required v-model="inputBalance" v-on:keyup.enter="completeBalance(inputBalance)" > </v-text-field>
@@ -157,7 +162,7 @@
                 <td>기업주소</td>
                 <td>{{nowChatRoom.companyAddr}}</td>
               </tr>
-              <tr >
+              <tr v-if="!toggleCompanyAddr" >
                 <td>기업주소</td>
                 <td v-if="!toggleCompanyAddr">
                   <v-text-field single-line outlined required v-model="inputCompanyAddr" v-on:keyup.enter="completeCompanyAddr(inputCompanyAddr)" > </v-text-field>
@@ -247,7 +252,12 @@
       <v-divider/>
     </div>
     <v-flex xs12 v-for="message in messages" v-if='message.chatId !== "" && message.chatMsg !== "" '>
-      [{{ message.chatId }}] : {{ message.chatMsg }}
+      <div class="messageBox">
+        [{{ message.chatId }}] : {{ message.chatMsg }}
+        <div v-if="!message.isReadUser">
+          &nbsp;1
+        </div>
+      </div>
     </v-flex>
     <v-text-field single-line outlined required v-model="myMessage" v-on:keyup.enter="pushMessage(myMessage)" > </v-text-field>
   </v-flex>
@@ -592,8 +602,24 @@ export default {
         firebase.database().ref(this.nowChatRoom.link).off()
       }
       this.nowChatRoom = myChatRoom
+      var dataRef = firebase.database().ref('/'+this.nowChatRoom.link);
       firebase.database().ref(this.nowChatRoom.link).on('value', snapshot => {
         this.messages = snapshot.val().chatting;
+        if ( this.nowLevel == "3" ) {
+            for(var i in this.messages) {
+              this.messages[i].isReadCompany = true;
+            }
+            dataRef.update({
+              chatting : this.messages,
+            });
+        } else if ( this.nowLevel == "2" ){
+          for(var i in this.messages) {
+            this.messages[i].isReadUser = true;
+          }
+          dataRef.update({
+            chatting : this.messages,
+          });
+        }
         this.nowChatRoom = snapshot.val();
       },function(error) {
         console.error(error,"채팅장 입장 에러입니다.");
@@ -601,7 +627,12 @@ export default {
     },
     pushMessage(myMessage) {
       var tmp = this.nowChatRoom.chatting;
-      tmp.push({ chatMsg : myMessage, chatId : this.$session.get('session_id') });
+      if ( this.nowLevel == "3") {
+        tmp.push({ chatMsg : myMessage, chatId : this.$session.get('session_id'), isReadCompany : true, isReadUser : false });
+      } else if ( this.nowLevel == "2" ) {
+        tmp.push({ chatMsg : myMessage, chatId : this.$session.get('session_id'), isReadCompany : false, isReadUser : true });
+      }
+      console.log(tmp)
       var dataRef = firebase.database().ref('/'+this.nowChatRoom.link);
       dataRef.update({
         chatting : tmp,
@@ -765,3 +796,8 @@ export default {
   },
 };
 </script>
+<style>
+.messageBox {
+  display: flex;
+}
+</style>
