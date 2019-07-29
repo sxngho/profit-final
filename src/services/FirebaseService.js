@@ -234,6 +234,17 @@ export default {
       });
     },
 
+    // Function :: 특정 문자를 포함하는 유저들을 리스트로 묶어서 보냅니다.(seulgi)
+    async SELECT_Usersdata(nickname) {
+      return firestore.collection("users").where("nickname", "==", nickname).get().then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+          // console.log(doc.data())
+          return doc.data();
+        });
+    });
+
+  },
+
     // Function :: 유저의 정보를 가져옵니다.
     async SELECT_AllUserdata() {
       return firestore.collection("users").get().then(docSnapshots => {
@@ -315,7 +326,21 @@ export default {
     },
 
     // Function :: 댓글을 프로젝트 안의 댓글들 이라는 요소에 추가합니다.
-    INSERT_Comment(comment, old, project_id) {
+    // toyou 라는 것은 댓글이 어떤 상대방을 태그할때(#) 상대방의 alertlist에 관련 내용들을 집어넣습니다.
+    // 추후에 이를 통해 알림을 제공할 예정입니다.(seulgi)
+    INSERT_Comment(toyou, comment, old, project_id) {
+      var toyou_length = toyou.length
+      // console.log(comment.Comment.substr(toyou_length+1))
+      if (toyou) {
+        firestore.collection('users').doc(toyou).get().then((docSnapshot) => {
+          var old_alertlist = docSnapshot.data().alertlist
+          old_alertlist.push({type:1, project_id:project_id, check:false, comment:comment.Comment.substr(toyou_length+1)})
+          firestore.collection('users').doc(toyou).update({
+            alertlist:old_alertlist
+          })
+        })
+      }
+
       old.comments.push(comment);
       return firestore.collection("projects").doc(project_id).update({
         comments: old.comments
@@ -323,6 +348,9 @@ export default {
     },
 
     DELETE_comment(project_id, comments, comment_index) {
+
+
+
       var old = comments;
       old.splice(comment_index, 1);
       return firestore.collection("projects").doc(project_id).update({
@@ -466,7 +494,7 @@ export default {
                 email: id, first_name: first_name, last_name: last_name, phonenumber: phonenumber, userSkills: userSkills,
                 userImage: userImage, userName: first_name + last_name, userIntro: userIntro, userCareers: userCareers,
                 userEducations: userEducations, followerlist: [], followinglist: [], likeitProject: [], nickname : nickname, level : 0, showSkillList : [],
-                dibs : [],
+                dibs : [], alertlist:[],
               });
               firestore.collection("user_addon").doc(nickname).set({
                 toggleView: false
