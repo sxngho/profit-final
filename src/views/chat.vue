@@ -35,124 +35,126 @@
           </v-flex>
       </v-layout>
 
-      <v-layout row wrap v-if='nowChatRoom !== "" '>
-        <v-flex xs5>
-          <v-divider/>
-          <h1> 채팅창 </h1>
-          <v-divider/>
+  <v-layout row wrap v-if='nowChatRoom !== "" '>
+    <v-flex xs1>
+    </v-flex>
+    <v-flex xs4>
+      <div>
+        <v-divider/>
+        <h1> 채팅창 </h1>
+        <v-divider/>
+      </div>
+      <v-flex xs12 v-for="message in messages" v-if='message.chatId !== "" && message.chatMsg !== "" '>
+        <div class="messageBox">
+          [{{ message.chatId }}] : {{ message.chatMsg }}
+          <div v-if="!message.isReadCompany">
+            &nbsp;1
+          </div>
+        </div>
+      </v-flex>
+      <v-text-field single-line outlined required v-model="myMessage" v-on:keyup.enter="pushMessage(myMessage)" > </v-text-field>
+    </v-flex>
+    <v-flex xs1>
+    </v-flex>
+    <v-flex xs6>
+      <div>
+        <v-divider/>
+        <h1> 간이 계약서 </h1>
+        <v-divider/>
+      </div>
+      <v-simple-table>
+           <thead>
+             <tr>
+               <th class="text-center">항목</th>
+               <th class="text-center">내용</th>
+             </tr>
+           </thead>
+           <tbody>
+             <tr>
+               <td>갑</td>
+               <td>{{nowChatRoom.companyId}}</td>
+             </tr>
+             <tr>
+               <td>을</td>
+               <td>{{nowChatRoom.userId}}</td>
+             </tr>
 
-          <v-flex
-          xs12
-          v-for="message in messages"
-          v-if='message.chatId !== "" && message.chatMsg !== "" '>
-            [{{ message.chatId }}] : {{ message.chatMsg }}
-          </v-flex>
+             <tr @click="changeProjectTitle()" v-if="toggleProjectTitle">
+               <td>프로젝트 이름</td>
+               <td>{{nowChatRoom.projectTitle}}</td>
+             </tr>
+             <tr v-if="!toggleProjectTitle">
+               <td>프로젝트 이름</td>
+               <td>
+                 <v-text-field single-line outlined required v-model="inputProjectTitle" v-on:keyup.enter="completeProjectTitle(inputProjectTitle)" > </v-text-field>
+               </td>
+             </tr>
 
-          <v-text-field
-          single-line outlined required
-          v-model="myMessage"
-          v-on:keyup.enter="pushMessage(myMessage)"/>
-        </v-flex>
+             <tr @click="changeProjectTerm()" v-if="toggleProjectTerm">
+               <td>프로젝트 기간</td>
+               <td>{{nowChatRoom.projectTerm}}</td>
+             </tr>
+             <tr v-if="!toggleProjectTerm">
+               <td>프로젝트 기간</td>
+               <td>
+                 <v-text-field single-line outlined required v-model="inputProjectTerm" v-on:keyup.enter="completeProjectTerm(inputProjectTerm)" > </v-text-field>
+               </td>
+             </tr>
 
-        <v-flex xs7>
-          <v-divider/>
-          <h1> 간이 계약서 </h1>
-          <v-divider/>
+             <tr @click="changePay()" v-if="togglePay">
+               <td> 급여 </td>
+               <td> {{nowChatRoom.pay}} </td>
+             </tr>
+             <tr v-if="!togglePay">
+               <td> 급여 </td>
+               <td>
+                 <v-text-field single-line outlined required v-model="inputPay" v-on:keyup.enter="completePay(inputPay)" > </v-text-field>
+               </td>
+             </tr>
 
-          <v-simple-table>
-            <thead>
-              <tr>
-                <th class="text-center">항목</th>
-                <th class="text-center">내용</th>
-              </tr>
-            </thead>
+             <tr @click="changeDownPayment()" v-if="toggleDownPayment">
+               <td> 계약금 </td>
+               <td> {{nowChatRoom.downPayment}} </td>
+             </tr>
+             <tr v-if="!toggleDownPayment">
+               <td></td>
+               <td>
+                 <v-text-field single-line outlined required v-model="inputDownPayment" v-on:keyup.enter="completeDownPayment(inputDownPayment)" > </v-text-field>
+               </td>
+             </tr>
 
-            <tbody>
-              <tr>
-                <td>갑</td>
-                <td>{{nowChatRoom.companyId}}</td>
-              </tr>
-              <tr>
-                <td>을</td>
-                <td>{{nowChatRoom.userId}}</td>
-              </tr>
+             <tr @click="changeBalance()" v-if="toggleBalance">
+               <td>잔금 </td>
+               <td>{{nowChatRoom.balance}} </td>
+             </tr>
+             <tr v-if="!toggleBalance">
+               <td>잔금</td>
+               <td v-if="!toggleBalance">
+                 <v-text-field single-line outlined required v-model="inputBalance" v-on:keyup.enter="completeBalance(inputBalance)" > </v-text-field>
+               </td>
+             </tr>
 
-              <tr @click="changeProjectTitle()" v-if="toggleProjectTitle">
-                <td>프로젝트 이름</td>
-                <td>{{nowChatRoom.projectTitle}}</td>
-              </tr>
-              <tr v-if="!toggleProjectTitle">
-                <td>프로젝트 이름</td>
-                <td>
-                  <v-text-field single-line outlined required v-model="inputProjectTitle" v-on:keyup.enter="completeProjectTitle(inputProjectTitle)" > </v-text-field>
-                </td>
-              </tr>
-              <tr @click="changeProjectTerm()" v-if="toggleProjectTerm">
-                <td>프로젝트 기간</td>
-                <td>{{nowChatRoom.projectTerm}}</td>
-              </tr>
-              <tr v-if="!toggleProjectTerm">
-                <td>프로젝트 기간</td>
-                <td>
-                  <v-text-field single-line outlined required v-model="inputProjectTerm" v-on:keyup.enter="completeProjectTerm(inputProjectTerm)" > </v-text-field>
-                </td>
-              </tr>
+             <tr @click="changePenalty()" v-if="togglePenalty">
+               <td> 위약금 </td>
+               <td> {{nowChatRoom.penalty}} </td>
+             </tr>
+             <tr v-if="!togglePenalty" >
+               <td> 위약금 </td>
+               <td>
+                 <v-text-field single-line outlined required v-model="inputPenalty" v-on:keyup.enter="completePenalty(inputPenalty)" > </v-text-field>
+               </td>
+             </tr>
 
-              <tr @click="changePay()" v-if="togglePay">
-                <td> 급여 </td>
-                <td> {{nowChatRoom.pay}} </td>
-              </tr>
-              <tr v-if="!togglePay">
-                <td> 급여 </td>
-                <td>
-                  <v-text-field single-line outlined required v-model="inputPay" v-on:keyup.enter="completePay(inputPay)" > </v-text-field>
-                </td>
-              </tr>
-
-              <tr @click="changeDownPayment()" v-if="toggleDownPayment">
-                <td> 계약금 </td>
-                <td> {{nowChatRoom.downPayment}} </td>
-              </tr>
-              <tr v-if="!toggleDownPayment">
-                <td></td>
-                <td>
-                  <v-text-field single-line outlined required v-model="inputDownPayment" v-on:keyup.enter="completeDownPayment(inputDownPayment)" > </v-text-field>
-                </td>
-              </tr>
-
-              <tr @click="changeBalance()" v-if="toggleBalance">
-                <td>잔금 </td>
-                <td>{{nowChatRoom.balance}} </td>
-              </tr>
-              <tr >
-                <td>잔금</td>
-                <td v-if="!toggleBalance">
-                  <v-text-field single-line outlined required v-model="inputBalance" v-on:keyup.enter="completeBalance(inputBalance)" > </v-text-field>
-                </td>
-              </tr>
-
-              <tr @click="changePenalty()" v-if="togglePenalty">
-                <td> 위약금 </td>
-                <td> {{nowChatRoom.penalty}} </td>
-              </tr>
-              <tr v-if="!togglePenalty" >
-                <td> 위약금 </td>
-                <td>
-                  <v-text-field single-line outlined required v-model="inputPenalty" v-on:keyup.enter="completePenalty(inputPenalty)" > </v-text-field>
-                </td>
-              </tr>
-
-
-              <tr @click="changeContractDate()" v-if="toggleContractDate">
-                <td> 계약일 </td>
-                <td> {{nowChatRoom.contractDate}} </td>
-              </tr>
-              <tr v-if="!toggleContractDate">
-                <td> 계약금</td>
-                <td>
-                  <v-text-field single-line outlined required v-model="inputContractDate" v-on:keyup.enter="completeContractDate(inputContractDate)" > </v-text-field>
-                </td>
-              </tr>
+             <tr @click="changeContractDate()" v-if="toggleContractDate">
+               <td> 계약일 </td>
+               <td> {{nowChatRoom.contractDate}} </td>
+             </tr>
+             <tr v-if="!toggleContractDate">
+               <td> 계약금</td>
+               <td>
+                 <v-text-field single-line outlined required v-model="inputContractDate" v-on:keyup.enter="completeContractDate(inputContractDate)" > </v-text-field>
+               </td>
+             </tr>
 
               <tr @click="changeCompanyId()" v-if="toggleCompanyId">
                 <td> 기업명 </td>
@@ -170,7 +172,7 @@
                 <td>기업주소</td>
                 <td>{{nowChatRoom.companyAddr}}</td>
               </tr>
-              <tr >
+              <tr v-if="!toggleCompanyAddr" >
                 <td>기업주소</td>
                 <td v-if="!toggleCompanyAddr">
                   <v-text-field single-line outlined required v-model="inputCompanyAddr" v-on:keyup.enter="completeCompanyAddr(inputCompanyAddr)" > </v-text-field>
@@ -260,7 +262,12 @@
       <v-divider/>
     </div>
     <v-flex xs12 v-for="message in messages" v-if='message.chatId !== "" && message.chatMsg !== "" '>
-      [{{ message.chatId }}] : {{ message.chatMsg }}
+      <div class="messageBox">
+        [{{ message.chatId }}] : {{ message.chatMsg }}
+        <div v-if="!message.isReadUser">
+          &nbsp;1
+        </div>
+      </div>
     </v-flex>
     <v-text-field single-line outlined required v-model="myMessage" v-on:keyup.enter="pushMessage(myMessage)" > </v-text-field>
   </v-flex>
@@ -462,11 +469,13 @@ export default {
       chatRooms : "", // 모든 공고 리스트
       myChatRooms : [], // 내가 볼 수 있는 공고 리스트
       nowChatRoom : "", // 내가 현재 접속중인 공고의 채팅방
+        myMessage : "", // 내가 입력하는 메시지
       messages : "", // 채팅방 메시지들
       myMessage : "", // 내가 입력하는 메시지
       recruitsbyCompany : "",
 
       // inputs
+      messages : "", // 채팅방 메시지들
       inputProjectTitle : "",
       inputProjectTerm : "",
       inputPay : "",
@@ -604,8 +613,24 @@ export default {
         firebase.database().ref(this.nowChatRoom.link).off()
       }
       this.nowChatRoom = myChatRoom
+      var dataRef = firebase.database().ref('/'+this.nowChatRoom.link);
       firebase.database().ref(this.nowChatRoom.link).on('value', snapshot => {
         this.messages = snapshot.val().chatting;
+        if ( this.nowLevel == "3" ) {
+            for(var i in this.messages) {
+              this.messages[i].isReadCompany = true;
+            }
+            dataRef.update({
+              chatting : this.messages,
+            });
+        } else if ( this.nowLevel == "2" ){
+          for(var i in this.messages) {
+            this.messages[i].isReadUser = true;
+          }
+          dataRef.update({
+            chatting : this.messages,
+          });
+        }
         this.nowChatRoom = snapshot.val();
       },function(error) {
         console.error(error,"채팅장 입장 에러입니다.");
@@ -613,7 +638,12 @@ export default {
     },
     pushMessage(myMessage) {
       var tmp = this.nowChatRoom.chatting;
-      tmp.push({ chatMsg : myMessage, chatId : this.$session.get('session_id') });
+      if ( this.nowLevel == "3") {
+        tmp.push({ chatMsg : myMessage, chatId : this.$session.get('session_id'), isReadCompany : true, isReadUser : false });
+      } else if ( this.nowLevel == "2" ) {
+        tmp.push({ chatMsg : myMessage, chatId : this.$session.get('session_id'), isReadCompany : false, isReadUser : true });
+      }
+      console.log(tmp)
       var dataRef = firebase.database().ref('/'+this.nowChatRoom.link);
       dataRef.update({
         chatting : tmp,
@@ -777,3 +807,8 @@ export default {
   },
 };
 </script>
+<style>
+.messageBox {
+  display: flex;
+}
+</style>

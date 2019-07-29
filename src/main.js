@@ -32,7 +32,7 @@ Vue.use(Vuetify, {
 	}
 })
 Vue.use(Vuetify, {
-  iconfont: 'mdi' // 'md' || 'mdi' || 'fa' || 'fa4'
+  iconfont: 'mdi', // 'md' || 'mdi' || 'fa' || 'fa4'
 })
 new Vue({
   router,

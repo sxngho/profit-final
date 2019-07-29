@@ -17,20 +17,15 @@
         </v-layout>
 
         <v-layout wrap row>
-          <v-flex xs12 sm6 md4>
+          <v-flex xs12 sm6 md4 v-for="recruit in myRecruits">
             <v-card outlined>
-              <v-card-title>프젝이름</v-card-title>
+              <v-card-title>{{ recruit.data.title }}</v-card-title>
               <v-card-text>
-                <span style="color:red"> 마감기간 </span>
-                <span>회사명</span>
-                <p>요약 :: Lorem ipsum dolor sit amet, mel at clita quando. Te sit oratio vituper</p>
-                <div class="tech d-inline">C</div>
-                <div class="tech d-inline">java</div>
-                <div class="tech d-inline">something</div>
+                {{recruit.data.companyId}}회사,필요스택 :  {{recruit.data.requireSkills}}, 요약, 마감기간
               </v-card-text>
               <v-card-actions justify-center>
                 <v-spacer/>
-                <v-btn @click="popRecruitDetail('test')" text outlined>자세히보기</v-btn>
+                <v-btn @click="popRecruitDetail(recruit.id)" text outlined>자세히보기</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -55,7 +50,38 @@ export default {
     RecuritBanner,
     RecruitEditor
   },
+  data() {
+      return {
+        recruits : "",
+        mySkills : "",
+        myRecruits : [],
+      };
+  },
+  mounted() {
+    this.fetchData();
+  },
   methods: {
+    async fetchData() {
+      this.recruits = await FirebaseService.SELECT_Recruit();
+      this.mySkills = await FirebaseService.SELECT_Userdata(this.$session.get('session_id'));
+      for(var i in this.recruits) {
+        if (this.recruits[i].data.requireSkills.length == 0) {
+          this.myRecruits.push(this.recruits[i]);
+          continue;
+        }
+        for(var j in this.mySkills[0].userSkills) {
+          var uc = this.mySkills[0].userSkills[j].toUpperCase();
+          if( !this.recruits[i].data.requireSkills.includes(uc) ) {
+            console.log("이거안나와야해")
+            break;
+          } else if( j == (this.mySkills[0].userSkills.length-1) ) {
+            console.log("푸시",this.recruits[i])
+            this.myRecruits.push(this.recruits[i]);
+          }
+        }
+      }
+    },
+
     popRecruitDetail(rdcode) {
       window.open(
         "../recruit/" + rdcode,
@@ -64,10 +90,8 @@ export default {
       );
     }
   },
-  data() {
-    return {};
-  },
-  mounted() {}
+
+
 };
 </script>
 
