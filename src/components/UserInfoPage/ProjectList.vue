@@ -121,7 +121,7 @@ export default {
     async SELECT_Projects() {
       this.id = this.$route.params.id;
       this.projects = await FirebaseService.SELECT_Projects(this.id);
-      console.log("gg", this.projects);
+      // console.log("gg", this.projects);
     },
     toStory(pcode) {
       this.$emit('toStory',pcode);
