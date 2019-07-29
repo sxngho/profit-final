@@ -148,12 +148,10 @@ export default {
       comment:"",
       update_comment: false,
       update_commenttext:'',
-      // islikeit:false,
     }
   },
   components: {
     BigImg,
-    // pcode : {type:String, default:""}
   },
   created(){
     this.user = this.$session.get('session_id')
@@ -178,35 +176,6 @@ export default {
       this.project = await FirebaseService.SELECT_ProjectsByPcode(this.$route.params.pcode);
       this.$loading(false)
     },
-    // async isLikeItCheck(){
-    //   var targetProject = await FirebaseService.SELECT_Project(this.project_id);
-    //   var tmp = targetProject.likeit.includes(this.$session.get('session_id'));
-    //   this.islikeit=tmp;
-    //   console.log("like it! :: ", this.islikeit);
-    // },
-    // async likeit(){
-    //   var targetProject = await FirebaseService.SELECT_Project(this.project_id);
-    //   var userlikeitlist = await FirebaseService.SELECT_Userdata(this.$session.get('session_id'));
-    //   await FirebaseService.likeit(
-    //     this.project_id,
-    //     this.$session.get('session_id'),
-    //     targetProject.likeit,
-    //     userlikeitlist[0].likeitProject
-    //   );
-    //   this.isLikeItCheck();
-    // },
-    // async unlikeit(){
-    //   var targetProject = await FirebaseService.SELECT_Project(this.project_id);
-    //   var userlikeitlist = await FirebaseService.SELECT_Userdata(this.$session.get('session_id'));
-    //
-    //   await FirebaseService.unlikeit(
-    //     this.project_id,
-    //     this.$session.get('session_id'),
-    //     targetProject.likeit,
-    //     userlikeitlist[0].likeitProject
-    //   );
-    //   this.isLikeItCheck();
-    // },
     // seulgi function
     async INSERT_Comment(comment){
       if (this.user) {
@@ -314,18 +283,13 @@ export default {
     },
     async like_comment(com, index) {
       // com 은 내용 , index 는 순서
-      console.log(com)
-      console.log(index)
       var result = await FirebaseService.like_comment(this.user, this.project_id, this.comments, com.like, index)
       var heart2 = document.querySelector(`#commentlike_${index}`)
-      console.log(result, '왓냐')
       if (result[index].like.includes(this.user)) {
-        console.log(1)
         // 댓글 남긴 사람들 중에서 내가 있다는 뜻.
         heart2.classList.remove('far')
         heart2.classList.add('fa')
       } else {
-        console.log(2)
         heart2.classList.remove('fa')
         heart2.classList.add('far')
       }
