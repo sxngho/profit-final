@@ -61,6 +61,7 @@
       </v-flex>
 
       <v-flex xs12>
+        {{this.$store.state.reload}}
        <div v-if="skillToggle" class="caption">
          <p> 등록된 기술이 없습니다. </p>
        </div>
@@ -96,7 +97,7 @@
         @mouseover="showRmCarBtn(index)" @mouseleave="hideRmCarBtn(index)"
         style="position:relative; padding:15px 6px; border-bottom:1px #cecece solid;">
           <v-flex
-            v-on:click="rmCareer(userdata[0].userCareers,c,userdata[0].email,reload)"
+            v-on:click="rmCareer(userdata[0].userCareers,c,userdata[0].nickname,reload)"
             v-show:false
             class ="carbtn"  v-if="isMine"
             style="z-index:2; right:0; top:35%; position: absolute; display: none;">
@@ -130,7 +131,7 @@
           style="position:relative; padding:15px 6px; border-bottom:1px #cecece solid;"
           >
           <v-flex
-            v-on:click="rmEducation(userdata[0].userEducations,e,userdata[0].email,reload)"
+            v-on:click="rmEducation(userdata[0].userEducations,e,userdata[0].nickname,reload)"
             v-show:false
             text outlined small absolute fab
             class ="edubtn"  v-if="isMine"
@@ -187,7 +188,6 @@ export default {
     SkillEditor,
   },
   created() {
-
     this.SELECT_Userdata();
     this.isMineCheck();
     this.isFollowCheck();
@@ -199,6 +199,7 @@ export default {
     async SELECT_Userdata() {
       this.toStory(true);
       this.userdata = await FirebaseService.SELECT_Userdata(this.$route.params.id);
+      console.log(this.userdata[0].userSkills)
       if ( this.userdata[0].userIntro == "" ) {
         this.userdata[0].userIntro = "소개말이 없습니다."
       }
@@ -233,7 +234,7 @@ export default {
     },
     receiveSkill(skill) {
       FirebaseService.UPDATE_userSkill(skill,this.$route.params.id);
-      this.userdata[0].userSkills = skill;
+      this.userdata[0].showSkillList = skill;
     },
     async receiveEdu(edu) {
       this.userEducations = await FirebaseService.SELECT_Userdata(this.$route.params.id);
@@ -343,7 +344,9 @@ export default {
     },
   },
   watch: {
-    'reload' : 'SELECT_Userdata'
+    reload: function (newVal, oldVal) {
+      this.SELECT_Userdata();
+   },
   }
 
 };

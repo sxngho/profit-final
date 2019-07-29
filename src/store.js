@@ -21,7 +21,8 @@ export default new Vuex.Store({
     showPortfolioList: [],
     techList: ["vue", "javascript", "jquery", "java", "c", "c++", "react"],
     showTechList: [],
-    selectTechList: []
+    selectTechList: [],
+    reload : true,
   },
   // Getter : get 함수 정의
   // 정의 -> return state.변수명
@@ -38,6 +39,9 @@ export default new Vuex.Store({
   // Mutations : 값변경 / 동기
   // 호출 -> this.$store.commit('함수명');
   mutations: {
+    onReload: function(state, payload) {
+      return (state.reload = !state.reload);
+    },
     setSession: function(state, payload) {
       return (state.session_id = payload);
     },
