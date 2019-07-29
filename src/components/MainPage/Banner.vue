@@ -23,7 +23,7 @@
           </div>
         </div>
       </button>
-      <button class="bannerBox" onclick="location.href='/recruit'">
+      <button class="bannerBox" onclick="location.href='/recruits'">
         <div class="recuritList contentBox">
           <div class="iconBox">
             <i class="far fa-handshake fa-7x" style="color:blueviolet"></i>
