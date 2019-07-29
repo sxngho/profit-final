@@ -18,7 +18,10 @@ export default new Vuex.Store({
     followingView: false,
     techFilterList: [],
     allPortfolioList: [],
-    showPortfolioList: []
+    showPortfolioList: [],
+    techList: ["vue", "javascript", "jquery", "java", "c", "c++", "react"],
+    showTechList: [],
+    selectTechList: []
   },
   // Getter : get 함수 정의
   // 정의 -> return state.변수명
@@ -97,6 +100,15 @@ export default new Vuex.Store({
     selectAllPortfolioList: function(state, payload) {
       state.allPortfolioList = payload;
       state.showPortfolioList = payload;
+    },
+    showingSameTechList: function(state, payload) {
+      state.showTechList = payload;
+    },
+    addTechList: function(state, payload) {
+      state.selectTechList.push(payload);
+    },
+    deleteTechList: function(state, payload) {
+      state.selectTechList.splice(payload, 1);
     }
   },
 
