@@ -1,227 +1,192 @@
 <template>
-  <div justify-center>
-    <v-flex column xs12 sm12 >
-    <v-tabs
-      right
-      v-model="active"
-      color="gray"
-      dark
-      slider-color="red"
-    >
-      <v-tab
-        v-for="step in steps"
-        :key="step.idx"
-        ripple
-      >
-        {{ step.title }}
-      </v-tab>
+  <v-stepper v-model="idx" style="width:100%" alt-labels>
+    <v-stepper-header>
+      <v-stepper-step :complete="idx > 1" step="1" editable>시작하기!</v-stepper-step>
+      <v-divider/>
+      <v-stepper-step :complete="idx > 2" step="2" editable>대표 이미지</v-stepper-step>
+      <v-divider/>
+      <v-stepper-step :complete="idx > 3" step="3" editable>옵션</v-stepper-step>
+      <v-divider/>
+      <v-stepper-step step="4" editable>상세설명</v-stepper-step>
+    </v-stepper-header>
 
-      <!-- 탭 아이템들 -->
-      <!-- Step 1 :: ProjectTitle -->
-      <v-tab-item :key="1">
-        <v-card text>
-          <v-card-text>
-            <v-container>
-              <v-flex>
-                <h3>ADD Project</h3>
-              </v-flex>
+    <v-stepper-items>
+      <v-stepper-content step="1">
+        <div>
+          <span>프로젝트 제목</span>
+          <small>*필수항목입니다</small>
+          <v-text-field
+          label="필수항목 입니다"
+          single-line
+          outlined
+          v-model="projecttitle"
+          required
+          ></v-text-field>
+          <span>프로젝트 설명</span>
+          <v-textarea
+          outlined
+          name="input-7-4"
+          label="프로젝트 설명"
+          v-model="projectdescription"
+          ></v-textarea>
+        </div>
+        <v-layout justify-center>
+          <v-btn color="primary" text @click="idx = 2">다음단계로</v-btn>
+        </v-layout>
+      </v-stepper-content>
 
-              <v-flex>
-                <span>프로젝트 제목</span>
-                <small>*필수항목입니다</small>
-                <v-text-field
-                label="프로젝트 제목*"
-                single-line
-                outlined
-                v-model="projecttitle"
-                required
-                ></v-text-field>
-              </v-flex>
+      <v-stepper-content step="2">
+        <div>
+          <div v-if="!projectimage">
+            <input type="file" @change="onFileChange" />
+          </div>
+          <div v-else>
+            <img :src="projectimage" width="200px" height="200px"/><br>
+            <v-btn @click="removeImage">Remove image</v-btn>
+          </div>
+        </div>
+        <v-layout justify-center>
+          <v-btn color="primary" text @click="idx = 1">이전으로</v-btn>
+          <v-btn color="primary" text @click="idx = 3">다음단계로</v-btn>
+        </v-layout>
+      </v-stepper-content>
 
-              <v-flex>
-                <span>프로젝트 설명</span>
-                <v-textarea
-                outlined
-                name="input-7-4"
-                label="프로젝트 설명"
-                v-model="projectdescription"
-                ></v-textarea>
-              </v-flex>
+      <v-stepper-content step="3">
+        <div>
+          <v-stepper v-model="subidx" vertical>
+            <v-stepper-step :complete="subidx > 1" step="1" style="display: inline-block;" editable>
+              진행기간
+              <small>프로젝트를 진행했던 기간을 입력해 주세요</small>
+            </v-stepper-step>
 
-              <v-flex>
-                <p>프로젝트 생성시 프로젝트 생성 도우미가 실행됩니다!</p>
-              </v-flex>
+            <v-stepper-content step="1">
+              <div>
+                <div>
+                  프로젝트 시작일 :  {{picker}}<br/>
+                  프로젝트 기간 : {{projectterm}}
+                </div>
 
-              <div class="text-xs-center mt-3">
-                <v-btn @click="next">프로젝트 생성하기!</v-btn>
+                <v-date-picker v-model="picker" landscape color="green lighten-1"/>
+
+                <div>
+                  <v-btn v-for="item in pterm" small text outlined rounded @click="termselect(item)">{{ item }}</v-btn>
+                </div>
               </div>
-            </v-container>
-          </v-card-text>
-        </v-card text>
-      </v-tab-item>
 
-      <!-- Step 2 :: ProjecStruct -->
-      <v-tab-item :key="2">
-        <v-card text>
-          <v-card-text>
-            <!-- 프로젝트 기간 세팅 -->
-            <v-container>
-              <h3>날짜 / 기간</h3>
-              <v-flex xs12>
-                프로젝트 시작일 :  {{picker}}<br/>
-                프로젝트 기간 : {{projectterm}}
-              </v-flex>
+              <div>
+                <v-btn color="primary" @click="subidx = 2">다음</v-btn>
+              </div>
+            </v-stepper-content>
 
-              <v-layout column justify-center>
-                <v-flex xs12>
-                  <v-date-picker v-model="picker" :landscape="landscape" color="green lighten-1"></v-date-picker>
+            <v-stepper-step :complete="subidx > 2" step="2" style="display: inline-block;" editable>
+              기술 스택
+              <small>프로젝트에 사용된 기술들을 등록하세요</small>
+            </v-stepper-step>
+
+            <v-stepper-content step="2">
+              <div>
+                <h3>현재 추가된 스킬</h3>
+                <div style="padding:15px; border:2px solid #3f51b51a; border-radius:15px;" v-if="projecttech != ''">
+                  <v-chip
+                   v-for="(item, index) in projecttech"
+                   text-color="white"
+                   color="indigo light-3"
+                   style="margin:3px;"
+                   small close @click="deleteTech(index)"> <!-- @click:close="deleteTech(index) -->
+                   {{ item }}</v-chip>
+                 </div>
+              </div>
+              <v-divider/>
+              <div>
+                <h3>직접 입력</h3>
+                <v-flex xs6>
+                  <v-text-field
+                  v-model="tech"
+                  v-on:keyup.enter="addNewTech()"
+                  />
                 </v-flex>
+              </div>
+              <v-divider/>
+              <div>
+                <h3>Hot Skills</h3>
+                <v-chip
+                 v-for="(item, index) in techlist"
+                 small outlined color="indigo darken-3" @click="addTech(item)">{{ item }}</v-chip>
+              </div>
+              <v-btn color="primary" @click="subidx = 1">이전</v-btn>
+              <v-btn color="primary" @click="subidx = 3">다음</v-btn>
+            </v-stepper-content>
 
-                <v-flex xs12>
-                  <ul row style="list-style:none;">
-                    <li v-for="item in pterm" style="float:left">
-                      <v-btn small text outlined rounded @click="termselect(item)">{{ item }}</v-btn>
-                    </li>
-                  </ul>
+            <v-stepper-step :complete="subidx > 3" step="3" style="display: inline-block;" editable>
+              등급
+              <small>프로젝트의 대략적인 등급을 설정해 주세요</small>
+            </v-stepper-step>
+
+            <v-stepper-content step="3">
+              <div>
+                <v-flex xs6>
+                  <v-text-field
+                  suffix="수준"
+                  v-model="projectrank"/>
                 </v-flex>
-              </v-layout>
-            </v-container>
-
-            <hr/>
-
-            <!--  테크 -->
-            <v-container>
-
-              <h3>현재 등록된 Tech stack</h3>
-              <v-layout column justify-center>
-                <v-layout row>
-                  <v-flex xs12>
-                    <ul row style="list-style:none;">
-                      <li v-for="(item, index) in projecttech" style="float:left">
-                        <v-btn small text outlined rounded @click="deleteTech()">{{ item }}</v-btn>
-                      </li>
-                    </ul>
-                  </v-flex>
-                </v-layout>
-
-                <h3>직접 추가하기</h3>
-                <v-layout row>
-                  <v-flex xs6>
-                    <v-text-field
-                    v-model="tech"
-                    v-on:keyup.enter="addNewTech()"
-                    ></v-text-field>
-                  </v-flex>
-                </v-layout>
-
-                <h3>Tech stack 목록</h3>
-                <v-layout row>
-                  <v-flex xs12>
-                    <ul row style="list-style:none;">
-                      <li v-for="(item, index) in techlist" style="float:left">
-                        <v-btn small text outlined rounded @click="addTech(item)">{{ item }}</v-btn>
-                      </li>
-                    </ul>
-                  </v-flex>
-                </v-layout>
-
-              </v-layout>
-            </v-container>
-
-            <hr/>
-
-            <!-- TODO project img upload ==> Main and thumbnail -->
-            <v-container>
-              <h3>프로젝트 대표이미지 등록</h3>
-              <div v-if="!projectimage">
-                <input type="file" @change="onFileChange" />
+                <div>
+                  <v-btn v-for="item in ranklist"
+                  small text outlined rounded
+                  @click="selectRank(item)">
+                  {{ item }}</v-btn>
+                </div>
+                <v-btn color="primary" @click="subidx = 2">이전</v-btn>
               </div>
-              <div v-else>
-                <img :src="projectimage" width="200px" height="200px"/><br>
-                <v-btn @click="removeImage">Remove image</v-btn>
+
+              <div>
               </div>
-            </v-container>
+            </v-stepper-content>
 
-            <hr/>
+          </v-stepper>
+        </div>
+        <v-layout justify-center>
+          <v-btn color="primary" text @click="idx = 2">이전으로</v-btn>
+          <v-btn color="primary" text @click="idx = 4">다음단계로</v-btn>
+        </v-layout>
+      </v-stepper-content>
 
-            <!-- 등급 -->
-            <v-container>
-              <h3>프로젝트의 등급</h3>
-              <v-layout column>
-                <v-layout row>
-                  <v-flex xs6>
-                    <v-text-field
-                    suffix="수준"
-                    v-model="projectrank"/>
-                  </v-flex>
-                </v-layout>
+      <v-stepper-content step="4">
+        <div>
+          <vue-editor v-model="projectcontent"/>
+        </div>
 
-                <v-layout row>
-                  <v-flex xs12>
-                    <ul row style="list-style:none;">
-                      <li v-for="item in ranklist" style="float:left">
-                        <v-btn small text outlined rounded @click="selectRank(item)">{{ item }}</v-btn>
-                      </li>
-                    </ul>
-                  </v-flex>
-                </v-layout>
-              </v-layout>
-            </v-container>
+        <v-layout justify-center>
+          <v-btn color="primary" text @click="idx = 3">이전으로</v-btn>
+          <v-btn color="primary" text
+          @click="submit(projecttitle,
+           projectdescription,
+           projectterm,
+           projectcontent,
+           projecttech,
+           projectimage,
+           projectrank,
+           session_id)" :editorToolbar="customToolbar">완성하기</v-btn>
+           <br/><small>*언제든지 수정할 수 있습니다!</small>
+        </v-layout>
+      </v-stepper-content>
 
-            <div class="text-xs-center mt-3">
-              <v-btn @click="prevent">이전으로</v-btn>
-              <v-btn @click="next">다음단계로</v-btn>
-            </div>
-          </v-card-text>
-        </v-card text>
-      </v-tab-item>
 
-      <!-- Step 3 :: Set Project main Img, Thumbnail, description -->
-      <v-tab-item :key="3">
-        <v-card text>
-          <v-card-text style="overflow:auto">
-            <vue-editor v-model="projectcontent"></vue-editor>
-
-            <div class="text-xs-center mt-3">
-              <v-btn @click="prevent">이전으로</v-btn>
-              <v-btn @click="submit(projecttitle,
-                     projectdescription,
-                     projectterm,
-                     projectcontent,
-                     projecttech,
-                     projectimage,
-                     projectrank,
-                     session_id)" :editorToolbar="customToolbar">완성하기!</v-btn>
-              <br/>
-              <small>*언제든지 수정할 수 있습니다!</small>
-            </div>
-          </v-card-text>
-        </v-card text>
-      </v-tab-item>
-
-    </v-tabs>
-
-  </v-flex>
-  </div>
+    </v-stepper-items>
+  </v-stepper>
 </template>
 
 <script>
-import { VueEditor } from "vue2-editor";
-import FirebaseService from "@/services/FirebaseService";
+  import { VueEditor } from "vue2-editor";
+  import FirebaseService from "@/services/FirebaseService";
 
   export default {
     name: "ProjectEditor",
     data () {
         return {
-          active: null,
-          steps:[
-            {idx:1, title:"step 1"},
-            {idx:2, title:"step 2"},
-            {idx:3, title:"step 3"},
-          ],
-
+          idx:0,
+          subidx:0,
+          e6:0,
           picker: new Date().toISOString().substr(0, 10),
-          landscape: true,
           pterm:[
              "진행중", "1주일", "2주일", "3주일", "1개월",
              "2개월", "3개월", "4개월", "5개월", "6개월",
@@ -259,11 +224,11 @@ import FirebaseService from "@/services/FirebaseService";
           session_id : "",
         }
       },
-      created() {
-        this.getSessionid()
-      },
-      methods: {
-        showNotification (group, type ,title, text) {
+    created() {
+      this.getSessionid()
+    },
+    methods: {
+      showNotification (group, type ,title, text) {
            this.$notify({
              group,
              title,
