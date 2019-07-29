@@ -60,8 +60,8 @@
                 <!-- comment input -->
                 <form>
                   <!-- <v-text-field label="Comment" required @input="$v.name.$touch()" @blur="$v.name.$touch()" v-model="comment"></v-text-field> -->
-                  <v-text-field label="Comment" v-model="comment"></v-text-field>
-                  <v-btn @click="INSERT_Comment(comment)">submit</v-btn>
+                  태그 : <span id="toyou"></span><v-text-field v-model="comment"></v-text-field>
+                  <v-btn @click="INSERT_Comment(toyou, comment)">submit</v-btn>
                   </form>
 
                 <!-- comment sort -->
@@ -148,6 +148,7 @@ export default {
       comment:"",
       update_comment: false,
       update_commenttext:'',
+      toyou : '',
     }
   },
   components: {
@@ -177,7 +178,7 @@ export default {
       this.$loading(false)
     },
     // seulgi function
-    async INSERT_Comment(comment){
+    async INSERT_Comment(toyou, comment){
       if (this.user) {
         this.projectData = await FirebaseService.SELECT_Project(this.project_id);
         var Json = new Object();
@@ -187,7 +188,7 @@ export default {
         Json.unlikecount = 0;
         Json.like = [];
         Json.unlike = [];
-        FirebaseService.INSERT_Comment(Json, this.projectData, this.project_id);
+        FirebaseService.INSERT_Comment(toyou, Json, this.projectData, this.project_id);
         const newcommnet = {
         User : this.user,
         Comment : this.comment,
@@ -197,6 +198,9 @@ export default {
         unlikecount : 0,
         };
         this.comments.push(newcommnet)
+        this.toyou = ''
+        var tmp_text = document.querySelector('#toyou')
+        tmp_text.innerText = ''
       } else {
         // 로그인 안했으면 안했다고 알려줘야지 헤헤
         alert('너 로그인안했다. 댓글못쓴다~')
@@ -207,7 +211,7 @@ export default {
       this.comments = await FirebaseService.SELECT_Comments(this.project_id)
     },
     DELETE_comment(comments, comment_index) {
-      console.log(this.project_id)
+      // console.log(this.project_id)
       FirebaseService.DELETE_comment(this.project_id, comments, comment_index)
     },
     UPDATE_comment(comments, index) {
@@ -307,10 +311,27 @@ export default {
         heart3.classList.add('far')
       }
     },
+    async select_user(nickname) {
+      var toyou = await FirebaseService.SELECT_Usersdata(nickname)
+      if (toyou.length === 1) {
+        this.toyou = toyou[0].nickname
+        var tmp_text = document.querySelector('#toyou')
+        tmp_text.innerText = this.toyou
+      }
+    }
   },
   computed : {
     likeprojectcount : function() {
       return this.project.likeit.length
+    }
+  },
+  watch : {
+    comment : function() {
+      if (this.comment[0]==='#') {
+        if (this.comment.split(' ').length < 2) {
+          this.select_user(this.comment.split(' ')[0].substr(1))
+        }
+      }
     }
   }
 }
