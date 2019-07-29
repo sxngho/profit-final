@@ -2,8 +2,6 @@
   <div class="MainPage">
     <Banner />
     <Filters />
-    <v-btn to="/recruits">Go To Recruit Page</v-btn>
-    <v-btn to="/studio">Studio</v-btn>
     <PortfolioList />
     <!-- <button class="mainMoreBtn">MORE</button> -->
   </div>
