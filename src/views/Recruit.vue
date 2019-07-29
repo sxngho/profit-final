@@ -23,8 +23,6 @@
       <div>
         <h1>모집중인 공고 리스트</h1>
         <v-layout row wrap>
-          그냥 여기서
-          포문돌림?
           <v-flex xs4 v-for="recruit in myRecruits">
             <v-card>
               <v-card-title>{{ recruit.data.title }}</v-card-title>
