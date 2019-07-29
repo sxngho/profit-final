@@ -1,9 +1,7 @@
 <template>
   <div>
-    <!-- TODO 여백 -->
-    <v-layout><v-flex style="margin:30px;" /></v-layout>
 
-    <v-container row wrap >
+    <v-container wrap >
       <!-- 작업중 리스트 -->
       <div>
         <h1>작업중인 리스트</h1>
@@ -53,6 +51,7 @@
     </v-container>
   </div>
 </template>
+
 <script src="https://www.gstatic.com/firebasejs/3.6.2/firebase.js"></script>
 <script>
 import FirebaseService from "@/services/FirebaseService";
@@ -170,6 +169,3 @@ export default {
 };
 
 </script>
-
-<style>
-</style>

@@ -3,24 +3,24 @@
   <v-container>
     <v-layout wrap justify-center>
       <v-flex
-        v-for="i in max_project" xs12 sm6 lg4 v-if="layout==1 && filtering(i,techfilter)"
+        v-for="i in projects.length > max_project ? max_project : projects.length" xs12 sm6 lg4 v-if="filtering(i,techfilter) && layout==1 "
         style="padding:10px 5px;" v-bind:class="[`project_${i-1}`]">
 
         <ProjectDetail v-on:popdetail="toStory"
           v-on:UPDATE_Project="toStoryUpdate"
+          v-on:delete="DELETE_project"
+
           :projectimage="projects[i-1].data.projectimage"
           :projecttitle="projects[i-1].data.projecttitle"
           :projectdescription="projects[i-1].data.projectdescription"
           :project_id="projects[i-1].project_id"
           :project_writer="projects[i-1].data.session_id"
           :index="i-1"
-          v-on:delete="DELETE_project"
           >
         </ProjectDetail>
       </v-flex>
 
-
-      <v-flex v-for="i in max_project" xs12 v-if="layout==2">
+      <v-flex v-for="i in projects.length > max_project ? max_project : projects.length" xs12 v-if="layout==2">
         <ProjectDetail0 v-on:popdetail="toStory"
           :projectimage="projects[i-1].data.projectimage"
           :projecttitle="projects[i-1].data.projecttitle"
@@ -36,7 +36,7 @@
         <v-divider></v-divider>
       </v-flex>
 
-      <v-flex v-for="i in max_project" xs12 v-if="layout==3">
+      <v-flex v-for="i in projects.length > max_project ? max_project : projects.length" xs12 v-if="layout==3">
         <ProjectDetail1 v-on:popdetail="toStory"
           :projectimage="projects[i-1].data.projectimage"
           :projecttitle="projects[i-1].data.projecttitle"
@@ -78,13 +78,14 @@ export default {
   name: "ProjectList",
   data() {
     return {
-      projects: [{data: '', project_id:""}],
+      projects: [{data: {projectimage: "", projecttitle:"", session_id:"", projectdescription:"",}, project_id:""}],
       max_project : 3,
       more : true,
       techs : ["전체보기", "c", "c#", "javascript", "android", "jquery"],
       techfilter:[],
       filter_projects:[],
       seeall : true,
+
     };
   },
   components: {
@@ -94,7 +95,7 @@ export default {
     ProjectDetail1,
     ProjectUpdator,
   },
-  created() {
+  mounted() {
     this.SELECT_Projects();
     this.user = this.$route.params.id;
     this.login = this.$session.get('session_id')
@@ -106,7 +107,7 @@ export default {
     this.amount_Projects();
   },
   props: {
-    layout : {type:String},
+    layout : {type:String, default:"1"},
     toFilter : {type:String, default:"aasdasnkdasdaskl"},
   },
   methods: {
@@ -119,9 +120,7 @@ export default {
        })
      },
     async SELECT_Projects() {
-      this.id = this.$route.params.id;
-      this.projects = await FirebaseService.SELECT_Projects(this.id);
-      // console.log("gg", this.projects);
+      this.projects = await FirebaseService.SELECT_Projects(this.$route.params.id);
     },
     toStory(pcode) {
       this.$emit('toStory',pcode);

@@ -1,6 +1,51 @@
 <template>
   <div class="banner__container">
-    <span class="banner__content">프로젝트를 쉽게 공유할 수 있습니다.</span>
+    <div class="banner__content">
+      <button class="bannerBox">
+        <div class="randomList contentBox">
+          <div class="iconBox">
+            <i class="far fa-list-alt fa-7x" style="color:blueviolet"></i>
+          </div>
+          <br />
+          <div class="randomList_title titleBox">
+            <span class="fontStyle">프로젝트 랜덤 리스트</span>
+          </div>
+        </div>
+      </button>
+      <button class="bannerBox">
+        <div class="companyList contentBox">
+          <div class="iconBox">
+            <i class="far fa-building fa-7x" style="color:blueviolet"></i>
+          </div>
+          <br />
+          <div class="companyList_title titleBox">
+            <span class="fontStyle">기업 리스트</span>
+          </div>
+        </div>
+      </button>
+      <button class="bannerBox" onclick="location.href='/recruits'">
+        <div class="recuritList contentBox">
+          <div class="iconBox">
+            <i class="far fa-handshake fa-7x" style="color:blueviolet"></i>
+          </div>
+          <br />
+          <div class="recuritList_title titleBox">
+            <span class="fontStyle">외주 공고 리스트</span>
+          </div>
+        </div>
+      </button>
+      <button class="bannerBox" onclick="location.href='/studio'">
+        <div class="studio contentBox">
+          <div class="iconBox">
+            <i class="far fa-keyboard fa-7x" style="color:blueviolet"></i>
+          </div>
+          <br />
+          <div class="studio_title titleBox">
+            <span class="fontStyle">작업실</span>
+          </div>
+        </div>
+      </button>
+    </div>
   </div>
 </template>
 
@@ -13,11 +58,37 @@ export default {};
   width: 100%;
   height: 300px;
   background-color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 .banner__content {
-  font-size: 25px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 0.02rem;
+  background-color: lightgrey;
+}
+.bannerBox {
+  height: 300px;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.contentBox {
+  height: 250px;
+  width: 80%;
+}
+.titleBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.iconBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 30px;
+}
+.fontStyle {
+  font-size: 20px;
+  color: grey;
 }
 </style>

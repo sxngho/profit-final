@@ -90,7 +90,6 @@
               <ProjectList
                 v-if="!stateAdd && !statedetail && !stateupdate"
                 v-on:toStory="cc"
-                :layout="layout"
                 v-on:goup="update_project"
                 v-on:toStoryUpdate="UPDATE_Project"
                 :toFilter="Filter" v-on:toStoryList="resetFilter"
