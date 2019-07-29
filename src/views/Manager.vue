@@ -4,12 +4,12 @@
     <v-layout><v-flex style="margin:30px;" /></v-layout>
 
     <div class="sidetoolbar white--text">
-      <!-- <a href="m.naver.com" ><img src="../assets/icon_set/customer-support.svg" fill="yellow" /></a> -->
-      <a class="sidetooltxt" @click="compo=1">home</a><br/>
-      <a class="sidetooltxt" @click="compo=2">weblog</a><br/>
-      <a class="sidetooltxt" @click="compo=3">users</a><br/>
-      <a class="sidetooltxt" @click="compo=4">companys</a><br/>
-      <a class="sidetooltxt" @click="compo=5">siren</a><br/>
+      <!-- <div href="m.naver.com" ><img src="../assets/icon_set/customer-support.svg" fill="yellow" /></div> -->
+      <div class="sidetooltxt" @click="compo=1">home</div><br/>
+      <div class="sidetooltxt" @click="compo=2">weblog</div><br/>
+      <div class="sidetooltxt" @click="compo=3">users</div><br/>
+      <div class="sidetooltxt" @click="compo=4">companys</div><br/>
+      <div class="sidetooltxt" @click="compo=5">siren</div><br/>
     </div>
 
     <div style="margin-left:65px;">
@@ -60,12 +60,12 @@ export default {
   height: 100%;
   width: 65px;
   position: fixed;
-  z-index: 1;
+  z-index: 0;
   top: 0;
   left: 0;
   background-color: #111;
   overflow-x: hidden;
-  padding-top: 60px;
+  margin-top:64px;
 }
 
 .sidetooltxt{
