@@ -70,8 +70,8 @@ export default new Router({
       component: Chat
     },
     {
-      path: "/recruit",
-      name: "recruit",
+      path: "/recruits",
+      name: "recruits",
       component: Recruit
     },
     {

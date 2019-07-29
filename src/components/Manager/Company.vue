@@ -4,33 +4,30 @@
       <v-layout row wrap>
         <v-flex xs12 sm10 offset-sm1>
           <h1>가입 대기중인 기업</h1>
-            <v-list two-line>
-              <template v-for="(item, index) in companylist"  v-if="!item.state">
+          <v-list>
+          <v-list-item
+            v-for="(company) in companylist"
+            v-if="!company.state"
+            @click=""
+          >
+            <v-list-item-avatar>
+              <v-img :src="company.logo"></v-img>
+            </v-list-item-avatar>
 
-                <v-list-tile
-                  :key="item.title"
-                  avatar
-                  @click=""
-                >
-                  <v-list-tile-avatar>
-                    <img :src="item.avatar">
-                  </v-list-tile-avatar>
+            <v-list-item-content>
+              {{ company.company_name }}
+            </v-list-item-content>
 
-                  <v-list-tile-content>
-                    {{ item.company_name }}
-                  </v-list-tile-content>
+            <v-list-item-action>
+              <div>
+                <v-btn text outlined color="#00f" small>승인</v-btn>
+                <v-btn text outlined color="#f00" small>거절</v-btn>
+              </div>
+            </v-list-item-action>
 
-                  <v-list-tile-action>
-                    <div>
-                      <v-btn text outlined color="#00f" small>승인</v-btn>
-                      <v-btn text outlined color="#f00" small>거절</v-btn>
-                    </div>
-                  </v-list-tile-action>
+          </v-list-item>
+        </v-list>
 
-                </v-list-tile>
-                <v-divider/>
-              </template>
-            </v-list>
         </v-flex>
       </v-layout>
     </template>
@@ -45,34 +42,28 @@
 
       <v-layout row wrap>
         <v-flex xs12 sm10 offset-sm1>
-          <v-expansion-panel>
-            <v-expansion-panel-content
-              v-for="(item,i) in companylist"
-              :key="i"
-              v-if="item.company_name.includes(input) && item.state"
-              >
-              <template v-slot:actions>
-                <v-icon color="primary">$vuetify.icons.expand</v-icon>
-              </template>
-
-              <template v-slot:header>
+          <v-expansion-panels>
+            <v-expansion-panel
+            v-for="company in companylist"
+            :key="i"
+            v-if="company.company_name.includes(input) && company.state"
+            >
+              <v-expansion-panel-header>
                 <div>
-                  <v-avatar>
-                    <img :src="item.companylogo" />
+                  <v-avatar v-if="company.logo">
+                    <img :src="company.logo" />
                   </v-avatar>
-                  {{item.company_name}}
+                  {{company.company_name}}
                 </div>
-              </template>
+              </v-expansion-panel-header>
 
-              <v-card>
-                <v-card-text>
-                  <v-btn text outlined>뭔가하기</v-btn>
-                  <v-btn text outlined color="red">탈퇴시키기</v-btn>
-                </v-card-text>
-              </v-card>
-
-            </v-expansion-panel-content>
-          </v-expansion-panel>
+              <v-expansion-panel-content>
+                <v-btn v-for="item in action" text outlined>
+                  {{item}}
+                </v-btn>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
         </v-flex>
       </v-layout>
     </template>
@@ -91,6 +82,7 @@ export default {
     return {
       companylist:[],
       input:"",
+      action:['뭔가하기','썸띵투두','밴 먹이기'],
     }
   },
   props: {

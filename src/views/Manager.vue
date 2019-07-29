@@ -12,13 +12,13 @@
       <div class="sidetooltxt" @click="compo=5">siren</div><br/>
     </div>
 
-    <div style="margin-left:65px;">
+    <v-container style="margin-left:65px;">
       <Main v-if="compo==1"/>
       <WebLog v-if="compo==2"/>
       <Users v-if="compo==3"/>
       <Company v-if="compo==4"/>
       <Report v-if="compo==5"/>
-    </div>
+    </v-container>
 
 
   </div>

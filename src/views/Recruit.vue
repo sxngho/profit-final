@@ -1,13 +1,4 @@
 <template>
-  <div>
-    <!-- TODO 여백 -->
-    <v-layout>
-      <v-flex style="margin:30px;" />
-    </v-layout>
-    <div class="recurit__container">
-      <RecuritBanner />
-      <!-- <RecruitEditor /> -->
-    </div>
 
     <!-- 비 로그인 유저라면 아래 레이아웃 출력 -->
     <!-- <v-layout v-if=" user== '' || user == undefined ">
@@ -18,27 +9,39 @@
     </v-layout>-->
 
     <!-- 개발자라면 아래 레이아웃 출력 -->
-    <v-container row wrap>
+    <v-container wrap>
       <!-- 모집중공고 리스트 -->
       <div>
-        <h1>모집중인 공고 리스트</h1>
-        <v-layout row wrap>
-          <v-flex xs4>
-            <v-card>
+        <v-layout wrap row>
+          <h1>모집중인 공고 리스트</h1>
+        </v-layout>
+
+        <v-layout wrap row>
+          <v-flex xs12 sm6 md4>
+            <v-card outlined>
               <v-card-title>프젝이름</v-card-title>
-              <v-card-text>회사명, 기술 스택들, 요약, 마감기간</v-card-text>
-              <v-card-actions>
-                <v-btn @click="popRecruitDetail('test')">자세히보기</v-btn>
+              <v-card-text>
+                <span style="color:red"> 마감기간 </span>
+                <span>회사명</span>
+                <p>요약 :: Lorem ipsum dolor sit amet, mel at clita quando. Te sit oratio vituper</p>
+                <div class="tech d-inline">C</div>
+                <div class="tech d-inline">java</div>
+                <div class="tech d-inline">something</div>
+              </v-card-text>
+              <v-card-actions justify-center>
+                <v-spacer/>
+                <v-btn @click="popRecruitDetail('test')" text outlined>자세히보기</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
         </v-layout>
+
       </div>
     </v-container>
 
     <!-- 회사라면 아래 레이아웃 출력 -->
-    <v-container></v-container>
-  </div>
+    <!-- <v-container></v-container> -->
+
 </template>
 
 
