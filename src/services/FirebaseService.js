@@ -439,7 +439,7 @@ export default {
                 email: id, first_name: first_name, last_name: last_name, phonenumber: phonenumber, userSkills: userSkills,
                 userImage: userImage, userName: first_name + last_name, userIntro: userIntro, userCareers: userCareers,
                 userEducations: userEducations, followerlist: [], followinglist: [], likeitProject: [], nickname : nickname, level : 0, showSkillList : [],
-      
+                dibs : [],
               });
               firestore.collection("user_addon").doc(nickname).set({
                 toggleView: false
