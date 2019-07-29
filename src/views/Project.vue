@@ -60,8 +60,8 @@
                 <!-- comment input -->
                 <form>
                   <!-- <v-text-field label="Comment" required @input="$v.name.$touch()" @blur="$v.name.$touch()" v-model="comment"></v-text-field> -->
-                  <v-text-field label="Comment" v-model="comment"></v-text-field>
-                  <v-btn @click="INSERT_Comment(comment)">submit</v-btn>
+                  태그 : <span id="toyou"></span><v-text-field v-model="comment"></v-text-field>
+                  <v-btn @click="INSERT_Comment(toyou, comment)">submit</v-btn>
                   </form>
 
                 <!-- comment sort -->
@@ -74,12 +74,12 @@
 
                 <!-- comment list -->
                 <v-list>
-                  <v-list-tile name="1" v-for="(com, index) in comments" style="border-bottom: 1px solid #9E6E2E; margin:5px; padding:5px;">
+                  <v-list-item name="1" v-for="(com, index) in comments" style="border-bottom: 1px solid #9E6E2E; margin:5px; padding:5px;">
                     <!-- 수정 전에 보여주는 댓글리스트 -->
-                    <v-list-tile-content v-bind:class="[`before_${index}`]" style="width:70%;">
-                      <v-list-tile-title v-html="com.Comment"></v-list-tile-title>
-                      <v-list-tile-title v-html="com.User"></v-list-tile-title>
-                    </v-list-tile-content>
+                    <v-list-item-content v-bind:class="[`before_${index}`]" style="width:70%;">
+                      <v-list-item-title v-html="com.Comment"></v-list-item-title>
+                      <v-list-item-title v-html="com.User"></v-list-item-title>
+                    </v-list-item-content>
                     <!--  -->
 
                     <!-- 수정 그림을 누르면 보여주는 구역 , 바로 비동기적으로 구현됨.-->
@@ -90,7 +90,7 @@
                     </div>
                     <!--  -->
 
-                    <v-list-tile-action>
+                    <v-list-item-action>
                       <div style='display:inline-block;'>
                         &nbsp;
                         <i v-bind:id="[`commentlike_${index}`]" class="far fa-heart" style="color:red" @click="like_comment(com, index)"></i>
@@ -104,9 +104,9 @@
                         &nbsp;
                         <img v-if="com.User==user" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAsQAAALEBxi1JjQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAHUSURBVFiF7Za/SxthGMc/76sFOU2q0aFWLf0fusmN/hh0ClkydFHpUMGpVOiQ2uIiKoj4o0J1CaVL7Fp0cTkoFVqE/gelxslEY0jDVe/tEDw8zUXvuFNEn+2e5+75fu75ce8JPNrQxIyqFV+beCW85JNeAYK2er8Pnn/TyyrjZjdegQv9Gl/6OICSK0BHwFp/EOrF1Mvhr2edFyug5IcQxAE6lRIr553VWtAZgjgAArquAnCtdg/g+tXaG0v42ms3a5/PVNW68QrcA9xCAFHjtK0VCwRACNrezNH6ehoZeegIaXofj2Y/0/BMDxEAUP9MHnQ8JTaasiE0vZ9oYgSkBNMMEUAp8suTHO/9pr79CbHRFI29caKJYQAKmVXKv7ZDBACso0NyC+84zlYgIoPJivj6GiVjw2s6f1tgFQv8/WnY1yeHOco73/yk8geg6f1EBpKgFCcH+9Q1tzpmIlQATe9z9Hx/ZtwxE7IpGiKAlETjQ7Z4ydiozMTiextC6+7xlNLbX7FlcfBpAUzTMe2ng6l191D6vhUiAFD+YVT1W8UCxc0vXtPdxrPgLgFkgxIRsOsdQJAOCsBCueZy3YJci0jF8goUz4HHPrWzCNL5FvnW7Yb/F8CPuY2PJ7UAAAAASUVORK5CYII=" alt="Smiley" style="cursor: pointer; height:20px; display:inline-block;" @click="DELETE_comment(comments, index)">
                       </div>
-                    </v-list-tile-action>
+                    </v-list-item-action>
                     <br>
-                  </v-list-tile>
+                  </v-list-item>
                 </v-list>
 
                 <!-- end xs9 -->
@@ -148,6 +148,7 @@ export default {
       comment:"",
       update_comment: false,
       update_commenttext:'',
+      toyou : '',
     }
   },
   components: {
@@ -177,7 +178,7 @@ export default {
       this.$loading(false)
     },
     // seulgi function
-    async INSERT_Comment(comment){
+    async INSERT_Comment(toyou, comment){
       if (this.user) {
         this.projectData = await FirebaseService.SELECT_Project(this.project_id);
         var Json = new Object();
@@ -187,7 +188,7 @@ export default {
         Json.unlikecount = 0;
         Json.like = [];
         Json.unlike = [];
-        FirebaseService.INSERT_Comment(Json, this.projectData, this.project_id);
+        FirebaseService.INSERT_Comment(toyou, Json, this.projectData, this.project_id);
         const newcommnet = {
         User : this.user,
         Comment : this.comment,
@@ -197,6 +198,9 @@ export default {
         unlikecount : 0,
         };
         this.comments.push(newcommnet)
+        this.toyou = ''
+        var tmp_text = document.querySelector('#toyou')
+        tmp_text.innerText = ''
       } else {
         // 로그인 안했으면 안했다고 알려줘야지 헤헤
         alert('너 로그인안했다. 댓글못쓴다~')
@@ -207,7 +211,7 @@ export default {
       this.comments = await FirebaseService.SELECT_Comments(this.project_id)
     },
     DELETE_comment(comments, comment_index) {
-      console.log(this.project_id)
+      // console.log(this.project_id)
       FirebaseService.DELETE_comment(this.project_id, comments, comment_index)
     },
     UPDATE_comment(comments, index) {
@@ -307,10 +311,27 @@ export default {
         heart3.classList.add('far')
       }
     },
+    async select_user(nickname) {
+      var toyou = await FirebaseService.SELECT_Usersdata(nickname)
+      if (toyou.length === 1) {
+        this.toyou = toyou[0].nickname
+        var tmp_text = document.querySelector('#toyou')
+        tmp_text.innerText = this.toyou
+      }
+    }
   },
   computed : {
     likeprojectcount : function() {
       return this.project.likeit.length
+    }
+  },
+  watch : {
+    comment : function() {
+      if (this.comment[0]==='#') {
+        if (this.comment.split(' ').length < 2) {
+          this.select_user(this.comment.split(' ')[0].substr(1))
+        }
+      }
     }
   }
 }

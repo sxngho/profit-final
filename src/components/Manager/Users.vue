@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <v-layout row wrap>
       <v-flex xs12 sm10 offset-sm1>
         <v-text-field v-model="input"/>
@@ -9,39 +8,31 @@
 
     <v-layout row wrap>
       <v-flex xs12 sm10 offset-sm1>
-        <v-expansion-panel>
-          <v-expansion-panel-content
-            v-for="(item,i) in userlist"
-            :key="i"
-            v-if="input != null && item.userName.includes(input)"
-            >
-            <template v-slot:actions>
-              <v-icon color="primary">$vuetify.icons.expand</v-icon>
-            </template>
-
-            <template v-slot:header>
+        <v-expansion-panels>
+          <v-expansion-panel
+          v-for="user in userlist"
+          :key="i"
+          v-if="input != null && user.userName.includes(input)"
+          >
+            <v-expansion-panel-header>
               <div>
                 <v-avatar>
-                  <img :src="item.userImage" />
+                  <img :src="user.userImage" />
                 </v-avatar>
-                {{item.userName}}
+                {{user.userName}}
               </div>
-            </template>
+            </v-expansion-panel-header>
 
-            <v-card>
-              <v-card-text>
-                <v-btn text outlined>운영자</v-btn>
-                <v-btn text outlined>관리자</v-btn>
-                <v-btn text outlined>일반유저</v-btn>
-                <v-btn text outlined class="red--text">탈퇴시키기</v-btn>
-              </v-card-text>
-            </v-card>
-
-          </v-expansion-panel-content>
-        </v-expansion-panel>
+            <v-expansion-panel-content>
+              <v-btn v-for="item in level" text outlined>
+                {{item}}
+              </v-btn>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
       </v-flex>
     </v-layout>
-</div>
+  </div>
 </template>
 
 <script>
