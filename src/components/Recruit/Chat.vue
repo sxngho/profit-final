@@ -82,7 +82,7 @@
                  <td> {{nowChatRoom.downPayment}} </td>
                </tr>
                <tr v-if="!toggleDownPayment">
-                 <td></td>
+                 <td> 계약금 </td>
                  <td>
                    <v-text-field single-line outlined required v-model="inputDownPayment" v-on:keyup.enter="completeDownPayment(inputDownPayment)" > </v-text-field>
                  </td>

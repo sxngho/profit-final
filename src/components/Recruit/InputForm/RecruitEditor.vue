@@ -104,13 +104,17 @@ export default {
       endDay: new Date().toISOString().substr(0, 10),
       startDay: new Date().toISOString().slice(0, 10),
       techName: "",
-      showTechList: []
+      showTechList: [],
+      user:"",
     };
   },
   components: {
     VueEditor,
     ShowTechList,
     SelectTechList
+  },
+  created() {
+    this.user = this.$session.get('session_id')
   },
   watch: {
     techName(to, from) {
@@ -134,11 +138,20 @@ export default {
       const result = newValue
         .replace(/\D/g, "")
         .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      this.$nextTick(() => (this.budget = result));
+      this.$nextTick(() => (this.
+        budget = result));
     }
   },
   methods: {
-    submit: function() {
+    showNotification (group, type ,title, text) {
+       this.$notify({
+         group,
+         title,
+         text,
+         type,
+       })
+     },
+    async submit() {
       const recruitInfo = {
         category: this.category,
         projectTitle: this.projectTitle,
@@ -148,11 +161,18 @@ export default {
         projectSummary: this.projectSummary,
         projectContent: this.projectContent,
         selectTechList: this.$store.state.selectTechList,
-        closingDate: this.closingDate
+        closingDate: this.closingDate,
+        session_id: this.user
       };
-      console.log(recruitInfo);
-      alert("등록완료!");
-    }
+      if (this.$session.get("session_id")) {
+        var result = await FirebaseService.INSERT_recruitInfo(recruitInfo)
+        this.showNotification("foo-css","success",`${this.$session.get("session_id")}님`,`recruitInfo 내용이 올라갔습니다.!`);
+      } else {
+        alert('권한이 없습니다.')
+      }
+
+
+    },
   }
 };
 </script>
