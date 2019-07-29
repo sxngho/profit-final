@@ -579,7 +579,52 @@ export default {
       }
     },
 
+    // Function :: 프로젝트 안에 있는 댓글 좋아요 기능.
+    // user : 현재 로그인한 유저, pcode : 프로젝트 id, comments : 프로젝트에 있는 댓글들, com_like : 해당 댓글을 좋아요 누른 사람들(배열), index : 특정 댓글이 프로젝트의 댓글들 안에 몇번째 인덱스인지
+    async like_comment(user, pcode, comments, com_like, index) {
+      var users_likecomment = comments[index].like
+      if (users_likecomment.includes(user)) {
+        var index3 = users_likecomment.indexOf(user)
+        users_likecomment.splice(index3, 1)
+        comments[index].like = users_likecomment
+        comments[index].likecount -= 1
+        firestore.collection('projects').doc(pcode).update({
+          comments : comments
+        })
+        return comments
+      } else {
+        users_likecomment.push(user)
+        comments[index].like = users_likecomment
+        comments[index].likecount += 1
+        firestore.collection('projects').doc(pcode).update({
+          comments : comments
+        })
+        return comments
+      }
 
+    },
+    async unlike_comment(user, pcode, comments, com_like, index) {
+      var users_unlikecomment = comments[index].unlike
+      if (users_unlikecomment.includes(user)) {
+        var index3 = users_unlikecomment.indexOf(user)
+        users_unlikecomment.splice(index3, 1)
+        comments[index].unlike = users_unlikecomment
+        comments[index].unlikecount -= 1
+        firestore.collection('projects').doc(pcode).update({
+          comments : comments
+        })
+        return comments
+      } else {
+        users_unlikecomment.push(user)
+        comments[index].unlike = users_unlikecomment
+        comments[index].unlikecount += 1
+        firestore.collection('projects').doc(pcode).update({
+          comments : comments
+        })
+        return comments
+      }
+
+    },
     // --------------------------------------------------------------------LIKE
     // ---------------------------------------------------------------------------------------------------------------------------------
 

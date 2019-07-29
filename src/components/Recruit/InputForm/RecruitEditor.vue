@@ -4,45 +4,70 @@
       <div class="category__content contentBox">
         <div class="category__title titleBox">카테고리</div>
         <div class="category__select inputBox">
-          <v-overflow-btn :items="categoryList" label="분류" v-model="category"></v-overflow-btn>
+          <v-autocomplete v-model="category" :items="categoryList" placeholder="선택하세요."></v-autocomplete>
         </div>
       </div>
       <div class="projectTitle__content contentBox">
         <div class="projectTitle__title titleBox">프로젝트 제목</div>
         <div class="projectTitle__input inputBox">
-          <input type="text" style="width:300px" v-model="projectTitle" />
+          <input
+            type="text"
+            style="width:500px"
+            v-model="projectTitle"
+            placeholder="프로젝트 제목을 입력하세요."
+            maxlength="27"
+          />
         </div>
       </div>
       <div class="duration__content contentBox">
         <div class="duration__title titleBox">예상 기간</div>
-        <div class="duration__input inputBox"></div>
+        <div class="duration__input inputBox">{{this.startDay}}&nbsp~&nbsp{{this.endDay}}</div>
       </div>
+      <v-date-picker v-model="endDay" color="purple lighten-1"></v-date-picker>
+
       <div class="budget__content contentBox">
         <div class="budget__title titleBox">지출 가능 예산</div>
         <div class="budget__input inputBox">
-          <input type="text" v-model="budget" />원
+          <input type="text" v-model="budget" placeholder="0" />원
         </div>
       </div>
       <div class="projectSummary__content contentBox">
         <div class="projectSummary__title titleBox">프로젝트 요약</div>
         <div class="projectSummary__input inputBox">
-          <textarea style="width:300px" v-model="projectSummary"></textarea>
+          <textarea
+            style="width:300px"
+            v-model="projectSummary"
+            placeholder="최대 30글자까지 입력 가능합니다."
+            maxlength="30"
+          ></textarea>
         </div>
       </div>
       <div class="projectContent__content contentBox">
         <div class="projectContent__title titleBox">프로젝트 내용</div>
-        <div class="projectContent__input inputBox" style="width:550px; height:500px">
-          <vue-editor v-model="projectContent" style="width:550px; height:500px"></vue-editor>
+        <div class="projectContent__input inputBox" style="width:550px; height:700px">
+          <vue-editor v-model="projectContent" style="width:550px; height:530px;"></vue-editor>
         </div>
       </div>
       <div class="techList__content contentBox">
         <div class="techList__title titleBox">관련 기술</div>
-        <div class="techList__input inputBox"></div>
+        <div class="techList__input inputBox">
+          <input
+            type="text"
+            v-model="techName"
+            placeholder="프로젝트에 필요한 기술을 검색 후 클릭하세요."
+            style="width:500px"
+          />
+        </div>
       </div>
+
+      <ShowTechList />
+      <SelectTechList />
+
       <div class="closingDate__content contentBox">
         <div class="closingDate__title titleBox">모집 마감일자</div>
         <div class="closingDate__input inputBox">
-          <v-overflow-btn :items="closingDateList" label="마감일" v-model="closingDate"></v-overflow-btn>
+          <!-- <v-overflow-btn :items="closingDateList" label="마감일" v-model="closingDate"></v-overflow-btn> -->
+          <v-autocomplete v-model="closingDate" :items="closingDateList"></v-autocomplete>
         </div>
       </div>
       <button
@@ -55,6 +80,8 @@
 
 <script>
 import FirebaseService from "@/services/FirebaseService";
+import ShowTechList from "../InputForm/ShowTechList";
+import SelectTechList from "../InputForm/SelectTechList";
 import { VueEditor } from "vue2-editor";
 export default {
   data() {
@@ -67,32 +94,63 @@ export default {
         "블록체인",
         "인공지능"
       ],
-      closingDateList: [
-        "7월26일",
-        "7월27일",
-        "7월28일",
-        "7월29일",
-        "7월30일",
-        "7월31일",
-        "8월01일",
-        "8월02일",
-        "8월03일",
-        "8월04일"
-      ],
+      closingDateList: ["7일 후", "14일 후", "21일 후", "28일 후", "50일 후"],
       category: "",
       closingDate: "",
       projectTitle: "",
-      duration: "",
       budget: "",
       projectContent: "",
-      projectSummary: ""
+      projectSummary: "",
+      endDay: new Date().toISOString().substr(0, 10),
+      startDay: new Date().toISOString().slice(0, 10),
+      techName: "",
+      showTechList: []
     };
   },
   components: {
-    VueEditor
+    VueEditor,
+    ShowTechList,
+    SelectTechList
+  },
+  watch: {
+    techName(to, from) {
+      this.showTechList = [];
+      if (this.techName === "") {
+        this.showTechList = [];
+      } else {
+        for (let i = 0; i < this.$store.state.techList.length; i++) {
+          if (
+            this.$store.state.techList[i].indexOf(
+              this.techName.toLowerCase()
+            ) !== -1
+          ) {
+            this.showTechList.push(this.$store.state.techList[i]);
+          }
+        }
+      }
+      this.$store.commit("showingSameTechList", this.showTechList);
+    },
+    budget: function(newValue) {
+      const result = newValue
+        .replace(/\D/g, "")
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      this.$nextTick(() => (this.budget = result));
+    }
   },
   methods: {
     submit: function() {
+      const recruitInfo = {
+        category: this.category,
+        projectTitle: this.projectTitle,
+        startDay: this.startDay,
+        endDay: this.endDay,
+        budget: this.budget,
+        projectSummary: this.projectSummary,
+        projectContent: this.projectContent,
+        selectTechList: this.$store.state.selectTechList,
+        closingDate: this.closingDate
+      };
+      console.log(recruitInfo);
       alert("등록완료!");
     }
   }
@@ -103,7 +161,7 @@ export default {
 .recuritEditor__container {
   background-color: white;
   width: 1080px;
-  height: 1000px;
+  height: 1800px;
   margin-left: 150px;
   margin-right: 150px;
 }
