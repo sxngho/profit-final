@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar flat color="#fff">
+  <v-toolbar flat color="#fff" style="flex:0">
     <v-toolbar-title>
       <v-btn
         text
@@ -38,9 +38,5 @@ export default {
 <style scoped>
 .content {
   margin-left: 30px;
-}
-a {
-  text-decoration: none;
-  color: #2c2c2c;
 }
 </style>

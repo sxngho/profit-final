@@ -52,7 +52,6 @@ export default {
       console.log(this.recruit);
     },
     dib(recruit_id) {
-
       if ( !this.userdata[0].dibs.includes(recruit_id) ) {
         this.userdata[0].dibs.push(recruit_id);
         FirebaseService.UPDATE_userDibs(this.userdata[0].dibs, this.$session.get('session_id'));

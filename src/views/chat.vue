@@ -471,7 +471,6 @@ export default {
       nowChatRoom : "", // 내가 현재 접속중인 공고의 채팅방
         myMessage : "", // 내가 입력하는 메시지
       messages : "", // 채팅방 메시지들
-      myMessage : "", // 내가 입력하는 메시지
       recruitsbyCompany : "",
 
       // inputs
