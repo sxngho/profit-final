@@ -2,7 +2,7 @@
   <div style="margin:20px">
     <v-layout row wrap>
       <v-flex xs12 class="text-xs-center">
-        <h1>{{projectTitle}}</h1>
+        <h1>{{recruit.title}}</h1>
       </v-flex>
 
       <v-flex xs12 class="text-xs-center">
@@ -26,7 +26,7 @@
         <p v-html="projectContent"></p>
       </v-flex>
 
-      <v-btn>
+      <v-btn @click="dib(recruit_id)">
         찜!
       </v-btn>
     </v-layout>
@@ -40,11 +40,31 @@ export default {
   name: "RecruitDetail",
   components: {
   },
+  created() {
+    this.$store.state.no_header = true;
+    this.recruit_id = this.$route.params.rcode;
+    this.fetchData(this.recruit_id);
+  },
   methods: {
+    async fetchData(recruit_id) {
+      this.recruit = await FirebaseService.SELECT_RecruitById(recruit_id);
+      this.userdata = await FirebaseService.SELECT_Userdata(this.$session.get('session_id'));
+      console.log(this.recruit);
+    },
+    dib(recruit_id) {
 
+      if ( !this.userdata[0].dibs.includes(recruit_id) ) {
+        this.userdata[0].dibs.push(recruit_id);
+        FirebaseService.UPDATE_userDibs(this.userdata[0].dibs, this.$session.get('session_id'));
+      } else {
+        console.log("이미 찜!되어있는 공고입니다");
+      }
+    },
   },
   data() {
     return {
+      recruit : "",
+      recruit_id : "",
       category:"웹", //웹 / 앱 등 분류
       closingDate:"2019-10-12", //모집 마감 날짜
       projectTitle:"이거해주실분~", // 제목
@@ -55,9 +75,6 @@ export default {
       projectSummary : "누구 이 프로젝트 해주실분 계신가요~~~~", //프로젝틍 요약설명
       applicationStack : 4,
     };
-  },
-  created() {
-    this.$store.state.no_header = true;
   },
 };
 </script>
