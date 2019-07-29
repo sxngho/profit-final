@@ -3,11 +3,11 @@
   <div style="padding:3vw; border-right:1px #cecece solid;">
     <!-- USER Profile Img -->
     <v-layout wrap align-center justify-space-around @mouseover="showRmImgBtn=true" @mouseleave="showRmImgBtn=false">
-      <div v-if="!image" justify-center>
+      <div v-if="!image" justify-center class="text-center">
         <v-avatar size="150" class="grey lighten-2">
           <img src="https://i.imgur.com/aTI4OeZ.png?1">
         </v-avatar>
-        <input type="file" @change="onFileChange" />
+        <input type="file" @change="onFileChange" style="width:100%;" />
       </div>
 
       <div v-else style="position:relative;">

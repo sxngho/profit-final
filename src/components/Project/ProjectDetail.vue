@@ -1,12 +1,15 @@
 <template>
   <v-flex style=" padding: 10px 5px;">
-    <button text @click="popdetail(project_id)">
+    <!-- <v-btn text @click="popdetail(project_id)"> -->
+    <div @click="popdetail(project_id)">
       <v-img :src="projectimage" height="20vw"></v-img>
       <div>
         <div class="black--text text-center">{{projecttitle}}</div>
         <div class="grey--text text-center">{{projectdescription}}</div>
       </div>
-    </button>
+    </div>
+    <!-- </v-btn> -->
+
     <div style="float:right; margin-right:1vw;">
       <v-flex
         v-if="isMine"
