@@ -74,12 +74,12 @@
 
                 <!-- comment list -->
                 <v-list>
-                  <v-list-tile name="1" v-for="(com, index) in comments" style="border-bottom: 1px solid #9E6E2E; margin:5px; padding:5px;">
+                  <v-list-item name="1" v-for="(com, index) in comments" style="border-bottom: 1px solid #9E6E2E; margin:5px; padding:5px;">
                     <!-- 수정 전에 보여주는 댓글리스트 -->
-                    <v-list-tile-content v-bind:class="[`before_${index}`]" style="width:70%;">
-                      <v-list-tile-title v-html="com.Comment"></v-list-tile-title>
-                      <v-list-tile-title v-html="com.User"></v-list-tile-title>
-                    </v-list-tile-content>
+                    <v-list-item-content v-bind:class="[`before_${index}`]" style="width:70%;">
+                      <v-list-item-title v-html="com.Comment"></v-list-item-title>
+                      <v-list-item-title v-html="com.User"></v-list-item-title>
+                    </v-list-item-content>
                     <!--  -->
 
                     <!-- 수정 그림을 누르면 보여주는 구역 , 바로 비동기적으로 구현됨.-->
@@ -90,7 +90,7 @@
                     </div>
                     <!--  -->
 
-                    <v-list-tile-action>
+                    <v-list-item-action>
                       <div style='display:inline-block;'>
                         &nbsp;
                         <i v-bind:id="[`commentlike_${index}`]" class="far fa-heart" style="color:red" @click="like_comment(com, index)"></i>
@@ -104,9 +104,9 @@
                         &nbsp;
                         <img v-if="com.User==user" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAsQAAALEBxi1JjQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAHUSURBVFiF7Za/SxthGMc/76sFOU2q0aFWLf0fusmN/hh0ClkydFHpUMGpVOiQ2uIiKoj4o0J1CaVL7Fp0cTkoFVqE/gelxslEY0jDVe/tEDw8zUXvuFNEn+2e5+75fu75ce8JPNrQxIyqFV+beCW85JNeAYK2er8Pnn/TyyrjZjdegQv9Gl/6OICSK0BHwFp/EOrF1Mvhr2edFyug5IcQxAE6lRIr553VWtAZgjgAArquAnCtdg/g+tXaG0v42ms3a5/PVNW68QrcA9xCAFHjtK0VCwRACNrezNH6ehoZeegIaXofj2Y/0/BMDxEAUP9MHnQ8JTaasiE0vZ9oYgSkBNMMEUAp8suTHO/9pr79CbHRFI29caKJYQAKmVXKv7ZDBACso0NyC+84zlYgIoPJivj6GiVjw2s6f1tgFQv8/WnY1yeHOco73/yk8geg6f1EBpKgFCcH+9Q1tzpmIlQATe9z9Hx/ZtwxE7IpGiKAlETjQ7Z4ydiozMTiextC6+7xlNLbX7FlcfBpAUzTMe2ng6l191D6vhUiAFD+YVT1W8UCxc0vXtPdxrPgLgFkgxIRsOsdQJAOCsBCueZy3YJci0jF8goUz4HHPrWzCNL5FvnW7Yb/F8CPuY2PJ7UAAAAASUVORK5CYII=" alt="Smiley" style="cursor: pointer; height:20px; display:inline-block;" @click="DELETE_comment(comments, index)">
                       </div>
-                    </v-list-tile-action>
+                    </v-list-item-action>
                     <br>
-                  </v-list-tile>
+                  </v-list-item>
                 </v-list>
 
                 <!-- end xs9 -->
