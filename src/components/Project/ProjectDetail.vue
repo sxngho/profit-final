@@ -1,46 +1,28 @@
 <template>
-  <v-flex class="text-xs-center" style=" padding: 10px 5px;">
-    <v-flex hidden-xs-only>
-      <button text class="white--text" @click="popdetail(project_id)" style="height:80%;width:80%;">
-        <v-img :src="projectimage" height="20vw" width="100%"></v-img>
-        <div>
-          <div class="black--text">{{projecttitle}}</div>
-          <span class="grey--text">{{projectdescription}}</span>
-        </div>
-      </button>
-      <div style="float:right; margin-right:1vw;">
-        <v-flex
-          v-if="isMine"
-          @click="UPDATE_Project(project_id)"
-          class="d-inline"
-          style="margin-right:1vw;">
-          <img src="../../assets/icon_set/technics.png" alt="Smiley" style="cursor: pointer; height:25px;"/>
-        </v-flex>
-        <v-flex
-          v-if="isMine"
-          @click="DELETE_Project(project_id, index)"
-          class="d-inline"
-          style="margin-right:1vw;">
-          <img src="../../assets/icon_set/delete.png" alt="Smiley" style="cursor: pointer; height:30px;"/>
-        </v-flex>
+  <v-flex style=" padding: 10px 5px;">
+    <button text @click="popdetail(project_id)"
+      <v-img :src="projectimage" height="20vw"></v-img>
+      <div>
+        <div class="black--text text-center">{{projecttitle}}</div>
+        <div class="grey--text text-center">{{projectdescription}}</div>
       </div>
-
-      <!-- <ProjectList v-if="!stateAdd"></ProjectList> -->
-    </v-flex>
-
-    <v-flex hidden-sm-and-up>
-      <button text class="white--text" @click="popdetail(project_id)" style="height:80%;width:80%;">
-        <v-img :src="projectimage" height="45vw" width="100%"></v-img>
-        <div>
-          <div class="black--text">{{projecttitle}}</div>
-          <span class="grey--text">{{projectdescription}}</span>
-        </div>
-      </button>
-
-
-    </v-flex>
-
-
+    </button>
+    <div style="float:right; margin-right:1vw;">
+      <v-flex
+        v-if="isMine"
+        @click="UPDATE_Project(project_id)"
+        class="d-inline"
+        style="margin-right:1vw;">
+        <img src="../../assets/icon_set/technics.png" alt="Smiley" style="cursor: pointer; height:25px;"/>
+      </v-flex>
+      <v-flex
+        v-if="isMine"
+        @click="DELETE_Project(project_id, index)"
+        class="d-inline"
+        style="margin-right:1vw;">
+        <img src="../../assets/icon_set/delete.png" alt="Smiley" style="cursor: pointer; height:30px;"/>
+      </v-flex>
+    </div>
   </v-flex>
 </template>
 

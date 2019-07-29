@@ -1,7 +1,7 @@
 <!--GetProjectByUserId-->
 <template>
-  <div style="">
-    <v-layout row wrap justify-center>
+  <v-container>
+    <v-layout wrap justify-center>
       <v-flex
         v-for="i in max_project" xs12 sm6 lg4 v-if="layout==1 && filtering(i,techfilter)"
         style="padding:10px 5px;" v-bind:class="[`project_${i-1}`]">
@@ -63,7 +63,7 @@
       </v-btn>
     </v-layout>
 
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -73,11 +73,12 @@ import ProjectDetail from "../Project/ProjectDetail";
 import ProjectDetail0 from "../Project/ProjectDetail0";
 import ProjectDetail1 from "../Project/ProjectDetail1";
 import ProjectUpdator from "./ProjectUpdator";
+
 export default {
   name: "ProjectList",
   data() {
     return {
-      projects: [],
+      projects: [{data: '', project_id:""}],
       max_project : 3,
       more : true,
       techs : ["전체보기", "c", "c#", "javascript", "android", "jquery"],
@@ -120,6 +121,7 @@ export default {
     async SELECT_Projects() {
       this.id = this.$route.params.id;
       this.projects = await FirebaseService.SELECT_Projects(this.id);
+      console.log("gg", this.projects);
     },
     toStory(pcode) {
       this.$emit('toStory',pcode);
@@ -163,8 +165,7 @@ export default {
       }
     },
     async amount_Projects() {
-      var projects =  await FirebaseService.amount_Projects(this.user)
-      this.max_project = projects
+      this.max_project = await FirebaseService.amount_Projects(this.user);
     },
     DELETE_project(project_id, index) {
       // 1. 단순한 방법인데 안돼서 2안으로 진행중.

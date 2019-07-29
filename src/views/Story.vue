@@ -1,107 +1,14 @@
 <template>
-  <div>
+  <v-container>
     <!-- 좌우여백을 위한 형식 -->
     <v-layout>
-      <v-flex xs12 md10 offset-md1>
-        <!-- TODO 여백 -->
-        <v-layout>
-          <v-flex style="margin:25px;" />
-        </v-layout>
+      <v-flex xs12>
 
         <div v-if="loading">
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
+          <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+          <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+          <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+          <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
         </div>
 
         <v-layout row wrap>
@@ -109,20 +16,21 @@
             <TopBar />
           </v-flex>
         </v-layout>
+
         <FollowerList v-show="this.viewFollower || this.viewFollowing"></FollowerList>
+
         <v-layout v-if="!this.viewFollower && !this.viewFollowing" row wrap>
           <v-flex xs12 sm4 md3>
             <LeftSide xs12 sm4 md3 :isMine="isMine" v-on:toStory="fromLeftSide" v-on:toStoryFilter="toFilterFunction"/>
           </v-flex>
 
           <v-flex xs12 sm8 md9>
-            <v-layout row wrap style="position:relative; border-bottom:1px #cecece solid;">
+            <v-layout wrap style="position:relative; border-bottom:1px #cecece solid; padding:0px 5px;">
               <div
-                @click="changeComponent()"
-                v-if="isMine && !statedetail && !stateupdate"
-                class="d-inline"
-                style="display:inline;"
-              >
+              @click="changeComponent()"
+              v-if="isMine && !statedetail && !stateupdate"
+              class="d-inline"
+              style="display:inline;">
                 <div id="toggletext">
                   <div
                     v-if="!stateAdd"
@@ -137,7 +45,7 @@
                 </div>
               </div>
 
-              <div style="position: absolute; display: inline; right: 0px; top:7px;">
+              <div style="position: absolute; display: inline; right: 5px; top:7px;">
                 <div style="display:inline!important; float:right; right:50%;" v-if="!stateAdd ">
                   <toggle-button
                     d-inline
@@ -178,24 +86,27 @@
               </div>
             </v-layout>
 
-            <ProjectList
-              v-if="!stateAdd && !statedetail && !stateupdate"
-              v-on:toStory="cc"
-              :layout="layout"
-              v-on:goup="update_project"
-              v-on:toStoryUpdate="UPDATE_Project"
-              :toFilter="Filter" v-on:toStoryList="resetFilter"
-            />
+            <v-layout wrap>
+              <ProjectList
+                v-if="!stateAdd && !statedetail && !stateupdate"
+                v-on:toStory="cc"
+                :layout="layout"
+                v-on:goup="update_project"
+                v-on:toStoryUpdate="UPDATE_Project"
+                :toFilter="Filter" v-on:toStoryList="resetFilter"
+              />
 
-            <ProjectEditor v-if="stateAdd && !statedetail && !stateupdate" v-on:insert_success="gbp4" />
-            <Project v-if="statedetail" :pcode="pcode" v-on:goBackpage="gbp" />
-            <ProjectUpdator v-if="stateupdate" :project_id="pcode2" v-on:goBackpage="gbp2" v-on:update_success="gbp3" />
-            <!-- <v-btn @click="check_stateupdate(state)"></v-btn> -->
+              <ProjectEditor v-if="stateAdd && !statedetail && !stateupdate" v-on:insert_success="gbp4" />
+              <Project v-if="statedetail" :pcode="pcode" v-on:goBackpage="gbp" />
+              <ProjectUpdator v-if="stateupdate" :project_id="pcode2" v-on:goBackpage="gbp2" v-on:update_success="gbp3" />
+              <!-- <v-btn @click="check_stateupdate(state)"></v-btn> -->
+            </v-layout>
           </v-flex>
+
         </v-layout>
       </v-flex>
     </v-layout>
-  </div>
+  </v-container>
 </template>
 
 <script>

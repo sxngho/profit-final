@@ -17,7 +17,6 @@ export default {};
   align-items: center;
   width: 100%;
   height: 100px;
-  margin-top: 50px;
   background-color: white;
   border: 1px solid #2c2c2c;
 }
