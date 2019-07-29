@@ -178,6 +178,12 @@ export default {
       });
     },
 
+    UPDATE_userDibs(dibs, userId) {
+      return firestore.collection("users").doc(userId).update({
+        dibs : dibs
+      });
+    },
+
     DELETE_userEducations(userEducations, edu, userId, reload) {
       var index = -1;
       for (var i in userEducations) {
@@ -350,6 +356,19 @@ export default {
         });
       });
     },
+    async SELECT_RecruitById(id) {
+      return firestore.collection("recruit").doc(id).get().then(docSnapshots => {
+        return docSnapshots.data();
+      });
+    },
+
+    async SELECT_AllRecruits() {
+      return firestore.collection("recruit").get().then(docSnapshot => {
+        return docSnapshot.docs.map(doc => {
+            return doc.data();
+        });
+      });
+    },
 
     async SELECT_RecruitByCompany(id) {
       return firestore.collection("recruit").where("companyId","==",id).get()
@@ -364,6 +383,14 @@ export default {
       return firestore.collection("chat").get().then(docSnapshots => {
         return docSnapshots.docs.map(doc => {
           return doc.data();
+        });
+      });
+    },
+
+    SELECT_AllChatRoom() {
+      return firestore.collection("chat").get().then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+          return { data : doc.data() , id : doc.id };
         });
       });
     },
