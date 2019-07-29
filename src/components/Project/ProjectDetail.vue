@@ -1,6 +1,6 @@
 <template>
   <v-flex style=" padding: 10px 5px;">
-    <button text @click="popdetail(project_id)"
+    <button text @click="popdetail(project_id)">
       <v-img :src="projectimage" height="20vw"></v-img>
       <div>
         <div class="black--text text-center">{{projecttitle}}</div>

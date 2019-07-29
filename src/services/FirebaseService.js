@@ -466,6 +466,7 @@ export default {
                 email: id, first_name: first_name, last_name: last_name, phonenumber: phonenumber, userSkills: userSkills,
                 userImage: userImage, userName: first_name + last_name, userIntro: userIntro, userCareers: userCareers,
                 userEducations: userEducations, followerlist: [], followinglist: [], likeitProject: [], nickname : nickname, level : 0, showSkillList : [],
+                dibs : [],
               });
               firestore.collection("user_addon").doc(nickname).set({
                 toggleView: false
@@ -687,5 +688,35 @@ export default {
 
 
     // --------------------------------------------------------------------Weblog
+    // ---------------------------------------------------------------------------------------------------------------------------------
+
+
+    // ---------------------------------------------------------------------------------------------------------------------------------
+    // recruit--------------------------------------------------------------------
+      // Function :: 모든 웹로그를 가져옵니다.
+      async INSERT_recruitInfo(recruitInfo) {
+        return firestore
+          .collection("recruitInfo")
+          .add({
+            category: recruitInfo.category,
+            projectTitle: recruitInfo.projectTitle,
+            startDay: recruitInfo.startDay,
+            endDay: recruitInfo.endDay,
+            budget: recruitInfo.budget,
+            projectSummary: recruitInfo.projectSummary,
+            projectContent: recruitInfo.projectContent,
+            selectTechList: recruitInfo.selectTechList,
+            closingDate: recruitInfo.closingDate
+          });
+      },
+
+      //
+      // firestore.collection("projects").add({
+      //   projecttitle, projectdescription, projectterm, projectcontent,
+      //   projecttech, projectimage, projectrank, session_id,
+      //   date: firebase.firestore.FieldValue.serverTimestamp(),
+      //   comments: [], likeit: []
+      // });
+    // --------------------------------------------------------------------recruit
     // ---------------------------------------------------------------------------------------------------------------------------------
   };
