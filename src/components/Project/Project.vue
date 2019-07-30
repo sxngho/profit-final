@@ -1,28 +1,26 @@
 <template>
   <div>
+    <v-btn @click="goBackpage()" text outlined> 뒤로가기 </v-btn>
+    <v-divider/>
+
     <v-layout>
-      <!-- profile img -->
-      <v-btn @click="goBackpage()" text outlined> 뒤로가기 </v-btn>
-      <v-toolbar-title class="font-weight-medium">
-
+      <v-toolbar-title class="font-weight-medium" style="padding-left:10px;">
          <span class="font-weight-bold">{{project.projecttitle}} </span>
-
          <span class="font-weight-thin font-italic subheading">{{project.developer}}</span>
          <v-flex class="caption">
            {{ project.projectdescription }}
          </v-flex>
        </v-toolbar-title>
-      <v-spacer/>
 
+      <v-spacer/>
       <v-btn text icon color="pink">
         <i id="likecheck" class="far fa-heart fa-2x" @click="like_project()"></i>
         {{likeprojectcount}}
-        <!-- 이미 좋아요 눌렀다면 다른 fa 를 보여주는 것도 좋겠다. -->
+        <!-- TODO 이미 좋아요 눌렀다면 다른 fa 를 보여주는 것도 좋겠다. -->
       </v-btn>
       <v-btn text icon color="yellow">
         <i class="fa fa-star fa-2x"></i>
       </v-btn>
-
     </v-layout>
 
     <!-- card -->

@@ -21,7 +21,7 @@
               <span class="subheading font-weight-bold">Show</span><br/>
               <v-btn
               v-for="item in this.selectList"
-              small text outlined round
+              small text outlined rounded
               @click="deleteTech(item)">
                 {{ item }}
               </v-btn>
@@ -36,7 +36,7 @@
             <v-flex xs12>
               <span class="subheading font-weight-bold">보유스킬</span><br/>
               <v-btn v-for="item in this.unselectList"
-               small text outlined round
+               small text outlined rounded
                 @click="addTech(item)">
                 {{ item }}
               </v-btn>
