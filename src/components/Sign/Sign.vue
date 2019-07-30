@@ -101,6 +101,8 @@ export default {
     signupforuser: false,
     signupforcompany: false,
     Level : "",
+
+    user_alertlist:"",
   }),
   components: {
     SignupforCompanyModal,
@@ -110,6 +112,7 @@ export default {
     this.user = this.$session.get("session_id");
     this.userpage = "/story/" + this.user;
     this.Level = this.$session.get('level');
+    this.get_alertlist()
   },
   methods: {
     showNotification (group, type ,title, text) {
@@ -189,6 +192,11 @@ export default {
     signupsuccess() {
       this.signupmodal = false;
       this.showNotification("foo-css","success",`회원가입 완료!`,`로그인 해주세요!`);
+    },
+    get_alertlist() {
+      if (this.user) {
+        FirebaseService.get_alertlist(this.user)
+      }
     }
   }
 };
