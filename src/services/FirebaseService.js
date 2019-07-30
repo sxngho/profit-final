@@ -91,7 +91,7 @@ export default {
       });
     },
 
-    UPDATE_Project(data, old, project_id) {
+    async UPDATE_Project(data, old, project_id) {
       old.projecttitle = data.projecttitle; old.projectdescription = data.projectdescription; old.projectterm = data.projectterm;
       old.projectcontent = data.projectcontent; old.projecttech = data.projecttech; old.projectimage = data.projectimage; old.projectrank = data.projectrank;
       alert("수정이 완료되었습니다.");
@@ -671,6 +671,9 @@ export default {
         a = new Set([...a, ...b]);
       }
       var arr = Array.from(a);
+      for(var i in arr) {
+        arr[i] = arr[i].toUpperCase();
+      }
       firestore.collection("users").doc(userId).update({
         userSkills : arr
       });

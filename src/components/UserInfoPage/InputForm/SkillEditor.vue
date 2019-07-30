@@ -47,7 +47,7 @@
 
         <!-- action -->
         <v-layout row wrap justify-center>
-          <v-btn v-on:click="sendSkill(selectList)" text outlined> 등록 </v-btn>
+          <v-btn v-on:click="sendSkill(selectList,unselectList)" text outlined> 등록 </v-btn>
         </v-layout>
 
       </v-card>
@@ -82,8 +82,8 @@ import FirebaseService from "@/services/FirebaseService";
         this.selectList.push(tech);
         this.calcDiff();
       },
-      sendSkill(skills) {
-        this.$emit('sendSkill',skills);
+      sendSkill(selectList,unselectList) {
+        this.$emit('sendSkill',selectList,unselectList);
         this.skillmodal = false;
       },
       calcDiff(){

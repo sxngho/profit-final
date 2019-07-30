@@ -33,7 +33,11 @@ export default new Vuex.Store({
     },
     getPVT: function(state) {
       return state.projectViewToggle;
-    }
+    },
+    getReload: function(state) {
+      return state.reload;
+    },
+
   },
 
   // Mutations : 값변경 / 동기

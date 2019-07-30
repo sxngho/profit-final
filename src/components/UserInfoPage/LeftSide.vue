@@ -3,11 +3,11 @@
   <div style="padding:3vw; border-right:1px #cecece solid;">
     <!-- USER Profile Img -->
     <v-layout wrap align-center justify-space-around @mouseover="showRmImgBtn=true" @mouseleave="showRmImgBtn=false">
-      <div v-if="!image" justify-center>
+      <div v-if="!image" class="text-center" justify-center>
         <v-avatar size="150" class="grey lighten-2">
           <img src="https://i.imgur.com/aTI4OeZ.png?1">
         </v-avatar>
-        <input type="file" @change="onFileChange" />
+        <input type="file" style="width:100%;" @change="onFileChange" />
       </div>
 
       <div v-else style="position:relative;">
@@ -62,6 +62,7 @@
 
       <v-flex xs12>
         {{this.$store.state.reload}}
+        {{this.userdata[0].userSkills}}
        <div v-if="skillToggle" class="caption">
          <p> 등록된 기술이 없습니다. </p>
        </div>
@@ -187,19 +188,18 @@ export default {
     IntroEditor,
     SkillEditor,
   },
-  created() {
+  mounted() {
     this.SELECT_Userdata();
     this.isMineCheck();
     this.isFollowCheck();
   },
   methods: {
     toStoryFilter(tech) {
-   this.$emit('toStoryFilter',tech)
- },
+      this.$emit('toStoryFilter',tech)
+    },
     async SELECT_Userdata() {
       this.toStory(true);
       this.userdata = await FirebaseService.SELECT_Userdata(this.$route.params.id);
-      console.log(this.userdata[0].userSkills)
       if ( this.userdata[0].userIntro == "" ) {
         this.userdata[0].userIntro = "소개말이 없습니다."
       }
@@ -232,9 +232,10 @@ export default {
       this.userdata[0].userIntro = intro;
 
     },
-    receiveSkill(skill) {
-      FirebaseService.UPDATE_userSkill(skill,this.$route.params.id);
-      this.userdata[0].showSkillList = skill;
+    receiveSkill(selectList,unselectList) {
+      FirebaseService.UPDATE_userSkill(selectList,this.$route.params.id);
+      this.userdata[0].showSkillList = selectList;
+      this.userdata[0].userSkills = unselectList;
     },
     async receiveEdu(edu) {
       this.userEducations = await FirebaseService.SELECT_Userdata(this.$route.params.id);
@@ -336,18 +337,23 @@ export default {
     rmEducation(userEducations, e, userId, reload){
       this.reload = FirebaseService.DELETE_userEducations(userEducations, e, userId, reload);
     },
-
-
-
     test(tmp){
       console.log(tmp);
     },
   },
+  computed: {
+      getReload() {
+          return this.$store.getters.getReload
+      }
+  },
   watch: {
-    reload: function (newVal, oldVal) {
-      this.SELECT_Userdata();
-   },
-  }
+      getReload(val, oldVal) {
+          console.log('watched: ', val)
+          this.SELECT_Userdata();
+          console.log(this.userdata,"aaa")
+          console.log("왓치")
+      }
+  },
 
 };
 </script>

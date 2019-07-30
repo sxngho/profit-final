@@ -69,12 +69,15 @@ export default {
           this.myRecruits.push(this.recruits[i]);
           continue;
         }
-        for(var j in this.mySkills[0].userSkills) {
-          var uc = this.mySkills[0].userSkills[j].toUpperCase();
-          if( !this.recruits[i].data.requireSkills.includes(uc) ) {
-            console.log("이거안나와야해")
+        for(var ii in this.mySkills[0].userSkills) {
+          this.mySkills[0].userSkills[ii] = this.mySkills[0].userSkills[ii].toUpperCase();
+        }
+        for(var j in this.recruits[i].data.requireSkills) {
+          var rs = this.recruits[i].data.requireSkills[j].toUpperCase();
+          if( !this.mySkills[0].userSkills.includes(rs) ) {
+            console.log(rs,"이거안나와야해")
             break;
-          } else if( j == (this.mySkills[0].userSkills.length-1) ) {
+          } else if( j == (this.recruits[i].data.requireSkills.length-1) ) {
             console.log("푸시",this.recruits[i])
             this.myRecruits.push(this.recruits[i]);
           }
