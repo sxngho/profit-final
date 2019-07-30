@@ -60,21 +60,37 @@
 
             <!--comment -->
               <v-flex>
-                <!-- comment input -->
-
                 <form>
-                  <!-- <v-text-field label="Comment" required @input="$v.name.$touch()" @blur="$v.name.$touch()" v-model="comment"></v-text-field> -->
-                  태그 : <span id="toyou"></span><v-text-field v-model="comment"></v-text-field>
-                  <v-btn @click="INSERT_Comment(toyou, comment)">submit</v-btn>
+
+                  <!-- 여기에 태그한 사람들의 이름이 박스로 체크됩니다. -->
+                  <div >
+                    태그 : <v-btn style="display:inline-block;" v-for="nickname in real_taglist" @click="delete_taglist(nickname)">{{nickname}}</v-btn>
+                    <v-text-field style="width:100%;" placeholder="댓글을 입력해주세요" v-model="comment"></v-text-field>
+                  </div>
+
+                  <!-- 여기에서 태그 가능한 사람들의 목록을 보여줄 것입니다.-->
+                  <v-list style="position:absolute; z-index:1; background-color:#fff;">
+                    <v-list-item v-for="nickname in tmp_taglist">
+                      <v-list-item-content style="border-bottom:1px solid; width:500px;">
+                        <v-list-item-title v-html="nickname" @click="insert_taglist(nickname)"></v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list>
+
+                  <v-btn @click="INSERT_Comment(real_taglist, comment)">submit</v-btn>
+
                   </form>
 
                 <!-- comment sort -->
                 <v-flex>
+
                   <span>sort</span>
+
                   <v-btn text depressed small>oldest</v-btn>
                   <v-btn text depressed small>newest</v-btn>
                   <v-btn text depressed small>liked</v-btn>
                 </v-flex>
+
 
                 <!-- comment list -->
                 <v-list>
@@ -154,9 +170,9 @@ export default {
     comment:"",
     update_comment: false,
     update_commenttext:'',
-    toyou:'',
     likeitcount: 0,
-
+    tmp_taglist:[],
+    real_taglist:[],
   }
   },
   props : {
@@ -184,39 +200,49 @@ export default {
       this.$loading(true)
       this.project = await FirebaseService.SELECT_ProjectsByPcode(this.project_id);
       this.likeitcount = this.project.likeitcount
-      // console.log(this.project);
       this.$loading(false)
-
     },
     // seulgi function
-    async INSERT_Comment(toyou, comment){
+    async INSERT_Comment(real_taglist, comment){
       if (this.user) {
+        var listtext = ''
+        for (var j in real_taglist) {
+          listtext += `@${real_taglist[j]} `
+        }
         this.projectData = await FirebaseService.SELECT_Project(this.project_id);
         var Json = new Object();
-        Json.Comment = this.comment;
+        Json.Comment = listtext + this.comment;
         Json.User = this.user;
         Json.likecount = 0;
         Json.unlikecount = 0;
         Json.like = [];
         Json.unlike = [];
-        FirebaseService.INSERT_Comment(toyou, Json, this.projectData, this.project_id);
+
+        // INSERT_alert_Comment  : 댓글을 달았을 때, 태그가 존재하면 해당 사람한테 alert 생기게함.
+        for (var i in real_taglist) {
+          FirebaseService.INSERT_alert_Comment(real_taglist[i], Json, this.projectData, this.project_id);
+        }
+
+        // INSERT_Comment : 프로젝트의 댓글들에 댓글 추가.
+        FirebaseService.INSERT_Comment(real_taglist[i], Json, this.projectData, this.project_id);
+
+        // 비동기적으로 댓글 추가
         const newcommnet = {
         User : this.user,
-        Comment : this.comment,
+        Comment : listtext + this.comment,
         like : [],
         unlike : [],
         likecount : 0,
         unlikecount : 0,
         };
         this.comments.push(newcommnet)
-        this.toyou = ''
-        var tmp_text = document.querySelector('#toyou')
-        tmp_text.innerText = ''
       } else {
         // 로그인 안했으면 안했다고 알려줘야지 헤헤
         alert('너 로그인안했다. 댓글못쓴다~')
       }
       this.comment = ''
+      this.real_taglist = []
+      this.tmp_taglist = []
     },
     async get_comments() {
       this.comments = await FirebaseService.SELECT_Comments(this.project_id)
@@ -335,19 +361,38 @@ export default {
       }
     },
     async select_user(nickname) {
-      var toyou = await FirebaseService.SELECT_Usersdata(nickname)
-      if (toyou.length === 1) {
-        this.toyou = toyou[0].nickname
-        var tmp_text = document.querySelector('#toyou')
-        tmp_text.innerText = this.toyou
+      this.tmp_taglist=[]
+      if (nickname) {
+      // answers 는 @ 이후로 붙은 문자에 대한 nickname을 순으로 4개 data를 묶어줌.
+      var answers = await FirebaseService.SELECT_Usersdata(nickname)
+      answers.docs.map(answer => {
+        if (answer.data().nickname.indexOf(nickname)===0) {
+          if (!this.tmp_taglist.includes(answer.data().nickname)) {
+          this.tmp_taglist.push(answer.data().nickname)
+          }
+        }
+      })
       }
-    }
+    },
+    insert_taglist(nickname) {
+      if (!this.real_taglist.includes(nickname)) {
+        this.real_taglist.push(nickname)
+      var index = this.comment.indexOf(nickname)
+      var leng = nickname.length
+      this.comment = ''
+      this.tmp_taglist = []
+      }
+    },
+    delete_taglist(nickname) {
+      var index = this.real_taglist.indexOf(nickname)
+      this.real_taglist.splice(index, 1)
+    },
   },
   watch : {
     comment : function() {
       if (this.comment[0]==='@') {
-        if (this.comment.split(' ').length < 2) {
-          this.select_user(this.comment.split(' ')[0].substr(1))
+        if (this.comment.split(' ').length ===1) {
+          this.select_user(this.comment.substr(1))
         }
       }
     }
