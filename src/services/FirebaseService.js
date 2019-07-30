@@ -242,9 +242,17 @@ export default {
           return doc.data();
         });
     });
-
   },
 
+  // Function :: 특정 문자를 포함하는 유저들을 리스트로 묶어서 보냅니다.(seulgi)
+  async SELECT_UserSkillByNickname(nickname) {
+    return firestore.collection("users").where("nickname", "==", nickname).get().then(docSnapshots => {
+      return docSnapshots.docs.map(doc => {
+        // console.log(doc.data())
+        return { us : doc.data().userSkills , ss : doc.data().showSkillList };
+      });
+  });
+},
     // Function :: 유저의 정보를 가져옵니다.
     async SELECT_AllUserdata() {
       return firestore.collection("users").get().then(docSnapshots => {
@@ -664,7 +672,7 @@ export default {
     // ETC --------------------------------------------------------------------
 
 
-    async reload_userskill(userId,projects) {
+    async reload_userskill(userId,projects,showlist) {
       let a = new Set([]);
       for(let i=0; i<projects.length; i++) {
         let b = new Set(projects[i].data.projecttech);
@@ -674,8 +682,17 @@ export default {
       for(var i in arr) {
         arr[i] = arr[i].toUpperCase();
       }
+
+      var showarr = new Array();
+      for(var i in showlist) {
+        if(arr.includes(showlist[i])) {
+          showarr.push(showlist[i])
+        }
+      }
+
       firestore.collection("users").doc(userId).update({
-        userSkills : arr
+        userSkills : arr,
+        showSkillList : showarr
       });
     },
 

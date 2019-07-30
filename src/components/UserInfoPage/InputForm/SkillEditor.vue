@@ -21,7 +21,7 @@
               <span class="subheading font-weight-bold">Show</span><br/>
               <v-btn
               v-for="item in this.selectList"
-              small text outlined round
+              small text outlined rounded
               @click="deleteTech(item)">
                 {{ item }}
               </v-btn>
@@ -36,7 +36,7 @@
             <v-flex xs12>
               <span class="subheading font-weight-bold">보유스킬</span><br/>
               <v-btn v-for="item in this.unselectList"
-               small text outlined round
+               small text outlined rounded
                 @click="addTech(item)">
                 {{ item }}
               </v-btn>
@@ -95,10 +95,12 @@ import FirebaseService from "@/services/FirebaseService";
         }
         this.unselectList = tmp;
       },
-      initShowModal(){
-        this.receiveUserSkills = this.userSkills;
-        this.receiveShowSkillList = this.showSkillList;
-        this.selectList = this.showSkillList;
+      async initShowModal(){
+        var skill = await FirebaseService.SELECT_UserSkillByNickname(this.$session.get('session_id'));
+        console.log(skill)
+        this.receiveUserSkills = skill[0].us;
+        this.receiveShowSkillList = skill[0].ss;
+        this.selectList = skill[0].ss;
         this.calcDiff();
       },
     },

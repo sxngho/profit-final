@@ -56,13 +56,10 @@
         <SkillEditor
         v-on:sendSkill="receiveSkill"
         v-if="isMine"
-        v-bind:userSkills="this.userdata[0].userSkills"
-        v-bind:showSkillList="this.userdata[0].showSkillList"/>
+      />
       </v-flex>
 
       <v-flex xs12>
-        {{this.$store.state.reload}}
-        {{this.userdata[0].userSkills}}
        <div v-if="skillToggle" class="caption">
          <p> 등록된 기술이 없습니다. </p>
        </div>
@@ -233,7 +230,7 @@ export default {
 
     },
     receiveSkill(selectList,unselectList) {
-      FirebaseService.UPDATE_userSkill(selectList,this.$route.params.id);
+      FirebaseService.UPDATE_userSkill(selectList,his.$route.params.id);
       this.userdata[0].showSkillList = selectList;
       this.userdata[0].userSkills = unselectList;
     },

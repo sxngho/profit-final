@@ -333,8 +333,9 @@ import FirebaseService from "@/services/FirebaseService";
          },
          async reload_userskill(session_id) {
                  var projects =  await FirebaseService.SELECT_Projects(session_id);
+                 var userSkill = await FirebaseService.SELECT_UserSkillByNickname(session_id);
                  console.log(projects)
-                 await FirebaseService.reload_userskill(session_id,projects);
+                 await FirebaseService.reload_userskill(session_id,projects,userSkill[0].ss);
          },
         //// IMAGE UPLOAD
         removeImage(){
