@@ -70,6 +70,19 @@
           <v-autocomplete v-model="closingDate" :items="closingDateList"></v-autocomplete>
         </div>
       </div>
+      <div class="imageUploader__content contentBox">
+        <div class="imageUploader__title titleBox">기업 로고 사진 등록</div>
+        <div class="imageUploader__input inputBox" style="width:550px; height:250px">
+          <div v-if="!recruitImage">
+            <input type="file" @change="onFileChange" />
+          </div>
+          <div v-else>
+            <img :src="recruitImage" width="200px" height="200px" />
+            <br />
+            <v-btn @click="removeImage">삭제</v-btn>
+          </div>
+        </div>
+      </div>
       <button
         style="margin-left:350px; margin-top:50px; background:blueviolet; color:white; width:50px; height:30px"
         @click="submit"
@@ -105,7 +118,8 @@ export default {
       startDay: new Date().toISOString().slice(0, 10),
       techName: "",
       showTechList: [],
-      user:"",
+      user: "",
+      recruitImage: ""
     };
   },
   components: {
@@ -114,7 +128,7 @@ export default {
     SelectTechList
   },
   created() {
-    this.user = this.$session.get('session_id')
+    this.user = this.$session.get("session_id");
   },
   watch: {
     techName(to, from) {
@@ -138,19 +152,18 @@ export default {
       const result = newValue
         .replace(/\D/g, "")
         .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      this.$nextTick(() => (this.
-        budget = result));
+      this.$nextTick(() => (this.budget = result));
     }
   },
   methods: {
-    showNotification (group, type ,title, text) {
-       this.$notify({
-         group,
-         title,
-         text,
-         type,
-       })
-     },
+    showNotification(group, type, title, text) {
+      this.$notify({
+        group,
+        title,
+        text,
+        type
+      });
+    },
     async submit() {
       const recruitInfo = {
         category: this.category,
@@ -162,17 +175,50 @@ export default {
         projectContent: this.projectContent,
         selectTechList: this.$store.state.selectTechList,
         closingDate: this.closingDate,
-        session_id: this.user
+        session_id: this.user,
+        recruitImage: this.recruitImage
       };
       if (this.$session.get("session_id")) {
-        var result = await FirebaseService.INSERT_recruitInfo(recruitInfo)
-        this.showNotification("foo-css","success",`${this.$session.get("session_id")}님`,`recruitInfo 내용이 올라갔습니다.!`);
+        var result = await FirebaseService.INSERT_recruitInfo(recruitInfo);
+        this.showNotification(
+          "foo-css",
+          "success",
+          `${this.$session.get("session_id")}님`,
+          `recruitInfo 내용이 올라갔습니다.!`,
+          console.log(recruitInfo)
+        );
       } else {
-        alert('권한이 없습니다.')
+        alert("권한이 없습니다.");
       }
-
-
     },
+    removeImage() {
+      this.recruitImage = "";
+    },
+    onFileChange(e) {
+      // file 세팅
+      let files = e.target.files || e.dataTransfer.files;
+      if (!files.length) {
+        return;
+      }
+      const apiUrl = "https://api.imgur.com/3/image";
+      let data = new FormData();
+      let content = {
+        method: "POST",
+        headers: {
+          Authorization: "Client-ID f96b8964f338658",
+          Accept: "application/json"
+        },
+        body: data,
+        mimeType: "multipart/form-data"
+      };
+      data.append("image", files[0]);
+      fetch(apiUrl, content)
+        .then(response => response.json())
+        .then(success => {
+          this.recruitImage = success.data.link;
+        })
+        .catch();
+    }
   }
 };
 </script>
