@@ -59,10 +59,8 @@
           />
         </div>
       </div>
-
       <ShowTechList />
       <SelectTechList />
-
       <div class="closingDate__content contentBox">
         <div class="closingDate__title titleBox">모집 마감일자</div>
         <div class="closingDate__input inputBox">

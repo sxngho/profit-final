@@ -83,13 +83,10 @@ export default {
       });
   },
 
-  // Function :: 프로젝트 디테일을 project_id로 가져옵니다
-  async SELECT_ProjectsByPcode(pcode) {
-    return firestore
-      .collection("projects")
-      .doc(pcode)
-      .get()
-      .then(docSnapshots => {
+    // Function :: 프로젝트 디테일을 project_id로 가져옵니다
+    async SELECT_ProjectsByPcode(pcode) {
+      return firestore.collection("projects").doc(pcode).get().then(docSnapshots => {
+        // console.log(docSnapshots.data())
         return docSnapshots.data();
       });
     },
@@ -102,11 +99,11 @@ export default {
         projecttitle, projectdescription, projectterm, projectcontent,
         projecttech, projectimage, projectrank, session_id,
         date: firebase.firestore.FieldValue.serverTimestamp(),
-        comments: [], likeit: []
+        comments: [], likeit: [], likeitcount:0,
       });
     },
 
-    async UPDATE_Project(data, old, project_id) {
+    UPDATE_Project(data, old, project_id) {
       old.projecttitle = data.projecttitle; old.projectdescription = data.projectdescription; old.projectterm = data.projectterm;
       old.projectcontent = data.projectcontent; old.projecttech = data.projecttech; old.projectimage = data.projectimage; old.projectrank = data.projectrank;
       alert("수정이 완료되었습니다.");
@@ -125,7 +122,6 @@ export default {
         return docSnapshots.size
       })
     },
-
   // --------------------------------------------------------------------PROJECT
   // ---------------------------------------------------------------------------------------------------------------------------------
 
@@ -294,17 +290,10 @@ export default {
       });
   },
 
-  // Function :: 특정 문자를 포함하는 유저들을 리스트로 묶어서 보냅니다.(seulgi)
-  async SELECT_Usersdata(nickname) {
-    return firestore
-      .collection("users")
-      .where("nickname", "==", nickname)
-      .get()
-      .then(docSnapshots => {
-        return docSnapshots.docs.map(doc => {
-          // console.log(doc.data())
-          return doc.data();
-        });
+    // Function :: 특정 문자를 포함하는 유저들을 리스트로 묶어서 보냅니다.(seulgi)
+    async SELECT_Usersdata(nickname) {
+      return firestore.collection("users").where("nickname", ">=", nickname).limit(4).get().then(docSnapshots => {
+        return docSnapshots
     });
   },
 
@@ -395,52 +384,35 @@ export default {
       .then(docSnapshots => {
         return docSnapshots.data().comments;
       });
-  },
+    },
 
-  // Function :: 댓글을 프로젝트 안의 댓글들 이라는 요소에 추가합니다.
-  // toyou 라는 것은 댓글이 어떤 상대방을 태그할때(#) 상대방의 alertlist에 관련 내용들을 집어넣습니다.
-  // 추후에 이를 통해 알림을 제공할 예정입니다.(seulgi)
-  INSERT_Comment(toyou, comment, old, project_id) {
-    var toyou_length = toyou.length;
-    // console.log(comment.Comment.substr(toyou_length+1))
-    if (toyou) {
-      firestore
-        .collection("users")
-        .doc(toyou)
-        .get()
-        .then(docSnapshot => {
-          var old_alertlist = docSnapshot.data().alertlist;
-          old_alertlist.push({
-            type: 1,
-            project_id: project_id,
-            check: false,
-            comment: comment.Comment.substr(toyou_length + 1)
-          });
-          firestore
-            .collection("users")
-            .doc(toyou)
-            .update({
-              alertlist: old_alertlist
-            });
-        });
-    }
+    // Function :: 댓글을 프로젝트 안의 댓글들 이라는 요소에 추가합니다.
+    // INSERT_alert_Comment, INSERT_Comment 안에 들어가는 요소들이 모두 필요하지는 않지만,
+    // 어떻게 수정될 지 모르는 상황이므로 일단 추가적으로 줄이지는 않겠습니다.
+    INSERT_alert_Comment(alert_person, comment, old, project_id) {
+      firestore.collection('users').doc(alert_person).get().then((docSnapshot) => {
+        var old_alertlist = docSnapshot.data().alertlist
+        // console.log(old_alertlist, alert_person)
+        old_alertlist.push({type:1, project_id:project_id, check:false, comment:comment.Comment})
+        firestore.collection('users').doc(alert_person).update({
+          alertlist:old_alertlist
+        })
+        // console.log(old_alertlist, alert_person)
+      })
+    },
 
-    old.comments.push(comment);
-    return firestore
-      .collection("projects")
-      .doc(project_id)
-      .update({
+    INSERT_Comment(alert_person, comment, old, project_id) {
+      old.comments.push(comment);
+      return firestore.collection("projects").doc(project_id).update({
         comments: old.comments
       });
-  },
+    },
 
-  DELETE_comment(project_id, comments, comment_index) {
-    var old = comments;
-    old.splice(comment_index, 1);
-    return firestore
-      .collection("projects")
-      .doc(project_id)
-      .update({
+
+    DELETE_comment(project_id, comments, comment_index) {
+      var old = comments;
+      old.splice(comment_index, 1);
+      return firestore.collection("projects").doc(project_id).update({
         comments: old
       });
   },
@@ -750,7 +722,7 @@ export default {
   // LIKE--------------------------------------------------------------------
 
   // Function :: 프로젝트를 좋아요 는 else문 취소는 if문 , like_users : 프로젝트를 좋아하는 사람들
-  async like_project(user, project_id, like_users) {
+  async like_project(user, project_id, like_users, likeitcount) {
     // 각 상황별로.
     // 1. 프로젝트의 좋아요 들 안에 user를 넣는다.
     // 2. user의 likeitProject에 project_id를 넣는다.
@@ -777,7 +749,9 @@ export default {
             .collection("projects")
             .doc(project_id)
             .update({
-              likeit: like_users
+              likeit: like_users,
+              likeitcount:likeitcount -=1
+
             });
         });
     } else {
@@ -799,7 +773,8 @@ export default {
             .collection("projects")
             .doc(project_id)
             .update({
-              likeit: like_users
+              likeit: like_users,
+              likeitcount:likeitcount +=1
             });
         });
     }

@@ -1,18 +1,20 @@
 <template>
   <div class="banner__container">
     <div class="banner__content">
-      <button class="bannerBox" @click="randomUser()">
-        <div class="randomList contentBox">
-          <div class="iconBox">
-            <i class="far fa-list-alt fa-7x" style="color:blueviolet"></i>
+      <router-link to="/" class="bannerBox" style="text-decoration:none">
+        <button class="bannerBox">
+          <div class="randomList contentBox">
+            <div class="iconBox">
+              <i class="far fa-list-alt fa-7x" style="color:blueviolet"></i>
+            </div>
+            <br />
+            <div class="randomList_title titleBox">
+              <span class="fontStyle">프로젝트 랜덤 리스트</span>
+            </div>
           </div>
-          <br />
-          <div class="randomList_title titleBox">
-            <span class="fontStyle">프로젝트 랜덤 리스트</span>
-          </div>
-        </div>
-      </button>
-      <button class="bannerBox">
+        </button>
+      </router-link>
+      <router-link to="/" class="bannerBox" style="text-decoration:none">
         <div class="companyList contentBox">
           <div class="iconBox">
             <i class="far fa-building fa-7x" style="color:blueviolet"></i>
@@ -22,8 +24,8 @@
             <span class="fontStyle">기업 리스트</span>
           </div>
         </div>
-      </button>
-      <button class="bannerBox" onclick="location.href='/recruits'">
+      </router-link>
+      <router-link to="/recruits" class="bannerBox" style="text-decoration:none">
         <div class="recuritList contentBox">
           <div class="iconBox">
             <i class="far fa-handshake fa-7x" style="color:blueviolet"></i>
@@ -33,8 +35,8 @@
             <span class="fontStyle">외주 공고 리스트</span>
           </div>
         </div>
-      </button>
-      <button class="bannerBox" onclick="location.href='/studio'">
+      </router-link>
+      <router-link to="/studio" class="bannerBox" style="text-decoration:none">
         <div class="studio contentBox">
           <div class="iconBox">
             <i class="far fa-keyboard fa-7x" style="color:blueviolet"></i>
@@ -44,7 +46,7 @@
             <span class="fontStyle">작업실</span>
           </div>
         </div>
-      </button>
+      </router-link>
     </div>
   </div>
 </template>
