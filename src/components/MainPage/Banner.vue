@@ -52,7 +52,23 @@
 </template>
 
 <script>
-export default {};
+import FirebaseService from "@/services/FirebaseService";
+export default {
+  data() {
+    return {
+
+    }
+  },
+  methods: {
+    async randomUser() {
+      var user = await FirebaseService.SELECT_ALLUser();
+      console.log(user.length)
+      var result = Math.floor(Math.random() * user.length);
+      console.log("랜덤수 :",result);
+    }
+  },
+
+};
 </script>
 
 <style scoped>

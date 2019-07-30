@@ -122,11 +122,6 @@ export default {
         return docSnapshots.size
       })
     },
-    // --------------------------------------------------------------------PROJECT
-    // ---------------------------------------------------------------------------------------------------------------------------------
-
-
-
   // --------------------------------------------------------------------PROJECT
   // ---------------------------------------------------------------------------------------------------------------------------------
 
@@ -299,48 +294,35 @@ export default {
     async SELECT_Usersdata(nickname) {
       return firestore.collection("users").where("nickname", ">=", nickname).limit(4).get().then(docSnapshots => {
         return docSnapshots
-        // return docSnapshots.docs.map(doc => {
-        //   console.log(doc.data())
-        //   return doc.data();
-        // });
     });
   },
 
-  // Function :: 유저의 정보를 가져옵니다.
-  async SELECT_AllUserdata() {
-    return firestore
-      .collection("users")
-      .get()
-      .then(docSnapshots => {
-        return docSnapshots.docs.map(doc => {
-          let data = doc.data();
-          return { level: data.level, name: data.email };
-        });
+  // Function :: 특정 문자를 포함하는 유저들을 리스트로 묶어서 보냅니다.(seulgi)
+  async SELECT_UserSkillByNickname(nickname) {
+    return firestore.collection("users").where("nickname", "==", nickname).get().then(docSnapshots => {
+      return docSnapshots.docs.map(doc => {
+        // console.log(doc.data())
+        return { us : doc.data().userSkills , ss : doc.data().showSkillList };
       });
-  },
-
-  // Function :: 유저 정보를 가져옵니다
-  async SELECT_ALLUser() {
-    return firestore
-      .collection("users")
-      .get()
-      .then(docSnapshots => {
-        return docSnapshots.docs.map(doc => {
-          let data = doc.data();
-          return data;
+  });
+},
+    // Function :: 유저의 정보를 가져옵니다.
+    async SELECT_AllUserdata() {
+      return firestore.collection("users").get().then(docSnapshots => {
+          return docSnapshots.docs.map(doc => {
+            let data = doc.data();
+            return { level : data.level , name : data.email };
+          });
         });
-      });
-  },
+    },
 
-  async SELECT_UserdataEmail(id) {
-    return firestore
-      .collection("users")
-      .where("email", "==", id)
-      .get()
-      .then(docSnapshots => {
-        return docSnapshots.docs.map(doc => {
-          return doc.data();
-        });
+    // Function :: 유저 정보를 가져옵니다
+    async SELECT_ALLUser(){
+      return firestore.collection("users").get().then(docSnapshots => {
+          return docSnapshots.docs.map(doc => {
+            let data = doc.data();
+            return data;
+          });
       });
   },
 
@@ -857,21 +839,27 @@ export default {
   // --------------------------------------------------------------------LIKE
   // ---------------------------------------------------------------------------------------------------------------------------------
 
-  // ---------------------------------------------------------------------------------------------------------------------------------
-  // ETC --------------------------------------------------------------------
+    async reload_userskill(userId,projects,showlist) {
+      let a = new Set([]);
+      for(let i=0; i<projects.length; i++) {
+        let b = new Set(projects[i].data.projecttech);
+        a = new Set([...a, ...b]);
+      }
+      var arr = Array.from(a);
+      for(var i in arr) {
+        arr[i] = arr[i].toUpperCase();
+      }
 
-  async reload_userskill(userId, projects) {
-    let a = new Set([]);
-    for (let i = 0; i < projects.length; i++) {
-      let b = new Set(projects[i].data.projecttech);
-      a = new Set([...a, ...b]);
-    }
-    var arr = Array.from(a);
-    firestore
-      .collection("users")
-      .doc(userId)
-      .update({
-        userSkills: arr
+      var showarr = new Array();
+      for(var i in showlist) {
+        if(arr.includes(showlist[i])) {
+          showarr.push(showlist[i])
+        }
+      }
+
+      firestore.collection("users").doc(userId).update({
+        userSkills : arr,
+        showSkillList : showarr
       });
   },
 

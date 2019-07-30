@@ -92,9 +92,9 @@
                 v-on:toStory="cc"
                 v-on:goup="update_project"
                 v-on:toStoryUpdate="UPDATE_Project"
+                :layout="layout"
                 :toFilter="Filter" v-on:toStoryList="resetFilter"
               />
-
               <ProjectEditor v-if="stateAdd && !statedetail && !stateupdate" v-on:insert_success="gbp4" />
               <Project v-if="statedetail" :pcode="pcode" v-on:goBackpage="gbp" />
               <ProjectUpdator v-if="stateupdate" :project_id="pcode2" v-on:goBackpage="gbp2" v-on:update_success="gbp3" />

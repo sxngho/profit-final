@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-layout>
+      <!-- 현재창입니다 -->
       <!-- profile img -->
       <v-btn @click="goBackpage()" text outlined> 뒤로가기 </v-btn>
       <v-toolbar-title class="font-weight-medium">
