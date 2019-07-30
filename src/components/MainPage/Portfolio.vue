@@ -2,7 +2,7 @@
   <div class="Portfolio__container">
     <!-- {{portfolio.project_id}} -->
     <div class="Portfolio__container__content">
-      <button class="Portfolio__box" @click="popdetail(portfolio.portfolioId)">
+      <button class="Portfolio__box" @click="popdetail(portfolioId)">
         <img :src="protfolioImg" style="height:280px; width:330px" />
       </button>
     </div>
@@ -35,6 +35,9 @@ export default {
   methods: {
     async SELECT_Project() {
       this.portfolioId = this.portfolio.project_id;
+      console.log("test");
+      console.log(this.portfolio);
+      console.log(this.portfolioId);
       this.portfolioInfo = await FirebaseService.SELECT_Project(
         this.portfolio.project_id
       );

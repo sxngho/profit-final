@@ -7,7 +7,8 @@
         <v-avatar size="150" class="grey lighten-2">
           <img src="https://i.imgur.com/aTI4OeZ.png?1">
         </v-avatar>
-        <input type="file" style="width:100%;" @change="onFileChange" />
+        <input type="file" name="file" id="file" style="width:100%; display:none" @change="onFileChange" />
+        <div @click="setFile()"><i class="fa fa-camera" aria-hidden="true"></i></div>
       </div>
 
       <div v-else style="position:relative;">
@@ -256,7 +257,6 @@ export default {
     async follow(){
       var follower = await FirebaseService.SELECT_Userdata(this.$route.params.id);
       var following = await FirebaseService.SELECT_Userdata(this.$session.get('session_id'));
-      //console.log("this is test :: ", follower[0].followerlist, following[0].followinglist);
       await FirebaseService.follow(
         this.$route.params.id,
         this.$session.get('session_id'),
@@ -268,7 +268,6 @@ export default {
     async unfollow(){
       var follower = await FirebaseService.SELECT_Userdata(this.$route.params.id);
       var following = await FirebaseService.SELECT_Userdata(this.$session.get('session_id'));
-      //console.log("this is test :: ", follower[0].followerlist, following[0].followinglist);
       await FirebaseService.unfollow(
         this.$route.params.id,
         this.$session.get('session_id'),
@@ -334,8 +333,9 @@ export default {
     rmEducation(userEducations, e, userId, reload){
       this.reload = FirebaseService.DELETE_userEducations(userEducations, e, userId, reload);
     },
-    test(tmp){
-      console.log(tmp);
+    setFile() {
+      var file = document.querySelector('#file')
+      file.click();
     },
   },
   computed: {
