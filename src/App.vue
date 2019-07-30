@@ -3,7 +3,7 @@
     <notifications group="foo-css" position="top right" :speed="500" />
     <Header v-if="!$store.state.no_header"/>
     <v-content>
-      <router-view />
+      <router-view :key="$route.fullPath"></router-view>
     </v-content>
 
     <Footer v-if="!$store.state.no_header"/>
