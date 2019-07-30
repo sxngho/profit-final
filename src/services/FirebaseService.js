@@ -75,6 +75,7 @@ export default {
     // Function :: 프로젝트 디테일을 project_id로 가져옵니다
     async SELECT_ProjectsByPcode(pcode) {
       return firestore.collection("projects").doc(pcode).get().then(docSnapshots => {
+        // console.log(docSnapshots.data())
         return docSnapshots.data();
       });
     },
@@ -87,7 +88,7 @@ export default {
         projecttitle, projectdescription, projectterm, projectcontent,
         projecttech, projectimage, projectrank, session_id,
         date: firebase.firestore.FieldValue.serverTimestamp(),
-        comments: [], likeit: []
+        comments: [], likeit: [], likeitcount:0,
       });
     },
 
@@ -489,11 +490,12 @@ export default {
             alert('nickname에 특수문자는 제외해주세요. ex : ~!@#$%^&*()_+|<>?:{}')
             return false;
         } else {
+          // level : 0 운영자, 1 관리자, 2 유저, 3 기업
           return firebase.auth().createUserWithEmailAndPassword(id, password).then(function() {
               firestore.collection("users").doc(nickname).set({
                 email: id, first_name: first_name, last_name: last_name, phonenumber: phonenumber, userSkills: userSkills,
                 userImage: userImage, userName: first_name + last_name, userIntro: userIntro, userCareers: userCareers,
-                userEducations: userEducations, followerlist: [], followinglist: [], likeitProject: [], nickname : nickname, level : 0, showSkillList : [],
+                userEducations: userEducations, followerlist: [], followinglist: [], likeitProject: [], nickname : nickname, level : "2", showSkillList : [],
                 dibs : [], alertlist:[],
               });
               firestore.collection("user_addon").doc(nickname).set({
@@ -573,7 +575,7 @@ export default {
 
 
     // Function :: 프로젝트를 좋아요 는 else문 취소는 if문 , like_users : 프로젝트를 좋아하는 사람들
-    async like_project(user, project_id, like_users) {
+    async like_project(user, project_id, like_users, likeitcount) {
       // 각 상황별로.
       // 1. 프로젝트의 좋아요 들 안에 user를 넣는다.
       // 2. user의 likeitProject에 project_id를 넣는다.
@@ -589,7 +591,8 @@ export default {
             likeitProject : users_likeprojects
           })
           firestore.collection('projects').doc(project_id).update({
-            likeit : like_users
+            likeit : like_users,
+            likeitcount : likeitcount -= 1
           })
         })
       } else {
@@ -602,7 +605,8 @@ export default {
             likeitProject : users_likeprojects
           })
           firestore.collection('projects').doc(project_id).update({
-            likeit : like_users
+            likeit : like_users,
+            likeitcount : likeitcount += 1
           })
         })
       }

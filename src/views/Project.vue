@@ -322,12 +322,13 @@ export default {
   },
   computed : {
     likeprojectcount : function() {
+      console.log('이거 왜 오류나')
       return this.project.likeit.length
     }
   },
   watch : {
     comment : function() {
-      if (this.comment[0]==='#') {
+      if (this.comment[0]==='@') {
         if (this.comment.split(' ').length < 2) {
           this.select_user(this.comment.split(' ')[0].substr(1))
         }

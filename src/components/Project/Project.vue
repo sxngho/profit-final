@@ -16,7 +16,7 @@
 
       <v-btn text icon color="pink">
         <i id="likecheck" class="far fa-heart fa-2x" @click="like_project()"></i>
-        {{likeprojectcount}}
+        {{likeitcount}}
         <!-- 이미 좋아요 눌렀다면 다른 fa 를 보여주는 것도 좋겠다. -->
       </v-btn>
       <v-btn text icon color="yellow">
@@ -155,6 +155,8 @@ export default {
     update_comment: false,
     update_commenttext:'',
     toyou:'',
+    likeitcount: 0,
+
   }
   },
   props : {
@@ -181,6 +183,7 @@ export default {
     async bindData(){
       this.$loading(true)
       this.project = await FirebaseService.SELECT_ProjectsByPcode(this.project_id);
+      this.likeitcount = this.project.likeitcount
       // console.log(this.project);
       this.$loading(false)
 
@@ -247,21 +250,27 @@ export default {
       after.style.display = 'none';
     },
     async like_project() {
-      var result = await FirebaseService.like_project(this.user, this.pcode, this.project.likeit)
-      var userdata = await FirebaseService.SELECT_Userdata(this.user)
-      var heart = document.querySelector('#likecheck')
-      if (userdata[0].likeitProject.includes(this.project_id)) {
-        heart.classList.remove('fa')
-        heart.classList.add('far')
-      } else {
-        heart.classList.remove('far')
-        heart.classList.add('fa')
+      if (this.user) {
+        var result = await FirebaseService.like_project(this.user, this.pcode, this.project.likeit, this.likeitcount)
+        var userdata = await FirebaseService.SELECT_Userdata(this.user)
+        var heart = document.querySelector('#likecheck')
+        // console.log()
+        if (userdata[0].likeitProject.includes(this.project_id)) {
+          heart.classList.remove('fa')
+          heart.classList.add('far')
+          this.likeitcount -=1
+        } else {
+          heart.classList.remove('far')
+          heart.classList.add('fa')
+          this.likeitcount +=1
+        }
       }
     },
     async like_check() {
       // 프로젝트 자체를 내가 좋아요 눌렀는지 체크
       var userdata = await FirebaseService.SELECT_Userdata(this.user)
       var heart = document.querySelector('#likecheck')
+
       if (userdata[0].likeitProject.includes(this.project_id)) {
         heart.classList.remove('far')
         heart.classList.add('fa')
@@ -296,30 +305,33 @@ export default {
       }
     },
     async like_comment(com, index) {
-      // com 은 내용 , index 는 순서
-      var result = await FirebaseService.like_comment(this.user, this.pcode, this.comments, com.like, index)
-      var heart2 = document.querySelector(`#commentlike_${index}`)
-      if (result[index].like.includes(this.user)) {
-        // 댓글 남긴 사람들 중에서 내가 있다는 뜻.
-        heart2.classList.remove('far')
-        heart2.classList.add('fa')
-      } else {
-        heart2.classList.remove('fa')
-        heart2.classList.add('far')
+      if (this.user) {
+        // com 은 내용 , index 는 순서
+        var result = await FirebaseService.like_comment(this.user, this.pcode, this.comments, com.like, index)
+        var heart2 = document.querySelector(`#commentlike_${index}`)
+        if (result[index].like.includes(this.user)) {
+          // 댓글 남긴 사람들 중에서 내가 있다는 뜻.
+          heart2.classList.remove('far')
+          heart2.classList.add('fa')
+        } else {
+          heart2.classList.remove('fa')
+          heart2.classList.add('far')
+        }
       }
-
     },
     async unlike_comment(com, index) {
-      // com 은 내용 , index 는 순서
-      var result = await FirebaseService.unlike_comment(this.user, this.pcode, this.comments, com.like, index)
-      var heart3 = document.querySelector(`#commentunlike_${index}`)
-      if (result[index].unlike.includes(this.user)) {
-        // 댓글 남긴 사람들 중에서 내가 있다는 뜻.
-        heart3.classList.remove('far')
-        heart3.classList.add('fa')
-      } else {
-        heart3.classList.remove('fa')
-        heart3.classList.add('far')
+      if (this.user) {
+        // com 은 내용 , index 는 순서
+        var result = await FirebaseService.unlike_comment(this.user, this.pcode, this.comments, com.like, index)
+        var heart3 = document.querySelector(`#commentunlike_${index}`)
+        if (result[index].unlike.includes(this.user)) {
+          // 댓글 남긴 사람들 중에서 내가 있다는 뜻.
+          heart3.classList.remove('far')
+          heart3.classList.add('fa')
+        } else {
+          heart3.classList.remove('fa')
+          heart3.classList.add('far')
+        }
       }
     },
     async select_user(nickname) {
@@ -331,14 +343,9 @@ export default {
       }
     }
   },
-  computed : {
-    likeprojectcount : function() {
-      return this.project.likeit.length
-    }
-  },
   watch : {
     comment : function() {
-      if (this.comment[0]==='#') {
+      if (this.comment[0]==='@') {
         if (this.comment.split(' ').length < 2) {
           this.select_user(this.comment.split(' ')[0].substr(1))
         }
