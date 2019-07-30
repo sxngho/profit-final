@@ -3,11 +3,12 @@
   <div style="padding:3vw; border-right:1px #cecece solid;">
     <!-- USER Profile Img -->
     <v-layout wrap align-center justify-space-around @mouseover="showRmImgBtn=true" @mouseleave="showRmImgBtn=false">
-      <div v-if="!image" justify-center class="text-center">
+      <div v-if="!image" class="text-center" justify-center>
         <v-avatar size="150" class="grey lighten-2">
           <img src="https://i.imgur.com/aTI4OeZ.png?1">
         </v-avatar>
-        <input type="file" @change="onFileChange" style="width:100%;" />
+        <input type="file" name="file" id="file" style="width:100%; display:none" @change="onFileChange" />
+        <div @click="setFile()"><i class="fa fa-camera" aria-hidden="true"></i></div>
       </div>
 
       <div v-else style="position:relative;">
@@ -56,8 +57,7 @@
         <SkillEditor
         v-on:sendSkill="receiveSkill"
         v-if="isMine"
-        v-bind:userSkills="this.userdata[0].userSkills"
-        v-bind:showSkillList="this.userdata[0].showSkillList"/>
+      />
       </v-flex>
 
       <v-flex xs12>
@@ -96,7 +96,7 @@
         @mouseover="showRmCarBtn(index)" @mouseleave="hideRmCarBtn(index)"
         style="position:relative; padding:15px 6px; border-bottom:1px #cecece solid;">
           <v-flex
-            v-on:click="rmCareer(userdata[0].userCareers,c,userdata[0].email,reload)"
+            v-on:click="rmCareer(userdata[0].userCareers,c,userdata[0].nickname,reload)"
             v-show:false
             class ="carbtn"  v-if="isMine"
             style="z-index:2; right:0; top:35%; position: absolute; display: none;">
@@ -130,7 +130,7 @@
           style="position:relative; padding:15px 6px; border-bottom:1px #cecece solid;"
           >
           <v-flex
-            v-on:click="rmEducation(userdata[0].userEducations,e,userdata[0].email,reload)"
+            v-on:click="rmEducation(userdata[0].userEducations,e,userdata[0].nickname,reload)"
             v-show:false
             text outlined small absolute fab
             class ="edubtn"  v-if="isMine"
@@ -186,16 +186,15 @@ export default {
     IntroEditor,
     SkillEditor,
   },
-  created() {
-
+  mounted() {
     this.SELECT_Userdata();
     this.isMineCheck();
     this.isFollowCheck();
   },
   methods: {
     toStoryFilter(tech) {
-   this.$emit('toStoryFilter',tech)
- },
+      this.$emit('toStoryFilter',tech)
+    },
     async SELECT_Userdata() {
       this.toStory(true);
       this.userdata = await FirebaseService.SELECT_Userdata(this.$route.params.id);
@@ -231,9 +230,10 @@ export default {
       this.userdata[0].userIntro = intro;
 
     },
-    receiveSkill(skill) {
-      FirebaseService.UPDATE_userSkill(skill,this.$route.params.id);
-      this.userdata[0].userSkills = skill;
+    receiveSkill(selectList,unselectList) {
+      FirebaseService.UPDATE_userSkill(selectList,his.$route.params.id);
+      this.userdata[0].showSkillList = selectList;
+      this.userdata[0].userSkills = unselectList;
     },
     async receiveEdu(edu) {
       this.userEducations = await FirebaseService.SELECT_Userdata(this.$route.params.id);
@@ -257,7 +257,6 @@ export default {
     async follow(){
       var follower = await FirebaseService.SELECT_Userdata(this.$route.params.id);
       var following = await FirebaseService.SELECT_Userdata(this.$session.get('session_id'));
-      //console.log("this is test :: ", follower[0].followerlist, following[0].followinglist);
       await FirebaseService.follow(
         this.$route.params.id,
         this.$session.get('session_id'),
@@ -269,7 +268,6 @@ export default {
     async unfollow(){
       var follower = await FirebaseService.SELECT_Userdata(this.$route.params.id);
       var following = await FirebaseService.SELECT_Userdata(this.$session.get('session_id'));
-      //console.log("this is test :: ", follower[0].followerlist, following[0].followinglist);
       await FirebaseService.unfollow(
         this.$route.params.id,
         this.$session.get('session_id'),
@@ -335,16 +333,24 @@ export default {
     rmEducation(userEducations, e, userId, reload){
       this.reload = FirebaseService.DELETE_userEducations(userEducations, e, userId, reload);
     },
-
-
-
-    test(tmp){
-      console.log(tmp);
+    setFile() {
+      var file = document.querySelector('#file')
+      file.click();
     },
   },
+  computed: {
+      getReload() {
+          return this.$store.getters.getReload
+      }
+  },
   watch: {
-    'reload' : 'SELECT_Userdata'
-  }
+      getReload(val, oldVal) {
+          console.log('watched: ', val)
+          this.SELECT_Userdata();
+          console.log(this.userdata,"aaa")
+          console.log("왓치")
+      }
+  },
 
 };
 </script>

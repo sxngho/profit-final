@@ -1,6 +1,5 @@
 <template>
   <v-flex style=" padding: 10px 5px;">
-    <!-- <v-btn text @click="popdetail(project_id)"> -->
     <div @click="popdetail(project_id)">
       <v-img :src="projectimage" height="20vw"></v-img>
       <div>
@@ -8,8 +7,6 @@
         <div class="grey--text text-center">{{projectdescription}}</div>
       </div>
     </div>
-    <!-- </v-btn> -->
-
     <div style="float:right; margin-right:1vw;">
       <v-flex
         v-if="isMine"
@@ -45,6 +42,7 @@ export default {
     project_id: { type: String },
     project_writer: {type: String},
     index : {type:Number}, // 프로젝트의 인덱스
+
   },
   data: () => ({
     popol: false,
