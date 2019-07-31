@@ -300,18 +300,6 @@ export default {
         });
       });
   },
-
-  async SELECT_UserdataEmail(id) {
-    return firestore
-      .collection("users")
-      .where("email", "==", id)
-      .get()
-      .then(docSnapshots => {
-        return docSnapshots.docs.map(doc => {
-          return doc.data();
-        });
-      });
-  },
     // Function :: 특정 문자를 포함하는 유저들을 리스트로 묶어서 보냅니다.(seulgi)
     async SELECT_Usersdata(nickname) {
       return firestore.collection("users").where("nickname", ">=", nickname).limit(4).get().then(docSnapshots => {
