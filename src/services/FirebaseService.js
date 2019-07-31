@@ -289,6 +289,17 @@ export default {
         });
       });
   },
+  async SELECT_UserdataEmail(id) {
+    return firestore
+      .collection("users")
+      .where("email", "==", id)
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+          return doc.data();
+        });
+      });
+  },
 
   async SELECT_UserdataEmail(id) {
     return firestore
