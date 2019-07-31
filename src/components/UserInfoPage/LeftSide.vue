@@ -264,6 +264,16 @@ export default {
         following[0].followinglist
       );
       this.isFollowCheck();
+
+      var Json = new Object();
+      Json.session_id = this.$session.get('session_id')
+      Json.url = '/story/' + this.$session.get('session_id')
+      Json.user = this.$session.get('session_id')
+      // console.log(this.$route.params.id) // 내가 하고자 하는 사람
+      // console.log(follower) // 그 사람의 정보.
+
+      FirebaseService.INSERT_alert_Follow(this.$route.params.id, Json, follower[0])
+
     },
     async unfollow(){
       var follower = await FirebaseService.SELECT_Userdata(this.$route.params.id);

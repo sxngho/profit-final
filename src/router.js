@@ -17,6 +17,7 @@ import ReChat from "./components/Recruit/Chat.vue";
 import Consult from "./components/Recruit/Consult.vue";
 import Contract from "./components/Recruit/Contract.vue";
 import RecuritEditorPage from "./views/RecuritEditorPage.vue";
+import Alert from "./views/Alert.vue";
 import Company from "./views/Company.vue";
 
 Vue.use(Vuex);
@@ -104,6 +105,11 @@ export default new Router({
       path: "/recuriteditorpage",
       name: "recuriteditorpage",
       component: RecuritEditorPage
+    },
+    {
+      path: "/alert",
+      name: "alert",
+      component: Alert
     },
     {
       path: "/company",

@@ -35,9 +35,9 @@ export default {
   methods: {
     async SELECT_Project() {
       this.portfolioId = this.portfolio.project_id;
-      console.log("test");
-      console.log(this.portfolio);
-      console.log(this.portfolioId);
+      // console.log("test");
+      // console.log(this.portfolio);
+      // console.log(this.portfolioId);
       this.portfolioInfo = await FirebaseService.SELECT_Project(
         this.portfolio.project_id
       );

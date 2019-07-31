@@ -274,7 +274,7 @@
         selectRank(inputrank){
           this.projectrank = inputrank;
         },
-        submit(projecttitle,
+        async submit(projecttitle,
                projectdescription,
                projectterm,
                projectcontent,
