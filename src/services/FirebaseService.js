@@ -106,7 +106,7 @@ export default {
     },
 
     INSERT_alert_Project(alert_person, project, old) {
-      console.log(project)
+      // console.log(project)
       firestore.collection('users').doc(alert_person).get().then((docSnapshot) => {
         var old_alertlist = docSnapshot.data().alertlist
         old_alertlist.push({url:'/project/' + project.project_id, project_id:project.project_id, user:project.session_id, check:false})
@@ -735,6 +735,24 @@ export default {
       .update({
         followinglist: followinglist
       });
+  },
+
+  // Function : follow 활동을 하면 alertlist에 추가한다
+  // follower 가 follow 당한 사람의 데이터. follow 는 Json 형태
+  INSERT_alert_Follow(alert_person, follow, follower) {
+    console.log(alert_person)
+    console.log(follow)
+    console.log(follower)
+    firestore.collection('users').doc(alert_person).get().then((docSnapshot) => {
+      var old_alertlist = docSnapshot.data().alertlist
+      // console.log(old_alertlist, '떳냐')
+      old_alertlist.push({url:follow.url, message:`${follow.session_id}님이 팔로우함`, user:follow.user, check:false})
+      // console.log(old_alertlist, '바꼇냐')
+      firestore.collection('users').doc(alert_person).update({
+        alertlist:old_alertlist
+      })
+    })
+
   },
 
   // --------------------------------------------------------------------FOLLOW
