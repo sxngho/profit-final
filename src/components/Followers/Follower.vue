@@ -49,7 +49,7 @@ export default {
       this.user = await FirebaseService.SELECT_Userdata(this.follower);
       this.userName = this.user[0].userName;
       this.userImg = this.user[0].userImage;
-      console.log(this.user[0].userIntro);
+      // console.log(this.user[0].userIntro);
       this.userIntro = this.user[0].userIntro;
       // console.log(this.user[0].userImage);
     }
