@@ -949,7 +949,7 @@ export default {
       closingDate: recruitInfo.closingDate,
       recruitImage: recruitInfo.recruitImage
     });
-  }
+  },
 
   //
   // firestore.collection("projects").add({
@@ -960,4 +960,21 @@ export default {
   // });
   // --------------------------------------------------------------------recruit
   // ---------------------------------------------------------------------------------------------------------------------------------
+
+  // --------------------------------------------------------------------alert
+  // -------------------------------------------------------------------------------------
+
+  async alertcheck(alertlist, alertindex, user_id) {
+    return firestore.collection('users').doc(user_id).get().then(docSnapshot => {
+      var old_alertlist = docSnapshot.data().alertlist
+
+      old_alertlist[alertindex].check = true
+      firestore.collection('users').doc(user_id).update({
+        alertlist : old_alertlist
+      })
+      return true
+    })
+  }
+
+
 };
