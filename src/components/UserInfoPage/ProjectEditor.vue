@@ -272,7 +272,7 @@
         selectRank(inputrank){
           this.projectrank = inputrank;
         },
-        submit(projecttitle,
+        async submit(projecttitle,
                projectdescription,
                projectterm,
                projectcontent,
@@ -280,7 +280,7 @@
                projectimage,
                projectrank,
              session_id) {
-        FirebaseService.INSERT_Projects(
+        var projectdata = await FirebaseService.INSERT_Projects(
           this.projecttitle,
           this.projectdescription,
           this.projectterm,
@@ -288,7 +288,31 @@
           this.projecttech,
           this.projectimage,
           this.projectrank,
-        this.session_id);
+        this.session_id).then(function(result) {
+          var project_id = result.id
+          // console.log(result.id, '넘어왔으려나..')
+          // console.log(session_id, '넘어왔으려나2..')
+          // 여기에서 팔로우들에게 프로젝트를 생성했다고 알림을 보낼 것입니다.
+          var userdata = FirebaseService.SELECT_Userdata(session_id).then(function(result) {
+            var userdata_dic = result[0]
+            var user_followerlist = result[0].followerlist
+            // check, comment, project_id, url
+            // console.log(user_followerlist, 'alert 보내야 할 리스트 떳냐')
+            for (var i in user_followerlist) {
+
+              // console.log(userdata_dic, 'userdata 왓음..??')
+              var Json = new Object();
+              // /project/Cx8TiNE5JNzaMUb9loMu
+              Json.url = '/project/' + result.id
+              Json.project_title = result.projecttitle
+              Json.project_id = project_id
+              Json.session_id = session_id
+              // console.log(user_followerlist[i], '한명 떳냐')
+              FirebaseService.INSERT_alert_Project(user_followerlist[i], Json, userdata_dic)
+            }
+          })
+        })
+
         this.reload_userskill(this.session_id);
         this.showNotification('foo-css','success','업로드 성공','프로젝트가 정상적으로 수정되었습니다.')
         this.$emit('insert_success')

@@ -218,6 +218,8 @@ export default {
         Json.unlikecount = 0;
         Json.like = [];
         Json.unlike = [];
+        Json.url = document.location.pathname;
+        Json.session_id = this.user;
 
         // INSERT_alert_Comment  : 댓글을 달았을 때, 태그가 존재하면 해당 사람한테 alert 생기게함.
         for (var i in real_taglist) {

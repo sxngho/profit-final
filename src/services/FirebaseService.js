@@ -92,15 +92,28 @@ export default {
     },
 
     // Function :: 프로젝트를 작성합니다.
-    INSERT_Projects(projecttitle, projectdescription, projectterm, projectcontent,
+    async INSERT_Projects(projecttitle, projectdescription, projectterm, projectcontent,
       projecttech, projectimage, projectrank, session_id)
     {
-      firestore.collection("projects").add({
+      var projectdata = firestore.collection("projects").add({
         projecttitle, projectdescription, projectterm, projectcontent,
         projecttech, projectimage, projectrank, session_id,
         date: firebase.firestore.FieldValue.serverTimestamp(),
         comments: [], likeit: [], likeitcount:0,
       });
+      // return 생성 이유 : 프로젝트 만든 순간 follow한테 alert 보내려고 데이터 필요하기 때문.seulgil
+      return projectdata
+    },
+
+    INSERT_alert_Project(alert_person, project, old) {
+      console.log(project)
+      firestore.collection('users').doc(alert_person).get().then((docSnapshot) => {
+        var old_alertlist = docSnapshot.data().alertlist
+        old_alertlist.push({url:'/project/' + project.project_id, project_id:project.project_id, user:project.session_id, check:false})
+        firestore.collection('users').doc(alert_person).update({
+          alertlist:old_alertlist
+        })
+      })
     },
 
     UPDATE_Project(data, old, project_id) {
@@ -403,7 +416,7 @@ export default {
       firestore.collection('users').doc(alert_person).get().then((docSnapshot) => {
         var old_alertlist = docSnapshot.data().alertlist
         // console.log(old_alertlist, alert_person)
-        old_alertlist.push({type:1, project_id:project_id, check:false, comment:comment.Comment})
+        old_alertlist.push({url:comment.url, project_id:project_id, check:false, comment:comment.Comment, user:comment.session_id})
         firestore.collection('users').doc(alert_person).update({
           alertlist:old_alertlist
         })
@@ -417,7 +430,6 @@ export default {
         comments: old.comments
       });
     },
-
 
     DELETE_comment(project_id, comments, comment_index) {
       var old = comments;
