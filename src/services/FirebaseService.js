@@ -100,6 +100,7 @@ export default {
         projecttech, projectimage, projectrank, session_id,
         date: firebase.firestore.FieldValue.serverTimestamp(),
         comments: [], likeit: [], likeitcount:0,
+        state : 0, reportUserList : [],
       });
       // return 생성 이유 : 프로젝트 만든 순간 follow한테 alert 보내려고 데이터 필요하기 때문.seulgil
       return projectdata
@@ -123,6 +124,19 @@ export default {
       return firestore.collection("projects").doc(project_id).update({
         projecttitle: old.projecttitle, projectdescription: old.projectdescription, projectterm: old.projectterm,
         projectcontent: old.projectcontent, projecttech: old.projecttech, projectimage: old.projectimage, projectrank: old.projectrank
+      });
+    },
+
+
+    UPDATE_projectReportUserList(projectId,reportUserList) {
+      firestore.collection("projects").doc(projectId).update({
+        reportUserList: reportUserList,
+      });
+    },
+
+    UPDATE_projectState(projectId,projectStack) {
+      firestore.collection("projects").doc(projectId).update({
+        state : projectStack,
       });
     },
 
@@ -902,14 +916,49 @@ export default {
 
   async SELECT_AllReport() {
     return firestore
-      .collection("report")
+      .collection("reports")
       .get()
       .then(docSnapshots => {
         return docSnapshots.docs.map(doc => {
           let data = doc.data();
-          return data;
+          return {data: data, id : doc.id};
         });
       });
+  },
+
+  INSERT_projectReport(reportTitle,reportContent,projectId,reportUser,reportedUser,projecttitle,reportStack,tag) {
+    firestore.collection("reports").add({
+        reportTitle : reportTitle,
+        reportContent : reportContent,
+        projectId : projectId,
+        reportUser : reportUser, // 신고자
+        reportedUser : reportedUser, // 신고당한 유저
+        projecttitle : projecttitle,
+        state : false,
+        reportStack : reportStack,
+        tag : tag,
+        date: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+  },
+
+  DELETE_report(id) {
+    firestore.collection("reports").doc(id).delete();
+  },
+
+  async SELECT_Objections(projectId) {
+    return firestore.collection("reports").where("projectId","==",projectId).get().then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+          return {data : doc.data(), id : doc.id};
+        });
+      });
+  },
+  INSERT_Objection(projectId,projectTitle,projectState,tag) {
+    firestore.collection("reports").add({
+      projectTitle : projectTitle,
+      state : projectState,
+      tag : tag,
+      projectId : projectId,
+    });
   },
 
   // --------------------------------------------------------------------REPORT

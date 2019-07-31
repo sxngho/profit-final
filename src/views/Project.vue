@@ -5,12 +5,16 @@
       <v-btn icon to="/"/>
       <v-toolbar-title class="font-weight-medium">
          <span class="font-weight-bold">{{project.projecttitle}}</span>
-         <span class="font-weight-thin font-italic subheading">{{project.developer}}</span>
+         <span class="font-weight-thin font-italic subheading">{{project.session_id}}</span>
          <v-flex class="caption">
            {{ project.projectdescription }}
          </v-flex>
        </v-toolbar-title>
       <v-spacer/>
+
+      <v-btn text color="yellow" @click="submitObjection()" v-if="isMineCheck() && project.state > 0">
+        이의제기
+      </v-btn>
 
       <v-btn text icon color="pink">
         <i id="likecheck" class="far fa-heart fa-2x" @click="like_project()"></i>
@@ -20,6 +24,71 @@
       <v-btn text icon color="yellow">
         <i class="fa fa-star fa-2x"></i>
       </v-btn>
+      <template>
+      <v-layout justify-center d-inline>
+        <v-dialog v-model="sirendialog" max-width="290">
+
+          <template v-slot:activator="{ on }">
+            <v-btn text color="primary" dark v-on="on"><i class="fa fa-trash fa-2x"></i></v-btn>
+          </template>
+
+          <v-card>
+            <v-card-title class="headline">
+              <h4>헤더 (없어도 무방)</h4>
+            </v-card-title>
+            <v-card-text>
+              <h4>모달에 넣을 내용 (없어도 무방)</h4>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn text @click="sirendialog = false">버튼배치</v-btn>
+            </v-card-actions>
+          </v-card>
+
+        </v-dialog>
+      </v-layout>
+    </template>
+
+
+      <template>
+      <v-layout justify-center d-inline>
+        <v-dialog v-model="sirendialog" max-width="290">
+          <template v-slot:activator="{ on }">
+            <v-btn text color="primary" dark v-on="on"><i class="fa fa-trash fa-2x"></i></v-btn>
+          </template>
+
+          <v-card>
+            <v-card-title class="headline">
+              <span class="headline">신고하기</span>
+            </v-card-title>
+            <v-card-text>
+              <v-layout wrap>
+                <v-flex xs12>
+                  <v-combobox
+                  v-model="reportSelect"
+                  :items="reportItems"
+                  label="신고 사유를 선택해주세요."
+                  ></v-combobox>
+                </v-flex>
+                <v-flex xs12 v-if="reportSelect=='기타'">
+                  <input type="text" v-model="reportText"/>
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field v-model="reportDesc" @keyup.enter="sirendialog = false, submitReport(reportSelect,reportText,reportDesc)"></v-text-field>
+                </v-flex>
+              </v-layout>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" text @click="sirendialog = false">취소</v-btn>
+              <v-btn color="blue darken-1" text @click="sirendialog = false, submitReport(reportSelect,reportText,reportDesc)">신고하기</v-btn>
+              <br />
+            </v-card-actions>
+          </v-card>
+
+        </v-dialog>
+      </v-layout>
+    </template>
 
     </v-toolbar>
 
@@ -156,6 +225,7 @@ export default {
   name: "Project",
   data() {
     return {
+      sirendialog:false,
       project_id: "",
       project: "",
       user:"",
@@ -166,6 +236,17 @@ export default {
       likeit: [],
       tmp_taglist:[],
       real_taglist:[],
+      sirendialog: false,
+      reportSelect: 'Programming',
+      reportItems: [
+        'Programming',
+        'Design',
+        'Vue',
+        'Vuetify',
+        '기타',
+      ],
+      reportText: "",
+      reportDesc: "",
     }
   },
   components: {
@@ -188,6 +269,37 @@ export default {
          type,
        })
      },
+     async submitObjection() {
+       var objs = await FirebaseService.SELECT_Objections(this.project_id);
+       if ( objs.length == 0 ) { // 이의제기 신청을 하지 않았던 상태
+         FirebaseService.INSERT_Objection(this.project_id,this.project.projecttitle,this.project.state,"Objection");
+       } else {
+         alert("이미 이의제기 신청이 접수되어있습니다.")
+       }
+     },
+     isMineCheck() {
+       if ( this.user == this.project.session_id ) {
+         return true;
+       } else {
+         return false;
+       }
+     },
+    submitReport(reportSelect,reportText,reportDesc) {
+      var upperUser = this.$session.get('session_id').toUpperCase();
+      if ( !this.project.reportUserList.includes(upperUser) ) {
+        if ( reportSelect !== "기타" ) {
+          FirebaseService.INSERT_projectReport(reportSelect,reportDesc,this.project_id,this.$session.get('session_id')
+                                              ,this.project.session_id,this.project.projecttitle,this.project.state,"Siren");
+        } else {
+          FirebaseService.INSERT_projectReport(reportText,reportDesc,this.project_id,this.$session.get('session_id')
+                                              ,this.project.session_id,this.project.projecttitle,this.project.state,"Siren");
+        }
+        this.project.reportUserList.push(upperUser);
+        FirebaseService.UPDATE_projectReportUserList(this.project_id,this.project.reportUserList);
+      } else {
+        alert("이미 신고한 이력이 있는 프로젝트입니다..")
+      }
+    },
     async bindData(){
       this.$loading(true)
       this.project = await FirebaseService.SELECT_ProjectsByPcode(this.$route.params.pcode);

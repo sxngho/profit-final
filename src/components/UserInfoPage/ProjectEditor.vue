@@ -170,7 +170,6 @@
         </v-layout>
       </v-stepper-content>
 
-
     </v-stepper-items>
   </v-stepper>
 </template>
@@ -226,6 +225,9 @@
       },
     created() {
       this.getSessionid()
+      if(this.project_id != ''){
+        this.getProject()
+      }
     },
     methods: {
       showNotification (group, type ,title, text) {
@@ -280,42 +282,36 @@
                projectimage,
                projectrank,
              session_id) {
-        var projectdata = await FirebaseService.INSERT_Projects(
-          this.projecttitle,
-          this.projectdescription,
-          this.projectterm,
-          this.projectcontent,
-          this.projecttech,
-          this.projectimage,
-          this.projectrank,
-        this.session_id).then(function(result) {
-          var project_id = result.id
-          // console.log(result.id, '넘어왔으려나..')
-          // console.log(session_id, '넘어왔으려나2..')
-          // 여기에서 팔로우들에게 프로젝트를 생성했다고 알림을 보낼 것입니다.
-          var userdata = FirebaseService.SELECT_Userdata(session_id).then(function(result) {
-            var userdata_dic = result[0]
-            var user_followerlist = result[0].followerlist
-            // check, comment, project_id, url
-            // console.log(user_followerlist, 'alert 보내야 할 리스트 떳냐')
-            for (var i in user_followerlist) {
 
-              // console.log(userdata_dic, 'userdata 왓음..??')
-              var Json = new Object();
-              // /project/Cx8TiNE5JNzaMUb9loMu
-              Json.url = '/project/' + result.id
-              Json.project_title = result.projecttitle
-              Json.project_id = project_id
-              Json.session_id = session_id
-              // console.log(user_followerlist[i], '한명 떳냐')
-              FirebaseService.INSERT_alert_Project(user_followerlist[i], Json, userdata_dic)
-            }
-          })
-        })
-
-        this.reload_userskill(this.session_id);
-        this.showNotification('foo-css','success','업로드 성공','프로젝트가 정상적으로 수정되었습니다.')
-        this.$emit('insert_success')
+               if(this.project_id == '' || this.project_id == null || this.project_id == undefined){
+                 FirebaseService.INSERT_Projects(
+                   this.projecttitle,
+                   this.projectdescription,
+                   this.projectterm,
+                   this.projectcontent,
+                   this.projecttech,
+                   this.projectimage,
+                   this.projectrank,
+                   this.session_id);
+                 this.reload_userskill(this.session_id);
+                 this.showNotification('foo-css','success','업로드 성공','프로젝트가 정상적으로 업로드 되었습니다.')
+                 this.$emit('insert_success')
+               }else{
+                 var data = {'projecttitle':projecttitle,
+                 'projectdescription':projectdescription,
+                 'projectterm':projectterm,
+                 'projectcontent':projectcontent,
+                 'projecttech':projecttech,
+                 'projectimage':projectimage,
+                 'projectrank':projectrank }
+                 // console.log(this.project_id, '이게 나와야 한다')
+                 FirebaseService.UPDATE_Project(
+                   data, this.project, this.project_id);
+                this.reload_userskill(this.session_id)
+                this.showNotification('foo-css','success','업로드 성공','프로젝트가 정상적으로 수정되었습니다.')
+                // 여기여기
+                this.$emit('update_success')
+               }
         },
         async reload_userskill(session_id) {
           // console.log('asdasd')
@@ -350,13 +346,25 @@
             this.projectimage = success.data.link;
           })
           .catch();
-        }
+        },
+        async getProject() {
+          this.project = await FirebaseService.SELECT_Project(this.project_id)
+          var data = this.project
+          this.projectcontent = data.projectcontent
+          this.projectdescription = data.projectdescription
+          this.projectimage = data.projectimage
+          this.projectrank = data.projectrank
+          this.projectterm = data.projectterm
+          this.projecttech = data.projecttech
+          this.projecttitle = data.projecttitle
+
+        },
     },
     components: {
       VueEditor
     },
     props: {
-
+      project_id: { type: String }
      },
   };
 </script>

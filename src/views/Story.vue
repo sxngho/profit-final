@@ -97,7 +97,8 @@
               />
               <ProjectEditor v-if="stateAdd && !statedetail && !stateupdate" v-on:insert_success="gbp4" />
               <Project v-if="statedetail" :pcode="pcode" v-on:goBackpage="gbp" />
-              <ProjectUpdator v-if="stateupdate" :project_id="pcode2" v-on:goBackpage="gbp2" v-on:update_success="gbp3" />
+              <ProjectEditor v-if="stateupdate" :project_id="pcode2" v-on:goBackpage="gbp2" v-on:update_success="gbp3" />
+              <!-- <ProjectUpdator v-if="stateupdate" :project_id="pcode2" v-on:goBackpage="gbp2" v-on:update_success="gbp3" /> -->
               <!-- <v-btn @click="check_stateupdate(state)"></v-btn> -->
             </v-layout>
           </v-flex>

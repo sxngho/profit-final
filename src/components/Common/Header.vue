@@ -18,7 +18,7 @@
       </v-btn>
       <v-btn text class="font-bold-light" to="/Chat">chat</v-btn>
       <v-btn text class="font-bold-light" to="/Manager">Manager</v-btn>
-      <v-btn text class="font-bold-light" to="/companyIntro">Company</v-btn>
+      <v-btn text class="font-bold-light" to="/company">Company</v-btn>
     </v-toolbar-items>
   </v-toolbar>
 </template>
