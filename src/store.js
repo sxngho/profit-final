@@ -157,6 +157,7 @@ export default new Vuex.Store({
       state.showCompanyList = [];
     },
     showAllCompany: function(state, payload) {
+      state.showCompanyList = [];
       for (let i = 0; i < state.companyList.length; i++) {
         state.showCompanyList.push(state.companyList[i]);
       }
