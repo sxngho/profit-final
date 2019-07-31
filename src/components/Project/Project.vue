@@ -1,29 +1,26 @@
 <template>
   <div>
+    <v-btn @click="goBackpage()" text outlined> 뒤로가기 </v-btn>
+    <v-divider/>
+
     <v-layout>
-      <!-- 현재창입니다 -->
-      <!-- profile img -->
-      <v-btn @click="goBackpage()" text outlined> 뒤로가기 </v-btn>
-      <v-toolbar-title class="font-weight-medium">
-
+      <v-toolbar-title class="font-weight-medium" style="padding-left:10px;">
          <span class="font-weight-bold">{{project.projecttitle}} </span>
-
          <span class="font-weight-thin font-italic subheading">{{project.developer}}</span>
          <v-flex class="caption">
            {{ project.projectdescription }}
          </v-flex>
        </v-toolbar-title>
-      <v-spacer/>
 
+      <v-spacer/>
       <v-btn text icon color="pink">
         <i id="likecheck" class="far fa-heart fa-2x" @click="like_project()"></i>
-        {{likeitcount}}
+        {{likeit.length}}
         <!-- 이미 좋아요 눌렀다면 다른 fa 를 보여주는 것도 좋겠다. -->
       </v-btn>
       <v-btn text icon color="yellow">
         <i class="fa fa-star fa-2x"></i>
       </v-btn>
-
     </v-layout>
 
     <!-- card -->
@@ -116,10 +113,10 @@
                       <div style='display:inline-block;'>
                         &nbsp;
                         <i v-bind:id="[`commentlike_${index}`]" class="far fa-heart" style="color:red" @click="like_comment(com, index)"></i>
-                        {{com.likecount}}
+                        {{com.like.length}}
                         &nbsp;
                         <i v-bind:id="[`commentunlike_${index}`]" class="far fa-heart" @click="unlike_comment(com, index)"></i>
-                        {{com.unlikecount}}
+                        {{com.unlike.length}}
                         &nbsp;
                         <img v-if="com.User==user" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA3QAAAN0BcFOiBwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAVySURBVFiFpZdbbBtVGoC/c2bG43FiB5HAQuMWEAWppRel6S5IrVaBAuFSpCKQECDuFITYFxAPy2pZWsTuFi2qKA/cBeIBUYQAiVS9glAlLiqhlKYXoALUJk2ApS34NvbYM/PvQ3FqOx7H0Z6385///N/nOWfOHCsRYfP2/N89Xx4JAxzDZMLSesO1gx3P8H+00XF/BcgdoC4D4ojKotiBEWyYc1bsYDVPffp56arfsv6WbC6oK2Db6ohtGddffXliz0zABw8SS6aC9aLkwYiUd+b0mjdWO1pE/taVNEgljbosz5Nz8m6we2hbYWjTJhLtCiRTwXMt4BkVylO1AQ2cBdBMIgxFucVgZZncic3b83+eDj46EVwnSu6JgmuRwdmzreGRA8Wbd+/1Rke+8a7TAsPVjGYSABVfbEGtnk6AUP4SNRIiV6XT1q79X1duc4vqDc+T2X5ZPaUNrV6rzWwmYZnak3LH/dPgNYoVEWO/uhlr/8iB0r35QvB6GKIAKpXwAn3JUvsDhLdaSVT80BYz/34r+vc/0wNMfXxALhd2Z91SNl/g5SocQARDA4gfPgzkWkm4pXDF+9vyW6MEJEcGqDSBk8mG1IJPNRVqgGXLEhMgaxqHGyWKxXBwaFthqJnA3Ll4wHfN4FHNinFEVztl13kWxT4ABZMHxZQnUQxWbtqWe6+x2OiE/zgwr104gGUaz08KDAzg+8i1KO7y3PhiYG2dROcpiUJRVm3a7r5dA/8HwpqZwONxvW/RfPNpJSKRSZ9+XloDPF7tZ7IB2fypEzPh6HcXLYh/peCJmcDtuPrWMe2l8+eTbykwnUR6lsXsXmsytxFumcqr+GJX+zGL41ZMP7/4othj1di0AlESqZRuCXcctbNvoT2waxepWHc53Tc3dgjwG2u3JdAokUpqUqnJ7RMJb6du2wIAnw2X/tXZqR/tagG3TI79cUn8jHZrmm3TgfQss1Cr22zD/TBa7hn/yR9zjM4/DQ7y43Q19XQJ1TY67j8q8GQr+NhEGQCvHKbPfmHd2Lcr1z7BNC1yCb47QWru6biAP3rU/yuKf0fBbVvx31/8ybdj3kvr6dmyEYXCIfbMabL3obYExn4MVkkoq4GT1ygoAt8Afa3gnneyRiYb0Lv+P/Rs2VgHsYnt7qZ7OfJRqanA4cPEtVV5EdTtUabN4PG4Gi2VZE6137P1Q/6w5jEK4k6Za2FmHIzlnbJ3f21cAygrWD9TuOOonUsW2eeh2FGFn792HUlx6MCZMr+C31Wg/FVGLbyiTuDwUX9AIQ/MFP77ex6WdeWWnq07jp+/dh0qPJmTJEEChwwBAaeWOECMIv7WrOq7ZlJAK7lzJnDLVF7tITPQnzzW8fWhh9C67pWwMfERxinXSYSIdikN5VTfKgB15GhlDEi3AwdQCmI63tHfT91CB2rZagUv1cZ+JccELgUCeolh1NxJDLTfSSqtYcqCCZCL+qqJgG3T3Rg35JOXgVdrY6eRZBYJOjCmPImA0CzhbtaIytbMyWvh0mLe7M3lw8gzesECxpvFNbEHgS+rfdVEorZogD9Pi2JLFY7m6nTa3On5pZua3+EgFtPHgeYffPmopAlvAI43SvSSoBOjcVPGtYm/AXhHFINzzjY/3n+wcrdbrF/L2mZZvBI1dlLis8Oa8Ergt0aJeZxJV82fLBNdfyEZOVC5wy0Gr0X9ettWR/oX2+e2FJikLl8aIh8AXY1DOVwKFIljb6z7GFX88J9R8Hhc7cEpL20LDiAff6HhCmCscShJghQde05n5NY6AcvmAcfRw5als1orsUxVtG11KJky7luyyF7Sf2HyWNsCAPLJsMZbCGwA9gEngDcFbuxEXYxI+D+6CroL3crOgwAAAABJRU5ErkJggg==" alt="Smiley" style="cursor: pointer; height:20px; display:inline-block;"
                         @click="UPDATE_comment(comments, index)">
@@ -171,7 +168,7 @@ export default {
     comment:"",
     update_comment: false,
     update_commenttext:'',
-    likeitcount: 0,
+    likeit: [],
     tmp_taglist:[],
     real_taglist:[],
   }
@@ -200,11 +197,12 @@ export default {
     async bindData(){
       this.$loading(true)
       this.project = await FirebaseService.SELECT_ProjectsByPcode(this.project_id);
-      this.likeitcount = this.project.likeitcount
+      this.likeit = this.project.likeit
       this.$loading(false)
     },
     // seulgi function
     async INSERT_Comment(real_taglist, comment){
+
       if (this.user) {
         var listtext = ''
         for (var j in real_taglist) {
@@ -214,27 +212,26 @@ export default {
         var Json = new Object();
         Json.Comment = listtext + this.comment;
         Json.User = this.user;
-        Json.likecount = 0;
-        Json.unlikecount = 0;
         Json.like = [];
         Json.unlike = [];
 
-        // INSERT_alert_Comment  : 댓글을 달았을 때, 태그가 존재하면 해당 사람한테 alert 생기게함.
-        for (var i in real_taglist) {
-          FirebaseService.INSERT_alert_Comment(real_taglist[i], Json, this.projectData, this.project_id);
-        }
-
         // INSERT_Comment : 프로젝트의 댓글들에 댓글 추가.
-        FirebaseService.INSERT_Comment(real_taglist[i], Json, this.projectData, this.project_id);
+        FirebaseService.INSERT_Comment(Json, this.projectData, this.project_id);
 
+        if (real_taglist.length) {
+          Json.url = '/project/' + this.project_id
+          Json.session_id = this.user;
+          for (var i in real_taglist) {
+            // INSERT_alert_Comment  : 댓글을 달았을 때, 태그가 존재하면 해당 사람한테 alert 생기게함.
+            FirebaseService.INSERT_alert_Comment(real_taglist[i], Json, this.projectData, this.project_id);
+          }
+        }
         // 비동기적으로 댓글 추가
         const newcommnet = {
         User : this.user,
         Comment : listtext + this.comment,
         like : [],
         unlike : [],
-        likecount : 0,
-        unlikecount : 0,
         };
         this.comments.push(newcommnet)
       } else {
@@ -278,18 +275,16 @@ export default {
     },
     async like_project() {
       if (this.user) {
-        var result = await FirebaseService.like_project(this.user, this.pcode, this.project.likeit, this.likeitcount)
+        var result = await FirebaseService.like_project(this.user, this.pcode, this.project.likeit)
         var userdata = await FirebaseService.SELECT_Userdata(this.user)
         var heart = document.querySelector('#likecheck')
         // console.log()
         if (userdata[0].likeitProject.includes(this.project_id)) {
           heart.classList.remove('fa')
           heart.classList.add('far')
-          this.likeitcount -=1
         } else {
           heart.classList.remove('far')
           heart.classList.add('fa')
-          this.likeitcount +=1
         }
       }
     },

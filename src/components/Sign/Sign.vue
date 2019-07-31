@@ -68,10 +68,6 @@
     >{{user}}</v-btn>
 
     <v-btn text @click="Logout()" v-if="user!=='' && user!==undefined" style="height:100%;">Log Out</v-btn>
-    <v-btn text>
-      <i class="fa fa-globe" aria-hidden="true"></i>
-      <!-- 여기에 알람을 넣어야하나.. -->
-    </v-btn>
   </div>
 </template>
 
@@ -94,7 +90,7 @@ export default {
 
     signupforuser: false,
     signupforcompany: false,
-    Level: ""
+    Level: "",
   }),
   components: {
     SignupforCompanyModal,
@@ -200,7 +196,7 @@ export default {
         `회원가입 완료!`,
         `로그인 해주세요!`
       );
-    }
+    },
   }
 };
 </script>

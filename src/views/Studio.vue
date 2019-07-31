@@ -92,7 +92,7 @@ export default {
       window.open(
         "../chat/" + curl,
         "name(이름지정)",
-        "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=700,height=600"
+        "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=1000,height=600"
       );
     },
 

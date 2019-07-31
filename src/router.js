@@ -18,6 +18,8 @@ import Consult from "./components/Recruit/Consult.vue";
 import Contract from "./components/Recruit/Contract.vue";
 import RecuritEditorPage from "./views/RecuritEditorPage.vue";
 import CompanyListPage from "./views/CompanyListPage.vue";
+import Alert from "./views/Alert.vue";
+import Company from "./views/Company.vue";
 
 Vue.use(Vuex);
 Vue.use(store);
@@ -41,7 +43,7 @@ export default new Router({
       component: Story
     },
     {
-      path: "/companyIntro/:id",
+      path: "/companyIntro/",
       name: "companyIntro",
       component: CompanyIntro
     },
@@ -104,6 +106,16 @@ export default new Router({
       path: "/recuriteditorpage",
       name: "recuriteditorpage",
       component: RecuritEditorPage
+    },
+    {
+      path: "/alert",
+      name: "alert",
+      component: Alert
+    },
+    {
+      path: "/company/:id",
+      name: "company",
+      component: Company
     },
     {
       path: "/companyListPage",

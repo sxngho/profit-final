@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="{name : 'companyIntro', params: { id: user }}">
+  <router-link :to="{name : 'company', params: { id: propsData }}">
     <button class="company__container">
       <div class="company__content">
         <div class="companyImage">
@@ -18,15 +18,6 @@ export default {
     return {
       user: ""
     };
-  },
-  created() {
-    this.fetchData();
-  },
-  methods: {
-    async fetchData() {
-      let session = this.$session.get("session_id");
-      this.user = session;
-    }
   }
 };
 </script>

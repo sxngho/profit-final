@@ -170,7 +170,6 @@
         </v-layout>
       </v-stepper-content>
 
-
     </v-stepper-items>
   </v-stepper>
 </template>
@@ -226,6 +225,9 @@
       },
     created() {
       this.getSessionid()
+      if(this.project_id != ''){
+        this.getProject()
+      }
     },
     methods: {
       showNotification (group, type ,title, text) {
@@ -272,7 +274,7 @@
         selectRank(inputrank){
           this.projectrank = inputrank;
         },
-        submit(projecttitle,
+        async submit(projecttitle,
                projectdescription,
                projectterm,
                projectcontent,
@@ -280,18 +282,36 @@
                projectimage,
                projectrank,
              session_id) {
-        FirebaseService.INSERT_Projects(
-          this.projecttitle,
-          this.projectdescription,
-          this.projectterm,
-          this.projectcontent,
-          this.projecttech,
-          this.projectimage,
-          this.projectrank,
-        this.session_id);
-        this.reload_userskill(this.session_id);
-        this.showNotification('foo-css','success','업로드 성공','프로젝트가 정상적으로 수정되었습니다.')
-        this.$emit('insert_success')
+
+               if(this.project_id == '' || this.project_id == null || this.project_id == undefined){
+                 FirebaseService.INSERT_Projects(
+                   this.projecttitle,
+                   this.projectdescription,
+                   this.projectterm,
+                   this.projectcontent,
+                   this.projecttech,
+                   this.projectimage,
+                   this.projectrank,
+                   this.session_id);
+                 this.reload_userskill(this.session_id);
+                 this.showNotification('foo-css','success','업로드 성공','프로젝트가 정상적으로 업로드 되었습니다.')
+                 this.$emit('insert_success')
+               }else{
+                 var data = {'projecttitle':projecttitle,
+                 'projectdescription':projectdescription,
+                 'projectterm':projectterm,
+                 'projectcontent':projectcontent,
+                 'projecttech':projecttech,
+                 'projectimage':projectimage,
+                 'projectrank':projectrank }
+                 // console.log(this.project_id, '이게 나와야 한다')
+                 FirebaseService.UPDATE_Project(
+                   data, this.project, this.project_id);
+                this.reload_userskill(this.session_id)
+                this.showNotification('foo-css','success','업로드 성공','프로젝트가 정상적으로 수정되었습니다.')
+                // 여기여기
+                this.$emit('update_success')
+               }
         },
         async reload_userskill(session_id) {
           // console.log('asdasd')
@@ -326,13 +346,25 @@
             this.projectimage = success.data.link;
           })
           .catch();
-        }
+        },
+        async getProject() {
+          this.project = await FirebaseService.SELECT_Project(this.project_id)
+          var data = this.project
+          this.projectcontent = data.projectcontent
+          this.projectdescription = data.projectdescription
+          this.projectimage = data.projectimage
+          this.projectrank = data.projectrank
+          this.projectterm = data.projectterm
+          this.projecttech = data.projecttech
+          this.projecttitle = data.projecttitle
+
+        },
     },
     components: {
       VueEditor
     },
     props: {
-
+      project_id: { type: String }
      },
   };
 </script>

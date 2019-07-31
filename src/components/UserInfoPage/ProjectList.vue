@@ -3,7 +3,7 @@
   <v-container>
     <v-layout wrap justify-center>
       <v-flex
-        v-for="i in projects.length > max_project ? max_project : projects.length" xs12 sm6 lg4 v-if="filtering(i,techfilter) && layout==1 "
+        v-for="i in projects.length > max_project ? max_project : projects.length" xs12 sm6 lg4 v-if="projects[i-1].data.state < 3 &&filtering(i,techfilter) && layout==1 "
         style="padding:10px 5px;" v-bind:class="[`project_${i-1}`]">
 
         <ProjectDetail v-on:popdetail="toStory"
