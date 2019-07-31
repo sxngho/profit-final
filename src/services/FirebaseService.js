@@ -83,45 +83,84 @@ export default {
       });
   },
 
-    // Function :: 프로젝트 디테일을 project_id로 가져옵니다
-    async SELECT_ProjectsByPcode(pcode) {
-      return firestore.collection("projects").doc(pcode).get().then(docSnapshots => {
+  // Function :: 프로젝트 디테일을 project_id로 가져옵니다
+  async SELECT_ProjectsByPcode(pcode) {
+    return firestore
+      .collection("projects")
+      .doc(pcode)
+      .get()
+      .then(docSnapshots => {
         // console.log(docSnapshots.data())
         return docSnapshots.data();
       });
-    },
+  },
 
-    // Function :: 프로젝트를 작성합니다.
-    INSERT_Projects(projecttitle, projectdescription, projectterm, projectcontent,
-      projecttech, projectimage, projectrank, session_id)
-    {
-      firestore.collection("projects").add({
-        projecttitle, projectdescription, projectterm, projectcontent,
-        projecttech, projectimage, projectrank, session_id,
-        date: firebase.firestore.FieldValue.serverTimestamp(),
-        comments: [], likeit: [], likeitcount:0,
+  // Function :: 프로젝트를 작성합니다.
+  INSERT_Projects(
+    projecttitle,
+    projectdescription,
+    projectterm,
+    projectcontent,
+    projecttech,
+    projectimage,
+    projectrank,
+    session_id
+  ) {
+    firestore.collection("projects").add({
+      projecttitle,
+      projectdescription,
+      projectterm,
+      projectcontent,
+      projecttech,
+      projectimage,
+      projectrank,
+      session_id,
+      date: firebase.firestore.FieldValue.serverTimestamp(),
+      comments: [],
+      likeit: [],
+      likeitcount: 0
+    });
+  },
+
+  UPDATE_Project(data, old, project_id) {
+    old.projecttitle = data.projecttitle;
+    old.projectdescription = data.projectdescription;
+    old.projectterm = data.projectterm;
+    old.projectcontent = data.projectcontent;
+    old.projecttech = data.projecttech;
+    old.projectimage = data.projectimage;
+    old.projectrank = data.projectrank;
+    alert("수정이 완료되었습니다.");
+    return firestore
+      .collection("projects")
+      .doc(project_id)
+      .update({
+        projecttitle: old.projecttitle,
+        projectdescription: old.projectdescription,
+        projectterm: old.projectterm,
+        projectcontent: old.projectcontent,
+        projecttech: old.projecttech,
+        projectimage: old.projectimage,
+        projectrank: old.projectrank
       });
-    },
+  },
 
-    UPDATE_Project(data, old, project_id) {
-      old.projecttitle = data.projecttitle; old.projectdescription = data.projectdescription; old.projectterm = data.projectterm;
-      old.projectcontent = data.projectcontent; old.projecttech = data.projecttech; old.projectimage = data.projectimage; old.projectrank = data.projectrank;
-      alert("수정이 완료되었습니다.");
-      return firestore.collection("projects").doc(project_id).update({
-        projecttitle: old.projecttitle, projectdescription: old.projectdescription, projectterm: old.projectterm,
-        projectcontent: old.projectcontent, projecttech: old.projecttech, projectimage: old.projectimage, projectrank: old.projectrank
+  DELETE_project(project_id) {
+    firestore
+      .collection("projects")
+      .doc(project_id)
+      .delete();
+  },
+
+  async amount_Projects(user) {
+    return firestore
+      .collection("projects")
+      .where("session_id", "==", user)
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.size;
       });
-    },
-
-    DELETE_project(project_id) {
-      firestore.collection("projects").doc(project_id).delete();
-    },
-
-    async amount_Projects(user) {
-      return firestore.collection('projects').where('session_id','==',user).get().then(docSnapshots => {
-        return docSnapshots.size
-      })
-    },
+  },
   // --------------------------------------------------------------------PROJECT
   // ---------------------------------------------------------------------------------------------------------------------------------
 
@@ -300,39 +339,54 @@ export default {
         });
       });
   },
-    // Function :: 특정 문자를 포함하는 유저들을 리스트로 묶어서 보냅니다.(seulgi)
-    async SELECT_Usersdata(nickname) {
-      return firestore.collection("users").where("nickname", ">=", nickname).limit(4).get().then(docSnapshots => {
-        return docSnapshots
-    });
+  // Function :: 특정 문자를 포함하는 유저들을 리스트로 묶어서 보냅니다.(seulgi)
+  async SELECT_Usersdata(nickname) {
+    return firestore
+      .collection("users")
+      .where("nickname", ">=", nickname)
+      .limit(4)
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots;
+      });
   },
 
   // Function :: 특정 문자를 포함하는 유저들을 리스트로 묶어서 보냅니다.(seulgi)
   async SELECT_UserSkillByNickname(nickname) {
-    return firestore.collection("users").where("nickname", "==", nickname).get().then(docSnapshots => {
-      return docSnapshots.docs.map(doc => {
-        // console.log(doc.data())
-        return { us : doc.data().userSkills , ss : doc.data().showSkillList };
-      });
-  });
-},
-    // Function :: 유저의 정보를 가져옵니다.
-    async SELECT_AllUserdata() {
-      return firestore.collection("users").get().then(docSnapshots => {
-          return docSnapshots.docs.map(doc => {
-            let data = doc.data();
-            return { level : data.level , name : data.email };
-          });
+    return firestore
+      .collection("users")
+      .where("nickname", "==", nickname)
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+          // console.log(doc.data())
+          return { us: doc.data().userSkills, ss: doc.data().showSkillList };
         });
-    },
+      });
+  },
+  // Function :: 유저의 정보를 가져옵니다.
+  async SELECT_AllUserdata() {
+    return firestore
+      .collection("users")
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+          let data = doc.data();
+          return { level: data.level, name: data.email };
+        });
+      });
+  },
 
-    // Function :: 유저 정보를 가져옵니다
-    async SELECT_ALLUser(){
-      return firestore.collection("users").get().then(docSnapshots => {
-          return docSnapshots.docs.map(doc => {
-            let data = doc.data();
-            return data;
-          });
+  // Function :: 유저 정보를 가져옵니다
+  async SELECT_ALLUser() {
+    return firestore
+      .collection("users")
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+          let data = doc.data();
+          return data;
+        });
       });
   },
 
@@ -394,35 +448,52 @@ export default {
       .then(docSnapshots => {
         return docSnapshots.data().comments;
       });
-    },
+  },
 
-    // Function :: 댓글을 프로젝트 안의 댓글들 이라는 요소에 추가합니다.
-    // INSERT_alert_Comment, INSERT_Comment 안에 들어가는 요소들이 모두 필요하지는 않지만,
-    // 어떻게 수정될 지 모르는 상황이므로 일단 추가적으로 줄이지는 않겠습니다.
-    INSERT_alert_Comment(alert_person, comment, old, project_id) {
-      firestore.collection('users').doc(alert_person).get().then((docSnapshot) => {
-        var old_alertlist = docSnapshot.data().alertlist
+  // Function :: 댓글을 프로젝트 안의 댓글들 이라는 요소에 추가합니다.
+  // INSERT_alert_Comment, INSERT_Comment 안에 들어가는 요소들이 모두 필요하지는 않지만,
+  // 어떻게 수정될 지 모르는 상황이므로 일단 추가적으로 줄이지는 않겠습니다.
+  INSERT_alert_Comment(alert_person, comment, old, project_id) {
+    firestore
+      .collection("users")
+      .doc(alert_person)
+      .get()
+      .then(docSnapshot => {
+        var old_alertlist = docSnapshot.data().alertlist;
         // console.log(old_alertlist, alert_person)
-        old_alertlist.push({type:1, project_id:project_id, check:false, comment:comment.Comment})
-        firestore.collection('users').doc(alert_person).update({
-          alertlist:old_alertlist
-        })
+        old_alertlist.push({
+          type: 1,
+          project_id: project_id,
+          check: false,
+          comment: comment.Comment
+        });
+        firestore
+          .collection("users")
+          .doc(alert_person)
+          .update({
+            alertlist: old_alertlist
+          });
         // console.log(old_alertlist, alert_person)
-      })
-    },
+      });
+  },
 
-    INSERT_Comment(alert_person, comment, old, project_id) {
-      old.comments.push(comment);
-      return firestore.collection("projects").doc(project_id).update({
+  INSERT_Comment(alert_person, comment, old, project_id) {
+    old.comments.push(comment);
+    return firestore
+      .collection("projects")
+      .doc(project_id)
+      .update({
         comments: old.comments
       });
-    },
+  },
 
-
-    DELETE_comment(project_id, comments, comment_index) {
-      var old = comments;
-      old.splice(comment_index, 1);
-      return firestore.collection("projects").doc(project_id).update({
+  DELETE_comment(project_id, comments, comment_index) {
+    var old = comments;
+    old.splice(comment_index, 1);
+    return firestore
+      .collection("projects")
+      .doc(project_id)
+      .update({
         comments: old
       });
   },
@@ -760,8 +831,7 @@ export default {
             .doc(project_id)
             .update({
               likeit: like_users,
-              likeitcount:likeitcount -=1
-
+              likeitcount: (likeitcount -= 1)
             });
         });
     } else {
@@ -784,7 +854,7 @@ export default {
             .doc(project_id)
             .update({
               likeit: like_users,
-              likeitcount:likeitcount +=1
+              likeitcount: (likeitcount += 1)
             });
         });
     }
@@ -849,27 +919,30 @@ export default {
   // --------------------------------------------------------------------LIKE
   // ---------------------------------------------------------------------------------------------------------------------------------
 
-    async reload_userskill(userId,projects,showlist) {
-      let a = new Set([]);
-      for(let i=0; i<projects.length; i++) {
-        let b = new Set(projects[i].data.projecttech);
-        a = new Set([...a, ...b]);
-      }
-      var arr = Array.from(a);
-      for(var i in arr) {
-        arr[i] = arr[i].toUpperCase();
-      }
+  async reload_userskill(userId, projects, showlist) {
+    let a = new Set([]);
+    for (let i = 0; i < projects.length; i++) {
+      let b = new Set(projects[i].data.projecttech);
+      a = new Set([...a, ...b]);
+    }
+    var arr = Array.from(a);
+    for (var i in arr) {
+      arr[i] = arr[i].toUpperCase();
+    }
 
-      var showarr = new Array();
-      for(var i in showlist) {
-        if(arr.includes(showlist[i])) {
-          showarr.push(showlist[i])
-        }
+    var showarr = new Array();
+    for (var i in showlist) {
+      if (arr.includes(showlist[i])) {
+        showarr.push(showlist[i]);
       }
+    }
 
-      firestore.collection("users").doc(userId).update({
-        userSkills : arr,
-        showSkillList : showarr
+    firestore
+      .collection("users")
+      .doc(userId)
+      .update({
+        userSkills: arr,
+        showSkillList: showarr
       });
   },
 
@@ -919,14 +992,14 @@ export default {
     return firestore.collection("recruitInfo").add({
       category: recruitInfo.category,
       projectTitle: recruitInfo.projectTitle,
-      startDay: recruitInfo.startDay,
+      createDay: recruitInfo.createDay,
       endDay: recruitInfo.endDay,
       budget: recruitInfo.budget,
       projectSummary: recruitInfo.projectSummary,
       projectContent: recruitInfo.projectContent,
-      selectTechList: recruitInfo.selectTechList,
+      requiredSkills: recruitInfo.requiredSkills,
       closingDate: recruitInfo.closingDate,
-      recruitImage: recruitInfo.recruitImage
+      companyId: recruitInfo.session_id
     });
   }
 

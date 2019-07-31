@@ -21,7 +21,7 @@
       </div>
       <div class="duration__content contentBox">
         <div class="duration__title titleBox">예상 기간</div>
-        <div class="duration__input inputBox">{{this.startDay}}&nbsp~&nbsp{{this.endDay}}</div>
+        <div class="duration__input inputBox">{{this.createDay}}&nbsp~&nbsp{{this.endDay}}</div>
       </div>
       <v-date-picker v-model="endDay" color="purple lighten-1"></v-date-picker>
 
@@ -68,19 +68,6 @@
           <v-autocomplete v-model="closingDate" :items="closingDateList"></v-autocomplete>
         </div>
       </div>
-      <div class="imageUploader__content contentBox">
-        <div class="imageUploader__title titleBox">기업 로고 사진 등록</div>
-        <div class="imageUploader__input inputBox" style="width:550px; height:250px">
-          <div v-if="!recruitImage">
-            <input type="file" @change="onFileChange" />
-          </div>
-          <div v-else>
-            <img :src="recruitImage" width="200px" height="200px" />
-            <br />
-            <v-btn @click="removeImage">삭제</v-btn>
-          </div>
-        </div>
-      </div>
       <button
         style="margin-left:350px; margin-top:50px; background:blueviolet; color:white; width:50px; height:30px"
         @click="submit"
@@ -113,7 +100,7 @@ export default {
       projectContent: "",
       projectSummary: "",
       endDay: new Date().toISOString().substr(0, 10),
-      startDay: new Date().toISOString().slice(0, 10),
+      createDay: new Date().toISOString().slice(0, 10),
       techName: "",
       showTechList: [],
       user: "",
@@ -166,16 +153,17 @@ export default {
       const recruitInfo = {
         category: this.category,
         projectTitle: this.projectTitle,
-        startDay: this.startDay,
+        createDay: this.createDay,
         endDay: this.endDay,
         budget: this.budget,
         projectSummary: this.projectSummary,
         projectContent: this.projectContent,
-        selectTechList: this.$store.state.selectTechList,
+        requiredSkills: this.$store.state.requiredSkills,
         closingDate: this.closingDate,
-        session_id: this.user,
-        recruitImage: this.recruitImage
+        session_id: this.user
       };
+      console.log("infotest");
+      console.log(recruitInfo);
       if (this.$session.get("session_id")) {
         var result = await FirebaseService.INSERT_recruitInfo(recruitInfo);
         this.showNotification(
@@ -188,34 +176,6 @@ export default {
       } else {
         alert("권한이 없습니다.");
       }
-    },
-    removeImage() {
-      this.recruitImage = "";
-    },
-    onFileChange(e) {
-      // file 세팅
-      let files = e.target.files || e.dataTransfer.files;
-      if (!files.length) {
-        return;
-      }
-      const apiUrl = "https://api.imgur.com/3/image";
-      let data = new FormData();
-      let content = {
-        method: "POST",
-        headers: {
-          Authorization: "Client-ID f96b8964f338658",
-          Accept: "application/json"
-        },
-        body: data,
-        mimeType: "multipart/form-data"
-      };
-      data.append("image", files[0]);
-      fetch(apiUrl, content)
-        .then(response => response.json())
-        .then(success => {
-          this.recruitImage = success.data.link;
-        })
-        .catch();
     }
   }
 };

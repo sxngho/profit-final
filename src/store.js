@@ -19,10 +19,39 @@ export default new Vuex.Store({
     techFilterList: [],
     allPortfolioList: [],
     showPortfolioList: [],
-    techList: ["vue", "javascript", "jquery", "java", "c", "c++", "react"],
+    techList: [
+      "vue",
+      "javascript",
+      "jquery",
+      "java",
+      "c",
+      "c++",
+      "react",
+      "python",
+      "spring",
+      "django",
+      "node.js",
+      "express"
+    ],
     showTechList: [],
-    selectTechList: [],
-    reload : true,
+    requiredSkills: [],
+    reload: true,
+    companyList: [
+      "ssafy",
+      "samsung",
+      "lg",
+      "sk",
+      "kia",
+      "random",
+      "random",
+      "random",
+      "random",
+      "random",
+      "random",
+      "random",
+      "random"
+    ],
+    showCompanyList: []
   },
   // Getter : get 함수 정의
   // 정의 -> return state.변수명
@@ -36,8 +65,7 @@ export default new Vuex.Store({
     },
     getReload: function(state) {
       return state.reload;
-    },
-
+    }
   },
 
   // Mutations : 값변경 / 동기
@@ -113,10 +141,25 @@ export default new Vuex.Store({
       state.showTechList = payload;
     },
     addTechList: function(state, payload) {
-      state.selectTechList.push(payload);
+      state.requiredSkills.push(payload);
     },
     deleteTechList: function(state, payload) {
-      state.selectTechList.splice(payload, 1);
+      state.requiredSkills.splice(payload, 1);
+    },
+    filterCompany: function(state, payload) {
+      for (let i = 0; i < state.companyList.length; i++) {
+        if (state.companyList[i] === payload) {
+          state.showCompanyList.push(state.companyList[i]);
+        }
+      }
+    },
+    clearShowCompanyList: function(state, payload) {
+      state.showCompanyList = [];
+    },
+    showAllCompany: function(state, payload) {
+      for (let i = 0; i < state.companyList.length; i++) {
+        state.showCompanyList.push(state.companyList[i]);
+      }
     }
   },
 

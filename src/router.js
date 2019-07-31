@@ -41,7 +41,7 @@ export default new Router({
       component: Story
     },
     {
-      path: "/companyIntro",
+      path: "/companyIntro/:id",
       name: "companyIntro",
       component: CompanyIntro
     },
