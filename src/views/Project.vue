@@ -27,32 +27,6 @@
       <template>
       <v-layout justify-center d-inline>
         <v-dialog v-model="sirendialog" max-width="290">
-
-          <template v-slot:activator="{ on }">
-            <v-btn text color="primary" dark v-on="on"><i class="fa fa-trash fa-2x"></i></v-btn>
-          </template>
-
-          <v-card>
-            <v-card-title class="headline">
-              <h4>헤더 (없어도 무방)</h4>
-            </v-card-title>
-            <v-card-text>
-              <h4>모달에 넣을 내용 (없어도 무방)</h4>
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn text @click="sirendialog = false">버튼배치</v-btn>
-            </v-card-actions>
-          </v-card>
-
-        </v-dialog>
-      </v-layout>
-    </template>
-
-
-      <template>
-      <v-layout justify-center d-inline>
-        <v-dialog v-model="sirendialog" max-width="290">
           <template v-slot:activator="{ on }">
             <v-btn text color="primary" dark v-on="on"><i class="fa fa-trash fa-2x"></i></v-btn>
           </template>
@@ -74,7 +48,7 @@
                   <input type="text" v-model="reportText"/>
                 </v-flex>
                 <v-flex xs12>
-                  <v-text-field v-model="reportDesc" @keyup.enter="sirendialog = false, submitReport(reportSelect,reportText,reportDesc)"></v-text-field>
+                  <v-text-field v-model="reportDesc" required @keyup.enter="sirendialog = false, submitReport(reportSelect,reportText,reportDesc)"></v-text-field>
                 </v-flex>
               </v-layout>
             </v-card-text>
@@ -274,7 +248,7 @@ export default {
        if ( objs.length == 0 ) { // 이의제기 신청을 하지 않았던 상태
          FirebaseService.INSERT_Objection(this.project_id,this.project.projecttitle,this.project.state,"Objection");
        } else {
-         alert("이미 이의제기 신청이 접수되어있습니다.")
+        this.showNotification('foo-css','error','이의제기 신청 오류','이미 이의제기 신청이 접수되어있습니다.')
        }
      },
      isMineCheck() {
@@ -297,8 +271,11 @@ export default {
         this.project.reportUserList.push(upperUser);
         FirebaseService.UPDATE_projectReportUserList(this.project_id,this.project.reportUserList);
       } else {
-        alert("이미 신고한 이력이 있는 프로젝트입니다..")
+        this.showNotification('foo-css','error','프로젝트 신고 오류','이미 신고한 이력이 있는 프로젝트입니다.')
       }
+      this.reportSelect = "";
+      this.reportText = "";
+      this.reportDesc = "";
     },
     async bindData(){
       this.$loading(true)
