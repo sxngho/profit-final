@@ -415,16 +415,14 @@ export default {
     INSERT_alert_Comment(alert_person, comment, old, project_id) {
       firestore.collection('users').doc(alert_person).get().then((docSnapshot) => {
         var old_alertlist = docSnapshot.data().alertlist
-        // console.log(old_alertlist, alert_person)
         old_alertlist.push({url:comment.url, project_id:project_id, check:false, comment:comment.Comment, user:comment.session_id})
         firestore.collection('users').doc(alert_person).update({
           alertlist:old_alertlist
         })
-        // console.log(old_alertlist, alert_person)
       })
     },
 
-    INSERT_Comment(alert_person, comment, old, project_id) {
+    INSERT_Comment(comment, old, project_id) {
       old.comments.push(comment);
       return firestore.collection("projects").doc(project_id).update({
         comments: old.comments
@@ -762,7 +760,7 @@ export default {
   // LIKE--------------------------------------------------------------------
 
   // Function :: 프로젝트를 좋아요 는 else문 취소는 if문 , like_users : 프로젝트를 좋아하는 사람들
-  async like_project(user, project_id, like_users, likeitcount) {
+  async like_project(user, project_id, like_users) {
     // 각 상황별로.
     // 1. 프로젝트의 좋아요 들 안에 user를 넣는다.
     // 2. user의 likeitProject에 project_id를 넣는다.
@@ -789,9 +787,7 @@ export default {
             .collection("projects")
             .doc(project_id)
             .update({
-              likeit: like_users,
-              likeitcount:likeitcount -=1
-
+              likeit: like_users
             });
         });
     } else {
@@ -813,8 +809,7 @@ export default {
             .collection("projects")
             .doc(project_id)
             .update({
-              likeit: like_users,
-              likeitcount:likeitcount +=1
+              likeit: like_users
             });
         });
     }
@@ -828,7 +823,6 @@ export default {
       var index3 = users_likecomment.indexOf(user);
       users_likecomment.splice(index3, 1);
       comments[index].like = users_likecomment;
-      comments[index].likecount -= 1;
       firestore
         .collection("projects")
         .doc(pcode)
@@ -839,7 +833,6 @@ export default {
     } else {
       users_likecomment.push(user);
       comments[index].like = users_likecomment;
-      comments[index].likecount += 1;
       firestore
         .collection("projects")
         .doc(pcode)
@@ -855,7 +848,6 @@ export default {
       var index3 = users_unlikecomment.indexOf(user);
       users_unlikecomment.splice(index3, 1);
       comments[index].unlike = users_unlikecomment;
-      comments[index].unlikecount -= 1;
       firestore
         .collection("projects")
         .doc(pcode)
@@ -866,7 +858,6 @@ export default {
     } else {
       users_unlikecomment.push(user);
       comments[index].unlike = users_unlikecomment;
-      comments[index].unlikecount += 1;
       firestore
         .collection("projects")
         .doc(pcode)

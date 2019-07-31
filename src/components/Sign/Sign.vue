@@ -70,7 +70,10 @@
     <v-btn text @click="Logout()" v-if="user!=='' && user!==undefined" style="height:100%;">Log Out</v-btn>
     <v-btn text>
       <i class="fa fa-globe" aria-hidden="true"></i>
-      <!-- 여기에 알람을 넣어야하나.. -->
+      <span style="color:red;" @click="alert_change()">{{alertlist.length}}</span>
+      <div v-if="alert_check" style="position:absolute; top:30px; z-index:1; ">
+        <v-btn v-for="alert in alertlist">{{alert}}</v-btn>
+      </div>
     </v-btn>
   </div>
 </template>
@@ -94,7 +97,10 @@ export default {
 
     signupforuser: false,
     signupforcompany: false,
-    Level: ""
+    Level: "",
+
+    alertlist:[],
+    alert_check:false,
   }),
   components: {
     SignupforCompanyModal,
@@ -104,6 +110,7 @@ export default {
     this.user = this.$session.get("session_id");
     this.userpage = "/story/" + this.user;
     this.Level = this.$session.get("level");
+    this.get_userdata(this.$session.get("session_id"))
   },
   methods: {
     showNotification(group, type, title, text) {
@@ -200,6 +207,20 @@ export default {
         `회원가입 완료!`,
         `로그인 해주세요!`
       );
+    },
+    async get_userdata(id) {
+      var userdata = await FirebaseService.SELECT_Userdata(id)
+      var alerts = userdata[0].alertlist
+
+      for (var i in alerts) {
+        if (alerts[i].check === false) {
+        this.alertlist.push(alerts[i])
+        // console.log(alerts[i])
+        }
+      }
+    },
+    alert_change() {
+      this.alert_check = !this.alert_check
     }
   }
 };
