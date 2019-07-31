@@ -20,6 +20,30 @@
       <v-btn text icon color="yellow">
         <i class="fa fa-star fa-2x"></i>
       </v-btn>
+      <template>
+      <v-layout justify-center d-inline>
+        <v-dialog v-model="sirendialog" max-width="290">
+
+          <template v-slot:activator="{ on }">
+            <v-btn text color="primary" dark v-on="on"><i class="fa fa-trash fa-2x"></i></v-btn>
+          </template>
+
+          <v-card>
+            <v-card-title class="headline">
+              <h4>헤더 (없어도 무방)</h4>
+            </v-card-title>
+            <v-card-text>
+              <h4>모달에 넣을 내용 (없어도 무방)</h4>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn text @click="sirendialog = false">버튼배치</v-btn>
+            </v-card-actions>
+          </v-card>
+
+        </v-dialog>
+      </v-layout>
+    </template>
 
     </v-toolbar>
 
@@ -156,6 +180,7 @@ export default {
   name: "Project",
   data() {
     return {
+      sirendialog:false,
       project_id: "",
       project: "",
       user:"",

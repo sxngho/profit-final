@@ -24,6 +24,17 @@ export default {
     PortfolioList,
     ProfileRegister
   },
-  methods: {}
+  created() {
+    this.test();
+  },
+  methods: {
+    test(){
+      var arr = ['aa','bb','cc'];
+      var brr = this.arr.toUpperCase();
+      console.log("arr", arr);
+      console.log("brr", brr);
+    }
+
+  }
 };
 </script>
