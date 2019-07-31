@@ -11,8 +11,7 @@
         <v-expansion-panels>
           <v-expansion-panel
           v-for="user in userlist"
-          :key="i"
-          v-if="input != null && user.userName.includes(input)"
+          v-if="user.userName.includes(input)"
           >
             <v-expansion-panel-header>
               <div>
