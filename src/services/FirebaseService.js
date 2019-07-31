@@ -300,7 +300,6 @@ export default {
         });
       });
   },
-
     // Function :: 특정 문자를 포함하는 유저들을 리스트로 묶어서 보냅니다.(seulgi)
     async SELECT_Usersdata(nickname) {
       return firestore.collection("users").where("nickname", ">=", nickname).limit(4).get().then(docSnapshots => {
