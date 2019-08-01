@@ -145,7 +145,7 @@
                     <!-- 수정 그림을 누르면 보여주는 구역 , 바로 비동기적으로 구현됨.-->
                     <div v-bind:class="[`after_${index}`]" style="display:none; width:100%; margin:10px; padding:10px; ">
                       <input v-bind:class="[`aftertext_${index}`]" style="display:inline-block; width:100%; border: 1px solid #ff0000;" v-model="update_commenttext"><br>
-                      <v-btn @click="change_comment(project_id, comments, index, update_commenttext)">수정</v-btn>
+                      <v-btn @click="change_comment(comments, index, update_commenttext)">수정</v-btn>
                       <v-btn @click="cancel(project_id, comments, index)">취소</v-btn>
                     </div>
                     <!--  -->
@@ -389,11 +389,13 @@ export default {
           }
         }
         // 비동기적으로 댓글 추가
+        console.log(listtext + this.comment)
         const newcommnet = {
         User : this.user,
         Comment : listtext + this.comment,
         like : [],
         unlike : [],
+        state:0,
         };
         this.comments.push(newcommnet)
       } else {
@@ -545,9 +547,7 @@ export default {
     seecomment(index) {
       if (confirm('블라인드 처리된 댓글을 보시겠습니까?')) {
         var blindtext = document.querySelector(`.blind_${index}`)
-        console.log(blindtext)
         blindtext.style.display = 'block';
-        console.log(1)
       }
     }
   },
