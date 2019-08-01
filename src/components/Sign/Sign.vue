@@ -121,7 +121,7 @@ export default {
         );
         this.$session.set("session_id", "");
         this.user = "";
-
+        this.$emit('logout_success')
         // console.log(this.$store.getters.getSession,"setSession")
         // console.log(this.$session.get('session_id'))
       }
@@ -168,6 +168,7 @@ export default {
         );
         this.LoginId = "";
         this.LoginPassword = "";
+        this.$emit('login_success')
       }
     },
 

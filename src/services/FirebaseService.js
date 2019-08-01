@@ -93,82 +93,41 @@ export default {
         // console.log(docSnapshots.data())
         return docSnapshots.data();
       });
-  },
+    },
 
-  // Function :: 프로젝트를 작성합니다.
-  async INSERT_Projects(
-    projecttitle,
-    projectdescription,
-    projectterm,
-    projectcontent,
-    projecttech,
-    projectimage,
-    projectrank,
-    session_id
-  ) {
-    var projectdata = firestore.collection("projects").add({
-      projecttitle,
-      projectdescription,
-      projectterm,
-      projectcontent,
-      projecttech,
-      projectimage,
-      projectrank,
-      session_id,
-      date: firebase.firestore.FieldValue.serverTimestamp(),
-      comments: [],
-      likeit: [],
-      likeitcount: 0,
-      state: 0,
-      reportUserList: []
-    });
-    // return 생성 이유 : 프로젝트 만든 순간 follow한테 alert 보내려고 데이터 필요하기 때문.seulgil
-    return projectdata;
-  },
-
-  INSERT_alert_Project(alert_person, project, old) {
-    // console.log(project)
-    firestore
-      .collection("users")
-      .doc(alert_person)
-      .get()
-      .then(docSnapshot => {
-        var old_alertlist = docSnapshot.data().alertlist;
-        old_alertlist.push({
-          url: "/project/" + project.project_id,
-          project_id: project.project_id,
-          user: project.session_id,
-          check: false
-        });
-        firestore
-          .collection("users")
-          .doc(alert_person)
-          .update({
-            alertlist: old_alertlist
-          });
+    // Function :: 프로젝트를 작성합니다.
+    async INSERT_Projects(projecttitle, projectdescription, projectterm, projectcontent,
+      projecttech, projectimage, projectrank, session_id)
+    {
+      var projectdata = firestore.collection("projects").add({
+        projecttitle, projectdescription, projectterm, projectcontent,
+        projecttech, projectimage, projectrank, session_id,
+        date: firebase.firestore.FieldValue.serverTimestamp(),
+        comments: [], likeit: [], likeitcount:0,
+        state : 0, reportUserList : [],
       });
-  },
+      // return 생성 이유 : 프로젝트 만든 순간 follow한테 alert 보내려고 데이터 필요하기 때문.seulgil
+      return projectdata
+    },
 
-  UPDATE_Project(data, old, project_id) {
-    old.projecttitle = data.projecttitle;
-    old.projectdescription = data.projectdescription;
-    old.projectterm = data.projectterm;
-    old.projectcontent = data.projectcontent;
-    old.projecttech = data.projecttech;
-    old.projectimage = data.projectimage;
-    old.projectrank = data.projectrank;
-    alert("수정이 완료되었습니다.");
-    return firestore
-      .collection("projects")
-      .doc(project_id)
-      .update({
-        projecttitle: old.projecttitle,
-        projectdescription: old.projectdescription,
-        projectterm: old.projectterm,
-        projectcontent: old.projectcontent,
-        projecttech: old.projecttech,
-        projectimage: old.projectimage,
-        projectrank: old.projectrank
+    INSERT_alert_Project(alert_person, project, old) {
+      // console.log(project)
+      firestore.collection('users').doc(alert_person).get().then((docSnapshot) => {
+        var old_alertlist = docSnapshot.data().alertlist
+        old_alertlist.push({check:false, url:'/project/' + project.project_id, message:`${project.session_id}님이 새 프로젝트를 생성하였습니다`, user:project.session_id})
+        firestore.collection('users').doc(alert_person).update({
+          alertlist:old_alertlist
+        })
+      })
+    },
+
+    UPDATE_Project(data, old, project_id) {
+      old.projecttitle = data.projecttitle; old.projectdescription = data.projectdescription; old.projectterm = data.projectterm;
+      old.projectcontent = data.projectcontent; old.projecttech = data.projecttech; old.projectimage = data.projectimage; old.projectrank = data.projectrank;
+      alert("수정이 완료되었습니다.");
+      return firestore.collection("projects").doc(project_id).update({
+        projecttitle: old.projecttitle, projectdescription: old.projectdescription, projectterm: old.projectterm,
+        projectcontent: old.projectcontent, projecttech: old.projecttech, projectimage: old.projectimage, projectrank: old.projectrank
       });
   },
 
@@ -373,6 +332,7 @@ export default {
         });
       });
   },
+
   async SELECT_UserdataEmail(id) {
     return firestore
       .collection("users")
@@ -493,33 +453,21 @@ export default {
       .then(docSnapshots => {
         return docSnapshots.data().comments;
       });
-  },
+    },
 
-  // Function :: 댓글을 프로젝트 안의 댓글들 이라는 요소에 추가합니다.
-  // INSERT_alert_Comment, INSERT_Comment 안에 들어가는 요소들이 모두 필요하지는 않지만,
-  // 어떻게 수정될 지 모르는 상황이므로 일단 추가적으로 줄이지는 않겠습니다.
-  INSERT_alert_Comment(alert_person, comment, old, project_id) {
-    firestore
-      .collection("users")
-      .doc(alert_person)
-      .get()
-      .then(docSnapshot => {
-        var old_alertlist = docSnapshot.data().alertlist;
-        old_alertlist.push({
-          url: comment.url,
-          project_id: project_id,
-          check: false,
-          comment: comment.Comment,
-          user: comment.session_id
-        });
-        firestore
-          .collection("users")
-          .doc(alert_person)
-          .update({
-            alertlist: old_alertlist
-          });
-      });
-  },
+    // Function :: 댓글을 프로젝트 안의 댓글들 이라는 요소에 추가합니다.
+    // INSERT_alert_Comment, INSERT_Comment 안에 들어가는 요소들이 모두 필요하지는 않지만,
+    // 어떻게 수정될 지 모르는 상황이므로 일단 추가적으로 줄이지는 않겠습니다.
+    INSERT_alert_Comment(alert_person, comment, old) {
+      // console.log(old, '떳냐')
+      firestore.collection('users').doc(alert_person).get().then((docSnapshot) => {
+        var old_alertlist = docSnapshot.data().alertlist
+        old_alertlist.push({check:false, url:comment.url, user:comment.session_id, message:`${comment.session_id}님이 댓글에서 회원님을 언급했습니다`})
+        firestore.collection('users').doc(alert_person).update({
+          alertlist:old_alertlist
+        })
+      })
+    },
 
   INSERT_Comment(comment, old, project_id) {
     old.comments.push(comment);
@@ -571,6 +519,16 @@ export default {
         });
       });
   },
+  async SELECT_RecruitInfo() {
+    return firestore
+      .collection("recruitInfo")
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+          return { data: doc.data(), id: doc.id };
+        });
+      });
+  },
   async SELECT_RecruitById(id) {
     return firestore
       .collection("recruit")
@@ -578,6 +536,18 @@ export default {
       .get()
       .then(docSnapshots => {
         return docSnapshots.data();
+      });
+  },
+
+  async SELECT_RecruitInfoById(id) {
+    return firestore
+      .collection("recruitInfo")
+      .where("companyId", "==", id)
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+          return { data: doc.data(), id: doc.id };
+        });
       });
   },
 
@@ -595,6 +565,18 @@ export default {
   async SELECT_RecruitByCompany(id) {
     return firestore
       .collection("recruit")
+      .where("companyId", "==", id)
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+          return { data: doc.data(), id: doc.id };
+        });
+      });
+  },
+
+  async SELECT_RecruitInfoByCompany(id) {
+    return firestore
+      .collection("recruitInfo")
       .where("companyId", "==", id)
       .get()
       .then(docSnapshots => {
@@ -843,30 +825,16 @@ export default {
   // Function : follow 활동을 하면 alertlist에 추가한다
   // follower 가 follow 당한 사람의 데이터. follow 는 Json 형태
   INSERT_alert_Follow(alert_person, follow, follower) {
-    console.log(alert_person);
-    console.log(follow);
-    console.log(follower);
-    firestore
-      .collection("users")
-      .doc(alert_person)
-      .get()
-      .then(docSnapshot => {
-        var old_alertlist = docSnapshot.data().alertlist;
-        // console.log(old_alertlist, '떳냐')
-        old_alertlist.push({
-          url: follow.url,
-          message: `${follow.session_id}님이 팔로우함`,
-          user: follow.user,
-          check: false
-        });
-        // console.log(old_alertlist, '바꼇냐')
-        firestore
-          .collection("users")
-          .doc(alert_person)
-          .update({
-            alertlist: old_alertlist
-          });
-      });
+    firestore.collection('users').doc(alert_person).get().then((docSnapshot) => {
+      var old_alertlist = docSnapshot.data().alertlist
+      // console.log(old_alertlist, '떳냐')
+      old_alertlist.push({check:false, url:follow.url, user:follow.user, message:`${follow.session_id}님이 팔로우했습니다`})
+      // console.log(old_alertlist, '바꼇냐')
+      firestore.collection('users').doc(alert_person).update({
+        alertlist:old_alertlist
+      })
+    })
+
   },
 
   // --------------------------------------------------------------------FOLLOW
@@ -1121,13 +1089,7 @@ export default {
     });
   },
 
-  //
-  // firestore.collection("projects").add({
-  //   projecttitle, projectdescription, projectterm, projectcontent,
-  //   projecttech, projectimage, projectrank, session_id,
-  //   date: firebase.firestore.FieldValue.serverTimestamp(),
-  //   comments: [], likeit: []
-  // });
+
   // --------------------------------------------------------------------recruit
   // ---------------------------------------------------------------------------------------------------------------------------------
 
