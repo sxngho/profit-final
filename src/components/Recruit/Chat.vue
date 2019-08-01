@@ -131,7 +131,7 @@
               <td> {{nowChatRoom.contractDate}} </td>
             </tr>
             <tr v-if="!toggleContractDate">
-              <td> 계약금</td>
+              <td> 계약일</td>
               <td>
                 <v-text-field single-line outlined required v-model="inputContractDate" v-on:keyup.enter="completeContractDate(inputContractDate)" > </v-text-field>
               </td>
@@ -210,9 +210,13 @@
     </v-layout>
 
     <v-layout row wrap justify-center>
+      <v-btn v-if="!changeAllow" depressed color="red" outlined >이미 도장을 찍었습니다!</v-btn>
+    </v-layout>
+
+    <v-layout row wrap justify-center>
       <v-dialog v-model="procedureDialog" scrollable max-width="700px">
       <template v-slot:activator="{ on }">
-        <v-btn color="red" dark v-on="on">도장찍기</v-btn>
+        <v-btn color="red" dark v-on="on" v-if="changeAllow">도장찍기</v-btn>
       </template>
 
       <v-card outlined>
@@ -233,61 +237,61 @@
               </tr>
               <tr>
                 <th class="text-center">회사이름</th>
-                <td class="text-center">샘숭</td>
+                <td class="text-center">{{nowChatRoom.companyId}}</td>
               </tr>
               <tr>
                 <th class="text-center">책임자</th>
-                <td class="text-center">김대리</td>
+                <td class="text-center">{{nowChatRoom.company}}</td>
               </tr>
               <tr>
                 <th class="text-center">주소</th>
-                <td class="text-center">어딘가마을의 어딘가</td>
+                <td class="text-center">{{nowChatRoom.companyAddr}}</td>
               </tr>
               <tr>
                 <th class="text-center" rowspan="4">을</th>
               </tr>
               <tr>
                 <th class="text-center">이름</th>
-                <td class="text-center">핖피</td>
+                <td class="text-center">{{nowChatRoom.userId}}</td>
               </tr>
               <tr>
                 <th class="text-center">주민번호</th>
-                <td class="text-center">999999-0000000</td>
+                <td class="text-center">{{nowChatRoom.rrn}}</td>
               </tr>
               <tr>
                 <th class="text-center">주소</th>
-                <td class="text-center">어딘가마을의 어딘가</td>
+                <td class="text-center">{{nowChatRoom.addr}}</td>
               </tr>
               <tr>
                 <th class="text-center" rowspan="7">프로젝트</th>
               </tr>
               <tr>
                 <th class="text-center">제목</th>
-                <td class="text-center"></td>
+                <td class="text-center">{{nowChatRoom.projectTitle}}</td>
               </tr>
               <tr>
                 <th class="text-center">기간</th>
-                <td class="text-center">999999-0000000</td>
+                <td class="text-center">{{nowChatRoom.projectTerm}}</td>
               </tr>
               <tr>
                 <th class="text-center">급여</th>
-                <td class="text-center">어딘가마을의 어딘가</td>
+                <td class="text-center">{{nowChatRoom.pay}}</td>
               </tr>
               <tr>
                 <th class="text-center">계약금</th>
-                <td class="text-center"></td>
+                <td class="text-center">{{nowChatRoom.downPayment}}</td>
               </tr>
               <tr>
                 <th class="text-center">잔금</th>
-                <td class="text-center">999999-0000000</td>
+                <td class="text-center">{{nowChatRoom.balance}} </td>
               </tr>
               <tr>
                 <th class="text-center">위약금</th>
-                <td class="text-center">어딘가마을의 어딘가</td>
+                <td class="text-center">{{nowChatRoom.penalty}}</td>
               </tr>
               <tr>
                 <th class="text-center">계약일</th>
-                <td class="text-center">어딘가마을의 어딘가</td>
+                <td class="text-center">{{nowChatRoom.contractDate}}</td>
               </tr>
             </tbody>
           </v-simple-table>
@@ -325,9 +329,9 @@ export default {
   data() {
     return {
       procedureDialog:false,
+      changeAllow : true,
       user : "",
       nowLevel : "",
-      allChatRoom : "",
       nowChatRoom : "", // 내가 현재 접속중인 공고의 채팅방
       myMessage : "", // 내가 입력하는 메시지
       // inputs
@@ -388,6 +392,10 @@ export default {
       this.nowChatRoom = myChatRoom
       var dataRef = firebase.database().ref('/'+this.nowChatRoom.link);
       firebase.database().ref(this.nowChatRoom.link).on('value', snapshot => {
+        this.changeAllow = (!(snapshot.val().userVerification || snapshot.val().companyVerification));
+        console.log("띠요오옹 ",this.changeAllow);
+        console.log(snapshot.val().userVerification,snapshot.val().companyVerification);
+
         this.messages = snapshot.val().chatting;
         if ( this.nowLevel == "3" ) {
           for(var i in this.messages) {
@@ -405,9 +413,9 @@ export default {
           });
         }
         this.nowChatRoom = snapshot.val();
-        //auto scroll
-        let targetscroll = documnet.getElementById('scrolling');
-        targetscroll.scrollTop = 20;
+        // TODO auto scroll
+        // let targetscroll = documnet.getElementById('scrolling');
+        // targetscroll.scrollTop = 20;
 
       },function(error) {
         console.error(error,"채팅장 입장 에러입니다.");
@@ -430,6 +438,7 @@ export default {
     },
 
     changeProjectTitle() {
+      if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification))
       this.toggleProjectTitle = !this.toggleProjectTitle;
     },
     completeProjectTitle() {
@@ -442,6 +451,7 @@ export default {
     },
 
     changeProjectTerm() {
+      if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification))
       this.toggleProjectTerm = !this.toggleProjectTerm;
     },
     completeProjectTerm() {
@@ -454,6 +464,7 @@ export default {
     },
 
     changePay() {
+      if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification))
       this.togglePay = !this.togglePay;
     },
     completePay() {
@@ -466,6 +477,7 @@ export default {
     },
 
     changeDownPayment() {
+      if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification))
       this.toggleDownPayment = !this.toggleDownPayment;
     },
     completeDownPayment() {
@@ -478,6 +490,7 @@ export default {
     },
 
     changeBalance() {
+      if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification))
       this.toggleBalance = !this.toggleBalance;
     },
     completeBalance() {
@@ -490,6 +503,7 @@ export default {
     },
 
     changePenalty() {
+      if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification))
       this.togglePenalty = !this.togglePenalty;
     },
     completePenalty() {
@@ -502,6 +516,7 @@ export default {
     },
 
     changeContractDate() {
+      if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification))
       this.toggleContractDate = !this.toggleContractDate;
     },
     completeContractDate() {
@@ -514,6 +529,7 @@ export default {
     },
 
     changeCompanyId() {
+      if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification))
       this.toggleCompanyId = !this.toggleCompanyId;
     },
     completeCompanyId() {
@@ -526,6 +542,7 @@ export default {
     },
 
     changeCompanyAddr() {
+      if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification))
       this.toggleCompanyAddr = !this.toggleCompanyAddr;
     },
     completeCompanyAddr() {
@@ -538,6 +555,7 @@ export default {
     },
 
     changeCompany() {
+      if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification))
       this.toggleCompany = !this.toggleCompany;
     },
     completeCompany() {
@@ -549,6 +567,7 @@ export default {
       this.inputCompany = "";
     },
     changeAddr() {
+      if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification))
       this.toggleAddr = !this.toggleAddr;
     },
     completeAddr() {
@@ -561,6 +580,7 @@ export default {
     },
 
     changeRrn() {
+      if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification))
       this.toggleRrn = !this.toggleRrn;
     },
     completeRrn() {
@@ -572,6 +592,7 @@ export default {
       this.inputRrn = "";
     },
     changeUserId() {
+      if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification))
       this.toggleUserId = !this.toggleUserId;
     },
     completeUserId() {
@@ -584,7 +605,26 @@ export default {
     },
 
     validContract(){
-      
+      var dataRef = firebase.database().ref('/'+this.nowChatRoom.link);
+
+      if(this.$session.get("session_id") == this.nowChatRoom.userId){
+        dataRef.update({
+          userVerification : true,
+        });
+      }else{
+        dataRef.update({
+          companyVerification : true,
+        });
+      }
+
+      firebase.database().ref(this.nowChatRoom.link).on('value', snapshot => {
+        this.messages = snapshot.val().chatting;
+        if(snapshot.val().userVerification && snapshot.val().companyVerification){
+          //둘 다 확인을 눌렀다는 것을 확인했다!
+          FirebaseService.UPDATE_RecruitContract(this.nowChatRoom.recruitPK ,this.user); //파베 컬렉션의 리크루트 상태를 계약완료된 상태로 만든다
+        }
+      })
+      this.changeAllow = (!(snapshot.val().userVerification || snapshot.val().companyVerification));
       this.procedureDialog = false;
     },
   },
