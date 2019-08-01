@@ -239,7 +239,7 @@ export default {
 
     },
     receiveSkill(selectList,unselectList) {
-      FirebaseService.UPDATE_userSkill(selectList,his.$route.params.id);
+      FirebaseService.UPDATE_userSkill(selectList,this.$route.params.id);
       this.userdata[0].showSkillList = selectList;
       this.userdata[0].userSkills = unselectList;
     },

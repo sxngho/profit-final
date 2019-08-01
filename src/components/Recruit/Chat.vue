@@ -277,15 +277,11 @@ export default {
         allChatRoom = snapshot.val();
         var index = "";
         for(var i in allChatRoom) {
-          console.log(allChatRoom[i].recruitPK)
           if ( allChatRoom[i].link == 'chat/'+this.$route.params.ccode ) {
             index = allChatRoom[i]
-            console.log(index,"인덱스설정이댐!!")
           }
         }
-        console.log(index,"인덱스")
         if ( index !== "" ) {
-          console.log("일단입장은하나?")
           this.EnterChatRoom(index);
         }
       });

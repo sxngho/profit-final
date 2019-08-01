@@ -68,6 +68,10 @@
     >{{user}}</v-btn>
 
     <v-btn text @click="Logout()" v-if="user!=='' && user!==undefined" style="height:100%;">Log Out</v-btn>
+    <v-btn text>
+      <i class="fa fa-globe" aria-hidden="true"></i>
+      <!-- 여기에 알람을 넣어야하나.. -->
+    </v-btn>
   </div>
 </template>
 
@@ -90,7 +94,7 @@ export default {
 
     signupforuser: false,
     signupforcompany: false,
-    Level: "",
+    Level: ""
   }),
   components: {
     SignupforCompanyModal,
@@ -98,7 +102,7 @@ export default {
   },
   mounted() {
     this.user = this.$session.get("session_id");
-    // this.userpage = "/story/" + this.user;
+    this.userpage = "/story/" + this.user;
     this.Level = this.$session.get("level");
   },
   methods: {
@@ -121,7 +125,7 @@ export default {
         );
         this.$session.set("session_id", "");
         this.user = "";
-        this.$emit('logout_success')
+
         // console.log(this.$store.getters.getSession,"setSession")
         // console.log(this.$session.get('session_id'))
       }
@@ -168,7 +172,6 @@ export default {
         );
         this.LoginId = "";
         this.LoginPassword = "";
-        this.$emit('login_success')
       }
     },
 
@@ -197,7 +200,7 @@ export default {
         `회원가입 완료!`,
         `로그인 해주세요!`
       );
-    },
+    }
   }
 };
 </script>

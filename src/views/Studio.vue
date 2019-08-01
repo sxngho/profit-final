@@ -33,7 +33,7 @@
           <v-flex xs4 v-for="recruit in recruits" v-if="myDibs.includes(recruit.id)">
             <v-card>
               <v-card-title>
-                타이틀 : {{recruit.data.title}}
+                타이틀 : {{recruit.data.projectTitle}}
               </v-card-title>
               <v-card-text>
                 회사명, 기술 스택들, 요약, 마감기간
@@ -81,8 +81,9 @@ export default {
       this.nowLevel = this.$session.get('level');
       this.userid = this.$session.get('session_id');
       this.userdata = await FirebaseService.SELECT_Userdata(this.$session.get('session_id'));
-      this.recruits = await FirebaseService.SELECT_Recruit();
+      this.recruits = await FirebaseService.SELECT_RecruitInfo();
       this.myDibs = this.userdata[0].dibs;
+      console.log(this.myDibs,"찜리스트 나와야할것들")
     },
     popChat(ccode){
 
@@ -99,6 +100,7 @@ export default {
     async createChatRoom(recruit) {
       var nickname = this.$session.get('session_id');
       var exist = await this.existChatRoom(recruit,nickname);
+      console.log(exist,"exist!");
       if ( exist.res ) {
 
       }
@@ -108,7 +110,7 @@ export default {
           link : 'chat/'+recruit.id+nickname,
           recruitPK : recruit.id,
           chatting : [{chatMsg:"",chatId:""}],
-          projectTitle : recruit.data.title,
+          projectTitle : recruit.data.projectTitle,
           projectTerm : "",
           pay : "",
           downPayment : "",

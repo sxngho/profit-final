@@ -519,6 +519,16 @@ export default {
         });
       });
   },
+  async SELECT_RecruitInfo() {
+    return firestore
+      .collection("recruitInfo")
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+          return { data: doc.data(), id: doc.id };
+        });
+      });
+  },
   async SELECT_RecruitById(id) {
     return firestore
       .collection("recruit")
@@ -526,6 +536,18 @@ export default {
       .get()
       .then(docSnapshots => {
         return docSnapshots.data();
+      });
+  },
+
+  async SELECT_RecruitInfoById(id) {
+    return firestore
+      .collection("recruitInfo")
+      .where("companyId", "==", id)
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+          return { data: doc.data(), id: doc.id };
+        });
       });
   },
 
@@ -543,6 +565,18 @@ export default {
   async SELECT_RecruitByCompany(id) {
     return firestore
       .collection("recruit")
+      .where("companyId", "==", id)
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+          return { data: doc.data(), id: doc.id };
+        });
+      });
+  },
+
+  async SELECT_RecruitInfoByCompany(id) {
+    return firestore
+      .collection("recruitInfo")
       .where("companyId", "==", id)
       .get()
       .then(docSnapshots => {
