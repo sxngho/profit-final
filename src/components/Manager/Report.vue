@@ -24,7 +24,7 @@
 
             <v-list-item-action>
               <div>
-                <v-btn text outlined color="#00f" small @click="greenBtn(report.data.projectId,report.data.reportStack,report.id)">허용</v-btn>
+                <v-btn text outlined color="#00f" small @click="greenBtn(report.data.projectId,report.data.reportStack,report.id)">기각</v-btn>
                 <v-btn text outlined color="#ff0" small @click="oragneBtn(report.data.projectId,report.data.reportStack,report.id)">경고</v-btn>
                 <v-btn text outlined color="#f00" small @click="redBtn(report.data.projectId,report.data.reportStack,report.id)">블라인드</v-btn>
               </div>

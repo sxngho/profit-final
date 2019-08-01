@@ -1079,5 +1079,20 @@ export default {
           });
         return true;
       });
+  },
+  INSERT_alert_siren(alert_person, project, old) {
+    // alert_person 에는 신고받은 사람 이다 . 신고한 사람의 데이터는 노 필요
+    // project 어떤 프로젝트인지 알아야 이동할 수 있다.
+    // old 에는 그 사람의 데이터가 들어가야한다. 그래야 alertlist 에 쌓을수있다.
+
+    firestore.collection('users').doc(alert_person).get().then((docSnapshot) => {
+      var old_alertlist = docSnapshot.data().alertlist
+      old_alertlist.push({check:false, url:'/project/' + project.project_id, message:`프로젝트가 신고내역에 접수되었습니다.`, user:project.session_id})
+      firestore.collection('users').doc(alert_person).update({
+        alertlist:old_alertlist
+      })
+    })
+
+
   }
 };

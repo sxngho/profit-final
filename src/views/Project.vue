@@ -59,7 +59,7 @@
 
           <v-card>
             <v-card-title class="headline">
-              <span class="headline">신고하기</span>
+              <span class="headline">1신고하기</span>
             </v-card-title>
             <v-card-text>
               <v-layout wrap>
@@ -229,6 +229,7 @@ export default {
       project_id: "",
       project: "",
       user:"",
+      userdata:"",
       comments:[],
       comment:"",
       update_comment: false,
@@ -290,9 +291,11 @@ export default {
         if ( reportSelect !== "기타" ) {
           FirebaseService.INSERT_projectReport(reportSelect,reportDesc,this.project_id,this.$session.get('session_id')
                                               ,this.project.session_id,this.project.projecttitle,this.project.state,"Siren");
+          FirebaseService.INSERT_alert_siren(this.project.session_id, this.project, this.userdata)
         } else {
           FirebaseService.INSERT_projectReport(reportText,reportDesc,this.project_id,this.$session.get('session_id')
                                               ,this.project.session_id,this.project.projecttitle,this.project.state,"Siren");
+          FirebaseService.INSERT_alert_siren(this.project.session_id, this.project, this.userdata)
         }
         this.project.reportUserList.push(upperUser);
         FirebaseService.UPDATE_projectReportUserList(this.project_id,this.project.reportUserList);
@@ -306,6 +309,7 @@ export default {
       this.likeit = this.project.likeit
       this.$loading(false)
       this.likeitcount = this.project.likeitcount
+      this.userdata = await FirebaseService.SELECT_Userdata(this.user)
     },
     // seulgi function
     async INSERT_Comment(real_taglist, comment){
