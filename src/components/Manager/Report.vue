@@ -127,12 +127,14 @@ export default {
         FirebaseService.UPDATE_projectState(projectId, reportStack);
         FirebaseService.INSERT_alert_manager(project_data.session_id, projectId, user_data[0], degree, reportStack, tag)
       } else {
+        console.log('여기왔냐')
         var project_data = await FirebaseService.SELECT_Project(projectId)
         var user_data = await FirebaseService.SELECT_Userdata(project_data.session_id)
         var comments_data = project_data.comments
         // comments_data[report.data.index].reportUserList = []
         FirebaseService.UPDATE_commentState(projectId, comments_data);
-        FirebaseService.INSERT_alert_manager(project_data.session_id, projectId, user_data[0], degree, reportStack, tag)
+        console.log(report.data.reportUser, '얘가 댓글쓴사람 맞음??')
+        FirebaseService.INSERT_alert_manager(report.data.reportUser, projectId, user_data[0], degree, reportStack, tag)
       }
 
     },
@@ -155,12 +157,13 @@ export default {
           FirebaseService.UPDATE_projectState(projectId, reportStack);
           FirebaseService.INSERT_alert_manager(project_data.session_id, projectId, user_data[0], degree, reportStack, tag)
         } else {
+          console.log(report)
           var project_data = await FirebaseService.SELECT_Project(projectId)
           var user_data = await FirebaseService.SELECT_Userdata(project_data.session_id)
           var comments_data = project_data.comments
-          // comments_data[report.data.index].reportUserList = []
+          comments_data[report.data.index].state = reportStack
           FirebaseService.UPDATE_commentState(projectId, comments_data);
-          FirebaseService.INSERT_alert_manager(project_data.session_id, projectId, user_data[0], degree, reportStack, tag)
+          FirebaseService.INSERT_alert_manager(report.data.reportUser, projectId, user_data[0], degree, reportStack, tag)
         }
       }
 
@@ -183,9 +186,9 @@ export default {
         var project_data = await FirebaseService.SELECT_Project(projectId)
         var user_data = await FirebaseService.SELECT_Userdata(project_data.session_id)
         var comments_data = project_data.comments
-        // comments_data[report.data.index].reportUserList = []
+        comments_data[report.data.index].state = reportStack
         FirebaseService.UPDATE_commentState(projectId, comments_data);
-        FirebaseService.INSERT_alert_manager(project_data.session_id, projectId, user_data[0], degree, reportStack, tag)
+        FirebaseService.INSERT_alert_manager(report.data.reportUser, projectId, user_data[0], degree, reportStack, tag)
       }
 
     },
