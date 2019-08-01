@@ -51,7 +51,8 @@ export default new Vuex.Store({
       "random",
       "random"
     ],
-    showCompanyList: []
+    showCompanyList: [],
+    showCompanyListBottomBar: []
   },
   // Getter : get 함수 정의
   // 정의 -> return state.변수명
@@ -148,7 +149,7 @@ export default new Vuex.Store({
     },
     filterCompany: function(state, payload) {
       for (let i = 0; i < state.companyList.length; i++) {
-        if (state.companyList[i] === payload) {
+        if (state.companyList[i].indexOf(payload) !== -1) {
           state.showCompanyList.push(state.companyList[i]);
         }
       }
@@ -161,6 +162,17 @@ export default new Vuex.Store({
       for (let i = 0; i < state.companyList.length; i++) {
         state.showCompanyList.push(state.companyList[i]);
       }
+    },
+    filterCompanyBottomBar: function(state, payload) {
+      state.showCompanyListBottomBar = [];
+      for (let i = 0; i < state.companyList.length; i++) {
+        if (state.companyList[i].indexOf(payload) !== -1) {
+          state.showCompanyListBottomBar.push(state.companyList[i]);
+        }
+      }
+    },
+    clearBottomBar: function(state, payload) {
+      state.showCompanyListBottomBar = [];
     }
   },
 
