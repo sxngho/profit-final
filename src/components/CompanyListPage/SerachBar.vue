@@ -5,13 +5,18 @@
         <i class="fas fa-search fa-2x"></i>
       </div>
       <div class="searchBar__input">
-        <v-autocomplete
+        <input
+          type="text"
           v-model="inputKeyword"
           class="searchBar__input__box"
           placeholder="회사명을 입력하세요."
-          :items="this.$store.state.companyList"
           @keyup.enter="seacrh"
-        ></v-autocomplete>
+        />
+        <button
+          v-for="item in this.$store.state.showCompanyListBottomBar"
+          class="keywordBottomBar"
+          @click="searchOnClick(item)"
+        >{{item}}</button>
       </div>
     </div>
   </div>
@@ -28,9 +33,11 @@ export default {
   },
   watch: {
     inputKeyword(to, from) {
-      console.log(this.inputKeyword);
       if (this.inputKeyword === "") {
         this.$store.commit("showAllCompany");
+        this.$store.commit("clearBottomBar");
+      } else {
+        this.$store.commit("filterCompanyBottomBar", this.inputKeyword);
       }
     }
   },
@@ -38,6 +45,11 @@ export default {
     seacrh() {
       this.$store.state.showCompanyList = [];
       this.$store.commit("filterCompany", this.inputKeyword);
+    },
+    searchOnClick(keyword) {
+      this.$store.state.showCompanyList = [];
+      this.$store.commit("filterCompany", keyword);
+      this.$store.commit("clearBottomBar");
     }
   }
 };
@@ -72,5 +84,13 @@ export default {
   width: 500px;
   height: 100px;
   background-color: red;
+}
+.keywordBottomBar {
+  z-index: 100px;
+  width: 100%;
+  text-align: left;
+  background-color: white;
+  display: block;
+  position: relative;
 }
 </style>
