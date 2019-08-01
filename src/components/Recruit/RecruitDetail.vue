@@ -2,7 +2,7 @@
   <div style="margin:20px">
     <v-layout row wrap>
       <v-flex xs12 class="text-xs-center">
-        <h1>{{recruit.title}}</h1>
+        <h1>{{recruit.data.projectTitle}}</h1>
       </v-flex>
 
       <v-flex xs12 class="text-xs-center">
@@ -47,7 +47,7 @@ export default {
   },
   methods: {
     async fetchData(recruit_id) {
-      this.recruit = await FirebaseService.SELECT_RecruitById(recruit_id);
+      this.recruit = await FirebaseService.SELECT_RecruitInfoById(recruit_id);
       this.userdata = await FirebaseService.SELECT_Userdata(this.$session.get('session_id'));
       console.log(this.recruit);
     },

@@ -21,7 +21,7 @@
             <v-card outlined>
               <v-card-title>{{ recruit.data.title }}</v-card-title>
               <v-card-text>
-                {{recruit.data.companyId}}회사,필요스택 :  {{recruit.data.requireSkills}}, 요약, 마감기간
+                {{recruit.data.companyId}}회사,필요스택 :  {{recruit.data.requiredSkills}}, 요약, 마감기간
               </v-card-text>
               <v-card-actions justify-center>
                 <v-spacer/>
@@ -62,22 +62,22 @@ export default {
   },
   methods: {
     async fetchData() {
-      this.recruits = await FirebaseService.SELECT_Recruit();
+      this.recruits = await FirebaseService.SELECT_RecruitInfo();
       this.mySkills = await FirebaseService.SELECT_Userdata(this.$session.get('session_id'));
       for(var i in this.recruits) {
-        if (this.recruits[i].data.requireSkills.length == 0) {
+        if (this.recruits[i].data.requiredSkills.length == 0) {
           this.myRecruits.push(this.recruits[i]);
           continue;
         }
         for(var ii in this.mySkills[0].userSkills) {
           this.mySkills[0].userSkills[ii] = this.mySkills[0].userSkills[ii].toUpperCase();
         }
-        for(var j in this.recruits[i].data.requireSkills) {
-          var rs = this.recruits[i].data.requireSkills[j].toUpperCase();
+        for(var j in this.recruits[i].data.requiredSkills) {
+          var rs = this.recruits[i].data.requiredSkills[j].toUpperCase();
           if( !this.mySkills[0].userSkills.includes(rs) ) {
             console.log(rs,"이거안나와야해")
             break;
-          } else if( j == (this.recruits[i].data.requireSkills.length-1) ) {
+          } else if( j == (this.recruits[i].data.requiredSkills.length-1) ) {
             console.log("푸시",this.recruits[i])
             this.myRecruits.push(this.recruits[i]);
           }
