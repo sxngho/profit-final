@@ -140,6 +140,15 @@ export default {
       });
   },
 
+  UPDATE_commentReportUserList(projectId, comments) {
+    firestore
+      .collection("projects")
+      .doc(projectId)
+      .update({
+        comments : comments
+      })
+  },
+
   UPDATE_projectState(projectId, projectStack) {
     firestore
       .collection("projects")
@@ -147,6 +156,15 @@ export default {
       .update({
         state: projectStack
       });
+  },
+
+  UPDATE_commentState(projectId,comments) {
+    firestore
+      .collection("projects")
+      .doc(projectId)
+      .update({
+        comments:comments
+      })
   },
 
   DELETE_project(project_id) {
@@ -1022,6 +1040,31 @@ export default {
       date: firebase.firestore.FieldValue.serverTimestamp()
     });
   },
+  INSERT_commentReport(
+    reportTitle,
+    reportContent,
+    projectId,
+    reportUser,
+    reportedUser,
+    projecttitle,
+    reportStack,
+    index,
+    tag
+  ) {
+    firestore.collection("reports").add({
+      reportTitle: reportTitle,
+      reportContent: reportContent,
+      projectId: projectId,
+      reportUser: reportUser, // 신고자
+      reportedUser: reportedUser, // 신고당한 유저
+      projecttitle: projecttitle,
+      state: false,
+      reportStack: reportStack,
+      index:index,
+      tag: tag,
+      date: firebase.firestore.FieldValue.serverTimestamp()
+    })
+  },
 
   DELETE_report(id) {
     firestore
@@ -1129,11 +1172,11 @@ export default {
   //   })
   // },
 
-  INSERT_alert_manager(alert_person, project_id, old, degree, reportStack) {
+  INSERT_alert_manager(alert_person, project_id, old, degree, reportStack, tag) {
     firestore.collection('users').doc(alert_person).get().then((docSnapshot) => {
       var old_alertlist = docSnapshot.data().alertlist
       console.log(old_alertlist)
-      old_alertlist.push({check:false, url:'/project/' + project_id, message:`프로젝트 신고 처리 : ${degree}, 스택 : ${reportStack}`, user:old.nickname})
+      old_alertlist.push({check:false, url:'/project/' + project_id, message:`${tag} 처리 : ${degree}, 스택 : ${reportStack}`, user:old.nickname})
       firestore.collection('users').doc(alert_person).update({
         alertlist:old_alertlist
       })
