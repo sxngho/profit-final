@@ -616,6 +616,17 @@ export default {
     });
   },
 
+  UPDATE_RecruitContract(rcode, user) {
+    firestore
+      .collection("recruitInfo")
+      .doc(rcode)
+      .update({
+        contract : true,
+        responsibility : user,
+      });
+    },
+
+
   // --------------------------------------------------------------------CHAT
   // ---------------------------------------------------------------------------------------------------------------------------------
 
