@@ -223,7 +223,7 @@ export default {
           Json.session_id = this.user;
           for (var i in real_taglist) {
             // INSERT_alert_Comment  : 댓글을 달았을 때, 태그가 존재하면 해당 사람한테 alert 생기게함.
-            FirebaseService.INSERT_alert_Comment(real_taglist[i], Json, this.projectData, this.project_id);
+            FirebaseService.INSERT_alert_Comment(real_taglist[i], Json, this.projectData);
           }
         }
         // 비동기적으로 댓글 추가

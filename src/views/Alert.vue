@@ -12,7 +12,7 @@
                 <v-list-item-content>
                   index : {{index}}, 확인여부 : {{alert.check}}
 
-                  <v-list-item-title style="color:red;" v-html="alert.url" @click="move(alert.check, alert.url, index)"></v-list-item-title>
+                  <v-list-item-title style="color:red;" v-html="alert.message" @click="move(alert.check, alert.url, index)"></v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
             </v-list>
@@ -40,7 +40,6 @@ export default {
   },
   methods : {
     async get_userdata(id) {
-
       var userdata = await FirebaseService.SELECT_Userdata(id)
       this.userdata = userdata[0]
       var alerts = userdata[0].alertlist
@@ -51,16 +50,16 @@ export default {
         this.unread_alertlist.push(alerts[i])
         }
       }
+      var unread_alert = document.querySelector("#unread_alret")
+      unread_alert.innerText = this.unread_alertlist.length
+      // console.log(unread_alert)
     },
     async move(check, url, alertindex) {
       window.open(document.location.origin + url)
-      // console.log(document.querySelector("#unread_alret").text())
-      var unread_alert = document.querySelector("#unread_alret")
       var result = await FirebaseService.alertcheck(this.alertlist, alertindex, this.$session.get("session_id"))
       if (!check) {
         this.get_userdata(this.$session.get("session_id"))
       }
-
     }
   }
 };

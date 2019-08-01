@@ -110,7 +110,7 @@ export default {
       // console.log(project)
       firestore.collection('users').doc(alert_person).get().then((docSnapshot) => {
         var old_alertlist = docSnapshot.data().alertlist
-        old_alertlist.push({url:'/project/' + project.project_id, project_id:project.project_id, user:project.session_id, check:false})
+        old_alertlist.push({check:false, url:'/project/' + project.project_id, message:`${project.session_id}님이 새 프로젝트를 생성하였습니다`, user:project.session_id})
         firestore.collection('users').doc(alert_person).update({
           alertlist:old_alertlist
         })
@@ -316,6 +316,7 @@ export default {
         });
       });
   },
+
   async SELECT_UserdataEmail(id) {
     return firestore
       .collection("users")
@@ -426,10 +427,11 @@ export default {
     // Function :: 댓글을 프로젝트 안의 댓글들 이라는 요소에 추가합니다.
     // INSERT_alert_Comment, INSERT_Comment 안에 들어가는 요소들이 모두 필요하지는 않지만,
     // 어떻게 수정될 지 모르는 상황이므로 일단 추가적으로 줄이지는 않겠습니다.
-    INSERT_alert_Comment(alert_person, comment, old, project_id) {
+    INSERT_alert_Comment(alert_person, comment, old) {
+      console.log(old, '떳냐')
       firestore.collection('users').doc(alert_person).get().then((docSnapshot) => {
         var old_alertlist = docSnapshot.data().alertlist
-        old_alertlist.push({url:comment.url, project_id:project_id, check:false, comment:comment.Comment, user:comment.session_id})
+        old_alertlist.push({check:false, url:comment.url, user:comment.session_id, message:`${comment.session_id}님이 댓글에서 회원님을 언급했습니다`})
         firestore.collection('users').doc(alert_person).update({
           alertlist:old_alertlist
         })
@@ -758,7 +760,7 @@ export default {
     firestore.collection('users').doc(alert_person).get().then((docSnapshot) => {
       var old_alertlist = docSnapshot.data().alertlist
       // console.log(old_alertlist, '떳냐')
-      old_alertlist.push({url:follow.url, message:`${follow.session_id}님이 팔로우함`, user:follow.user, check:false})
+      old_alertlist.push({check:false, url:follow.url, user:follow.user, message:`${follow.session_id}님이 팔로우했습니다`})
       // console.log(old_alertlist, '바꼇냐')
       firestore.collection('users').doc(alert_person).update({
         alertlist:old_alertlist
