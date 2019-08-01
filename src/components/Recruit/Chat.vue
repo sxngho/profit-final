@@ -207,7 +207,100 @@
           </tbody>
         </v-simple-table>
       </v-flex>
+    </v-layout>
 
+    <v-layout row wrap justify-center>
+      <v-dialog v-model="procedureDialog" scrollable max-width="700px">
+      <template v-slot:activator="{ on }">
+        <v-btn color="red" dark v-on="on">도장찍기</v-btn>
+      </template>
+
+      <v-card outlined>
+        <v-card-title>
+          <p class="red--text text-center" style="width:100%;">
+            <i class="fas fa-exclamation-triangle"/><br/>
+            주의! 정말로 도장을 찍을겁니까?<br/>
+            <small class="caption">한번 완료하면 되돌릴 수 없습니다.</small>
+            <br/>협의된 계약 내용을 확인하세요
+          </p>
+        </v-card-title>
+        <v-card-text>
+        <v-flex row wrap justify-center>
+          <v-simple-table dense style="width:60%">
+            <tbody>
+              <tr>
+                <th class="text-center" rowspan="4">갑</th>
+              </tr>
+              <tr>
+                <th class="text-center">회사이름</th>
+                <td class="text-center">샘숭</td>
+              </tr>
+              <tr>
+                <th class="text-center">책임자</th>
+                <td class="text-center">김대리</td>
+              </tr>
+              <tr>
+                <th class="text-center">주소</th>
+                <td class="text-center">어딘가마을의 어딘가</td>
+              </tr>
+              <tr>
+                <th class="text-center" rowspan="4">을</th>
+              </tr>
+              <tr>
+                <th class="text-center">이름</th>
+                <td class="text-center">핖피</td>
+              </tr>
+              <tr>
+                <th class="text-center">주민번호</th>
+                <td class="text-center">999999-0000000</td>
+              </tr>
+              <tr>
+                <th class="text-center">주소</th>
+                <td class="text-center">어딘가마을의 어딘가</td>
+              </tr>
+              <tr>
+                <th class="text-center" rowspan="7">프로젝트</th>
+              </tr>
+              <tr>
+                <th class="text-center">제목</th>
+                <td class="text-center"></td>
+              </tr>
+              <tr>
+                <th class="text-center">기간</th>
+                <td class="text-center">999999-0000000</td>
+              </tr>
+              <tr>
+                <th class="text-center">급여</th>
+                <td class="text-center">어딘가마을의 어딘가</td>
+              </tr>
+              <tr>
+                <th class="text-center">계약금</th>
+                <td class="text-center"></td>
+              </tr>
+              <tr>
+                <th class="text-center">잔금</th>
+                <td class="text-center">999999-0000000</td>
+              </tr>
+              <tr>
+                <th class="text-center">위약금</th>
+                <td class="text-center">어딘가마을의 어딘가</td>
+              </tr>
+              <tr>
+                <th class="text-center">계약일</th>
+                <td class="text-center">어딘가마을의 어딘가</td>
+              </tr>
+            </tbody>
+          </v-simple-table>
+        </v-flex>
+      </v-card-text>
+
+        <v-divider></v-divider>
+        <v-flex row wrap justify-center>
+          <v-btn color="red" text @click="validContract()">도장찍기</v-btn>
+          <v-btn color="grey" text dark @click="procedureDialog = false">Close</v-btn>
+        </v-flex>
+      </v-card>
+    </v-dialog>
     </v-layout>
   </v-container>
 </template>
@@ -231,6 +324,7 @@ export default {
   },
   data() {
     return {
+      procedureDialog:false,
       user : "",
       nowLevel : "",
       allChatRoom : "",
@@ -491,6 +585,11 @@ export default {
         userId : this.inputUserId,
       });
       this.inputUserId = "";
+    },
+
+    validContract(){
+      
+      this.procedureDialog = false;
     },
   },
 
