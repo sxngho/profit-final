@@ -11,8 +11,8 @@
     <v-spacer />
     <!-- <div id="google_translate_element"></div> -->
     <v-toolbar-items>
-      <Sign />
-      <v-btn text to="/Alert">
+      <Sign v-on:login_success="login_success" v-on:logout_success="logout_success"/>
+      <v-btn v-if="check" text to="/Alert">
         <i class="fa fa-globe" aria-hidden="true"></i>
         <span id="unread_alret" style="color:red;">{{unread_alertlist.length}}</span>
       </v-btn>
@@ -35,7 +35,8 @@ export default {
   data: () => ({
     unread_alertlist:[],
     nowLevel : "",
-    fake:false,
+    check:false,
+    userdata:[],
   }),
   mounted() {
     this.get_userdata(this.$session.get("session_id"));
@@ -43,16 +44,27 @@ export default {
   },
   methods : {
     async get_userdata(id) {
-      if ( this.nowlevel == "2" ) {
-        var userdata = await FirebaseService.SELECT_Userdata(id)
+     if ( this.nowlevel == "2" ) {
+      var userdata = await FirebaseService.SELECT_Userdata(id)
+      this.userdata = userdata
+      if (userdata.length) {
+        this.check = true
         var alerts = userdata[0].alertlist
-
         for (var i in alerts) {
           if (alerts[i].check === false) {
           this.unread_alertlist.push(alerts[i])
           }
         }
+      } else {
+        this.check = false
       }
+    }
+    },
+    login_success() {
+      this.check = true
+    },
+    logout_success() {
+      this.check = false
     }
   },
 

@@ -63,7 +63,7 @@
                   <!-- 여기에 태그한 사람들의 이름이 박스로 체크됩니다. -->
                   <div >
                     태그 : <v-btn style="display:inline-block;" v-for="nickname in real_taglist" @click="delete_taglist(nickname)">{{nickname}}</v-btn>
-                    <v-text-field style="width:100%;" placeholder="댓글을 입력해주세요" v-model="comment"></v-text-field>
+                    <v-text-field style="width:100%;" placeholder="댓글을 입력해주세요" v-model="comment" v-on:keyup.enter="INSERT_Comment(real_taglist, comment)"></v-text-field>
                   </div>
 
                   <!-- 여기에서 태그 가능한 사람들의 목록을 보여줄 것입니다.-->
@@ -202,7 +202,6 @@ export default {
     },
     // seulgi function
     async INSERT_Comment(real_taglist, comment){
-
       if (this.user) {
         var listtext = ''
         for (var j in real_taglist) {
@@ -223,7 +222,7 @@ export default {
           Json.session_id = this.user;
           for (var i in real_taglist) {
             // INSERT_alert_Comment  : 댓글을 달았을 때, 태그가 존재하면 해당 사람한테 alert 생기게함.
-            FirebaseService.INSERT_alert_Comment(real_taglist[i], Json, this.projectData, this.project_id);
+            FirebaseService.INSERT_alert_Comment(real_taglist[i], Json, this.projectData);
           }
         }
         // 비동기적으로 댓글 추가
