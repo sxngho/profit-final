@@ -2,7 +2,7 @@
   <div class="selectTechList__container">
     <ul class="selectTechList__content">
       <li
-        v-for="(item,index) in this.$store.state.selectTechList"
+        v-for="(item,index) in this.$store.state.requiredSkills"
         @click="clickTech(item)"
         class="selectTechBox"
       >

@@ -83,9 +83,13 @@ export default {
       });
   },
 
-    // Function :: 프로젝트 디테일을 project_id로 가져옵니다
-    async SELECT_ProjectsByPcode(pcode) {
-      return firestore.collection("projects").doc(pcode).get().then(docSnapshots => {
+  // Function :: 프로젝트 디테일을 project_id로 가져옵니다
+  async SELECT_ProjectsByPcode(pcode) {
+    return firestore
+      .collection("projects")
+      .doc(pcode)
+      .get()
+      .then(docSnapshots => {
         // console.log(docSnapshots.data())
         return docSnapshots.data();
       });
@@ -125,30 +129,42 @@ export default {
         projecttitle: old.projecttitle, projectdescription: old.projectdescription, projectterm: old.projectterm,
         projectcontent: old.projectcontent, projecttech: old.projecttech, projectimage: old.projectimage, projectrank: old.projectrank
       });
-    },
+  },
 
-
-    UPDATE_projectReportUserList(projectId,reportUserList) {
-      firestore.collection("projects").doc(projectId).update({
-        reportUserList: reportUserList,
+  UPDATE_projectReportUserList(projectId, reportUserList) {
+    firestore
+      .collection("projects")
+      .doc(projectId)
+      .update({
+        reportUserList: reportUserList
       });
-    },
+  },
 
-    UPDATE_projectState(projectId,projectStack) {
-      firestore.collection("projects").doc(projectId).update({
-        state : projectStack,
+  UPDATE_projectState(projectId, projectStack) {
+    firestore
+      .collection("projects")
+      .doc(projectId)
+      .update({
+        state: projectStack
       });
-    },
+  },
 
-    DELETE_project(project_id) {
-      firestore.collection("projects").doc(project_id).delete();
-    },
+  DELETE_project(project_id) {
+    firestore
+      .collection("projects")
+      .doc(project_id)
+      .delete();
+  },
 
-    async amount_Projects(user) {
-      return firestore.collection('projects').where('session_id','==',user).get().then(docSnapshots => {
-        return docSnapshots.size
-      })
-    },
+  async amount_Projects(user) {
+    return firestore
+      .collection("projects")
+      .where("session_id", "==", user)
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.size;
+      });
+  },
   // --------------------------------------------------------------------PROJECT
   // ---------------------------------------------------------------------------------------------------------------------------------
 
@@ -328,39 +344,54 @@ export default {
         });
       });
   },
-    // Function :: 특정 문자를 포함하는 유저들을 리스트로 묶어서 보냅니다.(seulgi)
-    async SELECT_Usersdata(nickname) {
-      return firestore.collection("users").where("nickname", ">=", nickname).limit(4).get().then(docSnapshots => {
-        return docSnapshots
-    });
+  // Function :: 특정 문자를 포함하는 유저들을 리스트로 묶어서 보냅니다.(seulgi)
+  async SELECT_Usersdata(nickname) {
+    return firestore
+      .collection("users")
+      .where("nickname", ">=", nickname)
+      .limit(4)
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots;
+      });
   },
 
   // Function :: 특정 문자를 포함하는 유저들을 리스트로 묶어서 보냅니다.(seulgi)
   async SELECT_UserSkillByNickname(nickname) {
-    return firestore.collection("users").where("nickname", "==", nickname).get().then(docSnapshots => {
-      return docSnapshots.docs.map(doc => {
-        // console.log(doc.data())
-        return { us : doc.data().userSkills , ss : doc.data().showSkillList };
-      });
-  });
-},
-    // Function :: 유저의 정보를 가져옵니다.
-    async SELECT_AllUserdata() {
-      return firestore.collection("users").get().then(docSnapshots => {
-          return docSnapshots.docs.map(doc => {
-            let data = doc.data();
-            return { level : data.level , name : data.email };
-          });
+    return firestore
+      .collection("users")
+      .where("nickname", "==", nickname)
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+          // console.log(doc.data())
+          return { us: doc.data().userSkills, ss: doc.data().showSkillList };
         });
-    },
+      });
+  },
+  // Function :: 유저의 정보를 가져옵니다.
+  async SELECT_AllUserdata() {
+    return firestore
+      .collection("users")
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+          let data = doc.data();
+          return { level: data.level, name: data.email };
+        });
+      });
+  },
 
-    // Function :: 유저 정보를 가져옵니다
-    async SELECT_ALLUser(){
-      return firestore.collection("users").get().then(docSnapshots => {
-          return docSnapshots.docs.map(doc => {
-            let data = doc.data();
-            return data;
-          });
+  // Function :: 유저 정보를 가져옵니다
+  async SELECT_ALLUser() {
+    return firestore
+      .collection("users")
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+          let data = doc.data();
+          return data;
+        });
       });
   },
 
@@ -438,17 +469,23 @@ export default {
       })
     },
 
-    INSERT_Comment(comment, old, project_id) {
-      old.comments.push(comment);
-      return firestore.collection("projects").doc(project_id).update({
+  INSERT_Comment(comment, old, project_id) {
+    old.comments.push(comment);
+    return firestore
+      .collection("projects")
+      .doc(project_id)
+      .update({
         comments: old.comments
       });
-    },
+  },
 
-    DELETE_comment(project_id, comments, comment_index) {
-      var old = comments;
-      old.splice(comment_index, 1);
-      return firestore.collection("projects").doc(project_id).update({
+  DELETE_comment(project_id, comments, comment_index) {
+    var old = comments;
+    old.splice(comment_index, 1);
+    return firestore
+      .collection("projects")
+      .doc(project_id)
+      .update({
         comments: old
       });
   },
@@ -754,9 +791,6 @@ export default {
   // Function : follow 활동을 하면 alertlist에 추가한다
   // follower 가 follow 당한 사람의 데이터. follow 는 Json 형태
   INSERT_alert_Follow(alert_person, follow, follower) {
-    console.log(alert_person)
-    console.log(follow)
-    console.log(follower)
     firestore.collection('users').doc(alert_person).get().then((docSnapshot) => {
       var old_alertlist = docSnapshot.data().alertlist
       // console.log(old_alertlist, '떳냐')
@@ -886,27 +920,30 @@ export default {
   // --------------------------------------------------------------------LIKE
   // ---------------------------------------------------------------------------------------------------------------------------------
 
-    async reload_userskill(userId,projects,showlist) {
-      let a = new Set([]);
-      for(let i=0; i<projects.length; i++) {
-        let b = new Set(projects[i].data.projecttech);
-        a = new Set([...a, ...b]);
-      }
-      var arr = Array.from(a);
-      for(var i in arr) {
-        arr[i] = arr[i].toUpperCase();
-      }
+  async reload_userskill(userId, projects, showlist) {
+    let a = new Set([]);
+    for (let i = 0; i < projects.length; i++) {
+      let b = new Set(projects[i].data.projecttech);
+      a = new Set([...a, ...b]);
+    }
+    var arr = Array.from(a);
+    for (var i in arr) {
+      arr[i] = arr[i].toUpperCase();
+    }
 
-      var showarr = new Array();
-      for(var i in showlist) {
-        if(arr.includes(showlist[i])) {
-          showarr.push(showlist[i])
-        }
+    var showarr = new Array();
+    for (var i in showlist) {
+      if (arr.includes(showlist[i])) {
+        showarr.push(showlist[i]);
       }
+    }
 
-      firestore.collection("users").doc(userId).update({
-        userSkills : arr,
-        showSkillList : showarr
+    firestore
+      .collection("users")
+      .doc(userId)
+      .update({
+        userSkills: arr,
+        showSkillList: showarr
       });
   },
 
@@ -923,43 +960,59 @@ export default {
       .then(docSnapshots => {
         return docSnapshots.docs.map(doc => {
           let data = doc.data();
-          return {data: data, id : doc.id};
+          return { data: data, id: doc.id };
         });
       });
   },
 
-  INSERT_projectReport(reportTitle,reportContent,projectId,reportUser,reportedUser,projecttitle,reportStack,tag) {
+  INSERT_projectReport(
+    reportTitle,
+    reportContent,
+    projectId,
+    reportUser,
+    reportedUser,
+    projecttitle,
+    reportStack,
+    tag
+  ) {
     firestore.collection("reports").add({
-        reportTitle : reportTitle,
-        reportContent : reportContent,
-        projectId : projectId,
-        reportUser : reportUser, // 신고자
-        reportedUser : reportedUser, // 신고당한 유저
-        projecttitle : projecttitle,
-        state : false,
-        reportStack : reportStack,
-        tag : tag,
-        date: firebase.firestore.FieldValue.serverTimestamp(),
+      reportTitle: reportTitle,
+      reportContent: reportContent,
+      projectId: projectId,
+      reportUser: reportUser, // 신고자
+      reportedUser: reportedUser, // 신고당한 유저
+      projecttitle: projecttitle,
+      state: false,
+      reportStack: reportStack,
+      tag: tag,
+      date: firebase.firestore.FieldValue.serverTimestamp()
     });
   },
 
   DELETE_report(id) {
-    firestore.collection("reports").doc(id).delete();
+    firestore
+      .collection("reports")
+      .doc(id)
+      .delete();
   },
 
   async SELECT_Objections(projectId) {
-    return firestore.collection("reports").where("projectId","==",projectId).get().then(docSnapshots => {
+    return firestore
+      .collection("reports")
+      .where("projectId", "==", projectId)
+      .get()
+      .then(docSnapshots => {
         return docSnapshots.docs.map(doc => {
-          return {data : doc.data(), id : doc.id};
+          return { data: doc.data(), id: doc.id };
         });
       });
   },
-  INSERT_Objection(projectId,projectTitle,projectState,tag) {
+  INSERT_Objection(projectId, projectTitle, projectState, tag) {
     firestore.collection("reports").add({
-      projectTitle : projectTitle,
-      state : projectState,
-      tag : tag,
-      projectId : projectId,
+      projectTitle: projectTitle,
+      state: projectState,
+      tag: tag,
+      projectId: projectId
     });
   },
 
@@ -991,24 +1044,18 @@ export default {
     return firestore.collection("recruitInfo").add({
       category: recruitInfo.category,
       projectTitle: recruitInfo.projectTitle,
-      startDay: recruitInfo.startDay,
+      createDay: recruitInfo.createDay,
       endDay: recruitInfo.endDay,
       budget: recruitInfo.budget,
       projectSummary: recruitInfo.projectSummary,
       projectContent: recruitInfo.projectContent,
-      selectTechList: recruitInfo.selectTechList,
+      requiredSkills: recruitInfo.requiredSkills,
       closingDate: recruitInfo.closingDate,
-      recruitImage: recruitInfo.recruitImage
+      companyId: recruitInfo.session_id
     });
   },
 
-  //
-  // firestore.collection("projects").add({
-  //   projecttitle, projectdescription, projectterm, projectcontent,
-  //   projecttech, projectimage, projectrank, session_id,
-  //   date: firebase.firestore.FieldValue.serverTimestamp(),
-  //   comments: [], likeit: []
-  // });
+
   // --------------------------------------------------------------------recruit
   // ---------------------------------------------------------------------------------------------------------------------------------
 
@@ -1016,16 +1063,21 @@ export default {
   // -------------------------------------------------------------------------------------
 
   async alertcheck(alertlist, alertindex, user_id) {
-    return firestore.collection('users').doc(user_id).get().then(docSnapshot => {
-      var old_alertlist = docSnapshot.data().alertlist
+    return firestore
+      .collection("users")
+      .doc(user_id)
+      .get()
+      .then(docSnapshot => {
+        var old_alertlist = docSnapshot.data().alertlist;
 
-      old_alertlist[alertindex].check = true
-      firestore.collection('users').doc(user_id).update({
-        alertlist : old_alertlist
-      })
-      return true
-    })
+        old_alertlist[alertindex].check = true;
+        firestore
+          .collection("users")
+          .doc(user_id)
+          .update({
+            alertlist: old_alertlist
+          });
+        return true;
+      });
   }
-
-
 };

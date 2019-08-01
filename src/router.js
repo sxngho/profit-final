@@ -17,6 +17,7 @@ import ReChat from "./components/Recruit/Chat.vue";
 import Consult from "./components/Recruit/Consult.vue";
 import Contract from "./components/Recruit/Contract.vue";
 import RecuritEditorPage from "./views/RecuritEditorPage.vue";
+import CompanyListPage from "./views/CompanyListPage.vue";
 import Alert from "./views/Alert.vue";
 import Company from "./views/Company.vue";
 
@@ -42,7 +43,7 @@ export default new Router({
       component: Story
     },
     {
-      path: "/companyIntro",
+      path: "/companyIntro/",
       name: "companyIntro",
       component: CompanyIntro
     },
@@ -112,9 +113,14 @@ export default new Router({
       component: Alert
     },
     {
-      path: "/company",
+      path: "/company/:id",
       name: "company",
       component: Company
+    },
+    {
+      path: "/companyListPage",
+      name: "companyListPage",
+      component: CompanyListPage
     }
   ]
 });
