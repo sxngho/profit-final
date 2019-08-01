@@ -3,7 +3,7 @@
   <v-container>
     <v-layout wrap justify-center>
       <v-flex
-        v-for="i in projects.length > max_project ? max_project : projects.length" xs12 sm6 lg4 v-if="projects[i-1].data.state < 3 &&filtering(i,techfilter) && layout==1 "
+        v-for="i in projects.length > max_project ? max_project : projects.length" xs12 sm6 lg4 v-if="( projects[i-1].data.state < 3 || projects[i-1].data.session_id==login ) && filtering(i,techfilter) && layout==1 "
         style="padding:10px 5px;" v-bind:class="[`project_${i-1}`]">
 
         <ProjectDetail v-on:popdetail="toStory"
@@ -20,7 +20,7 @@
         </ProjectDetail>
       </v-flex>
 
-      <v-flex v-for="i in projects.length > max_project ? max_project : projects.length" xs12 v-if="layout==2">
+      <v-flex v-for="i in projects.length > max_project ? max_project : projects.length" xs12 v-if="( projects[i-1].data.state < 3 || projects[i-1].data.session_id==login ) && filtering(i,techfilter) && layout==2">
         <ProjectDetail0 v-on:popdetail="toStory"
           :projectimage="projects[i-1].data.projectimage"
           :projecttitle="projects[i-1].data.projecttitle"
@@ -36,7 +36,7 @@
         <v-divider></v-divider>
       </v-flex>
 
-      <v-flex v-for="i in projects.length > max_project ? max_project : projects.length" xs12 v-if="layout==3">
+      <v-flex v-for="i in projects.length > max_project ? max_project : projects.length" xs12 v-if="( projects[i-1].data.state < 3 || projects[i-1].data.session_id==login ) && filtering(i,techfilter) && layout==3">
         <ProjectDetail1 v-on:popdetail="toStory"
           :projectimage="projects[i-1].data.projectimage"
           :projecttitle="projects[i-1].data.projecttitle"
@@ -85,7 +85,7 @@ export default {
       techfilter:[],
       filter_projects:[],
       seeall : true,
-
+      login:'',
     };
   },
   components: {

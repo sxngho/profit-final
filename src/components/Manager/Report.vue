@@ -81,24 +81,41 @@ export default {
   methods: {
     async fetchData(){
       this.reportList = await FirebaseService.SELECT_AllReport();
-      console.log(this.reportList);
+      // console.log(this.reportList);
     },
     async greenBtn(projectId,reportStack,id) {
+      var degree = '기각'
       FirebaseService.DELETE_report(id);
       FirebaseService.UPDATE_projectState(projectId,reportStack);
       this.reportList = await FirebaseService.SELECT_AllReport();
+      var project_data = await FirebaseService.SELECT_Project(projectId)
+      var user_data = await FirebaseService.SELECT_Userdata(project_data.session_id)
+      FirebaseService.INSERT_alert_manager(project_data.session_id, projectId, user_data[0], degree)
+      // console.log(user)
     },
     async oragneBtn(projectId,reportStack,id) {
-      reportStack = reportStack + 1;
+      if (reportStack === 2) {
+        this.redBtn(projectId,reportStack,id)
+      } else {
+      var degree = '경고'
+      var reportStack = reportStack + 1;
       FirebaseService.DELETE_report(id);
       FirebaseService.UPDATE_projectState(projectId,reportStack);
       this.reportList = await FirebaseService.SELECT_AllReport();
+      var project_data = await FirebaseService.SELECT_Project(projectId)
+      var user_data = await FirebaseService.SELECT_Userdata(project_data.session_id)
+      FirebaseService.INSERT_alert_manager(project_data.session_id, projectId, user_data[0], degree, reportStack)
+      }
     },
     async redBtn(projectId,reportStack,id) {
-      reportStack = 3;
+      var degree = '블라인드'
+      var reportStack = 3;
       FirebaseService.DELETE_report(id);
       FirebaseService.UPDATE_projectState(projectId,reportStack);
       this.reportList = await FirebaseService.SELECT_AllReport();
+      var project_data = await FirebaseService.SELECT_Project(projectId)
+      var user_data = await FirebaseService.SELECT_Userdata(project_data.session_id)
+      FirebaseService.INSERT_alert_manager(project_data.session_id, projectId, user_data[0], degree, reportStack)
     },
     setTag(tag) {
       this.tag = tag;

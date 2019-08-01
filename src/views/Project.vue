@@ -291,11 +291,11 @@ export default {
         if ( reportSelect !== "기타" ) {
           FirebaseService.INSERT_projectReport(reportSelect,reportDesc,this.project_id,this.$session.get('session_id')
                                               ,this.project.session_id,this.project.projecttitle,this.project.state,"Siren");
-          FirebaseService.INSERT_alert_siren(this.project.session_id, this.project, this.userdata)
+          // FirebaseService.INSERT_alert_siren_project(this.project.session_id, this.project, this.userdata)
         } else {
           FirebaseService.INSERT_projectReport(reportText,reportDesc,this.project_id,this.$session.get('session_id')
                                               ,this.project.session_id,this.project.projecttitle,this.project.state,"Siren");
-          FirebaseService.INSERT_alert_siren(this.project.session_id, this.project, this.userdata)
+          // FirebaseService.INSERT_alert_siren_project(this.project.session_id, this.project, this.userdata)
         }
         this.project.reportUserList.push(upperUser);
         FirebaseService.UPDATE_projectReportUserList(this.project_id,this.project.reportUserList);
