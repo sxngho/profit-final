@@ -1063,13 +1063,13 @@ export default {
   // -------------------------------------------------------------------------------------
 
   async alertcheck(alertlist, alertindex, user_id) {
+    // console.log(alertindex)
     return firestore
       .collection("users")
       .doc(user_id)
       .get()
       .then(docSnapshot => {
         var old_alertlist = docSnapshot.data().alertlist;
-
         old_alertlist[alertindex].check = true;
         firestore
           .collection("users")
