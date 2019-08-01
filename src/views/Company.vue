@@ -175,7 +175,16 @@
                           </v-flex>
 
                         </v-layout>
-                        <v-layout row wrap justify-center><v-btn flex outlined color="red">삭제</v-btn></v-layout>
+                        <v-layout justify-center>
+                          <div  v-if="recruit.activeuser_testdata == ''">
+                            <v-btn flex outlined color="red">삭제</v-btn>
+                          </div>
+                          <div v-else>
+                            <v-btn flex outlined color="blue">완료</v-btn>
+                            <v-btn flex outlined color="orange">계약서</v-btn>
+                            <v-btn flex outlined color="red">프로젝트 종료(실패)</v-btn>
+                          </div>
+                        </v-layout>
                       </v-container>
                     </v-expansion-panel-content>
                   </v-expansion-panel>

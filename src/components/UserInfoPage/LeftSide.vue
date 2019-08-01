@@ -2,23 +2,30 @@
 <template>
   <div style="padding:3vw; border-right:1px #cecece solid;">
     <!-- USER Profile Img -->
-    <v-layout wrap align-center justify-space-around @mouseover="showRmImgBtn=true" @mouseleave="showRmImgBtn=false">
-      <div v-if="!image" class="text-center" justify-center>
-        <v-avatar size="150" class="grey lighten-2">
+    <v-layout wrap align-center justify-space-around>
+
+      <div v-if="!image" class="text-center" justify-center style="position:relative"
+        @mouseover="showUpImgBtn=true" @mouseleave="showUpImgBtn=false">
+        <div  @click="setFile()" v-show="showUpImgBtn" style="position: absolute; top: 54px; z-index: 2">
+          <!-- <i class="fa fa-camera" aria-hidden="true"></i> -->
+          <p class="text-center" style="background: #ffffff91;padding: 10px 5px; cursor:pointer;">
+            사진을 등록하세요!
+          </p>
+        </div>
+        <v-avatar size="150" class="grey lighten-2"  @click="setFile()" style="cursor:pointer;">
           <img src="https://i.imgur.com/aTI4OeZ.png?1">
         </v-avatar>
         <input type="file" name="file" id="file" style="width:100%; display:none" @change="onFileChange" />
-        <div @click="setFile()"><i class="fa fa-camera" aria-hidden="true"></i></div>
       </div>
 
-      <div v-else style="position:relative;">
-        <v-flex
-          @click="removeImage"
+      <div v-else style="position:relative;"
+       @mouseover="showRmImgBtn=true" @mouseleave="showRmImgBtn=false">
+        <div
+          @click="removeImage()"
           v-show="showRmImgBtn"
-          style="z-index:2; right:0;position: absolute; display: none;">
+          style="z-index:2; right:0; position: absolute;">
           <img src="../../assets/icon_set/delete.png" alt="delimg" style="cursor:pointer;width:25px;height:25px;"/>
-        </v-flex>
-        <br/>
+        </div>
         <v-avatar size="150" class="grey lighten-2">
           <img :src="image"/>
         </v-avatar>
@@ -174,6 +181,7 @@ export default {
         {userSkills : ''},
         {showSkillList:''} ],
       showRmImgBtn : false,
+      showUpImgBtn : false,
       reload : false,
     }
   },
