@@ -34,19 +34,23 @@ export default {
   },
   data: () => ({
     unread_alertlist:[],
+    nowLevel : "",
     fake:false,
   }),
   mounted() {
-    this.get_userdata(this.$session.get("session_id"))
+    this.get_userdata(this.$session.get("session_id"));
+    this.nowLevel = this.$session.get("level");
   },
   methods : {
     async get_userdata(id) {
-      var userdata = await FirebaseService.SELECT_Userdata(id)
-      var alerts = userdata[0].alertlist
+      if ( this.nowlevel == "2" ) {
+        var userdata = await FirebaseService.SELECT_Userdata(id)
+        var alerts = userdata[0].alertlist
 
-      for (var i in alerts) {
-        if (alerts[i].check === false) {
-        this.unread_alertlist.push(alerts[i])
+        for (var i in alerts) {
+          if (alerts[i].check === false) {
+          this.unread_alertlist.push(alerts[i])
+          }
         }
       }
     }
