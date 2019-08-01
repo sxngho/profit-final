@@ -3,7 +3,6 @@
     <v-content style="margin-top:60px">
       <v-layout xs12 rows wrap>
         <v-flex>
-          <div id="go">456</div>
           읽지 않은 알람 : {{unread_alertlist.length}} 개<br><br>
           <div>
             <!-- {{alertlist}} -->
@@ -12,7 +11,7 @@
                 <v-list-item-content>
                   index : {{index}}, 확인여부 : {{alert.check}}
                   <v-btn>
-                  <v-list-item-title style="color:red;" v-html="alert.message" @click="move(alert.check, alert.url, index)"></v-list-item-title>
+                    <v-list-item-title :style="{color:colorcheck(alert.check)}" v-html="alert.message" @click="move(alert.check, alert.url, index)"></v-list-item-title>
                   </v-btn>
                 </v-list-item-content>
               </v-list-item>
@@ -60,6 +59,13 @@ export default {
       var result = await FirebaseService.alertcheck(this.alertlist, alertindex, this.$session.get("session_id"))
       if (!check) {
         this.get_userdata(this.$session.get("session_id"))
+      }
+    },
+    colorcheck(check) {
+      if (check) {
+        return
+      } else {
+        return 'red'
       }
     }
   }

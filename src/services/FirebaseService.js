@@ -428,7 +428,7 @@ export default {
     // INSERT_alert_Comment, INSERT_Comment 안에 들어가는 요소들이 모두 필요하지는 않지만,
     // 어떻게 수정될 지 모르는 상황이므로 일단 추가적으로 줄이지는 않겠습니다.
     INSERT_alert_Comment(alert_person, comment, old) {
-      console.log(old, '떳냐')
+      // console.log(old, '떳냐')
       firestore.collection('users').doc(alert_person).get().then((docSnapshot) => {
         var old_alertlist = docSnapshot.data().alertlist
         old_alertlist.push({check:false, url:comment.url, user:comment.session_id, message:`${comment.session_id}님이 댓글에서 회원님을 언급했습니다`})
