@@ -8,11 +8,12 @@
           <div>
             <!-- {{alertlist}} -->
             <v-list>
-              <v-list-item v-for="(alert, index) in alertlist">
+              <v-list-item v-for="(alert, index) in alertlist.slice().reverse()">
                 <v-list-item-content>
                   index : {{index}}, 확인여부 : {{alert.check}}
-
+                  <v-btn>
                   <v-list-item-title style="color:red;" v-html="alert.message" @click="move(alert.check, alert.url, index)"></v-list-item-title>
+                  </v-btn>
                 </v-list-item-content>
               </v-list-item>
             </v-list>

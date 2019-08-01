@@ -63,7 +63,7 @@
                   <!-- 여기에 태그한 사람들의 이름이 박스로 체크됩니다. -->
                   <div >
                     태그 : <v-btn style="display:inline-block;" v-for="nickname in real_taglist" @click="delete_taglist(nickname)">{{nickname}}</v-btn>
-                    <v-text-field style="width:100%;" placeholder="댓글을 입력해주세요" v-model="comment"></v-text-field>
+                    <v-text-field style="width:100%;" placeholder="댓글을 입력해주세요" v-model="comment" v-on:keyup.enter="INSERT_Comment(real_taglist, comment)"></v-text-field>
                   </div>
 
                   <!-- 여기에서 태그 가능한 사람들의 목록을 보여줄 것입니다.-->
@@ -202,7 +202,6 @@ export default {
     },
     // seulgi function
     async INSERT_Comment(real_taglist, comment){
-
       if (this.user) {
         var listtext = ''
         for (var j in real_taglist) {
