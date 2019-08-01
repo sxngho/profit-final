@@ -68,11 +68,6 @@ export default new Router({
       component: Manager
     },
     {
-      path: "/chat",
-      name: "chat",
-      component: Chat
-    },
-    {
       path: "/recruits",
       name: "recruits",
       component: Recruit
