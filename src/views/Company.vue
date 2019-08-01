@@ -101,7 +101,7 @@
                   <v-expansion-panel
                   v-for="recruit in recruitlist">
                     <v-expansion-panel-header>
-                      {{recruit.projectTitle}}
+                      {{recruit.data.projectTitle}}
                     </v-expansion-panel-header>
                     <v-expansion-panel-content>
                       <v-container>
@@ -111,41 +111,41 @@
                             <!-- 제목과 기술스택 -->
                             <v-layout row wrap>
                               <div>
-                                <v-chip label outlined color="deep-purple">{{recruit.category}}</v-chip>
+                                <v-chip label outlined color="deep-purple">{{recruit.data.category}}</v-chip>
                               </div>
                               <v-spacer/>
                               <div>
-                                <v-chip v-for="skill in recruit.requiredSkills" small color="#7c5eb2c7">
+                                <v-chip v-for="skill in recruit.data.requiredSkills" small color="#7c5eb2c7">
                                   {{skill}}
                                 </v-chip>
                               </div>
                             </v-layout>
 
                             <!-- 요약 -->
-                            <p style="margin:20px 0px; border-bottom:1px solid black">{{recruit.projectSummary}}</p>
+                            <p style="margin:20px 0px; border-bottom:1px solid black">{{recruit.data.projectSummary}}</p>
 
                             <!-- 나머지 디테일 -->
                             <v-simple-table>
                               <tbody>
                                 <tr>
                                   <th>제목</th>
-                                  <td>{{recruit.projectTitle}}</td>
+                                  <td>{{recruit.data.projectTitle}}</td>
                                 </tr>
                                 <tr>
                                   <th>예산</th>
-                                  <td>{{recruit.budget}}</td>
+                                  <td>{{recruit.data.budget}}</td>
                                 </tr>
                                 <tr>
                                   <th>업로드일</th>
-                                  <td>{{recruit.createDay}}</td>
+                                  <td>{{recruit.data.createDay}}</td>
                                 </tr>
                                 <tr>
                                   <th>모집종료</th>
-                                  <td>{{recruit.closingDate}}</td>
+                                  <td>{{recruit.data.closingDate}}</td>
                                 </tr>
                                 <tr>
                                   <th>프로젝트 마감일</th>
-                                  <td>{{recruit.endDay}}</td>
+                                  <td>{{recruit.data.endDay}}</td>
                                 </tr>
                               </tbody>
                             </v-simple-table>
@@ -153,26 +153,27 @@
 
                           <!-- 채팅방 목록들 ==> 즉, 찜한 유저 리스트-->
                           <!-- 아직 계약이 되지 않았을때 -->
-                          <v-flex xs12 sm5 v-if="recruit.activeuser_testdata == ''">
+                          <v-flex xs12 sm5 v-if="nowLevel=='3'">
                             <h3>찜한 유저들</h3>
                             <v-layout row wrap>
-                              <v-flex xs11 offset-xs1 v-for="user in recruit.jjim_testdata">
-                                <v-btn text outlined>
-                                  {{user}}
+                              <v-flex xs11 offset-xs1 v-for="user in dibsUsers">
+                                <!-- 여기서 user는 chatting 입니다 혼동하기 쉬울거같아서 남겨놓습니다.-->
+                                <v-btn text outlined @click="openChat(user)">
+                                  {{user.userId}}
                                 </v-btn>
                               </v-flex>
                             </v-layout>
                           </v-flex>
 
                           <!-- 계약이 된 상태라면 -->
-                          <v-flex xs12 sm5 v-else>
+                          <!-- <v-flex xs12 sm5>
                             <h3>작업중인 유저</h3>
                             <v-layout row wrap>
                               <v-flex xs11 offset-xs1>
                                 {{recruit.activeuser_testdata}}
                               </v-flex>
                             </v-layout>
-                          </v-flex>
+                          </v-flex> -->
 
                         </v-layout>
                         <v-layout justify-center>
@@ -201,16 +202,55 @@
 </template>
 
 
+
+<script src="https://www.gstatic.com/firebasejs/3.6.2/firebase.js"></script>
 <script>
 import FirebaseService from "@/services/FirebaseService";
+import Vue from "vue";
 import Main from "../components/Manager/Main";
+var firebase = require('firebase/app');
+require('firebase/auth');
+require('firebase/database');
 
 export default {
   name: "Company",
   components: {
   },
+  mounted() {
+    this.fetchData();
+    this.nowLevel = this.$session.get('level');
+  },
   methods: {
+    async fetchData() {
+      //this.company = await FirebaseService.SELECT_CompanyById(this.$route.params.id);
+      this.recruitlist = await FirebaseService.SELECT_RecruitInfoById(this.$route.params.id);
+      this.dibsUsers = [];
+      var recruitsbyCompany = await FirebaseService.SELECT_RecruitInfoByCompany(this.$route.params.id);
+      var chatRooms = "";
+      var ChatRef = firebase.database().ref('/chat/')
+      ChatRef.once('value', snapshot => {
+        chatRooms = snapshot.val();
+        console.log(chatRooms,"챗룸")
+        for(var ii in recruitsbyCompany) {
+          for(var i in chatRooms) {
+            if( chatRooms[i].recruitPK == recruitsbyCompany[ii].id ) {
+              this.dibsUsers.push(chatRooms[i]);
+            }
+          }
+        }
+      },function(error) {
+        console.error(error,"유저리스트 불러오기 에러");
+      });
 
+      console.log( this.dibsUsers ,"찜유저리스트")
+    },
+    openChat(user) {
+      window.open(
+        "../" + user.link,
+        "name(이름지정)",
+        "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=1000,height=600"
+      );
+    },
   },
   data() {
     return {
@@ -227,50 +267,10 @@ export default {
 
         descript:"어쩌고저쩌고 회사설명 긴글이필요하다법률이 정하는 주요방위산업체에 종사하는 근로자의 단체행동권은 법률이 정하는 바에 의하여 이를 제한하거나 인정하지 아니할 수 있다. 대통령은 법률안의 일부에 대하여 또는 법률안을 수정하여 재의를 요구할 수 없다. 군인은 현역을 면한 후가 아니면 국무총리로 임명될 수 없다. 법원은 최고법원인 대법원과 각급법원으로 조직된다. 대한민국의 영토는 한반도와 그 부속도서로 한다.대통령후보자가 1인일 때에는 그 득표수가 선거권자 총수의 3분의 1 이상이 아니면 대통령으로 당선될 수 없다. 재판의 전심절차로서 행정심판을 할 수 있다. 행정심판의 절차는 법률로 정하되, 사법절차가 준용되어야 한다",
       },
-      recruitlist:[
-        {
-        companyId:"공고를올린회사이름",
-        requiredSkills:['C','Java','C++'],
-        projectTitle:"기업공고제목",
-        budget:"10000000000000",
-        category:"웹모바일",
-        closingDate:"50일후",
-        createDay:"2019-07-30",
-        endDay:"2019-09-26",
-        projectContent:"<h1>사람구합니다!!!</h1>살려주세요!!!!",
-        projectSummary:"포트폴리오 웹 사이트 제작 6개월 프로젝트",
-        jjim_testdata:['찜한유저1','찜유저2','핖피'],
-        activeuser_testdata:"",
-        },
-        {
-        companyId:"공고를올린회사이름",
-        requiredSkills:['C','Java','C++'],
-        projectTitle:"기업공고제목",
-        budget:"10000000000000",
-        category:"웹모바일",
-        closingDate:"50일후",
-        createDay:"2019-07-30",
-        endDay:"2019-09-26",
-        projectContent:"<h1>사람구합니다!!!</h1>살려주세요!!!!",
-        projectSummary:"포트폴리오 웹 사이트 제작 6개월 프로젝트",
-        jjim_testdata:['유저1','유저2','유저3'],
-        activeuser_testdata:"핖피",
-        },
-        {
-        companyId:"공고를올린회사이름",
-        requiredSkills:['C','Java','C++'],
-        projectTitle:"기업공고제목",
-        budget:"10000000000000",
-        category:"웹모바일",
-        closingDate:"50일후",
-        createDay:"2019-07-30",
-        endDay:"2019-09-26",
-        projectContent:"<h1>사람구합니다!!!</h1>살려주세요!!!!",
-        projectSummary:"포트폴리오 웹 사이트 제작 6개월 프로젝트",
-        jjim_testdata:['유저1','유저2','유저3'],
-        activeuser_testdata:"",
-        },
-      ],
+      recruitlist:[],
+      workingUser : "",
+      dibsUsers : "",
+      nowLevel : "",
     };
   },
 };

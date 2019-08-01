@@ -34,14 +34,17 @@ export default {
   },
   data: () => ({
     unread_alertlist:[],
+    nowLevel : "",
     check:false,
     userdata:[],
   }),
   mounted() {
-    this.get_userdata(this.$session.get("session_id"))
+    this.get_userdata(this.$session.get("session_id"));
+    this.nowLevel = this.$session.get("level");
   },
   methods : {
     async get_userdata(id) {
+     if ( this.nowlevel == "2" ) {
       var userdata = await FirebaseService.SELECT_Userdata(id)
       this.userdata = userdata
       if (userdata.length) {
@@ -55,6 +58,7 @@ export default {
       } else {
         this.check = false
       }
+    }
     },
     login_success() {
       this.check = true
