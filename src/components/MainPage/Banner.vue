@@ -14,7 +14,7 @@
           </div>
         </button>
       </router-link>
-      <router-link to="/" class="bannerBox" style="text-decoration:none">
+      <router-link to="/companyListPage" class="bannerBox" style="text-decoration:none">
         <div class="companyList contentBox">
           <div class="iconBox">
             <i class="far fa-building fa-7x" style="color:blueviolet"></i>
@@ -55,19 +55,16 @@
 import FirebaseService from "@/services/FirebaseService";
 export default {
   data() {
-    return {
-
-    }
+    return {};
   },
   methods: {
     async randomUser() {
       var user = await FirebaseService.SELECT_ALLUser();
-      console.log(user.length)
+      console.log(user.length);
       var result = Math.floor(Math.random() * user.length);
-      console.log("랜덤수 :",result);
+      console.log("랜덤수 :", result);
     }
-  },
-
+  }
 };
 </script>
 
