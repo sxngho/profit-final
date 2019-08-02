@@ -184,7 +184,7 @@
 
                         </v-layout>
                         <v-layout justify-center>
-                          <div  v-if="recruit.activeuser_testdata == ''">
+                          <div  v-if="!recruit.data.contract">
                             <v-btn flex outlined color="red">삭제</v-btn>
                           </div>
                           <div v-else>

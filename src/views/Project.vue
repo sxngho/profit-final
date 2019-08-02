@@ -73,11 +73,11 @@
       <v-container grid-list-md>
         <v-layout wrap>
           <!-- Project Main Thumbnail -->
-          <v-flex xs12 sm6>
+          <v-flex xs10 offset-xs1>
             <BigImg v-bind:imgSrc="project.projectimage" />
           </v-flex>
           <!--  left detail -->
-          <v-flex xs12 md9>
+          <v-flex xs12>
             <v-layout column>
               <!-- project description -->
               <v-layout row style="padding: 2vw 0vw; border-bottom: 1px solid #cecece;">
