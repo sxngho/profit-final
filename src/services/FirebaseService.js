@@ -744,7 +744,8 @@ export default {
                     level: 0,
                     showSkillList: [],
                     dibs: [],
-                    alertlist: []
+                    alertlist: [],
+                    proceedList : [],
                   });
                 firestore
                   .collection("user_addon")
