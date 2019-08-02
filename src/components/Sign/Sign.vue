@@ -60,6 +60,13 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-btn
+      text
+      v-if="(Level == '0' || Level =='1') && user !=='' && user !== undefined "
+      style="height:100%;"
+    >{{user}}</v-btn>
+
     <v-btn
       text
       v-if="Level == '2' && user !=='' && user !== undefined "
