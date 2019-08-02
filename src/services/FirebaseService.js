@@ -492,6 +492,22 @@ export default {
       });
   },
 
+  DELETE_user(id) {
+    firestore
+      .collection("users")
+      .doc(id)
+      .delete();
+  },
+
+  UPDATE_Userlevel(nickname, newlevel) {
+    return firestore
+      .collection("users")
+      .doc(nickname)
+      .update({
+        level: newlevel
+      });
+  },
+
   // -----------------------------------------------------------------------USER
   // ---------------------------------------------------------------------------------------------------------------------------------
 

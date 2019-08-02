@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="level<=1">
     <!-- TODO 여백 -->
     <v-layout><v-flex style="margin:30px;" /></v-layout>
 
@@ -49,8 +49,12 @@ export default {
   data() {
     return {
       compo:1,
+      level:"",
     };
   },
+  mounted() {
+    this.level = this.$session.get('level');
+  }
 };
 
 </script>
