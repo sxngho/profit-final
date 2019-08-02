@@ -1,5 +1,5 @@
 <template>
-  <v-flex style=" padding: 10px 5px;">
+  <v-flex  style="padding: 5px 5px 45px 5px; background: #d2d2d233;">
     <div @click="popdetail(project_id)">
       <v-img :src="projectimage" height="20vw"></v-img>
       <div>

@@ -1,36 +1,47 @@
 <template>
-  <div style="margin:20px">
-    <v-layout row wrap>
-      <v-flex xs12 class="text-xs-center">
-        <h1>{{recruit.data.projectTitle}}</h1>
-      </v-flex>
+  <v-container>
 
+    <v-layout row style="margin:20px"/>
+
+    <v-layout row wrap justify-ceneter>
+      <v-flex xs12>
+        <p class="text-center font-weight-bold display-1">{{recruit.data.projectTitle}}</p>
+      </v-flex>
+    </v-layout>
+
+    <v-layout row wrap justify-ceneter>
+      <v-flex xs12>
+        <p class="text-center grey--text">{{recruit.data.projectSummary}}</p>
+      </v-flex>
+    </v-layout>
+
+    <v-layout row wrap>
       <v-flex xs12 class="text-xs-center">
         <span class="grey--text">{{projectSummary}}</span>
       </v-flex>
 
       <v-flex xs12 class="text-xs-center">
-        <p>모집 마감일 : <span class="red--text">{{closingDate}}</span>,
-          현재 신청자 수 : <span class="red--text">{{applicationStack}}</span></p>
+        <p>모집 마감일 : <span class="red--text">{{recruit.data.closingDate}}</span>,
+          현재 신청자 수 : <span class="red--text">{{recruit.data.applicationStack}}</span></p>
       </v-flex>
 
       <v-flex xs12 class="text-xs-center ">
-        <span class="tech">{{category}}</span>
-        <span class="tech">{{duration}}</span>
-        <span class="tech">{{budget}}원</span>
+        <v-chip color="red" outlined>{{recruit.data.category}}</v-chip>
+        <v-chip color="orange" outlined>{{recruit.data.endDay}}</v-chip>
+        <v-chip color="blue" outlined>{{recruit.data.budget}}원</v-chip>
       </v-flex>
 
       <v-flex xs12 style="height:40px"/>
 
       <v-flex xs12>
-        <p v-html="projectContent"></p>
+        <p v-html="recruit.data.projectContent"></p>
       </v-flex>
 
       <v-btn @click="dib(recruit_id)">
         찜!
       </v-btn>
     </v-layout>
-  </div>
+  </v-container>
 </template>
 
 <script>
