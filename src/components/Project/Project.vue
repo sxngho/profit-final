@@ -142,9 +142,10 @@
 
                     <!-- 수정 전에 보여주는 댓글리스트 -->
                     <v-list-item-content v-bind:class="[`before_${index}`]" style="width:70%;">
-                      <v-list-item-title v-html="com.Comment"></v-list-item-title>
+                      <span v-if="com.state==3" style="color:red;" @click="seecomment(index)">이 댓글은 신고 누적으로 블라인드 처리</span>
+                      <v-list-item-title v-if="com.state < 3" v-html="com.Comment"></v-list-item-title>
+                      <v-list-item-title v-html="com.Comment" v-bind:class="[`blind_${index}`]" style="display:none;"></v-list-item-title>
                       <v-list-item-title v-html="com.User"></v-list-item-title>
-
                     </v-list-item-content>
                     <!--  -->
                     <!-- 수정 그림을 누르면 보여주는 구역 , 바로 비동기적으로 구현됨.-->
@@ -508,6 +509,12 @@ export default {
       var index = this.real_taglist.indexOf(nickname)
       this.real_taglist.splice(index, 1)
     },
+    seecomment(index) {
+      if (confirm('블라인드 처리된 댓글을 보시겠습니까?')) {
+        var blindtext = document.querySelector(`.blind_${index}`)
+        blindtext.style.display = 'block';
+      }
+    }
   },
   watch : {
     comment : function() {
