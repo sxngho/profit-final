@@ -389,7 +389,7 @@ export default {
           }
         }
         // 비동기적으로 댓글 추가
-        console.log(listtext + this.comment)
+        // console.log(listtext + this.comment)
         const newcommnet = {
         User : this.user,
         Comment : listtext + this.comment,

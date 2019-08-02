@@ -109,6 +109,7 @@ export default {
   },
   mounted() {
     this.user = this.$session.get("session_id");
+    this.Level = this.$session.get('level');
     this.userpage = "/story/" + this.user;
   },
   methods: {

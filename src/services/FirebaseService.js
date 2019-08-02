@@ -346,7 +346,6 @@ export default {
       .get()
       .then(docSnapshots => {
         return docSnapshots.docs.map(doc => {
-          console.log(doc.data())
           return doc.data();
         });
       });
