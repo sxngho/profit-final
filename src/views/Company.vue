@@ -101,7 +101,12 @@
                   <v-expansion-panel
                   v-for="recruit in recruitlist">
                     <v-expansion-panel-header>
+                      <div>
+                      <v-chip color="green" text-color="white" v-if="recruit.data.contract" style="">작업중</v-chip>
+                      <v-chip color="primary" v-if="!recruit.data.contract">모집중</v-chip>
+                      </div>
                       {{recruit.data.projectTitle}}
+                      <v-spacer/>
                     </v-expansion-panel-header>
                     <v-expansion-panel-content>
                       <v-container>
@@ -153,13 +158,13 @@
 
                           <!-- 채팅방 목록들 ==> 즉, 찜한 유저 리스트-->
                           <!-- 아직 계약이 되지 않았을때 -->
-                          <v-flex xs12 sm5 v-if="isMineCheck() && !recruit.data.contract">
+                          <v-flex xs12 sm5 v-if="isMineCheck() && !recruit.data.contract ">
                             <h3>찜한 유저들</h3>
                             <v-layout row wrap>
-                              <v-flex xs11 offset-xs1 v-for="user in dibsUsers">
+                              <v-flex xs11 offset-xs1 v-for="user in dibsUsers" v-if="user.recruit==recruit.id">
                                 <!-- 여기서 user는 chatting 입니다 혼동하기 쉬울거같아서 남겨놓습니다.-->
-                                <v-btn text outlined @click="openChat(user)">
-                                  {{user.userId}}
+                                <v-btn text outlined @click="openChat(user.chat)">
+                                  {{user.chat.userId}}
                                 </v-btn>
                               </v-flex>
                             </v-layout>
@@ -170,7 +175,7 @@
                             <h3>작업중인 유저</h3>
                             <v-layout row wrap>
                               <v-flex xs11 offset-xs1>
-                                <v-btn text outlined @click="opneWorkChat(recruit.data.responsibility)">
+                                <v-btn text outlined @click="openWorkChat(recruit.data.responsibility,recruit.id)">
                                 {{recruit.data.responsibility}}
                                 </v-btn>
                               </v-flex>
@@ -243,7 +248,7 @@ export default {
         for(var ii in recruitsbyCompany) {
           for(var i in chatRooms) {
             if( chatRooms[i].recruitPK == recruitsbyCompany[ii].id ) {
-              this.dibsUsers.push(chatRooms[i]);
+              this.dibsUsers.push({ recruit : recruitsbyCompany[ii].id, chat :chatRooms[i] })
             }
           }
         }
@@ -260,16 +265,19 @@ export default {
         "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=1000,height=600"
       );
     },
-    opneWorkChat(user) { // user -> 이 프로젝트를 하기로한 유저아이디
+    openWorkChat(user,id) { // user -> 이 프로젝트를 하기로한 유저아이디
       for(var i in this.dibsUsers) {
-        if (this.dibsUsers[i].userId  == user ) {
-          this.workingUser = this.dibsUsers[i];
+        console.log(this.dibsUsers[i],"리쿠르트아이디가나와야함..")
+        console.log(id,"아이디");
+        if (this.dibsUsers[i].chat.userId  == user && this.dibsUsers[i].recruit == id ) {
+          this.workingUser = this.dibsUsers[i].chat;
           break;
         }
       }
-
+      console.log(this.workingUser);
+      var link = this.workingUser.link;
       window.open(
-        "../" + this.workingUser.link,
+        "../" + link,
         "name(이름지정)",
         "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=1000,height=600"
       );

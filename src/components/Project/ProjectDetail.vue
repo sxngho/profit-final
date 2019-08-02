@@ -3,7 +3,7 @@
     <div @click="popdetail(project_id)">
       <v-img :src="projectimage" height="20vw"></v-img>
       <div>
-        <div class="black--text text-center">{{projecttitle}}</div>
+        <div class="black--text text-center"><span v-if="projectstate==3" style="color:red;">블라인드 처리됨</span>&nbsp; {{projecttitle}}</div>
         <div class="grey--text text-center">{{projectdescription}}</div>
       </div>
     </div>
@@ -42,6 +42,7 @@ export default {
     project_id: { type: String },
     project_writer: {type: String},
     index : {type:Number}, // 프로젝트의 인덱스
+    projectstate : {type:Number},
 
   },
   data: () => ({

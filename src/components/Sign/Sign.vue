@@ -65,20 +65,20 @@
       v-if="Level == '2' && user !=='' && user !== undefined "
       :to="{ name: 'story', params: { id: user }}"
       style="height:100%;"
-    >{{user}} 유저</v-btn>
+    >{{user}}</v-btn>
 
     <v-btn
       text
       v-if="Level == '3' && user !=='' && user !== undefined"
       :to="{ name: 'company', params: { id: user }}"
       style="height:100%;"
-    >{{user}} 기업 </v-btn>
+    >{{user}}</v-btn>
 
     <v-btn text @click="Logout()" v-if="user!=='' && user!==undefined" style="height:100%;">Log Out</v-btn>
-    <v-btn text>
-      <i class="fa fa-globe" aria-hidden="true"></i>
+    <!-- <v-btn text> -->
+      <!-- <i class="fa fa-globe" aria-hidden="true"></i> -->
       <!-- 여기에 알람을 넣어야하나.. -->
-    </v-btn>
+    <!-- </v-btn> -->
   </div>
 </template>
 
@@ -109,7 +109,9 @@ export default {
   },
   mounted() {
     this.user = this.$session.get("session_id");
+    this.Level = this.$session.get('level');
     this.userpage = "/story/" + this.user;
+    this.Level = this.$session.get("level");
   },
   methods: {
     showNotification(group, type, title, text) {
@@ -133,7 +135,7 @@ export default {
         this.$session.set("session_id", "");
         this.$session.set("level", "");
         this.user = "";
-
+        this.$emit('logout_success')
         // console.log(this.$store.getters.getSession,"setSession")
         // console.log(this.$session.get('session_id'))
       }
@@ -154,7 +156,7 @@ export default {
           this.$session.set("session_id", user_nickname[0].nickname);
           this.user = this.$session.get("session_id");
         } else if (company_nickname[0] !== undefined) {
-          console.log(company_nickname[0].company_name);
+          // console.log(company_nickname[0].company_name);
           this.$session.set("session_id", company_nickname[0].company_name);
           this.user = this.$session.get("session_id");
         }
@@ -164,6 +166,7 @@ export default {
             this.$session.set("level", userlist[user].level);
             level = userlist[user].level;
             this.Level = this.$session.get("level");
+            // console.log(this.Level, '올라왔냐')
           }
         }
         for (var company in companylist) {
@@ -182,6 +185,7 @@ export default {
         );
         this.LoginId = "";
         this.LoginPassword = "";
+        this.$emit('login_success')
       }
     },
 

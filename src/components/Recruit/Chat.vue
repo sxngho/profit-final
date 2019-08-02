@@ -670,7 +670,9 @@ export default {
 
           //계약당사자의 users Collection에서 proceedList를 업데이트 해야한다!
           this.addProceedList(contractUser, this.nowChatRoom.recruitPK );
-
+          firebase.database().ref('/'+this.nowChatRoom.link).update({
+            contractTime : new Date(),
+          });
           //이것을 찜하고있던 유저들의 찜목록에서 다 지워주기 (계약 당사자 포함)
           var dellist = [];
           firebase.database().ref('/chat/').once('value').then( snapshot => {

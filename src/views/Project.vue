@@ -12,28 +12,29 @@
        </v-toolbar-title>
       <v-spacer/>
 
-      <v-btn text color="yellow" @click="submitObjection()" v-if="isMineCheck() && project.state > 0">
+      <v-btn text @click="submitObjection()" v-if="isMineCheck() && project.state > 0">
         이의제기
       </v-btn>
 
       <v-btn text icon color="pink">
         <i id="likecheck" class="far fa-heart fa-2x" @click="like_project()"></i>
         {{likeit.length}}
-        <!-- 이미 좋아요 눌렀다면 다른 fa 를 보여주는 것도 좋겠다. -->
       </v-btn>
+
       <v-btn text icon color="yellow">
         <i class="fa fa-star fa-2x"></i>
       </v-btn>
+
       <template>
       <v-layout justify-center d-inline>
         <v-dialog v-model="sirendialog" max-width="290">
           <template v-slot:activator="{ on }">
-            <v-btn text color="primary" dark v-on="on"><i class="fa fa-trash fa-2x"></i></v-btn>
+            <v-btn text color="primary" dark v-on="on"><i class="fas fa-bell fa-2x" style="color:orange"></i></v-btn>
           </template>
 
           <v-card>
             <v-card-title class="headline">
-              <span class="headline">신고하기</span>
+              <span class="headline">프로젝트 신고하기</span>
             </v-card-title>
             <v-card-text>
               <v-layout wrap>
@@ -42,13 +43,14 @@
                   v-model="reportSelect"
                   :items="reportItems"
                   label="신고 사유를 선택해주세요."
+                  readonly
                   ></v-combobox>
                 </v-flex>
                 <v-flex xs12 v-if="reportSelect=='기타'">
-                  <input type="text" v-model="reportText"/>
+                  <v-text-field single-line outlined required v-model="reportText" placeholder="신고 사유를 입력해주세요."> </v-text-field>
                 </v-flex>
                 <v-flex xs12>
-                  <v-text-field v-model="reportDesc" required @keyup.enter="sirendialog = false, submitReport(reportSelect,reportText,reportDesc)"></v-text-field>
+                  <v-text-field v-model="reportDesc" required placeholder="신고 내용을 입력해주세요." @keyup.enter="sirendialog = false,  submitReport(reportSelect,reportText,reportDesc)"></v-text-field>
                 </v-flex>
               </v-layout>
             </v-card-text>
@@ -134,8 +136,10 @@
                 <v-list>
                   <v-list-item name="1" v-for="(com, index) in comments" style="border-bottom: 1px solid #9E6E2E; margin:5px; padding:5px;">
                     <!-- 수정 전에 보여주는 댓글리스트 -->
-                    <v-list-item-content v-bind:class="[`before_${index}`]" style="width:70%;">
-                      <v-list-item-title v-html="com.Comment"></v-list-item-title>
+                    <v-list-item-content v-bind:class="[`before_${index}`]" style="width:70%;" >
+                      <span v-if="com.state==3" style="color:red;" @click="seecomment(index)">이 댓글은 신고 누적으로 블라인드 처리</span>
+                      <v-list-item-title v-if="com.state < 3" v-html="com.Comment"></v-list-item-title>
+                      <v-list-item-title v-html="com.Comment" v-bind:class="[`blind_${index}`]" style="display:none;"></v-list-item-title>
                       <v-list-item-title v-html="com.User"></v-list-item-title>
                     </v-list-item-content>
                     <!--  -->
@@ -143,30 +147,29 @@
                     <!-- 수정 그림을 누르면 보여주는 구역 , 바로 비동기적으로 구현됨.-->
                     <div v-bind:class="[`after_${index}`]" style="display:none; width:100%; margin:10px; padding:10px; ">
                       <input v-bind:class="[`aftertext_${index}`]" style="display:inline-block; width:100%; border: 1px solid #ff0000;" v-model="update_commenttext"><br>
-                      <v-btn @click="change_comment(project_id, comments, index, update_commenttext)">수정</v-btn>
+                      <v-btn @click="change_comment(comments, index, update_commenttext)">수정</v-btn>
                       <v-btn @click="cancel(project_id, comments, index)">취소</v-btn>
                     </div>
                     <!--  -->
-
+                    <v-spacer/>
                     <v-list-item-action>
-                      <div style='display:inline-block;'>
-                        &nbsp;
+                      <div style='display:flex;'>
+                        &nbsp;&nbsp;
                         <i v-bind:id="[`commentlike_${index}`]" class="far fa-heart" style="color:red" @click="like_comment(com, index)"></i>
                         {{com.like.length}}
-                        &nbsp;
+                        &nbsp;&nbsp;
                         <i v-bind:id="[`commentunlike_${index}`]" class="far fa-heart" @click="unlike_comment(com, index)"></i>
                         {{com.unlike.length}}
-                        &nbsp;
+                        &nbsp;&nbsp;
                         <img v-if="com.User==user" src="data:image/png;base64,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" alt="Smiley" style="cursor: pointer; height:20px; display:inline-block;"
                         @click="UPDATE_comment(comments, index)">
-                        &nbsp;
+                        &nbsp;&nbsp;
                         <img v-if="com.User==user" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAsQAAALEBxi1JjQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAHUSURBVFiF7Za/SxthGMc/76sFOU2q0aFWLf0fusmN/hh0ClkydFHpUMGpVOiQ2uIiKoj4o0J1CaVL7Fp0cTkoFVqE/gelxslEY0jDVe/tEDw8zUXvuFNEn+2e5+75fu75ce8JPNrQxIyqFV+beCW85JNeAYK2er8Pnn/TyyrjZjdegQv9Gl/6OICSK0BHwFp/EOrF1Mvhr2edFyug5IcQxAE6lRIr553VWtAZgjgAArquAnCtdg/g+tXaG0v42ms3a5/PVNW68QrcA9xCAFHjtK0VCwRACNrezNH6ehoZeegIaXofj2Y/0/BMDxEAUP9MHnQ8JTaasiE0vZ9oYgSkBNMMEUAp8suTHO/9pr79CbHRFI29caKJYQAKmVXKv7ZDBACso0NyC+84zlYgIoPJivj6GiVjw2s6f1tgFQv8/WnY1yeHOco73/yk8geg6f1EBpKgFCcH+9Q1tzpmIlQATe9z9Hx/ZtwxE7IpGiKAlETjQ7Z4ydiozMTiextC6+7xlNLbX7FlcfBpAUzTMe2ng6l191D6vhUiAFD+YVT1W8UCxc0vXtPdxrPgLgFkgxIRsOsdQJAOCsBCueZy3YJci0jF8goUz4HHPrWzCNL5FvnW7Yb/F8CPuY2PJ7UAAAAASUVORK5CYII=" alt="Smiley" style="cursor: pointer; height:20px; display:inline-block;" @click="DELETE_comment(comments, index)">
-                        &nbsp;
                         <template>
                         <v-layout justify-center d-inline>
                           <v-dialog v-model="Commentdialog" max-width="290">
                             <template v-slot:activator="{ on }">
-                              <v-btn text color="primary" dark v-on="on"><i class="fa fa-trash fa-2x"></i></v-btn>
+                              <v-btn text color="primary" dark v-on="on"><i class="fas fa-bell" style="color:orange"></i></v-btn>
                             </template>
 
                             <v-card>
@@ -180,20 +183,21 @@
                                     v-model="reportCommentSelect"
                                     :items="reportCommentItems"
                                     label="댓글신고 사유를 선택해주세요."
+                                    readonly
                                     ></v-combobox>
                                   </v-flex>
                                   <v-flex xs12 v-if="reportCommentSelect=='기타'">
-                                    <input type="text" v-model="reportCommentText"/>
+                                      <v-text-field single-line outlined required v-model="reportCommentText" placeholder="신고 사유를 입력해주세요."> </v-text-field>
                                   </v-flex>
                                   <v-flex xs12>
-                                    <v-text-field v-model="reportCommentDesc" required @keyup.enter="Commentdialog = false, submitCommentReport(reportCommentSelect,reportCommentText,reportCommentDesc)"></v-text-field>
+                                    <v-text-field v-model="reportCommentDesc" required placeholder="신고 내용을 입력해주세요." @keyup.enter="Commentdialog = false, submitCommentReport(reportCommentSelect,reportCommentText,reportCommentDesc)"></v-text-field>
                                   </v-flex>
                                 </v-layout>
                               </v-card-text>
                               <v-card-actions>
                                 <v-spacer></v-spacer>
                                 <v-btn color="blue darken-1" text @click="Commentdialog = false">취소</v-btn>
-                                <v-btn color="blue darken-1" text @click="Commentdialog = false, submitCommentReport(reportCommentSelect,reportCommentText,reportCommentDesc)">신고하기</v-btn>
+                                <v-btn color="blue darken-1" text @click="Commentdialog = false, submitCommentReport(reportCommentSelect,reportCommentText,reportCommentDesc, comments, index)">신고하기</v-btn>
                                 <br />
                               </v-card-actions>
                             </v-card>
@@ -239,10 +243,10 @@ export default {
   name: "Project",
   data() {
     return {
-      sirendialog:false,
       project_id: "",
       project: "",
       user:"",
+      userdata:"",
       comments:[],
       comment:"",
       update_comment: false,
@@ -255,7 +259,6 @@ export default {
       reportItems: [
         '잘못된 정보가 기입된 프로젝트',
         '비속어 사용',
-        '필요한 정보가 기입된 프로젝트',
         '기타',
       ],
       reportText: "",
@@ -312,10 +315,12 @@ export default {
       if ( !this.project.reportUserList.includes(upperUser) ) {
         if ( reportSelect !== "기타" ) {
           FirebaseService.INSERT_projectReport(reportSelect,reportDesc,this.project_id,this.$session.get('session_id')
-                                              ,this.project.session_id,this.project.projecttitle,this.project.state,"Siren");
+                                              ,this.project.session_id,this.project.projecttitle,this.project.state,"Siren_Project");
+          // FirebaseService.INSERT_alert_siren_project(this.project.session_id, this.project, this.userdata)
         } else {
           FirebaseService.INSERT_projectReport(reportText,reportDesc,this.project_id,this.$session.get('session_id')
-                                              ,this.project.session_id,this.project.projecttitle,this.project.state,"Siren");
+                                              ,this.project.session_id,this.project.projecttitle,this.project.state,"Siren_Project");
+          // FirebaseService.INSERT_alert_siren_project(this.project.session_id, this.project, this.userdata)
         }
         this.project.reportUserList.push(upperUser);
         FirebaseService.UPDATE_projectReportUserList(this.project_id,this.project.reportUserList);
@@ -326,31 +331,34 @@ export default {
       this.reportText = "";
       this.reportDesc = "";
     },
-    submitCommentReport(reportCommentSelect,reportCommentText,reportCommentDesc) {
+    submitCommentReport(reportCommentSelect,reportCommentText,reportCommentDesc, comments, index) {
+      // console.log(this.comments[index].reportUserList)
       var upperUser = this.$session.get('session_id').toUpperCase();
-      if ( !this.project.reportUserList.includes(upperUser) ) {
-        if ( reportSelect !== "기타" ) {
-          FirebaseService.INSERT_projectReport(reportSelect,reportDesc,this.project_id,this.$session.get('session_id')
-                                              ,this.project.session_id,this.project.projecttitle,this.project.state,"Siren");
+      if ( !this.comments[index].reportUserList.includes(upperUser) ) {
+        if ( reportCommentSelect !== "기타" ) {
+          FirebaseService.INSERT_commentReport(reportCommentSelect,reportCommentDesc,this.project_id,this.$session.get('session_id')
+                                              ,this.project.session_id,this.project.projecttitle,this.project.state,index,"Siren_Comment");
         } else {
-          FirebaseService.INSERT_projectReport(reportText,reportDesc,this.project_id,this.$session.get('session_id')
-                                              ,this.project.session_id,this.project.projecttitle,this.project.state,"Siren");
+          FirebaseService.INSERT_commentReport(reportCommentText,reportCommentDesc,this.project_id,this.$session.get('session_id')
+                                              ,this.project.session_id,this.project.projecttitle,this.project.state,index,"Siren_Comment");
         }
-        this.project.reportUserList.push(upperUser);
-        FirebaseService.UPDATE_projectReportUserList(this.project_id,this.project.reportUserList);
+
+        this.comments[index].reportUserList.push(upperUser);
+
+        FirebaseService.UPDATE_commentReportUserList(this.project_id,this.comments);
       } else {
-        this.showNotification('foo-css','error','프로젝트 신고 오류','이미 신고한 이력이 있는 프로젝트입니다.')
+        this.showNotification('foo-css','error','댓글 신고 오류','이미 신고한 이력이 있는 댓글입니다.')
       }
-      this.reportSelect = "";
-      this.reportText = "";
-      this.reportDesc = "";
+      this.reportCommentSelect = "";
+      this.reportCommentText = "";
+      this.reportCommentDesc = "";
     },
     async bindData(){
       this.$loading(true)
       this.project = await FirebaseService.SELECT_ProjectsByPcode(this.$route.params.pcode);
       this.likeit = this.project.likeit
       this.$loading(false)
-      this.likeitcount = this.project.likeitcount
+      this.userdata = await FirebaseService.SELECT_Userdata(this.user)
     },
     // seulgi function
     async INSERT_Comment(real_taglist, comment){
@@ -366,7 +374,8 @@ export default {
         Json.User = this.user;
         Json.like = [];
         Json.unlike = [];
-
+        Json.reportUserList = [];
+        Json.state = 0;
         // INSERT_Comment : 프로젝트의 댓글들에 댓글 추가.
         FirebaseService.INSERT_Comment(Json, this.projectData, this.project_id);
 
@@ -379,11 +388,13 @@ export default {
           }
         }
         // 비동기적으로 댓글 추가
+        // console.log(listtext + this.comment)
         const newcommnet = {
         User : this.user,
         Comment : listtext + this.comment,
         like : [],
         unlike : [],
+        state:0,
         };
         this.comments.push(newcommnet)
       } else {
@@ -532,6 +543,12 @@ export default {
       var index = this.real_taglist.indexOf(nickname)
       this.real_taglist.splice(index, 1)
     },
+    seecomment(index) {
+      if (confirm('블라인드 처리된 댓글을 보시겠습니까?')) {
+        var blindtext = document.querySelector(`.blind_${index}`)
+        blindtext.style.display = 'block';
+      }
+    }
   },
   watch : {
     comment : function() {

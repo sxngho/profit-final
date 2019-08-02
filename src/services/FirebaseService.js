@@ -141,6 +141,15 @@ export default {
       });
   },
 
+  UPDATE_commentReportUserList(projectId, comments) {
+    firestore
+      .collection("projects")
+      .doc(projectId)
+      .update({
+        comments : comments
+      })
+  },
+
   UPDATE_projectState(projectId, projectStack) {
     firestore
       .collection("projects")
@@ -148,6 +157,15 @@ export default {
       .update({
         state: projectStack
       });
+  },
+
+  UPDATE_commentState(projectId,comments) {
+    firestore
+      .collection("projects")
+      .doc(projectId)
+      .update({
+        comments:comments
+      })
   },
 
   DELETE_project(project_id) {
@@ -433,7 +451,7 @@ export default {
         return docSnapshots.data().proceedList;
       });
   },
-  
+
 
   // -----------------------------------------------------------------------USER
   // ---------------------------------------------------------------------------------------------------------------------------------
@@ -590,6 +608,16 @@ export default {
         });
       });
   },
+  async SELECT_RecruitInfoByRecruitId(id) {
+    return firestore
+      .collection("recruitInfo")
+      .doc(id)
+      .get()
+      .then(docSnapshots => {
+        return { data :docSnapshots.data(), id : docSnapshots.id }
+      });
+  },
+
 
   async SELECT_AllRecruits() {
     return firestore
@@ -773,10 +801,11 @@ export default {
                     followinglist: [],
                     likeitProject: [],
                     nickname: nickname,
-                    level: 0,
+                    level: 2,
                     showSkillList: [],
                     dibs: [],
-                    alertlist: []
+                    alertlist: [],
+                    proceedList : [],
                   });
                 firestore
                   .collection("user_addon")
@@ -1073,6 +1102,31 @@ export default {
       date: firebase.firestore.FieldValue.serverTimestamp()
     });
   },
+  INSERT_commentReport(
+    reportTitle,
+    reportContent,
+    projectId,
+    reportUser,
+    reportedUser,
+    projecttitle,
+    reportStack,
+    index,
+    tag
+  ) {
+    firestore.collection("reports").add({
+      reportTitle: reportTitle,
+      reportContent: reportContent,
+      projectId: projectId,
+      reportUser: reportUser, // 신고자
+      reportedUser: reportedUser, // 신고당한 유저
+      projecttitle: projecttitle,
+      state: false,
+      reportStack: reportStack,
+      index:index,
+      tag: tag,
+      date: firebase.firestore.FieldValue.serverTimestamp()
+    })
+  },
 
   DELETE_report(id) {
     firestore
@@ -1148,13 +1202,13 @@ export default {
   // -------------------------------------------------------------------------------------
 
   async alertcheck(alertlist, alertindex, user_id) {
+    // console.log(alertindex)
     return firestore
       .collection("users")
       .doc(user_id)
       .get()
       .then(docSnapshot => {
         var old_alertlist = docSnapshot.data().alertlist;
-
         old_alertlist[alertindex].check = true;
         firestore
           .collection("users")
@@ -1164,5 +1218,31 @@ export default {
           });
         return true;
       });
+  },
+
+  // INSERT_alert_siren_project(alert_person, project, old) {
+  //   // alert_person 에는 신고받은 사람 이다 . 신고한 사람의 데이터는 노 필요
+  //   // project 어떤 프로젝트인지 알아야 이동할 수 있다.
+  //   // old 에는 그 사람의 데이터가 들어가야한다. 그래야 alertlist 에 쌓을수있다.
+  //
+  //   firestore.collection('users').doc(alert_person).get().then((docSnapshot) => {
+  //     var old_alertlist = docSnapshot.data().alertlist
+  //     old_alertlist.push({check:false, url:'/project/' + project.project_id, message:`프로젝트가 신고내역에 접수되었습니다.`, user:project.session_id})
+  //     firestore.collection('users').doc(alert_person).update({
+  //       alertlist:old_alertlist
+  //     })
+  //   })
+  // },
+
+  INSERT_alert_manager(alert_person, project_id, old, degree, reportStack, tag) {
+    firestore.collection('users').doc(alert_person).get().then((docSnapshot) => {
+      var old_alertlist = docSnapshot.data().alertlist
+      console.log(old_alertlist)
+      old_alertlist.push({check:false, url:'/project/' + project_id, message:`${tag} 처리 : ${degree}, 스택 : ${reportStack}`, user:old.nickname})
+      firestore.collection('users').doc(alert_person).update({
+        alertlist:old_alertlist
+      })
+    })
+
   }
 };
