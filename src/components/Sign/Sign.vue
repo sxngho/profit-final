@@ -65,14 +65,14 @@
       v-if="Level == '2' && user !=='' && user !== undefined "
       :to="{ name: 'story', params: { id: user }}"
       style="height:100%;"
-    >{{user}} 유저</v-btn>
+    >{{user}}</v-btn>
 
     <v-btn
       text
       v-if="Level == '3' && user !=='' && user !== undefined"
       :to="{ name: 'company', params: { id: user }}"
       style="height:100%;"
-    >{{user}} 기업 </v-btn>
+    >{{user}}</v-btn>
 
     <v-btn text @click="Logout()" v-if="user!=='' && user!==undefined" style="height:100%;">Log Out</v-btn>
     <v-btn text>
@@ -110,6 +110,7 @@ export default {
   mounted() {
     this.user = this.$session.get("session_id");
     this.userpage = "/story/" + this.user;
+    this.Level = this.$session.get("level");
   },
   methods: {
     showNotification(group, type, title, text) {
