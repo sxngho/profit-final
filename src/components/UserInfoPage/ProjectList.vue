@@ -9,7 +9,7 @@
         <ProjectDetail v-on:popdetail="toStory"
           v-on:UPDATE_Project="toStoryUpdate"
           v-on:delete="DELETE_project"
-          
+
           :projectstate="projects[i-1].data.state"
 
           :projectimage="projects[i-1].data.projectimage"
