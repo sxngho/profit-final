@@ -1,3 +1,4 @@
+
 import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
@@ -412,6 +413,45 @@ export default {
         });
       });
   },
+
+  UPDATE_UsersDibsToDel(user, newdibs) {
+      return firestore
+        .collection("users")
+        .doc(user)
+        .update({
+          dibs: newdibs
+        });
+  },
+
+  async SELECT_UserDibs(nickname) {
+    return firestore
+      .collection("users")
+      .doc(nickname)
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.data().dibs;
+      });
+  },
+
+  UPDATE_UserProceedList(user, newlist){
+    return firestore
+      .collection("users")
+      .doc(user)
+      .update({
+        proceedList: newlist
+      });
+  },
+
+  async SELECT_UserProceedList(nickname) {
+    return firestore
+      .collection("users")
+      .doc(nickname)
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.data().proceedList;
+      });
+  },
+  
 
   // -----------------------------------------------------------------------USER
   // ---------------------------------------------------------------------------------------------------------------------------------
