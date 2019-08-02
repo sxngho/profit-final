@@ -358,11 +358,24 @@ export default {
       $('.carbtn').eq(index).hide();
     },
 
-    rmCareer(userCareers, c, userId, reload){
-      this.reload = FirebaseService.DELETE_userCareer(userCareers,c,userId,reload);
+    async rmCareer(userCareers, c, userId, reload){
+      var reload = await FirebaseService.DELETE_userCareer(userCareers,c,userId,reload);
+      this.userdata = await FirebaseService.SELECT_Userdata(this.$route.params.id);
+      if ( this.userdata[0].userCareers.length == 0 ) {
+        this.careerToggle = true;
+      } else {
+        this.careerToggle = false;
+      }
+
     },
-    rmEducation(userEducations, e, userId, reload){
-      this.reload = FirebaseService.DELETE_userEducations(userEducations, e, userId, reload);
+    async rmEducation(userEducations, e, userId, reload){
+      var reload = await FirebaseService.DELETE_userEducations(userEducations, e, userId, reload);
+      this.userdata = await FirebaseService.SELECT_Userdata(this.$route.params.id);
+      if ( this.userdata[0].userEducations.length == 0 ) {
+        this.educationToggle = true;
+      } else {
+        this.educationToggle = false;
+      }
     },
     setFile() {
       var file = document.querySelector('#file')
@@ -376,11 +389,12 @@ export default {
   },
   watch: {
       getReload(val, oldVal) {
-          console.log('watched: ', val)
+          // console.log('watched: ', val)
           this.SELECT_Userdata();
-          console.log(this.userdata,"aaa")
-          console.log("왓치")
+          // console.log(this.userdata,"aaa")
+          // console.log("왓치")
       }
+
   },
 
 };
