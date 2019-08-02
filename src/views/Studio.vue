@@ -6,8 +6,7 @@
       <div>
         <h1>작업중인 리스트</h1>
         <v-layout row wrap>
-          <v-flex xs4 style="background:white;">
-            <v-card outlinedd>
+            <v-card outlinedd style="width:100%">
               <v-card-title>
                 프젝이름
               </v-card-title>
@@ -15,12 +14,11 @@
                 남은기간, 페이, 회사이름
               </v-card-text>
               <v-card-actions>
-                <v-btn>완료</v-btn>
-                <v-btn @click="popChat('test')">채팅창</v-btn>
-                <v-btn @click="popContract('test')">계약서</v-btn>
+                <v-btn outlined color="blue">완료</v-btn>
+                <v-btn @click="popChat('test')" outlined color="orange">채팅창</v-btn>
+                <v-btn @click="popContract('test')" outlined color="orange">계약서</v-btn>
               </v-card-actions>
             </v-card>
-          </v-flex>
         </v-layout>
       </div>
 
@@ -30,8 +28,7 @@
       <div>
         <h1>찜 리스트</h1>
         <v-layout row wrap>
-          <v-flex xs4 v-for="recruit in recruits" v-if="myDibs.includes(recruit.id)">
-            <v-card>
+            <v-card  v-for="recruit in Dibs" outlinedd style="width:100%">
               <v-card-title>
                 타이틀 : {{recruit.data.projectTitle}}
               </v-card-title>
@@ -39,11 +36,9 @@
                 회사명, 기술 스택들, 요약, 마감기간
               </v-card-text>
               <v-card-actions>
-                <v-btn @click="popChat(recruit)">채팅방</v-btn>
-                <v-btn @click="popConsult('test')">협의내용</v-btn>
+                <v-btn @click="popChat(recruit)" outlined color="orange">채팅방</v-btn>
               </v-card-actions>
             </v-card>
-          </v-flex>
         </v-layout>
       </div>
 
@@ -71,6 +66,8 @@ export default {
       userdata : "",
       myDibs : "",
       recruits : "",
+      Dibs : [],
+      proceedList:"",
     };
   },
   mounted() {
@@ -82,8 +79,13 @@ export default {
       this.userid = this.$session.get('session_id');
       this.userdata = await FirebaseService.SELECT_Userdata(this.$session.get('session_id'));
       this.recruits = await FirebaseService.SELECT_RecruitInfo();
+      this.proceedList = await FirebaseService.SELECT_UserProceedList(this.$session.get('session_id'));
       this.myDibs = this.userdata[0].dibs;
-      console.log(this.myDibs,"찜리스트 나와야할것들")
+      for(var i in this.recruits){
+        if(this.myDibs.includes(this.recruits[i].id)){
+          this.Dibs.push(this.recruits[i]);
+        }
+      }
     },
     popChat(ccode){
 

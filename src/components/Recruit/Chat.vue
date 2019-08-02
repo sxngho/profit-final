@@ -390,12 +390,9 @@ export default {
         firebase.database().ref(this.nowChatRoom.link).off()
       }
       this.nowChatRoom = myChatRoom
+      this.isOnProcedure();
       var dataRef = firebase.database().ref('/'+this.nowChatRoom.link);
       firebase.database().ref(this.nowChatRoom.link).on('value', snapshot => {
-        this.changeAllow = (!(snapshot.val().userVerification || snapshot.val().companyVerification));
-        console.log("띠요오옹 ",this.changeAllow);
-        console.log(snapshot.val().userVerification,snapshot.val().companyVerification);
-
         this.messages = snapshot.val().chatting;
         if ( this.nowLevel == "3" ) {
           for(var i in this.messages) {
@@ -618,15 +615,52 @@ export default {
       }
 
       firebase.database().ref(this.nowChatRoom.link).on('value', snapshot => {
-        this.messages = snapshot.val().chatting;
+        var contractUser = this.nowChatRoom.userId;
+        var contractCompany = this.nowChatRoom.companyId;
+
+        //둘 다 확인을 눌렀다는 것을 현 시점 확인했다!!
         if(snapshot.val().userVerification && snapshot.val().companyVerification){
-          //둘 다 확인을 눌렀다는 것을 확인했다!
-          FirebaseService.UPDATE_RecruitContract(this.nowChatRoom.recruitPK ,this.user); //파베 컬렉션의 리크루트 상태를 계약완료된 상태로 만든다
+          //리크루트 컬렉션의 상태를 '계약완료된 상태'로 만든다
+          FirebaseService.UPDATE_RecruitContract(this.nowChatRoom.recruitPK , contractUser);
+
+          //계약당사자의 users Collection에서 proceedList를 업데이트 해야한다!
+          this.addProceedList(contractUser, this.nowChatRoom.recruitPK );
+
+          //이것을 찜하고있던 유저들의 찜목록에서 다 지워주기 (계약 당사자 포함)
+          var dellist = [];
+          firebase.database().ref('/chat/').once('value').then( snapshot => {
+            var allChatRoom = snapshot.val();
+            for(var i in allChatRoom) {
+              if(allChatRoom[i].recruitPK == this.nowChatRoom.recruitPK){
+                this.delInFirebase(allChatRoom[i].userId, this.nowChatRoom.recruitPK);
+              }
+            }
+          });
         }
       })
-      this.changeAllow = (!(snapshot.val().userVerification || snapshot.val().companyVerification));
+      this.changeAllow =this.isOnProcedure();
       this.procedureDialog = false;
     },
+
+    async delInFirebase(userid, rePK){
+      var oldDibs = await FirebaseService.SELECT_UserDibs(userid);
+      oldDibs.splice(oldDibs.indexOf(rePK), 1);
+      FirebaseService.UPDATE_UsersDibsToDel(userid, oldDibs);
+    },
+
+    async addProceedList(userId, rePK){
+      var proceedList = await FirebaseService.SELECT_UserProceedList(userId);
+      proceedList.push(rePK);;
+      FirebaseService.UPDATE_UserProceedList(userId, proceedList);
+    },
+
+    isOnProcedure(){
+      if(this.$session.get("session_id") == this.nowChatRoom.userId){
+        this.changeAllow = !(this.nowChatRoom.userVerification);
+      }else{
+        this.changeAllow = !(this.nowChatRoom.companyVerification);
+      }
+    }
   },
 
 };
