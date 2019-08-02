@@ -62,10 +62,17 @@
     </v-dialog>
     <v-btn
       text
-      v-if="user !=='' && user !== undefined"
+      v-if="Level == '2' && user !=='' && user !== undefined "
       :to="{ name: 'story', params: { id: user }}"
       style="height:100%;"
-    >{{user}}</v-btn>
+    >{{user}} 유저</v-btn>
+
+    <v-btn
+      text
+      v-if="Level == '3' && user !=='' && user !== undefined"
+      :to="{ name: 'company', params: { id: user }}"
+      style="height:100%;"
+    >{{user}} 기업 </v-btn>
 
     <v-btn text @click="Logout()" v-if="user!=='' && user!==undefined" style="height:100%;">Log Out</v-btn>
     <v-btn text>
@@ -103,7 +110,6 @@ export default {
   mounted() {
     this.user = this.$session.get("session_id");
     this.userpage = "/story/" + this.user;
-    this.Level = this.$session.get("level");
   },
   methods: {
     showNotification(group, type, title, text) {
@@ -117,6 +123,7 @@ export default {
     async Logout() {
       var res = await FirebaseService.Logout();
       if (res == false) {
+
         this.showNotification(
           "foo-css",
           "error",
@@ -124,6 +131,7 @@ export default {
           `로그아웃 완료!`
         );
         this.$session.set("session_id", "");
+        this.$session.set("level", "");
         this.user = "";
 
         // console.log(this.$store.getters.getSession,"setSession")
@@ -155,12 +163,14 @@ export default {
           if (userlist[user].name == id) {
             this.$session.set("level", userlist[user].level);
             level = userlist[user].level;
+            this.Level = this.$session.get("level");
           }
         }
         for (var company in companylist) {
           if (companylist[company].name == id) {
             this.$session.set("level", companylist[company].level);
             level = companylist[company].level;
+            this.Level = this.$session.get("level");
           }
         }
         this.$session.set("level", level);

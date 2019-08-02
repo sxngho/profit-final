@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-layout wrap >
+    <v-layout wrap v-if="!isWork">
       <!-- 채팅창 -->
       <v-flex xs7>
         <v-layout wrap>
@@ -21,6 +21,7 @@
                     <div style="background:#ffffab;" class="speech_bubble">{{message.chatMsg}}</div>
                   </v-layout>
                   <v-layout v-else>
+                    <div v-if="!message.isReadUser">1</div>
                     <div style="background:#d6ddff;" class="speech_bubble">
                       {{message.chatMsg}}
                     </div>
@@ -209,14 +210,14 @@
       </v-flex>
     </v-layout>
 
-    <v-layout row wrap justify-center>
+    <v-layout row wrap justify-center v-if="!isWork">
       <v-btn v-if="!changeAllow" depressed color="red" outlined >이미 도장을 찍었습니다!</v-btn>
     </v-layout>
 
-    <v-layout row wrap justify-center>
+    <v-layout row wrap justify-center v-if="!isWork">
       <v-dialog v-model="procedureDialog" scrollable max-width="700px">
       <template v-slot:activator="{ on }">
-        <v-btn color="red" dark v-on="on" v-if="changeAllow">도장찍기</v-btn>
+        <v-btn color="red" dark v-on="on">도장찍기</v-btn>
       </template>
 
       <v-card outlined>
@@ -306,6 +307,37 @@
       </v-card>
     </v-dialog>
     </v-layout>
+
+    <v-layout wrap v-if="isWork">
+      <!-- 채팅창 -->
+      <v-flex xs12>
+          <v-divider/><h1 class="text-center"> 채팅창 </h1><v-divider/>
+
+            <v-container class="overflow-y-auto" style="max-height:700px">
+              <v-layout v-scroll:scroll-target="'#scrolling'" column>
+                <v-flex
+                xs12
+                v-for="message in messages"
+                v-if='message.chatId !== "" && message.chatMsg !== "" '
+                class="messageBox">
+                  <v-layout justify-end v-if='message.chatId == user'>
+                    <div v-if="!message.isReadCompany">1</div>
+                    <div style="background:#ffffab;" class="speech_bubble">{{message.chatMsg}}</div>
+                  </v-layout>
+                  <v-layout v-else>
+                    <div v-if="!message.isReadUser">1</div>
+                    <div style="background:#d6ddff;" class="speech_bubble">
+                      {{message.chatMsg}}
+                    </div>
+                  </v-layout>
+                <!-- [{{ message.chatId }}] : {{ message.chatMsg }} -->
+                </v-flex>
+              </v-layout>
+            </v-container>
+
+          <v-text-field single-line outlined required v-model="myMessage" v-on:keyup.enter="pushMessage(myMessage)" > </v-text-field>
+      </v-flex>
+    </v-layout>
   </v-container>
 </template>
 
@@ -364,12 +396,15 @@ export default {
       toggleAddr : true,
       toggleRrn : true,
       toggleUserId : true,
+
+      isWork : false,
     };
   },
 
   methods: {
     async fetchData() {
       this.nowLevel = this.$session.get('level');
+      var recruits = await FirebaseService.SELECT_RecruitInfo();
       var allChatRoom = "";
       firebase.database().ref('/chat/').once('value').then( snapshot => {
         allChatRoom = snapshot.val();
@@ -380,6 +415,14 @@ export default {
           }
         }
         if ( index !== "" ) {
+          for(var i in recruits) {
+            if ( recruits[i].id == index.recruitPK ) {
+              if ( recruits[i].data.contract ) {
+                this.isWork = true;
+              }
+            }
+          }
+          console.log("isWORK? ",this.isWork)
           this.EnterChatRoom(index);
         }
       });
@@ -395,7 +438,6 @@ export default {
         this.changeAllow = (!(snapshot.val().userVerification || snapshot.val().companyVerification));
         console.log("띠요오옹 ",this.changeAllow);
         console.log(snapshot.val().userVerification,snapshot.val().companyVerification);
-
         this.messages = snapshot.val().chatting;
         if ( this.nowLevel == "3" ) {
           for(var i in this.messages) {
@@ -616,15 +658,13 @@ export default {
           companyVerification : true,
         });
       }
-
       firebase.database().ref(this.nowChatRoom.link).on('value', snapshot => {
-        this.messages = snapshot.val().chatting;
         if(snapshot.val().userVerification && snapshot.val().companyVerification){
           //둘 다 확인을 눌렀다는 것을 확인했다!
           FirebaseService.UPDATE_RecruitContract(this.nowChatRoom.recruitPK ,this.user); //파베 컬렉션의 리크루트 상태를 계약완료된 상태로 만든다
         }
+        this.changeAllow = (!(snapshot.val().userVerification || snapshot.val().companyVerification));
       })
-      this.changeAllow = (!(snapshot.val().userVerification || snapshot.val().companyVerification));
       this.procedureDialog = false;
     },
   },
