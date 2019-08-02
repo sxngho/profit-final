@@ -451,7 +451,7 @@ export default {
         return docSnapshots.data().proceedList;
       });
   },
-  
+
 
   // -----------------------------------------------------------------------USER
   // ---------------------------------------------------------------------------------------------------------------------------------
@@ -791,7 +791,7 @@ export default {
                     followinglist: [],
                     likeitProject: [],
                     nickname: nickname,
-                    level: 0,
+                    level: 2,
                     showSkillList: [],
                     dibs: [],
                     alertlist: [],
