@@ -71,11 +71,11 @@
       <v-container grid-list-md>
         <v-layout wrap>
           <!-- Project Main Thumbnail -->
-          <v-flex xs12 sm6>
+          <v-flex xs10 offset-xs1>
             <BigImg v-bind:imgSrc="project.projectimage" />
           </v-flex>
           <!--  left detail -->
-          <v-flex xs12 md9>
+          <v-flex xs12>
             <v-layout column>
               <!-- project description -->
               <v-layout row style="padding: 2vw 0vw; border-bottom: 1px solid #cecece;">
@@ -213,7 +213,7 @@
           </v-flex>
 
         <!-- right detail -->
-        <v-flex xs12 md3 justify-center>
+        <!-- <v-flex xs12 md3 justify-center>
           <v-flex>Etc Project</v-flex>
           <img
             v-for="e in project.etcproject"
@@ -222,7 +222,7 @@
             :src="e.url"
             style="width:70px; height:70px; padding:3px;"
           />
-        </v-flex>
+        </v-flex> -->
       </v-layout>
     </v-container>
   </v-layout>
