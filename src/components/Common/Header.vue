@@ -39,10 +39,10 @@ export default {
   mounted() {
     this.get_userdata(this.$session.get("session_id"));
     this.nowLevel = this.$session.get("level");
-    // console.log(this.check)
   },
   methods : {
     async get_userdata(id) {
+     this.nowLevel = this.$session.get("level");
      if ( this.nowLevel == "2" ) {
       var userdata = await FirebaseService.SELECT_Userdata(id)
       this.userdata = userdata

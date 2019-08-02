@@ -154,7 +154,7 @@ export default {
           this.$session.set("session_id", user_nickname[0].nickname);
           this.user = this.$session.get("session_id");
         } else if (company_nickname[0] !== undefined) {
-          console.log(company_nickname[0].company_name);
+          // console.log(company_nickname[0].company_name);
           this.$session.set("session_id", company_nickname[0].company_name);
           this.user = this.$session.get("session_id");
         }
@@ -164,6 +164,7 @@ export default {
             this.$session.set("level", userlist[user].level);
             level = userlist[user].level;
             this.Level = this.$session.get("level");
+            // console.log(this.Level, '올라왔냐')
           }
         }
         for (var company in companylist) {
