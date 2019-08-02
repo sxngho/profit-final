@@ -19,11 +19,12 @@
       <v-btn text icon color="pink">
         <i id="likecheck" class="far fa-heart fa-2x" @click="like_project()"></i>
         {{likeit.length}}
-        <!-- 이미 좋아요 눌렀다면 다른 fa 를 보여주는 것도 좋겠다. -->
       </v-btn>
+
       <v-btn text icon color="yellow">
         <i class="fa fa-star fa-2x"></i>
       </v-btn>
+
       <template>
       <v-layout justify-center d-inline>
         <v-dialog v-model="sirendialog" max-width="290">
@@ -242,7 +243,6 @@ export default {
   name: "Project",
   data() {
     return {
-      sirendialog:false,
       project_id: "",
       project: "",
       user:"",
@@ -259,7 +259,6 @@ export default {
       reportItems: [
         '잘못된 정보가 기입된 프로젝트',
         '비속어 사용',
-        '필요한 정보가 기입된 프로젝트',
         '기타',
       ],
       reportText: "",
@@ -359,7 +358,6 @@ export default {
       this.project = await FirebaseService.SELECT_ProjectsByPcode(this.$route.params.pcode);
       this.likeit = this.project.likeit
       this.$loading(false)
-      this.likeitcount = this.project.likeitcount
       this.userdata = await FirebaseService.SELECT_Userdata(this.user)
     },
     // seulgi function
