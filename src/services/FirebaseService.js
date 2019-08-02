@@ -451,7 +451,7 @@ export default {
         return docSnapshots.data().proceedList;
       });
   },
-  
+
 
   // -----------------------------------------------------------------------USER
   // ---------------------------------------------------------------------------------------------------------------------------------
@@ -608,6 +608,16 @@ export default {
         });
       });
   },
+  async SELECT_RecruitInfoByRecruitId(id) {
+    return firestore
+      .collection("recruitInfo")
+      .doc(id)
+      .get()
+      .then(docSnapshots => {
+        return { data :docSnapshots.data(), id : docSnapshots.id }
+      });
+  },
+
 
   async SELECT_AllRecruits() {
     return firestore
