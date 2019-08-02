@@ -16,7 +16,7 @@
         <i class="fa fa-globe" aria-hidden="true"></i>
         <span id="unread_alret" style="color:red;">{{unread_alertlist.length}}</span>
       </v-btn>
-      <v-btn text class="font-bold-light" to="/Manager" v-if="nowLevel=='0' || nowLevel=='1'">Manager</v-btn>
+      <v-btn text class="font-bold-light" to="/Manager" v-if="nowLevel===0 || nowLevel===1">Manager</v-btn>
     </v-toolbar-items>
   </v-toolbar>
 </template>
@@ -42,8 +42,9 @@ export default {
   },
   methods : {
     async get_userdata(id) {
+     this.unread_alertlist = [];
      this.nowLevel = this.$session.get("level");
-     if ( this.nowLevel == "2" ) {
+     if ( this.nowLevel === 2 ) {
       var userdata = await FirebaseService.SELECT_Userdata(id)
       this.userdata = userdata
       if (userdata.length) {
@@ -57,7 +58,7 @@ export default {
       } else {
         this.check = false
       }
-    }
+     }
     },
     login_success() {
       this.check = true
@@ -65,6 +66,7 @@ export default {
     },
     logout_success() {
       this.check = false
+      this.nowLevel = this.$session.get("level");
     }
   },
 
