@@ -74,12 +74,25 @@
 
        <div v-else
          style="padding:10px 0px;">
-         <v-flex
+         <!-- <v-flex
           v-for="s in userdata[0].showSkillList"
           d-inline-block
-          style="zzcursor:pointer;border:1px solid #cecece; padding:2px 10px; border-radius:8px; margin:2px 4px;"  v-on:click="toStoryFilter(s)">
+          style="zzcursor:pointer;border:1px solid #cecece; padding:2px 10px; border-radius:8px; margin:2px 4px;"
+          v-on:click="toStoryFilter(s)">
            {{s}}
-         </v-flex>
+         </v-flex> -->
+         <v-chip-group
+          multiple
+          column
+          active-class="indigo"
+          >
+           <v-chip
+            v-for="s in userdata[0].showSkillList"
+            style="cursor:pointer;"
+            v-on:click="toStoryFilter(s)" color="#cecece" outlined>
+             {{s}}
+           </v-chip>
+         </v-chip-group>
        </div>
      </v-flex>
    </v-layout>
@@ -186,7 +199,7 @@ export default {
     }
   },
   props: {
-    isMine : {type:Boolean ,default:false}
+    isMine : {type:Boolean ,default:false},
   },
   components:{
     CareerEditor,

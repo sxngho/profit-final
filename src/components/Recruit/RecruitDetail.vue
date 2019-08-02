@@ -42,14 +42,17 @@ export default {
   },
   created() {
     this.$store.state.no_header = true;
+  },
+  mounted() {
+    this.fetchData(this.$route.params.rcode);
     this.recruit_id = this.$route.params.rcode;
-    this.fetchData(this.recruit_id);
   },
   methods: {
-    async fetchData(recruit_id) {
-      this.recruit = await FirebaseService.SELECT_RecruitInfoById(recruit_id);
+    async fetchData(recruitId) {
+      console.log(recruitId,"이공고를찾아라");
+      this.recruit = await FirebaseService.SELECT_RecruitInfoByRecruitId(recruitId);
       this.userdata = await FirebaseService.SELECT_Userdata(this.$session.get('session_id'));
-      console.log(this.recruit);
+      console.log(this.recruit,"공고좀보자");
     },
     dib(recruit_id) {
       if ( !this.userdata[0].dibs.includes(recruit_id) ) {

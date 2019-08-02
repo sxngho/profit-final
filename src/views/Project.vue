@@ -12,7 +12,7 @@
        </v-toolbar-title>
       <v-spacer/>
 
-      <v-btn text color="yellow" @click="submitObjection()" v-if="isMineCheck() && project.state > 0">
+      <v-btn text @click="submitObjection()" v-if="isMineCheck() && project.state > 0">
         이의제기
       </v-btn>
 
@@ -29,12 +29,12 @@
       <v-layout justify-center d-inline>
         <v-dialog v-model="sirendialog" max-width="290">
           <template v-slot:activator="{ on }">
-            <v-btn text color="primary" dark v-on="on"><i class="fa fa-trash fa-2x"></i></v-btn>
+            <v-btn text color="primary" dark v-on="on"><i class="fas fa-bell fa-2x" style="color:orange"></i></v-btn>
           </template>
 
           <v-card>
             <v-card-title class="headline">
-              <span class="headline">1신고하기</span>
+              <span class="headline">프로젝트 신고하기</span>
             </v-card-title>
             <v-card-text>
               <v-layout wrap>
@@ -43,13 +43,14 @@
                   v-model="reportSelect"
                   :items="reportItems"
                   label="신고 사유를 선택해주세요."
+                  readonly
                   ></v-combobox>
                 </v-flex>
                 <v-flex xs12 v-if="reportSelect=='기타'">
-                  <input type="text" v-model="reportText"/>
+                  <v-text-field single-line outlined required v-model="reportText" placeholder="신고 사유를 입력해주세요."> </v-text-field>
                 </v-flex>
                 <v-flex xs12>
-                  <v-text-field v-model="reportDesc" required @keyup.enter="sirendialog = false, submitReport(reportSelect,reportText,reportDesc)"></v-text-field>
+                  <v-text-field v-model="reportDesc" required placeholder="신고 내용을 입력해주세요." @keyup.enter="sirendialog = false,  submitReport(reportSelect,reportText,reportDesc)"></v-text-field>
                 </v-flex>
               </v-layout>
             </v-card-text>
@@ -72,11 +73,11 @@
       <v-container grid-list-md>
         <v-layout wrap>
           <!-- Project Main Thumbnail -->
-          <v-flex xs12 sm6>
+          <v-flex xs10 offset-xs1>
             <BigImg v-bind:imgSrc="project.projectimage" />
           </v-flex>
           <!--  left detail -->
-          <v-flex xs12 md9>
+          <v-flex xs12>
             <v-layout column>
               <!-- project description -->
               <v-layout row style="padding: 2vw 0vw; border-bottom: 1px solid #cecece;">
@@ -150,26 +151,25 @@
                       <v-btn @click="cancel(project_id, comments, index)">취소</v-btn>
                     </div>
                     <!--  -->
-
+                    <v-spacer/>
                     <v-list-item-action>
-                      <div style='display:inline-block;'>
-                        &nbsp;
+                      <div style='display:flex;'>
+                        &nbsp;&nbsp;
                         <i v-bind:id="[`commentlike_${index}`]" class="far fa-heart" style="color:red" @click="like_comment(com, index)"></i>
                         {{com.like.length}}
-                        &nbsp;
+                        &nbsp;&nbsp;
                         <i v-bind:id="[`commentunlike_${index}`]" class="far fa-heart" @click="unlike_comment(com, index)"></i>
                         {{com.unlike.length}}
-                        &nbsp;
+                        &nbsp;&nbsp;
                         <img v-if="com.User==user" src="data:image/png;base64,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" alt="Smiley" style="cursor: pointer; height:20px; display:inline-block;"
                         @click="UPDATE_comment(comments, index)">
-                        &nbsp;
+                        &nbsp;&nbsp;
                         <img v-if="com.User==user" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAsQAAALEBxi1JjQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAHUSURBVFiF7Za/SxthGMc/76sFOU2q0aFWLf0fusmN/hh0ClkydFHpUMGpVOiQ2uIiKoj4o0J1CaVL7Fp0cTkoFVqE/gelxslEY0jDVe/tEDw8zUXvuFNEn+2e5+75fu75ce8JPNrQxIyqFV+beCW85JNeAYK2er8Pnn/TyyrjZjdegQv9Gl/6OICSK0BHwFp/EOrF1Mvhr2edFyug5IcQxAE6lRIr553VWtAZgjgAArquAnCtdg/g+tXaG0v42ms3a5/PVNW68QrcA9xCAFHjtK0VCwRACNrezNH6ehoZeegIaXofj2Y/0/BMDxEAUP9MHnQ8JTaasiE0vZ9oYgSkBNMMEUAp8suTHO/9pr79CbHRFI29caKJYQAKmVXKv7ZDBACso0NyC+84zlYgIoPJivj6GiVjw2s6f1tgFQv8/WnY1yeHOco73/yk8geg6f1EBpKgFCcH+9Q1tzpmIlQATe9z9Hx/ZtwxE7IpGiKAlETjQ7Z4ydiozMTiextC6+7xlNLbX7FlcfBpAUzTMe2ng6l191D6vhUiAFD+YVT1W8UCxc0vXtPdxrPgLgFkgxIRsOsdQJAOCsBCueZy3YJci0jF8goUz4HHPrWzCNL5FvnW7Yb/F8CPuY2PJ7UAAAAASUVORK5CYII=" alt="Smiley" style="cursor: pointer; height:20px; display:inline-block;" @click="DELETE_comment(comments, index)">
-                        &nbsp;
                         <template>
                         <v-layout justify-center d-inline>
                           <v-dialog v-model="Commentdialog" max-width="290">
                             <template v-slot:activator="{ on }">
-                              <v-btn text color="primary" dark v-on="on"><i class="fa fa-trash fa-2x"></i></v-btn>
+                              <v-btn text color="primary" dark v-on="on"><i class="fas fa-bell" style="color:orange"></i></v-btn>
                             </template>
 
                             <v-card>
@@ -183,13 +183,14 @@
                                     v-model="reportCommentSelect"
                                     :items="reportCommentItems"
                                     label="댓글신고 사유를 선택해주세요."
+                                    readonly
                                     ></v-combobox>
                                   </v-flex>
                                   <v-flex xs12 v-if="reportCommentSelect=='기타'">
-                                    <input type="text" v-model="reportCommentText"/>
+                                      <v-text-field single-line outlined required v-model="reportCommentText" placeholder="신고 사유를 입력해주세요."> </v-text-field>
                                   </v-flex>
                                   <v-flex xs12>
-                                    <v-text-field v-model="reportCommentDesc" required @keyup.enter="Commentdialog = false, submitCommentReport(reportCommentSelect,reportCommentText,reportCommentDesc)"></v-text-field>
+                                    <v-text-field v-model="reportCommentDesc" required placeholder="신고 내용을 입력해주세요." @keyup.enter="Commentdialog = false, submitCommentReport(reportCommentSelect,reportCommentText,reportCommentDesc)"></v-text-field>
                                   </v-flex>
                                 </v-layout>
                               </v-card-text>
@@ -216,7 +217,7 @@
           </v-flex>
 
         <!-- right detail -->
-        <v-flex xs12 md3 justify-center>
+        <!-- <v-flex xs12 md3 justify-center>
           <v-flex>Etc Project</v-flex>
           <img
             v-for="e in project.etcproject"
@@ -225,7 +226,7 @@
             :src="e.url"
             style="width:70px; height:70px; padding:3px;"
           />
-        </v-flex>
+        </v-flex> -->
       </v-layout>
     </v-container>
   </v-layout>
