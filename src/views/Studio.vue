@@ -127,7 +127,8 @@ export default {
           addr : "",
           rrn : "",
           userId : nickname,
-
+          companyVerification : false,
+          userVerification: false,
         });
       }
     },

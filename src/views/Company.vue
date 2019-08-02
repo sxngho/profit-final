@@ -153,7 +153,7 @@
 
                           <!-- 채팅방 목록들 ==> 즉, 찜한 유저 리스트-->
                           <!-- 아직 계약이 되지 않았을때 -->
-                          <v-flex xs12 sm5 v-if="nowLevel=='3'">
+                          <v-flex xs12 sm5 v-if="isMineCheck() && !recruit.data.contract">
                             <h3>찜한 유저들</h3>
                             <v-layout row wrap>
                               <v-flex xs11 offset-xs1 v-for="user in dibsUsers">
@@ -166,14 +166,16 @@
                           </v-flex>
 
                           <!-- 계약이 된 상태라면 -->
-                          <!-- <v-flex xs12 sm5>
+                          <v-flex xs12 sm5 v-if="isMineCheck() && recruit.data.contract">
                             <h3>작업중인 유저</h3>
                             <v-layout row wrap>
                               <v-flex xs11 offset-xs1>
-                                {{recruit.activeuser_testdata}}
+                                <v-btn text outlined @click="opneWorkChat(recruit.data.responsibility)">
+                                {{recruit.data.responsibility}}
+                                </v-btn>
                               </v-flex>
                             </v-layout>
-                          </v-flex> -->
+                          </v-flex>
 
                         </v-layout>
                         <v-layout justify-center>
@@ -182,7 +184,7 @@
                           </div>
                           <div v-else>
                             <v-btn flex outlined color="blue">완료</v-btn>
-                            <v-btn flex outlined color="orange">계약서</v-btn>
+                            <v-btn flex outlined color="orange" @click="openContract(recruit.id,recruit.data.responsibility)">계약서</v-btn>
                             <v-btn flex outlined color="red">프로젝트 종료(실패)</v-btn>
                           </div>
                         </v-layout>
@@ -221,6 +223,13 @@ export default {
     this.nowLevel = this.$session.get('level');
   },
   methods: {
+    isMineCheck() {
+      if ( this.$route.params.id == this.$session.get('session_id') ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     async fetchData() {
       //this.company = await FirebaseService.SELECT_CompanyById(this.$route.params.id);
       this.recruitlist = await FirebaseService.SELECT_RecruitInfoById(this.$route.params.id);
@@ -251,6 +260,28 @@ export default {
         "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=1000,height=600"
       );
     },
+    opneWorkChat(user) { // user -> 이 프로젝트를 하기로한 유저아이디
+      for(var i in this.dibsUsers) {
+        if (this.dibsUsers[i].userId  == user ) {
+          this.workingUser = this.dibsUsers[i];
+          break;
+        }
+      }
+
+      window.open(
+        "../" + this.workingUser.link,
+        "name(이름지정)",
+        "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=1000,height=600"
+      );
+
+    },
+    openContract(id,responsibility) {
+      window.open(
+        "../contract/" + id + responsibility,
+        "name(이름지정)",
+        "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=1000,height=600"
+      );
+    },
   },
   data() {
     return {
@@ -271,6 +302,7 @@ export default {
       workingUser : "",
       dibsUsers : "",
       nowLevel : "",
+
     };
   },
 };

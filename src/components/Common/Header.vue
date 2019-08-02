@@ -16,9 +16,7 @@
         <i class="fa fa-globe" aria-hidden="true"></i>
         <span id="unread_alret" style="color:red;">{{unread_alertlist.length}}</span>
       </v-btn>
-      <v-btn text class="font-bold-light" to="/Chat">chat</v-btn>
-      <v-btn text class="font-bold-light" to="/Manager">Manager</v-btn>
-      <v-btn text class="font-bold-light" to="/company">Company</v-btn>
+      <v-btn text class="font-bold-light" to="/Manager" v-if="nowLevel=='0' || nowLevel=='1'">Manager</v-btn>
     </v-toolbar-items>
   </v-toolbar>
 </template>

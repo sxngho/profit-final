@@ -62,8 +62,15 @@
     </v-dialog>
     <v-btn
       text
-      v-if="user !=='' && user !== undefined"
+      v-if="user !=='' && user !== undefined && Level == '2'"
       :to="{ name: 'story', params: { id: user }}"
+      style="height:100%;"
+    >{{user}}</v-btn>
+
+    <v-btn
+      text
+      v-if="user !=='' && user !== undefined && Level == '3'"
+      :to="{ name: 'company', params: { id: user }}"
       style="height:100%;"
     >{{user}}</v-btn>
 
