@@ -1,6 +1,6 @@
 <template>
   <div class="companyList__container">
-    <div v-for="company in this.$store.state.showCompanyList" class="companyList__content">
+    <div v-for="company in this.companyList" class="companyList__content">
       <Company v-bind:propsData="company" />
     </div>
   </div>
@@ -8,12 +8,21 @@
 
 <script>
 import Company from "./Company";
+import FirebaseService from "@/services/FirebaseService";
 export default {
   data() {
-    return {};
+    return {
+      companyList: []
+    };
   },
   created() {
+    this.fetchData();
     this.$store.commit("showAllCompany");
+  },
+  methods: {
+    async fetchData() {
+      this.companyList = await FirebaseService.SELECT_AllCompany();
+    }
   },
   components: {
     Company

@@ -36,21 +36,7 @@ export default new Vuex.Store({
     showTechList: [],
     requiredSkills: [],
     reload: true,
-    companyList: [
-      "ssafy",
-      "samsung",
-      "lg",
-      "sk",
-      "kia",
-      "random",
-      "random",
-      "random",
-      "random",
-      "random",
-      "random",
-      "random",
-      "random"
-    ],
+    companyList: [],
     showCompanyList: [],
     showCompanyListBottomBar: []
   },

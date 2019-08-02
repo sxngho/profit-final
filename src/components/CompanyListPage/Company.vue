@@ -1,11 +1,11 @@
 <template>
-  <router-link :to="{name : 'company', params: { id: propsData }}">
+  <router-link :to="{name : 'company', params: { id: propsData.company_name }}">
     <button class="company__container">
       <div class="company__content">
         <div class="companyImage">
-          <img src="https://i.imgur.com/ohiDbgF.png" style="width:150px; height:90px" />
+          <img :src="img" style="width:150px; height:90px" />
         </div>
-        <div class="companyName">{{propsData}}</div>
+        <div class="companyName">{{propsData.company_name}}</div>
       </div>
     </button>
   </router-link>
@@ -16,7 +16,8 @@ export default {
   props: ["propsData"],
   data() {
     return {
-      user: ""
+      user: "",
+      img: this.propsData.company_logo
     };
   }
 };
