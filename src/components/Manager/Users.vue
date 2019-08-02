@@ -25,7 +25,13 @@
 
             <v-expansion-panel-content>
               회원 관리 :
-              <v-btn v-for="item in level" text outlined @click="change_userlevel(user, index, item)">
+              <v-btn v-for="(item, index2) in change_state_0" v-if="user.level===1 && level==0" text outlined @click="change_userlevel(user, index2, item)">
+                {{item}}
+              </v-btn>
+              <v-btn v-for="(item, index2) in change_state_1" v-if="user.level===2 && level==0" text outlined @click="change_userlevel(user, index2, item)">
+                {{item}}
+              </v-btn>
+              <v-btn v-for="(item, index2) in change_state_2" v-if="user.level===2 && level==1" text outlined @click="change_userlevel(user, index2, item)">
                 {{item}}
               </v-btn>
             </v-expansion-panel-content>
@@ -48,9 +54,12 @@ export default {
     return {
       user:1,
       userlist:[],
-      level:[],
       input:"",
       userlevel : '',
+      change_state_0:['유저', '탈퇴'],
+      change_state_1:['관리자', '탈퇴'],
+      change_state_2:['탈퇴'],
+      level : ''
     }
   },
   props: {
@@ -60,37 +69,26 @@ export default {
   },
   created() {
     this.filldata();
-    this.user_auth();
+    this.level = this.$session.get('level');
   },
   methods: {
     async filldata(){
       this.userlist = await FirebaseService.SELECT_ALLUser();
       // console.log(this.userlist);
     },
-    user_auth() {
-      this.userlevel = this.$session.get('level');
-      if (this.userlevel === 0) {
-        this.level = ['관리자', '유저', '탈퇴']
-      } else if (this.userlevel === 1) {
-        this.level = ['탈퇴']
-      }
-    },
-    change_userlevel(user, index, item) {
+    change_userlevel(user, index2, item) {
       // console.log(user)
-      // console.log(index)
+      // console.log(index2)
       // console.log(item)
       if (confirm('회원의 level을 수정하시겠습니까?')) {
         if (item === '관리자') {
           FirebaseService.UPDATE_Userlevel(user.nickname, 1)
-          // console.log('이 사람을 관리자(1)로 바꿔야합니다.')
         } else if (item === '유저') {
           FirebaseService.UPDATE_Userlevel(user.nickname, 2)
-          // console.log('이 사람을 유저(2)로 바꿔야 합니다.')
         } else {
           // 일단 막아뒀습니다.
           FirebaseService.DELETE_user(user.nickname)
           this.userlist.splice(index, 1)
-          // console.log('이 사람을 탈퇴시켜야 합니다.')
         }
         this.filldata()
       }
