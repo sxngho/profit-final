@@ -345,11 +345,17 @@ export default {
       $('.carbtn').eq(index).hide();
     },
 
-    rmCareer(userCareers, c, userId, reload){
-      this.reload = FirebaseService.DELETE_userCareer(userCareers,c,userId,reload);
+    async rmCareer(userCareers, c, userId, reload){
+      var reload = await FirebaseService.DELETE_userCareer(userCareers,c,userId,reload);
+      if ( reload.legnth == undefined ) {
+        this.careerToggle = true;
+      }
     },
-    rmEducation(userEducations, e, userId, reload){
-      this.reload = FirebaseService.DELETE_userEducations(userEducations, e, userId, reload);
+    async rmEducation(userEducations, e, userId, reload){
+      var reload = await FirebaseService.DELETE_userEducations(userEducations, e, userId, reload);
+      if ( reload.legnth == undefined ) {
+        this.educationToggle = true;
+      }
     },
     setFile() {
       var file = document.querySelector('#file')
@@ -363,11 +369,12 @@ export default {
   },
   watch: {
       getReload(val, oldVal) {
-          console.log('watched: ', val)
+          // console.log('watched: ', val)
           this.SELECT_Userdata();
-          console.log(this.userdata,"aaa")
-          console.log("왓치")
+          // console.log(this.userdata,"aaa")
+          // console.log("왓치")
       }
+
   },
 
 };

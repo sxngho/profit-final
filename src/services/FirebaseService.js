@@ -230,7 +230,7 @@ export default {
       });
   },
 
-  DELETE_userCareer(userCareers, career, userId, reload) {
+  async DELETE_userCareer(userCareers, career, userId, reload) {
     var index = -1;
     for (var i in userCareers) {
       if (
@@ -252,11 +252,7 @@ export default {
           userCareers: userCareers
         })
         .then(docSnapshots => {
-          if (userCareers == 0) {
-            return !reload;
-          } else {
-            return reload;
-          }
+          return userCareers;
         });
     }
   },
@@ -281,7 +277,7 @@ export default {
       });
   },
 
-  DELETE_userEducations(userEducations, edu, userId, reload) {
+ async DELETE_userEducations(userEducations, edu, userId, reload) {
     var index = -1;
     for (var i in userEducations) {
       if (
@@ -302,11 +298,7 @@ export default {
           userEducations: userEducations
         })
         .then(docSnapshots => {
-          if (userEducations == 0) {
-            return !reload;
-          } else {
-            return reload;
-          }
+          return userEducations;
         });
     }
   },
