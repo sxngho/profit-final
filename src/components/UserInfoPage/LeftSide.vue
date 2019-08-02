@@ -360,14 +360,21 @@ export default {
 
     async rmCareer(userCareers, c, userId, reload){
       var reload = await FirebaseService.DELETE_userCareer(userCareers,c,userId,reload);
-      if ( reload.legnth == undefined ) {
+      this.userdata = await FirebaseService.SELECT_Userdata(this.$route.params.id);
+      if ( this.userdata[0].userCareers.length == 0 ) {
         this.careerToggle = true;
+      } else {
+        this.careerToggle = false;
       }
+
     },
     async rmEducation(userEducations, e, userId, reload){
       var reload = await FirebaseService.DELETE_userEducations(userEducations, e, userId, reload);
-      if ( reload.legnth == undefined ) {
+      this.userdata = await FirebaseService.SELECT_Userdata(this.$route.params.id);
+      if ( this.userdata[0].userEducations.length == 0 ) {
         this.educationToggle = true;
+      } else {
+        this.educationToggle = false;
       }
     },
     setFile() {
