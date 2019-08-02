@@ -33,7 +33,7 @@
 
           <v-card>
             <v-card-title class="headline">
-              <span class="headline">신고하기</span>
+              <span class="headline">1신고하기</span>
             </v-card-title>
             <v-card-text>
               <v-layout wrap>
@@ -134,8 +134,10 @@
                 <v-list>
                   <v-list-item name="1" v-for="(com, index) in comments" style="border-bottom: 1px solid #9E6E2E; margin:5px; padding:5px;">
                     <!-- 수정 전에 보여주는 댓글리스트 -->
-                    <v-list-item-content v-bind:class="[`before_${index}`]" style="width:70%;">
-                      <v-list-item-title v-html="com.Comment"></v-list-item-title>
+                    <v-list-item-content v-bind:class="[`before_${index}`]" style="width:70%;" >
+                      <span v-if="com.state==3" style="color:red;" @click="seecomment(index)">이 댓글은 신고 누적으로 블라인드 처리</span>
+                      <v-list-item-title v-if="com.state < 3" v-html="com.Comment"></v-list-item-title>
+                      <v-list-item-title v-html="com.Comment" v-bind:class="[`blind_${index}`]" style="display:none;"></v-list-item-title>
                       <v-list-item-title v-html="com.User"></v-list-item-title>
                     </v-list-item-content>
                     <!--  -->
@@ -143,7 +145,7 @@
                     <!-- 수정 그림을 누르면 보여주는 구역 , 바로 비동기적으로 구현됨.-->
                     <div v-bind:class="[`after_${index}`]" style="display:none; width:100%; margin:10px; padding:10px; ">
                       <input v-bind:class="[`aftertext_${index}`]" style="display:inline-block; width:100%; border: 1px solid #ff0000;" v-model="update_commenttext"><br>
-                      <v-btn @click="change_comment(project_id, comments, index, update_commenttext)">수정</v-btn>
+                      <v-btn @click="change_comment(comments, index, update_commenttext)">수정</v-btn>
                       <v-btn @click="cancel(project_id, comments, index)">취소</v-btn>
                     </div>
                     <!--  -->
@@ -193,7 +195,7 @@
                               <v-card-actions>
                                 <v-spacer></v-spacer>
                                 <v-btn color="blue darken-1" text @click="Commentdialog = false">취소</v-btn>
-                                <v-btn color="blue darken-1" text @click="Commentdialog = false, submitCommentReport(reportCommentSelect,reportCommentText,reportCommentDesc)">신고하기</v-btn>
+                                <v-btn color="blue darken-1" text @click="Commentdialog = false, submitCommentReport(reportCommentSelect,reportCommentText,reportCommentDesc, comments, index)">신고하기</v-btn>
                                 <br />
                               </v-card-actions>
                             </v-card>
@@ -243,6 +245,7 @@ export default {
       project_id: "",
       project: "",
       user:"",
+      userdata:"",
       comments:[],
       comment:"",
       update_comment: false,
@@ -312,10 +315,12 @@ export default {
       if ( !this.project.reportUserList.includes(upperUser) ) {
         if ( reportSelect !== "기타" ) {
           FirebaseService.INSERT_projectReport(reportSelect,reportDesc,this.project_id,this.$session.get('session_id')
-                                              ,this.project.session_id,this.project.projecttitle,this.project.state,"Siren");
+                                              ,this.project.session_id,this.project.projecttitle,this.project.state,"Siren_Project");
+          // FirebaseService.INSERT_alert_siren_project(this.project.session_id, this.project, this.userdata)
         } else {
           FirebaseService.INSERT_projectReport(reportText,reportDesc,this.project_id,this.$session.get('session_id')
-                                              ,this.project.session_id,this.project.projecttitle,this.project.state,"Siren");
+                                              ,this.project.session_id,this.project.projecttitle,this.project.state,"Siren_Project");
+          // FirebaseService.INSERT_alert_siren_project(this.project.session_id, this.project, this.userdata)
         }
         this.project.reportUserList.push(upperUser);
         FirebaseService.UPDATE_projectReportUserList(this.project_id,this.project.reportUserList);
@@ -326,24 +331,27 @@ export default {
       this.reportText = "";
       this.reportDesc = "";
     },
-    submitCommentReport(reportCommentSelect,reportCommentText,reportCommentDesc) {
+    submitCommentReport(reportCommentSelect,reportCommentText,reportCommentDesc, comments, index) {
+      // console.log(this.comments[index].reportUserList)
       var upperUser = this.$session.get('session_id').toUpperCase();
-      if ( !this.project.reportUserList.includes(upperUser) ) {
-        if ( reportSelect !== "기타" ) {
-          FirebaseService.INSERT_projectReport(reportSelect,reportDesc,this.project_id,this.$session.get('session_id')
-                                              ,this.project.session_id,this.project.projecttitle,this.project.state,"Siren");
+      if ( !this.comments[index].reportUserList.includes(upperUser) ) {
+        if ( reportCommentSelect !== "기타" ) {
+          FirebaseService.INSERT_commentReport(reportCommentSelect,reportCommentDesc,this.project_id,this.$session.get('session_id')
+                                              ,this.project.session_id,this.project.projecttitle,this.project.state,index,"Siren_Comment");
         } else {
-          FirebaseService.INSERT_projectReport(reportText,reportDesc,this.project_id,this.$session.get('session_id')
-                                              ,this.project.session_id,this.project.projecttitle,this.project.state,"Siren");
+          FirebaseService.INSERT_commentReport(reportCommentText,reportCommentDesc,this.project_id,this.$session.get('session_id')
+                                              ,this.project.session_id,this.project.projecttitle,this.project.state,index,"Siren_Comment");
         }
-        this.project.reportUserList.push(upperUser);
-        FirebaseService.UPDATE_projectReportUserList(this.project_id,this.project.reportUserList);
+
+        this.comments[index].reportUserList.push(upperUser);
+
+        FirebaseService.UPDATE_commentReportUserList(this.project_id,this.comments);
       } else {
-        this.showNotification('foo-css','error','프로젝트 신고 오류','이미 신고한 이력이 있는 프로젝트입니다.')
+        this.showNotification('foo-css','error','댓글 신고 오류','이미 신고한 이력이 있는 댓글입니다.')
       }
-      this.reportSelect = "";
-      this.reportText = "";
-      this.reportDesc = "";
+      this.reportCommentSelect = "";
+      this.reportCommentText = "";
+      this.reportCommentDesc = "";
     },
     async bindData(){
       this.$loading(true)
@@ -351,6 +359,7 @@ export default {
       this.likeit = this.project.likeit
       this.$loading(false)
       this.likeitcount = this.project.likeitcount
+      this.userdata = await FirebaseService.SELECT_Userdata(this.user)
     },
     // seulgi function
     async INSERT_Comment(real_taglist, comment){
@@ -366,7 +375,8 @@ export default {
         Json.User = this.user;
         Json.like = [];
         Json.unlike = [];
-
+        Json.reportUserList = [];
+        Json.state = 0;
         // INSERT_Comment : 프로젝트의 댓글들에 댓글 추가.
         FirebaseService.INSERT_Comment(Json, this.projectData, this.project_id);
 
@@ -379,11 +389,13 @@ export default {
           }
         }
         // 비동기적으로 댓글 추가
+        // console.log(listtext + this.comment)
         const newcommnet = {
         User : this.user,
         Comment : listtext + this.comment,
         like : [],
         unlike : [],
+        state:0,
         };
         this.comments.push(newcommnet)
       } else {
@@ -532,6 +544,12 @@ export default {
       var index = this.real_taglist.indexOf(nickname)
       this.real_taglist.splice(index, 1)
     },
+    seecomment(index) {
+      if (confirm('블라인드 처리된 댓글을 보시겠습니까?')) {
+        var blindtext = document.querySelector(`.blind_${index}`)
+        blindtext.style.display = 'block';
+      }
+    }
   },
   watch : {
     comment : function() {

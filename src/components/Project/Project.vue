@@ -213,7 +213,8 @@ export default {
         Json.User = this.user;
         Json.like = [];
         Json.unlike = [];
-
+        Json.reportUserList = [];
+        Json.state = 0;
         // INSERT_Comment : 프로젝트의 댓글들에 댓글 추가.
         FirebaseService.INSERT_Comment(Json, this.projectData, this.project_id);
 

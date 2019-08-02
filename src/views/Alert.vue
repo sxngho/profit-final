@@ -56,7 +56,7 @@ export default {
     },
     async move(check, url, alertindex) {
       window.open(document.location.origin + url)
-      var result = await FirebaseService.alertcheck(this.alertlist, alertindex, this.$session.get("session_id"))
+      var result = await FirebaseService.alertcheck(this.alertlist, this.alertlist.length-alertindex-1, this.$session.get("session_id"))
       if (!check) {
         this.get_userdata(this.$session.get("session_id"))
       }
