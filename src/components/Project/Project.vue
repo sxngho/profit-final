@@ -169,6 +169,50 @@
                         @click="UPDATE_comment(comments, index)">
                         &nbsp;
                         <img v-if="com.User==user" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAsQAAALEBxi1JjQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAHUSURBVFiF7Za/SxthGMc/76sFOU2q0aFWLf0fusmN/hh0ClkydFHpUMGpVOiQ2uIiKoj4o0J1CaVL7Fp0cTkoFVqE/gelxslEY0jDVe/tEDw8zUXvuFNEn+2e5+75fu75ce8JPNrQxIyqFV+beCW85JNeAYK2er8Pnn/TyyrjZjdegQv9Gl/6OICSK0BHwFp/EOrF1Mvhr2edFyug5IcQxAE6lRIr553VWtAZgjgAArquAnCtdg/g+tXaG0v42ms3a5/PVNW68QrcA9xCAFHjtK0VCwRACNrezNH6ehoZeegIaXofj2Y/0/BMDxEAUP9MHnQ8JTaasiE0vZ9oYgSkBNMMEUAp8suTHO/9pr79CbHRFI29caKJYQAKmVXKv7ZDBACso0NyC+84zlYgIoPJivj6GiVjw2s6f1tgFQv8/WnY1yeHOco73/yk8geg6f1EBpKgFCcH+9Q1tzpmIlQATe9z9Hx/ZtwxE7IpGiKAlETjQ7Z4ydiozMTiextC6+7xlNLbX7FlcfBpAUzTMe2ng6l191D6vhUiAFD+YVT1W8UCxc0vXtPdxrPgLgFkgxIRsOsdQJAOCsBCueZy3YJci0jF8goUz4HHPrWzCNL5FvnW7Yb/F8CPuY2PJ7UAAAAASUVORK5CYII=" alt="Smiley" style="cursor: pointer; height:20px; display:inline-block;" @click="DELETE_comment(comments, index)">
+
+                        &nbsp;
+                        <template>
+                        <v-layout justify-center d-inline>
+                          <v-dialog v-model="Commentdialog" max-width="290">
+                            <template v-slot:activator="{ on }">
+                              <v-btn text color="primary" dark v-on="on"><i class="fa fa-trash fa-2x"></i></v-btn>
+                            </template>
+
+                            <v-card>
+                              <v-card-title class="headline">
+                                <span class="headline">신고하기</span>
+                              </v-card-title>
+                              <v-card-text>
+                                <v-layout wrap>
+                                  <v-flex xs12>
+                                    <v-combobox
+                                    v-model="reportCommentSelect"
+                                    :items="reportCommentItems"
+                                    label="댓글신고 사유를 선택해주세요."
+                                    ></v-combobox>
+                                  </v-flex>
+                                  <v-flex xs12 v-if="reportCommentSelect=='기타'">
+                                    <input type="text" v-model="reportCommentText"/>
+                                  </v-flex>
+                                  <v-flex xs12>
+                                    <v-text-field v-model="reportCommentDesc" required @keyup.enter="Commentdialog = false, submitCommentReport(reportCommentSelect,reportCommentText,reportCommentDesc)"></v-text-field>
+                                  </v-flex>
+                                </v-layout>
+                              </v-card-text>
+                              <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn color="blue darken-1" text @click="Commentdialog = false">취소</v-btn>
+                                <v-btn color="blue darken-1" text @click="Commentdialog = false, submitCommentReport(reportCommentSelect,reportCommentText,reportCommentDesc, comments, index)">신고하기</v-btn>
+                                <br />
+                              </v-card-actions>
+                            </v-card>
+
+                          </v-dialog>
+                        </v-layout>
+                        </template>
+
+
+
                       </div>
                     </v-list-item-action>
                     <br>
