@@ -64,9 +64,12 @@ export default {
     async fetchData() {
       this.recruits = await FirebaseService.SELECT_RecruitInfo();
       this.mySkills = await FirebaseService.SELECT_Userdata(this.$session.get('session_id'));
+      console.log(this.recruits,"공고들")
       for(var i in this.recruits) {
+        console.log(this.recruits[i],"공고정보")
         if (this.recruits[i].data.requiredSkills.length == 0) {
           this.myRecruits.push(this.recruits[i]);
+          console.log("기업이 요구하는 스킬이없으면 바로출력")
           continue;
         }
         for(var ii in this.mySkills[0].userSkills) {
