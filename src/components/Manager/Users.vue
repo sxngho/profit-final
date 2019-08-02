@@ -2,7 +2,7 @@
   <div>
     <v-layout row wrap>
       <v-flex xs12 sm10 offset-sm1>
-        당신의 level은 {{userlevel}}
+        당신의 level은 {{level}}
         <v-text-field v-model="input"/>
       </v-flex>
     </v-layout>
