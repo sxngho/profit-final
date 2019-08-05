@@ -9,7 +9,7 @@
 
     <div style="margin:30%"/>
     <hr/>
-
+    {{projects.length}} 개의 프로젝트를 가져왔습니다.
     <!-- 이것저것의 차트 -->
     <v-layout row wrap>
       <v-flex xs4>
@@ -47,7 +47,7 @@ import FirebaseService from "@/services/FirebaseService";
 export default {
   data() {
     return {
-
+      projects : '',
     }
   },
   props: {
@@ -57,8 +57,13 @@ export default {
 
   },
   created() {
+    this.SELECT_ALLProjects()
   },
   methods: {
+    async SELECT_ALLProjects() {
+      this.projects = await FirebaseService.SELECT_ALLProjects()
+      // console.log(this.projects)
+    },
   },
   watch: {
   }
