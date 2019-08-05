@@ -25,7 +25,7 @@
     <!--companyList-->
     <div class="companyList__container">
       <div v-show="inputValue" v-for="company in this.showCompanyList" class="companyList__content">
-        <router-link :to="{name : 'company', params: { id: company_name }}">
+        <router-link :to="{name : 'company', params: { id: company.company_name }}">
           <button class="company__container">
             <div class="company__content">
               <div class="companyImage">
@@ -37,7 +37,7 @@
         </router-link>
       </div>
       <div v-show="noneValue" v-for="company in this.allCompanyList" class="companyList__content">
-        <router-link :to="{name : 'company', params: { id: company_name }}">
+        <router-link :to="{name : 'company', params: { id: company.company_name }}">
           <button class="company__container">
             <div class="company__content">
               <div class="companyImage">
