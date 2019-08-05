@@ -1,6 +1,6 @@
 <template>
-  <div class="recuritEditor__container">
-    <div class="recuritEditor__content">
+  <div class="recruitEditor__container">
+    <div class="recruitEditor__content">
       <div class="category__content contentBox">
         <div class="category__title titleBox">카테고리</div>
         <div class="category__select inputBox">
@@ -182,7 +182,7 @@ export default {
 </script>
 
 <style scoped>
-.recuritEditor__container {
+.recruitEditor__container {
   background-color: white;
   width: 1080px;
   height: 1800px;

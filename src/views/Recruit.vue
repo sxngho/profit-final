@@ -42,12 +42,12 @@
 
 <script>
 import FirebaseService from "@/services/FirebaseService";
-import RecuritBanner from "../components/Recruit/InputForm/RecruitBanner";
+import RecruitBanner from "../components/Recruit/InputForm/RecruitBanner";
 import RecruitEditor from "../components/Recruit/InputForm/RecruitEditor";
 export default {
   name: "Recruit",
   components: {
-    RecuritBanner,
+    RecruitBanner,
     RecruitEditor
   },
   data() {
