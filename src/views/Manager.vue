@@ -49,11 +49,11 @@ export default {
         var userdata = await FirebaseService.SELECT_Userdata(this.user)
         this.level = userdata[0].level
         if (this.level >= 2) {
-          alert('권한이 없습니다.')
+          alert('권한이 없습니다. 필요 level : 0, 1 (운영자, 관리자)')
           location.href=`${document.location.origin}/error`
         }
       } else {
-        alert('권한이 없습니다.')
+        alert('권한이 없습니다. 필요 level : 0, 1 (운영자, 관리자)')
         location.href=`${document.location.origin}/error`
       }
     }

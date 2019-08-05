@@ -270,7 +270,7 @@ export default {
       });
   },
 
-  async DELETE_userCareer(userCareers, career, userId, reload) {
+  DELETE_userCareer(userCareers, career, userId, reload) {
     var index = -1;
     for (var i in userCareers) {
       if (
@@ -292,7 +292,11 @@ export default {
           userCareers: userCareers
         })
         .then(docSnapshots => {
-          return userCareers;
+          if (userCareers == 0) {
+            return !reload;
+          } else {
+            return reload;
+          }
         });
     }
   },
@@ -317,7 +321,7 @@ export default {
       });
   },
 
- async DELETE_userEducations(userEducations, edu, userId, reload) {
+  DELETE_userEducations(userEducations, edu, userId, reload) {
     var index = -1;
     for (var i in userEducations) {
       if (
@@ -338,7 +342,11 @@ export default {
           userEducations: userEducations
         })
         .then(docSnapshots => {
-          return userEducations;
+          if (userEducations == 0) {
+            return !reload;
+          } else {
+            return reload;
+          }
         });
     }
   },
@@ -1324,7 +1332,7 @@ export default {
       .get()
       .then(docSnapshot => {
         var old_alertlist = docSnapshot.data().alertlist;
-        console.log(old_alertlist);
+        // console.log(old_alertlist);
         old_alertlist.push({
           check: false,
           url: "/project/" + project_id,
