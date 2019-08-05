@@ -5,16 +5,19 @@
       <!-- 작업중 리스트 -->
       <div>
         <h1>작업중인 리스트</h1>
-        <v-layout row wrap>
-            <v-card outlinedd style="width:100%">
+        <v-layout row wrap style="margin:20px 0;" v-for="recruit in proceedList">
+            <v-card outlined style="width:100%">
               <v-card-title>
-                프젝이름
+                {{recruit.projectTitle}}
               </v-card-title>
               <v-card-text>
-                남은기간, 페이, 회사이름
+                {{recruit.projectTerm}}
+                {{recruit.pay}}
+                {{recruit.companyId}}
               </v-card-text>
               <v-card-actions>
-                <v-btn outlined color="blue">완료</v-btn>
+                <v-btn @click="cancle()" outlined color="red">계약파기</v-btn>
+                <v-btn @click="complete()" outlined color="blue">완료</v-btn>
                 <v-btn @click="popChat('test')" outlined color="orange">채팅창</v-btn>
                 <v-btn @click="popContract('test')" outlined color="orange">계약서</v-btn>
               </v-card-actions>
@@ -22,13 +25,13 @@
         </v-layout>
       </div>
 
-      <v-divider/>
+      <v-layout row style="margin:20px"/>
 
       <!-- 찜 리스트 -->
       <div>
         <h1>찜 리스트</h1>
-        <v-layout row wrap>
-            <v-card  v-for="recruit in Dibs" outlinedd style="width:100%">
+        <v-layout row wrap v-for="recruit in Dibs" style="margin:20px 0;">
+            <v-card outlined style="width:100%">
               <v-card-title>
                 타이틀 : {{recruit.data.projectTitle}}
               </v-card-title>
@@ -42,7 +45,6 @@
         </v-layout>
       </div>
 
-      <v-divider/>
     </v-container>
   </div>
 </template>
@@ -67,7 +69,7 @@ export default {
       myDibs : "",
       recruits : "",
       Dibs : [],
-      proceedList:"",
+      proceedList:[],
     };
   },
   mounted() {
@@ -79,13 +81,24 @@ export default {
       this.userid = this.$session.get('session_id');
       this.userdata = await FirebaseService.SELECT_Userdata(this.$session.get('session_id'));
       this.recruits = await FirebaseService.SELECT_RecruitInfo();
-      this.proceedList = await FirebaseService.SELECT_UserProceedList(this.$session.get('session_id'));
+      var userProceedList = await FirebaseService.SELECT_UserProceedList(this.$session.get('session_id'));
       this.myDibs = this.userdata[0].dibs;
       for(var i in this.recruits){
         if(this.myDibs.includes(this.recruits[i].id)){
           this.Dibs.push(this.recruits[i]);
         }
       }
+      var allChatRoom="";
+      firebase.database().ref('/chat/').once('value').then( snapshot => {
+        allChatRoom = snapshot.val();
+        for(var j in userProceedList)
+          for(var i in allChatRoom) {
+            if ( allChatRoom[i].recruitPK == userProceedList[j]) {
+              this.proceedList.push(allChatRoom[i]);
+              break;
+          }
+        }
+      });
     },
     popChat(ccode){
 

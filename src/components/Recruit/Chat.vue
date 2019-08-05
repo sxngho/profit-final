@@ -639,15 +639,17 @@ export default {
         var contractUser = this.nowChatRoom.userId;
         var contractCompany = this.nowChatRoom.companyId;
 
+        console.log("않이 진짜", snapshot.val().contractDate);
+
         //둘 다 확인을 눌렀다는 것을 현 시점 확인했다!!
-        if(snapshot.val().userVerification && snapshot.val().companyVerification){
+        if(snapshot.val().userVerification && snapshot.val().companyVerification && (snapshot.val().contractDate==undefined||snapshot.val().contractDate=="")){
           //리크루트 컬렉션의 상태를 '계약완료된 상태'로 만든다
           FirebaseService.UPDATE_RecruitContract(this.nowChatRoom.recruitPK , contractUser);
 
           //계약당사자의 users Collection에서 proceedList를 업데이트 해야한다!
           this.addProceedList(contractUser, this.nowChatRoom.recruitPK );
           firebase.database().ref('/'+this.nowChatRoom.link).update({
-            contractTime : new Date(),
+            contractDate : new Date(),
           });
           //이것을 찜하고있던 유저들의 찜목록에서 다 지워주기 (계약 당사자 포함)
           var dellist = [];
@@ -674,7 +676,8 @@ export default {
 
     async addProceedList(userId, rePK){
       var proceedList = await FirebaseService.SELECT_UserProceedList(userId);
-      proceedList.push(rePK);;
+      proceedList.push(rePK);
+      console.log("요걸로 업데이트할것이다!", proceedList);
       FirebaseService.UPDATE_UserProceedList(userId, proceedList);
     },
 

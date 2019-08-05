@@ -1,28 +1,26 @@
 <template>
-
-    <!-- 비 로그인 유저라면 아래 레이아웃 출력 -->
-    <!-- <v-layout v-if=" user== '' || user == undefined ">
-      <h1>로그인해야 이용 가능한 서비스 입니다</h1>
-      <v-btn>로그인하기</v-btn>
-      <v-btn>회원가입하기</v-btn>
-      <v-btn>메인으로</v-btn>
-    </v-layout>-->
-
+  <v-container wrap>
     <!-- 개발자라면 아래 레이아웃 출력 -->
-    <v-container wrap>
       <!-- 모집중공고 리스트 -->
-      <div>
+      <div v-if='nowLevel == "2"'>
         <v-layout wrap row>
-          <h1>모집중인 공고 리스트</h1>
+          <h1>지원할 수 있는 공고 리스트</h1>
         </v-layout>
 
         <v-layout wrap row>
-          <v-flex xs12 sm6 md4 v-for="recruit in myRecruits" v-if="!recruit.data.contract">
-            <v-card outlined>
-              <v-card-title>{{ recruit.data.title }}</v-card-title>
-              <v-card-text>
-                {{recruit.data.companyId}}회사,필요스택 :  {{recruit.data.requiredSkills}}, 요약, 마감기간
-              </v-card-text>
+          <v-flex xs12 sm6 md4 v-for="recruit in myRecruits" style="padding:10px;">
+            <v-card outlined class="text-center" style="padding:25px 10px 5px 10px;">
+                <p class="display-1" style="font-size: 24px; font-weight: bold;">{{ recruit.data.projectTitle }}</p>
+              <div>
+                <div>
+                  <v-chip v-for="skill in recruit.data.requiredSkills" outlined small class="pa-2" color="indigo">{{skill}}</v-chip>
+                </div>
+                <span class="indigo--text headline">{{recruit.data.closingDate}}</span>
+                <p class="grey--text">{{recruit.data.projectSummary}}</p>
+                <span class="caption">
+                  {{recruit.data.companyId}} 
+                  {{recruit.data.endDay}}</span>
+              </div>
               <v-card-actions justify-center>
                 <v-spacer/>
                 <v-btn @click="popRecruitDetail(recruit.id)" text outlined>자세히보기</v-btn>
@@ -32,11 +30,22 @@
         </v-layout>
 
       </div>
-    </v-container>
 
     <!-- 회사라면 아래 레이아웃 출력 -->
-    <!-- <v-container></v-container> -->
+    <div v-else-if='nowLevel == "0" || nowLevel=="1" || nowLevel=="3"'>
+      <v-layout wrap row>
+        <h1>회사당!</h1>
+      </v-layout>
+    </div>
 
+    <!-- 비 로그인 유저라면 아래 레이아웃 출력 -->
+    <div v-else>
+      <v-layout wrap row>
+        <h1>비로그인이당</h1>
+      </v-layout>
+    </div>
+
+  </v-container>
 </template>
 
 
@@ -55,13 +64,18 @@ export default {
         recruits : "",
         mySkills : "",
         myRecruits : [],
+        userlevel:"",
+        nowLevel:"-1",
       };
   },
   mounted() {
+
     this.fetchData();
   },
   methods: {
     async fetchData() {
+      this.nowLevel = this.$session.get('level');
+      console.log("내 렙은? : ",this.noewLevel);
       this.recruits = await FirebaseService.SELECT_RecruitInfo();
       this.mySkills = await FirebaseService.SELECT_Userdata(this.$session.get('session_id'));
       console.log(this.recruits,"공고들")
