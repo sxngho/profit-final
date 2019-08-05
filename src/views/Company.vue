@@ -218,7 +218,7 @@
           <v-card style="width:100%" outlined>
             <v-card-title>
               공고
-              <router-link to="/recuriteditorpage" style="text-decoration:none">
+              <router-link v-if="isMineCheck()" to="/recruiteditorpage" style="text-decoration:none">
                 <v-btn text outlined small rounded color="success" style="margin-left:1em;">
                   <i class="fa fa-pencil" />공고 추가
                 </v-btn>
@@ -244,8 +244,59 @@
                     <v-expansion-panel-content>
                       <v-container>
                         <v-layout row wrap>
-                          <!-- 공고 상세 내용 -->
-                          <v-flex xs12 sm7 style="padding:1em; border-right:1px solid black;">
+
+                          <!-- 1. 로그인한 사람이 회사가 아닐 때 : 공고 상세 내용 -->
+                          <v-flex v-if="!isMineCheck()" xs12 style="padding:1em;">
+                            <!-- 제목과 기술스택 -->
+                            <v-layout row wrap>
+                              <div>
+                                <v-chip label outlined color="deep-purple">{{recruit.data.category}}</v-chip>
+                              </div>
+                              <v-spacer />
+                              <div>
+                                <v-chip
+                                  v-for="skill in recruit.data.requiredSkills"
+                                  small
+                                  color="#7c5eb2c7"
+                                >{{skill}}</v-chip>
+                              </div>
+                            </v-layout>
+
+                            <!-- 요약 -->
+                            <p
+                              style="margin:20px 0px; border-bottom:1px solid black"
+                            >{{recruit.data.projectSummary}}</p>
+
+                            <!-- 나머지 디테일 -->
+                            <v-simple-table>
+                              <tbody>
+                                <tr>
+                                  <th>제목</th>
+                                  <td>{{recruit.data.projectTitle}}</td>
+                                </tr>
+                                <tr>
+                                  <th>예산</th>
+                                  <td>{{recruit.data.budget}}</td>
+                                </tr>
+                                <tr>
+                                  <th>업로드일</th>
+                                  <td>{{recruit.data.createDay}}</td>
+                                </tr>
+                                <tr>
+                                  <th>모집종료</th>
+                                  <td>{{recruit.data.closingDate}}</td>
+                                </tr>
+                                <tr>
+                                  <th>프로젝트 마감일</th>
+                                  <td>{{recruit.data.endDay}}</td>
+                                </tr>
+                              </tbody>
+                            </v-simple-table>
+                          </v-flex>
+
+
+                          <!-- 2. 로그인한 사람이 해당 회사일 때 : 공고 상세 내용 -->
+                          <v-flex v-if="isMineCheck()" xs12 sm7 style="padding:1em; border-right:1px solid black;">
                             <!-- 제목과 기술스택 -->
                             <v-layout row wrap>
                               <div>
@@ -315,7 +366,7 @@
                           </v-flex>
 
                           <!-- 계약이 된 상태라면 -->
-                          <v-flex xs12 sm5 v-if="isMineCheck() && recruit.data.contract">
+                          <v-flex xs12 sm5 v-if="isMineCheck() && recruit.data.contract" >
                             <h3>작업중인 유저</h3>
                             <v-layout row wrap>
                               <v-flex xs11 offset-xs1>
@@ -328,7 +379,7 @@
                             </v-layout>
                           </v-flex>
                         </v-layout>
-                        <v-layout justify-center>
+                        <v-layout justify-center v-if="isMineCheck()">
                           <div v-if="!recruit.data.contract">
                             <v-btn flex outlined color="red">삭제</v-btn>
                           </div>

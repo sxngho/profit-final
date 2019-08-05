@@ -4,7 +4,7 @@
       <span>{{company.name}}</span>
     </v-flex>
     <div class="recruitBtnContainer">
-      <a href="/recuritEditorPage" class="recruitBtn">Recruit 등록하기</a>
+      <a href="/recruitEditorPage" class="recruitBtn">Recruit 등록하기</a>
     </div>
   </v-layout>
 </template>
