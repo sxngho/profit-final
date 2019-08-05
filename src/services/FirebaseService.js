@@ -526,6 +526,16 @@ export default {
       });
   },
 
+  async SELECT_Companynickname(company_name) {
+    return firestore
+      .collection("companys")
+      .doc(company_name)
+      .get()
+      .then(docSnapshot => {
+        return docSnapshot.data();
+      });
+  },
+
   // Function :: 기업의 정보를 가져옵니다.
   async SELECT_AllCompanydata() {
     return firestore

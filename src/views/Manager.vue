@@ -50,11 +50,11 @@ export default {
         this.level = userdata[0].level
         if (this.level >= 2) {
           alert('권한이 없습니다. 필요 level : 0, 1 (운영자, 관리자)')
-          location.href=`${document.location.origin}/error`
+          location.href=`${document.location.origin}`
         }
       } else {
         alert('권한이 없습니다. 필요 level : 0, 1 (운영자, 관리자)')
-        location.href=`${document.location.origin}/error`
+        location.href=`${document.location.origin}`
       }
     }
   },
