@@ -17,7 +17,7 @@
         </v-layout>
 
         <v-layout wrap row>
-          <v-flex xs12 sm6 md4 v-for="recruit in myRecruits">
+          <v-flex xs12 sm6 md4 v-for="recruit in myRecruits" v-if="!recruit.data.contract">
             <v-card outlined>
               <v-card-title>{{ recruit.data.title }}</v-card-title>
               <v-card-text>

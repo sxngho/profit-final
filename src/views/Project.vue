@@ -82,7 +82,6 @@
               <!-- project description -->
               <v-layout row style="padding: 2vw 0vw; border-bottom: 1px solid #cecece;">
 
-
               <!--comment -->
                 <v-flex>
                   <span class="title">{{project.projecttitle}}</span>
