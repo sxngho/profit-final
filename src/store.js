@@ -38,7 +38,8 @@ export default new Vuex.Store({
     reload: true,
     companyList: [],
     showCompanyList: [],
-    showCompanyListBottomBar: []
+    showCompanyListBottomBar: [],
+    level:-1
   },
   // Getter : get 함수 정의
   // 정의 -> return state.변수명
@@ -52,6 +53,9 @@ export default new Vuex.Store({
     },
     getReload: function(state) {
       return state.reload;
+    },
+    getLevel: function(state) {
+      return state.level;
     }
   },
 
@@ -159,7 +163,10 @@ export default new Vuex.Store({
     },
     clearBottomBar: function(state, payload) {
       state.showCompanyListBottomBar = [];
-    }
+    },
+    changeLevel: function(state, payload) {
+      state.level = payload;
+    },
   },
 
   // Action : 값변경 / 비동기
