@@ -65,12 +65,6 @@
               <td>프로젝트 이름</td>
               <td>{{nowChatRoom.projectTitle}}</td>
             </tr>
-            <tr v-if="!toggleProjectTitle">
-              <td>프로젝트 이름</td>
-              <td>
-                <v-text-field single-line outlined required v-model="inputProjectTitle" v-on:keyup.enter="completeProjectTitle(inputProjectTitle)" > </v-text-field>
-              </td>
-            </tr>
 
             <tr @click="changeProjectTerm()" v-if="toggleProjectTerm">
               <td>프로젝트 기간</td>
@@ -79,7 +73,7 @@
             <tr v-if="!toggleProjectTerm">
               <td>프로젝트 기간</td>
               <td>
-                <v-text-field single-line outlined required v-model="inputProjectTerm" v-on:keyup.enter="completeProjectTerm(inputProjectTerm)" > </v-text-field>
+                <v-text-field single-line outlined required v-model="inputProjectTerm" ref="ProjectTermRef" v-on:keyup.esc="cancleProjectTerm()" v-on:keyup.enter="completeProjectTerm(inputProjectTerm)" > </v-text-field>
               </td>
             </tr>
 
@@ -90,7 +84,7 @@
             <tr v-if="!togglePay">
               <td> 급여 </td>
               <td>
-                <v-text-field single-line outlined required v-model="inputPay" v-on:keyup.enter="completePay(inputPay)" > </v-text-field>
+                <v-text-field single-line outlined required v-model="inputPay" v-on:keyup.esc="canclePay()" ref="PayRef"  v-on:keyup.enter="completePay(inputPay)" > </v-text-field>
               </td>
             </tr>
 
@@ -101,7 +95,7 @@
             <tr v-if="!toggleDownPayment">
               <td> 계약금 </td>
               <td>
-                <v-text-field single-line outlined required v-model="inputDownPayment" v-on:keyup.enter="completeDownPayment(inputDownPayment)" > </v-text-field>
+                <v-text-field single-line outlined required v-model="inputDownPayment" v-on:keyup.esc="cancleDownPayment()" ref="DownPaymentRef" v-on:keyup.enter="completeDownPayment(inputDownPayment)" > </v-text-field>
               </td>
             </tr>
 
@@ -112,7 +106,7 @@
             <tr v-if="!toggleBalance">
               <td>잔금</td>
               <td v-if="!toggleBalance">
-                <v-text-field single-line outlined required v-model="inputBalance" v-on:keyup.enter="completeBalance(inputBalance)" > </v-text-field>
+                <v-text-field single-line outlined required v-model="inputBalance" v-on:keyup.esc="cancleBalance()" ref="BalanceRef" v-on:keyup.enter="completeBalance(inputBalance)" > </v-text-field>
               </td>
             </tr>
 
@@ -123,7 +117,7 @@
             <tr v-if="!togglePenalty" >
               <td> 위약금 </td>
               <td>
-                <v-text-field single-line outlined required v-model="inputPenalty" v-on:keyup.enter="completePenalty(inputPenalty)" > </v-text-field>
+                <v-text-field single-line outlined required v-model="inputPenalty" v-on:keyup.esc="canclePenalty()" ref="PenaltyRef" v-on:keyup.enter="completePenalty(inputPenalty)" > </v-text-field>
               </td>
             </tr>
 
@@ -134,7 +128,7 @@
             <tr v-if="!toggleContractDate">
               <td> 계약일</td>
               <td>
-                <v-text-field single-line outlined required v-model="inputContractDate" v-on:keyup.enter="completeContractDate(inputContractDate)" > </v-text-field>
+                <v-text-field single-line outlined required v-model="inputContractDate" ref="ContractDateRef" v-on:keyup.esc="cancleContractDate()" v-on:keyup.enter="completeContractDate(inputContractDate)" > </v-text-field>
               </td>
             </tr>
 
@@ -142,23 +136,11 @@
               <td> 기업명 </td>
               <td> {{nowChatRoom.companyId}} </td>
             </tr>
-            <tr v-if="!toggleCompanyId">
-              <td> 기업명 </td>
-              <td>
-                <v-text-field single-line outlined required v-model="inputCompanyId" v-on:keyup.enter="completeCompanyId(inputCompanyId)" > </v-text-field>
-              </td>
-            </tr>
 
 
             <tr @click="changeCompanyAddr()" v-if="toggleCompanyAddr">
               <td>기업주소</td>
               <td>{{nowChatRoom.companyAddr}}</td>
-            </tr>
-            <tr v-if="!toggleCompanyAddr" >
-              <td>기업주소</td>
-              <td v-if="!toggleCompanyAddr">
-                <v-text-field single-line outlined required v-model="inputCompanyAddr" v-on:keyup.enter="completeCompanyAddr(inputCompanyAddr)" > </v-text-field>
-              </td>
             </tr>
 
 
@@ -169,7 +151,7 @@
             <tr v-if="!toggleCompany">
               <td> 책임자 </td>
               <td>
-                <v-text-field single-line outlined required v-model="inputCompany" v-on:keyup.enter="completeCompany(inputCompany)" > </v-text-field>
+                <v-text-field single-line outlined required v-model="inputCompany" ref="CompanyRef" v-on:keyup.esc="cancleCompany()" v-on:keyup.enter="completeCompany(inputCompany)" > </v-text-field>
               </td>
             </tr>
 
@@ -180,7 +162,7 @@
             <tr v-if="!toggleAddr">
               <td> 유저주소 </td>
               <td>
-                <v-text-field single-line outlined required v-model="inputAddr" v-on:keyup.enter="completeAddr(inputAddr)" > </v-text-field>
+                <v-text-field single-line outlined required v-model="inputAddr" ref="AddrRef" v-on:keyup.esc="cancleAddr()" v-on:keyup.enter="completeAddr(inputAddr)" > </v-text-field>
               </td>
             </tr>
 
@@ -191,19 +173,13 @@
             <tr v-if="!toggleRrn" >
               <td> 유저주민번호 </td>
               <td>
-                <v-text-field single-line outlined required v-model="inputRrn" v-on:keyup.enter="completeRrn(inputRrn)" > </v-text-field>
+                <v-text-field single-line outlined required v-model="inputRrn" ref="RrnRef" v-on:keyup.esc="cancleRrn()" v-on:keyup.enter="completeRrn(inputRrn)" > </v-text-field>
               </td>
             </tr>
 
             <tr @click="changeUserId()" v-if="toggleUserId">
               <td> 유저이름 </td>
               <td> {{nowChatRoom.userId}} </td>
-            </tr>
-            <tr v-if="!toggleUserId">
-              <td> 유저이름 </td>
-              <td>
-                <v-text-field single-line outlined required v-model="inputUserId" v-on:keyup.enter="completeUserId(inputUserId)" > </v-text-field>
-              </td>
             </tr>
           </tbody>
         </v-simple-table>
@@ -367,6 +343,7 @@ export default {
       nowChatRoom : "", // 내가 현재 접속중인 공고의 채팅방
       myMessage : "", // 내가 입력하는 메시지
       // inputs
+      mainData : "",
       messages : "", // 채팅방 메시지들
       inputProjectTitle : "",
       inputProjectTerm : "",
@@ -407,6 +384,7 @@ export default {
       var recruits = await FirebaseService.SELECT_RecruitInfo();
       var allChatRoom = "";
       firebase.database().ref('/chat/').once('value').then( snapshot => {
+        this.mainData = snapshot.val();
         allChatRoom = snapshot.val();
         var index = "";
         for(var i in allChatRoom) {
@@ -439,6 +417,7 @@ export default {
         // this.changeAllow = (!(snapshot.val().userVerification || snapshot.val().companyVerification));
         // console.log("띠요오옹 ",this.changeAllow);
         // console.log(snapshot.val().userVerification,snapshot.val().companyVerification);
+        this.mainData = snapshot.val();
         this.messages = snapshot.val().chatting;
         if ( this.nowLevel == "3" ) {
           for(var i in this.messages) {
@@ -480,22 +459,15 @@ export default {
       this.myMessage = "";
     },
 
-    changeProjectTitle() {
-      if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification))
-      this.toggleProjectTitle = !this.toggleProjectTitle;
-    },
-    completeProjectTitle() {
-      this.toggleProjectTitle = !this.toggleProjectTitle;
-      var dataRef = firebase.database().ref('/'+this.nowChatRoom.link);
-      dataRef.update({
-        projectTitle : this.inputProjectTitle,
-      });
-      this.inputProjectTitle = "";
-    },
-
     changeProjectTerm() {
-      if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification))
+      if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification)) {
       this.toggleProjectTerm = !this.toggleProjectTerm;
+      this.$nextTick(() => this.$refs.ProjectTermRef.focus());
+    }
+    },
+    cancleProjectTerm() {
+      this.toggleProjectTerm = !this.toggleProjectTerm;
+      this.inputProjectTerm = this.mainData.projectTerm;
     },
     completeProjectTerm() {
       this.toggleProjectTerm = !this.toggleProjectTerm;
@@ -503,12 +475,17 @@ export default {
       dataRef.update({
         projectTerm : this.inputProjectTerm,
       });
-      this.inputProjectTerm = "";
     },
 
     changePay() {
-      if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification))
+      if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification)) {
+        this.togglePay = !this.togglePay;
+        this.$nextTick(() => this.$refs.PayRef.focus());
+      }
+    },
+    canclePay() {
       this.togglePay = !this.togglePay;
+      this.inputPay = this.mainData.pay;
     },
     completePay() {
       this.togglePay = !this.togglePay;
@@ -516,12 +493,17 @@ export default {
       dataRef.update({
         pay : this.inputPay,
       });
-      this.inputPay = "";
     },
 
     changeDownPayment() {
-      if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification))
+      if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification)) {
+        this.toggleDownPayment = !this.toggleDownPayment;
+        this.$nextTick(() => this.$refs.DownPaymentRef.focus());
+      }
+    },
+    cancleDownPayment() {
       this.toggleDownPayment = !this.toggleDownPayment;
+      this.inputDownPayment = this.mainData.DownPayment;
     },
     completeDownPayment() {
       this.toggleDownPayment = !this.toggleDownPayment;
@@ -529,12 +511,17 @@ export default {
       dataRef.update({
         downPayment : this.inputDownPayment,
       });
-      this.inputDownPayment = "";
     },
 
     changeBalance() {
-      if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification))
+      if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification)) {
+        this.toggleBalance = !this.toggleBalance;
+        this.$nextTick(() => this.$refs.BalanceRef.focus());
+      }
+    },
+    cancleBalance() {
       this.toggleBalance = !this.toggleBalance;
+      this.inputBalance = this.mainData.Balance;
     },
     completeBalance() {
       this.toggleBalance = !this.toggleBalance;
@@ -542,12 +529,17 @@ export default {
       dataRef.update({
         balance : this.inputBalance,
       });
-      this.inputBalance = "";
     },
 
     changePenalty() {
-      if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification))
+      if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification)) {
+        this.togglePenalty = !this.togglePenalty;
+        this.$nextTick(() => this.$refs.PenaltyRef.focus());
+      }
+    },
+    canclePenalty() {
       this.togglePenalty = !this.togglePenalty;
+      this.inputPenalty = this.mainData.Penalty;
     },
     completePenalty() {
       this.togglePenalty = !this.togglePenalty;
@@ -555,12 +547,17 @@ export default {
       dataRef.update({
         penalty : this.inputPenalty,
       });
-      this.inputPenalty = "";
     },
 
     changeContractDate() {
-      if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification))
+      if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification)) {
+        this.toggleContractDate = !this.toggleContractDate;
+        this.$nextTick(() => this.$refs.ContractDateRef.focus());
+      }
+    },
+    cancleContractDate() {
       this.toggleContractDate = !this.toggleContractDate;
+      this.inputContractDate = this.mainData.ContractDate;
     },
     completeContractDate() {
       this.toggleContractDate = !this.toggleContractDate;
@@ -568,38 +565,17 @@ export default {
       dataRef.update({
         contractDate : this.inputContractDate,
       });
-      this.inputContractDate = "";
-    },
-
-    changeCompanyId() {
-      if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification))
-      this.toggleCompanyId = !this.toggleCompanyId;
-    },
-    completeCompanyId() {
-      this.toggleCompanyId = !this.toggleCompanyId;
-      var dataRef = firebase.database().ref('/'+this.nowChatRoom.link);
-      dataRef.update({
-        companyId : this.inputCompanyId,
-      });
-      this.inputCompanyId = "";
-    },
-
-    changeCompanyAddr() {
-      if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification))
-      this.toggleCompanyAddr = !this.toggleCompanyAddr;
-    },
-    completeCompanyAddr() {
-      this.toggleCompanyAddr = !this.toggleCompanyAddr;
-      var dataRef = firebase.database().ref('/'+this.nowChatRoom.link);
-      dataRef.update({
-        companyAddr : this.inputCompanyAddr,
-      });
-      this.inputCompanyAddr = "";
     },
 
     changeCompany() {
-      if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification))
+      if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification)) {
+        this.toggleCompany = !this.toggleCompany;
+        this.$nextTick(() => this.$refs.CompanyRef.focus());
+      }
+    },
+    cancleCompany() {
       this.toggleCompany = !this.toggleCompany;
+      this.inputCompany = this.mainData.Company;
     },
     completeCompany() {
       this.toggleCompany = !this.toggleCompany;
@@ -607,24 +583,19 @@ export default {
       dataRef.update({
         company : this.inputCompany,
       });
-      this.inputCompany = "";
-    },
-    changeAddr() {
-      if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification))
-      this.toggleAddr = !this.toggleAddr;
-    },
-    completeAddr() {
-      this.toggleAddr = !this.toggleAddr;
-      var dataRef = firebase.database().ref('/'+this.nowChatRoom.link);
-      dataRef.update({
-        addr : this.inputAddr,
-      });
-      this.inputAddr = "";
     },
 
     changeRrn() {
-      if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification))
+      if( this.nowLevel == "2") {
+        if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification)) {
+          this.toggleRrn = !this.toggleRrn;
+          this.$nextTick(() => this.$refs.RrnRef.focus());
+        }
+      }
+    },
+    cancleRrn() {
       this.toggleRrn = !this.toggleRrn;
+      this.inputRrn = this.mainData.Rrn;
     },
     completeRrn() {
       this.toggleRrn = !this.toggleRrn;
@@ -632,19 +603,24 @@ export default {
       dataRef.update({
         rrn : this.inputRrn,
       });
-      this.inputRrn = "";
     },
-    changeUserId() {
-      if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification))
-      this.toggleUserId = !this.toggleUserId;
+
+    changeAddr() {
+      if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification)) {
+        this.toggleAddr = !this.toggleAddr;
+        this.$nextTick(() => this.$refs.AddrRef.focus());
+      }
     },
-    completeUserId() {
-      this.toggleUserId = !this.toggleUserId;
+    cancleAddr() {
+      this.toggleAddr = !this.toggleAddr;
+      this.inputAddr = this.mainData.Addr;
+    },
+    completeAddr() {
+      this.toggleAddr = !this.toggleAddr;
       var dataRef = firebase.database().ref('/'+this.nowChatRoom.link);
       dataRef.update({
-        userId : this.inputUserId,
+        addr : this.inputAddr,
       });
-      this.inputUserId = "";
     },
 
     validContract(){

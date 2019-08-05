@@ -86,99 +86,58 @@
                 <tbody class="text-center">
                   <tr>
                     <th>산업</th>
-                    <td v-if="!toggleIndustry" @click="toggleIndustry = true">{{company.industry}}</td>
+                    <td v-if="!toggleIndustry" @click="Function_Industry()">{{company.industry}}</td>
                     <td>
-                      <input
-                        type="text"
-                        v-model="company.industry"
-                        v-if="toggleIndustry"
-                        style="text-align:center"
-                        @keyup.enter="submit()"
-                      />
+                      <input type="text" v-model="company.industry" v-if="toggleIndustry"
+                        style="text-align:center" ref="IndustryRef" @keyup.enter="Submit_Industry()"/>
                     </td>
                   </tr>
                   <tr>
                     <th>사원수</th>
-                    <td v-if="!toggleMount" @click="toggleMount = true">{{company.mount}}</td>
+                    <td v-if="!toggleMount" @click="Function_Mount()">{{company.mount}}</td>
                     <td>
-                      <input
-                        type="text"
-                        v-model="company.mount"
-                        v-if="toggleMount"
-                        style="text-align:center"
-                        @keyup.enter="submit()"
-                      />
+                      <input type="text" v-model="company.mount" v-if="toggleMount"
+                        style="text-align:center" ref="MountRef" @keyup.enter="Submit_Mount()"/>
                     </td>
                   </tr>
                   <tr>
                     <th>기업구분</th>
-                    <td v-if="!toggleComsize" @click="toggleComsize = true">{{company.comsize}}</td>
+                    <td v-if="!toggleComsize" @click="Function_Comsize()">{{company.comsize}}</td>
                     <td>
-                      <input
-                        type="text"
-                        v-model="company.comsize"
-                        v-if="toggleComsize"
-                        style="text-align:center"
-                        @keyup.enter="submit()"
-                      />
+                      <input type="text" v-model="company.comsize" v-if="toggleComsize"
+                        style="text-align:center" ref="ComsizeRef" @keyup.enter="Submit_Comsize()"/>
                     </td>
                   </tr>
                   <tr>
                     <th>홈페이지</th>
-                    <td v-if="!toggleHomepage" @click="toggleHomepage = true">{{company.homepage}}</td>
+                    <td v-if="!toggleHomepage" @click="Function_Homepage()">{{company.homepage}}</td>
                     <td>
-                      <input
-                        type="text"
-                        v-model="company.homepage"
-                        v-if="toggleHomepage"
-                        style="text-align:center"
-                        @keyup.enter="submit()"
-                      />
+                      <input type="text" v-model="company.homepage" v-if="toggleHomepage"
+                        style="text-align:center" ref="HomepageRef" @keyup.enter="Submit_Homepage()"/>
                     </td>
                   </tr>
                   <tr>
                     <th>주소</th>
-                    <td v-if="!toggleAddress" @click="toggleAddress = true">{{company.address}}</td>
+                    <td v-if="!toggleAddress" @click="Function_Address()">{{company.address}}</td>
                     <td>
-                      <input
-                        type="text"
-                        v-model="company.address"
-                        v-if="toggleAddress"
-                        style="text-align:center"
-                        @keyup.enter="submit()"
-                      />
+                      <input type="text" v-model="company.address" v-if="toggleAddress"
+                        style="text-align:center" ref="AddressRef" @keyup.enter="Submit_Address()"/>
                     </td>
                   </tr>
                   <tr>
                     <th>설립일</th>
-                    <td
-                      v-if="!toggleEstablishedDate"
-                      @click="toggleEstablishedDate = true"
-                    >{{company.establishedDate}}</td>
+                    <td v-if="!toggleEstablishedDate" @click="Function_EstablishedDate()"> {{company.establishedDate}} </td>
                     <td>
-                      <input
-                        type="text"
-                        v-model="company.establishedDate"
-                        v-if="toggleEstablishedDate"
-                        style="text-align:center"
-                        @keyup.enter="submit()"
-                      />
+                      <input type="text" v-model="company.establishedDate" v-if="toggleEstablishedDate"
+                        style="text-align:center" ref="EstablishedDateRef" @keyup.enter="Submit_EstablishedDate()"/>
                     </td>
                   </tr>
                   <tr>
                     <th>대표자</th>
-                    <td
-                      v-if="!toggleRepresent"
-                      @click="toggleRepresent = true"
-                    >{{company.represent}}</td>
+                    <td v-if="!toggleRepresent" @click="Function_Represent()"> {{company.represent}} </td>
                     <td>
-                      <input
-                        type="text"
-                        v-model="company.represent"
-                        v-if="toggleRepresent"
-                        style="text-align:center"
-                        @keyup.enter="submit()"
-                      />
+                      <input type="text" v-model="company.represent" v-if="toggleRepresent"
+                        style="text-align:center" ref="RepresentRef"@keyup.enter="Submit_Represent()"/>
                     </td>
                   </tr>
                   <tr>
@@ -199,13 +158,10 @@
         <v-flex xs12 sm10 offset-sm1>
           <v-card style="width:100%" outlined>
             <v-card-title>회사소개</v-card-title>
-            <v-card-text v-if="!toggleDescript" @click="toggleDescript = true">{{company.descript}}</v-card-text>
-            <textarea
-              v-model="company.descript"
-              v-if="toggleDescript"
-              @keyup.enter="submit()"
-              style="width:1000px; height:150px"
-            />
+            <v-card-text v-if="!toggleDescript" @click="Function_Descript()">{{company.descript}}</v-card-text>
+            <v-card-text v-if="toggleDescript">
+            <textarea v-model="company.descript" ref="DescriptRef" @keyup.enter="Submit_Descript()" style="width:100%; height:150px"/>
+            </v-card-text>
           </v-card>
         </v-flex>
       </v-layout>
@@ -375,6 +331,98 @@ export default {
     this.nowLevel = this.$session.get("level");
   },
   methods: {
+    Function_Industry() {
+      this.toggleIndustry = true; this.toggleMount = false; this.toggleComsize = false; this.toggleEstablishedDate = false;
+      this.toggleRepresent = false; this.toggleHomepage = false; this.toggleAddress = false; this.toggleDescript = false;
+      this.$nextTick(() => this.$refs.IndustryRef.focus());
+    },
+    Function_Mount() {
+      this.toggleIndustry = false; this.toggleMount = true; this.toggleComsize = false; this.toggleEstablishedDate = false;
+      this.toggleRepresent = false; this.toggleHomepage = false; this.toggleAddress = false; this.toggleDescript = false;
+
+      this.$nextTick(() => this.$refs.MountRef.focus());
+    },
+    Function_Comsize() {
+      this.toggleIndustry = false; this.toggleMount = false; this.toggleComsize = true; this.toggleEstablishedDate = false;
+      this.toggleRepresent = false; this.toggleHomepage = false; this.toggleAddress = false; this.toggleDescript = false;
+
+      this.$nextTick(() => this.$refs.ComsizeRef.focus());
+    },
+    Function_Homepage() {
+      this.toggleIndustry = false; this.toggleMount = false; this.toggleComsize = false; this.toggleEstablishedDate = false;
+      this.toggleRepresent = false; this.toggleHomepage = true; this.toggleAddress = false; this.toggleDescript = false;
+
+      this.$nextTick(() => this.$refs.HomepageRef.focus());
+    },
+    Function_Address() {
+      this.toggleIndustry = false; this.toggleMount = false; this.toggleComsize = false; this.toggleEstablishedDate = false;
+      this.toggleRepresent = false; this.toggleHomepage = false; this.toggleAddress = true; this.toggleDescript = false;
+
+      this.$nextTick(() => this.$refs.AddressRef.focus());
+    },
+    Function_EstablishedDate() {
+      this.toggleIndustry = false; this.toggleMount = false; this.toggleComsize = false; this.toggleEstablishedDate = true;
+      this.toggleRepresent = false; this.toggleHomepage = false; this.toggleAddress = false; this.toggleDescript = false;
+
+      this.$nextTick(() => this.$refs.EstablishedDateRef.focus());
+    },
+
+    Function_Represent() {
+      this.toggleIndustry = false; this.toggleMount = false; this.toggleComsize = false; this.toggleEstablishedDate = false;
+      this.toggleRepresent = true; this.toggleHomepage = false; this.toggleAddress = false; this.toggleDescript = false;
+
+      this.$nextTick(() => this.$refs.RepresentRef.focus());
+    },
+
+    Function_Descript() {
+      this.toggleIndustry = false; this.toggleMount = false; this.toggleComsize = false; this.toggleEstablishedDate = false;
+      this.toggleRepresent = false; this.toggleHomepage = false; this.toggleAddress = false; this.toggleDescript = true;
+
+      this.$nextTick(() => this.$refs.DescriptRef.focus());
+    },
+
+
+    async Submit_Industry() {
+      this.toggleIndustry = !this.toggleIndustry;
+      await FirebaseService.UPDATE_Companys(this.company,this.company.company_name);
+      this.showNotification("foo-css","success","", `내용이 성공적으로 수정되었습니다.!`);
+    },
+    async Submit_Mount() {
+      this.toggleMount = !this.toggleMount;
+      await FirebaseService.UPDATE_Companys(this.company,this.company.company_name);
+      this.showNotification("foo-css","success","", `내용이 성공적으로 수정되었습니다.!`);
+    },
+    async Submit_Comsize() {
+      this.toggleComsize = !this.toggleComsize;
+      await FirebaseService.UPDATE_Companys(this.company,this.company.company_name);
+      this.showNotification("foo-css","success","", `내용이 성공적으로 수정되었습니다.!`);
+    },
+    async Submit_Homepage() {
+      this.toggleHomepage = !this.toggleHomepage;
+      await FirebaseService.UPDATE_Companys(this.company,this.company.company_name);
+      this.showNotification("foo-css","success","", `내용이 성공적으로 수정되었습니다.!`);
+    },
+    async Submit_Address() {
+      this.toggleAddress = !this.toggleAddress;
+      await FirebaseService.UPDATE_Companys(this.company,this.company.company_name);
+      this.showNotification("foo-css","success","", `내용이 성공적으로 수정되었습니다.!`);
+    },
+    async Submit_EstablishedDate() {
+      this.toggleEstablishedDate = !this.toggleEstablishedDate;
+      await FirebaseService.UPDATE_Companys(this.company,this.company.company_name);
+      this.showNotification("foo-css","success","", `내용이 성공적으로 수정되었습니다.!`);
+    },
+    async Submit_Represent() {
+      this.toggleRepresent = !this.toggleRepresent;
+      await FirebaseService.UPDATE_Companys(this.company,this.company.company_name);
+      this.showNotification("foo-css","success","", `내용이 성공적으로 수정되었습니다.!`);
+    },
+    async Submit_Descript() {
+      this.toggleDescript = !this.toggleDescript;
+      await FirebaseService.UPDATE_Companys(this.company,this.company.company_name);
+      this.showNotification("foo-css","success","", `내용이 성공적으로 수정되었습니다.!`);
+    },
+
     isMineCheck() {
       if (this.$route.params.id == this.$session.get("session_id")) {
         return true;
@@ -477,7 +525,7 @@ export default {
       );
     },
     async submit() {
-      this.toggleIndustry = !this.toggleIndustry;
+      if ( this.toggleIndustry ) this.toggleIndustry = !this.toggleIndustry;
       this.toggleMount = !this.toggleMount;
       this.toggleComsize = !this.toggleComsize;
       this.toggleEstablishedDate = !this.toggleEstablishedDate;
