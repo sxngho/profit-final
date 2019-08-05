@@ -2,7 +2,6 @@
   <div class="PortfolioList__container">
     <div class="PortfolioList__container__content">
       <div v-for="item in this.bottolePortfolio" class="content__portfolioList">
-        <!-- {{item.data.state}} -->
         <Portfolio v-bind:portfolio="item" />
       </div>
     </div>
@@ -33,18 +32,10 @@ export default {
   methods: {
     async SELECT_ALLProjects() {
       this.allPortfolio = await FirebaseService.SELECT_ALLProjects();
-      console.log(this.allPortfolio.length);
       this.pageLength = this.allPortfolio.length;
-      console.log(this.pageLength + "<<pagelength");
       this.pushPortfolio();
-      console.log("db호출했습니다. 호출한데이터는 ->", this.allPortfolio);
-      // this.$store.commit("selectAllPortfolioList", this.allPortfolio);
-      // console.log(this.bottolePortfolio);
     },
     morePortfolio() {
-      console.log(this.bottolePortfolio);
-      console.log("this.end -> " + this.end);
-      console.log("pagelen ->" + this.pageLength);
       if (this.end < this.pageLength) {
         this.end += 12;
         this.start += 12;
@@ -53,10 +44,8 @@ export default {
         }
         this.pushPortfolio();
       }
-      console.log(this.start + "<-start-----end>" + this.end);
     },
     pushPortfolio() {
-      console.log("pushPortfolio들어왔음");
       for (let i = this.start; i < this.end; i++) {
         this.bottolePortfolio.push(this.allPortfolio[i]);
       }
