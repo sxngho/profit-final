@@ -1,5 +1,5 @@
 <template>
-  <div v-if="level<=1">
+  <div>
     <!-- TODO 여백 -->
     <v-layout><v-flex style="margin:30px;" /></v-layout>
 
@@ -19,7 +19,6 @@
       <Company v-if="compo==4"/>
       <Report v-if="compo==5"/>
     </v-container>
-
 
   </div>
 </template>
@@ -44,16 +43,30 @@ export default {
     Report,
   },
   methods: {
-
+    async get_userdata() {
+      this.user = this.$session.get('session_id')
+      if (this.user) {
+        var userdata = await FirebaseService.SELECT_Userdata(this.user)
+        this.level = userdata[0].level
+        if (this.level >= 2) {
+          alert('권한이 없습니다.')
+          location.href=`${document.location.origin}/error`
+        }
+      } else {
+        alert('권한이 없습니다.')
+        location.href=`${document.location.origin}/error`
+      }
+    }
   },
   data() {
     return {
       compo:1,
+      user: "",
       level:"",
     };
   },
   mounted() {
-    this.level = this.$session.get('level');
+    this.get_userdata()
   }
 };
 
