@@ -14,12 +14,12 @@
       </router-link>
 
       <router-link to="/recruits" class="bannerBox" style="text-decoration:none">
-        <div class="recuritList contentBox">
+        <div class="recruitList contentBox">
           <div class="iconBox">
             <i class="far fa-handshake fa-7x" style="color:blueviolet"></i>
           </div>
           <br />
-          <div class="recuritList_title titleBox">
+          <div class="recruitList_title titleBox">
             <span class="fontStyle">외주 공고 리스트</span>
           </div>
         </div>

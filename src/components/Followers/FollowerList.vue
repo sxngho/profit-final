@@ -21,29 +21,42 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
-      userData: "",
+      userdata: "",
       followers: [],
       followings: [],
       view1: false,
-      view2: false
+      view2: false,
+      level:"",
     };
   },
   components: {
     Follower
   },
   created() {
+    this.level = this.$session.get('level')
     this.SELECT_Userdata();
   },
   methods: {
     async SELECT_Userdata() {
-      this.user = await FirebaseService.SELECT_Userdata(
-        this.$session.get("session_id")
-      );
-      this.followers = this.user[0].followerlist;
-      this.followings = this.user[0].followinglist;
+      if (this.level !== undefined) {
+        // 로그인한 경우
+        if (this.level == 3) {
+          // 회사인 경우
+          this.userdata = await FirebaseService.SELECT_Companynickname(this.$session.get('session_id'))
+          this.followers = this.userdata.followerlist;
+          this.followings = this.userdata.followinglist;
+        } else {
+          // 회사가 아닌 경우
+          this.userdata = await FirebaseService.SELECT_Userdata(
+            this.$session.get("session_id")
+          );
+          this.followers = this.userdata[0].followerlist;
+          this.followings = this.userdata[0].followinglist;
+        }
+      }
       // this.$store.state.followerView = false;
       // this.$store.state.followingView = false;
-    }
+    },
   },
   mounted() {
     // this.view1 = this.$store.state.followerView;

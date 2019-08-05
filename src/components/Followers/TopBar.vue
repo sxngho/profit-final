@@ -27,16 +27,32 @@ export default {
       userdata: "",
       followerNumber: "",
       starNumber: "9",
-      followingNumber: ""
+      followingNumber: "",
+      level:"",
     };
   },
   methods: {
     async SELECT_Userdata() {
-      this.userdata = await FirebaseService.SELECT_Userdata(
-        this.$session.get("session_id")
-      );
-      this.followerNumber = this.userdata[0].followerlist.length;
-      this.followingNumber = this.userdata[0].followinglist.length;
+      if (this.level !== undefined) {
+        // 로그인한 경우
+        if (this.level == 3) {
+          // 회사인 경우
+          this.userdata = await FirebaseService.SELECT_Companynickname(this.$session.get('session_id'))
+          this.followerNumber = this.userdata.followerlist.length;
+          this.followingNumber = this.userdata.followinglist.length;
+        } else {
+          // 회사가 아닌 경우
+          this.userdata = await FirebaseService.SELECT_Userdata(
+            this.$session.get("session_id")
+          );
+          this.followerNumber = this.userdata[0].followerlist.length;
+          this.followingNumber = this.userdata[0].followinglist.length;
+        }
+      } else {
+        // 로그인하지 않은 경우
+        alert('권한이 없습니다. 로그인 필요')
+        location.href=`${document.location.origin}`
+      }
     },
     followerView() {
       // this.$store.commit("setFollowerView", !this.$store.state.followerView);
@@ -59,6 +75,7 @@ export default {
     }
   },
   created() {
+    this.level = this.$session.get('level')
     this.SELECT_Userdata();
   }
 };

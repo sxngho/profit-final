@@ -16,10 +16,11 @@ import Studio from "./views/Studio.vue";
 import ReChat from "./components/Recruit/Chat.vue";
 import Consult from "./components/Recruit/Consult.vue";
 import Contract from "./components/Recruit/Contract.vue";
-import RecuritEditorPage from "./views/RecuritEditorPage.vue";
+import RecruitEditorPage from "./views/RecruitEditorPage.vue";
 import CompanyListPage from "./views/CompanyListPage.vue";
 import Alert from "./views/Alert.vue";
 import Company from "./views/Company.vue";
+import Error from "./views/Error.vue";
 
 Vue.use(Vuex);
 Vue.use(store);
@@ -98,9 +99,9 @@ export default new Router({
       component: Contract
     },
     {
-      path: "/recuriteditorpage",
-      name: "recuriteditorpage",
-      component: RecuritEditorPage
+      path: "/recruiteditorpage",
+      name: "recruiteditorpage",
+      component: RecruitEditorPage
     },
     {
       path: "/alert",
@@ -116,6 +117,11 @@ export default new Router({
       path: "/companyListPage",
       name: "companyListPage",
       component: CompanyListPage
-    }
+    },
+    {
+      path: "/error",
+      name: "error",
+      component: Error
+    },
   ]
 });
