@@ -1,7 +1,12 @@
 <template>
   <div class="PortfolioList__container">
     <div class="PortfolioList__container__content">
-      <div v-for="item in this.bottolePortfolio" class="content__portfolioList">
+      <div
+        v-for="item in this.$store.state.showPortfolioList"
+        class="content__portfolioList"
+        v-if="item.data.state < 3"
+      >
+        <!-- {{item.data.state}} -->
         <Portfolio v-bind:portfolio="item" />
       </div>
     </div>
@@ -20,9 +25,9 @@ export default {
     return {
       allPortfolio: [],
       bottolePortfolio: [],
-      end: 12,
+      end: 6,
       start: 0,
-      pageLength: "",
+      PageLength: "",
       PortfolioList: []
     };
   },
@@ -32,22 +37,19 @@ export default {
   methods: {
     async SELECT_ALLProjects() {
       this.allPortfolio = await FirebaseService.SELECT_ALLProjects();
-      this.pageLength = this.allPortfolio.length;
-      this.pushPortfolio();
-    },
-    morePortfolio() {
-      if (this.end < this.pageLength) {
-        this.end += 12;
-        this.start += 12;
-        if (this.end > this.pageLength) {
-          this.end = this.pageLength;
-        }
-        this.pushPortfolio();
-      }
-    },
-    pushPortfolio() {
       for (let i = this.start; i < this.end; i++) {
         this.bottolePortfolio.push(this.allPortfolio[i]);
+      }
+      this.$store.commit("selectAllPortfolioList", this.allPortfolio);
+    },
+    morePortfolio() {
+      if (this.end < this.PageLength) {
+        this.end += 6;
+        this.start += 6;
+        if (this.end > this.PageLength) {
+          this.end = this.PageLength;
+        }
+        this.SELECT_ALLProjects();
       }
     }
   }
