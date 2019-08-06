@@ -75,7 +75,7 @@
             <tr v-if="!toggleProjectTerm">
               <td>프로젝트 기간</td>
               <td>
-                <v-text-field single-line outlined required v-model="inputProjectTerm" ref="ProjectTermRef" v-on:keyup.esc="cancleProjectTerm()" v-on:keyup.enter="completeProjectTerm(inputProjectTerm)" > </v-text-field>
+                <v-text-field single-line outlined required v-model="inputProjectTerm" ref="ProjectTermRef" v-on:keyup.esc="cancelProjectTerm()" v-on:keyup.enter="completeProjectTerm(inputProjectTerm)" > </v-text-field>
               </td>
             </tr>
 
@@ -86,7 +86,7 @@
             <tr v-if="!togglePay">
               <td> 급여 </td>
               <td>
-                <v-text-field single-line outlined required v-model="inputPay" v-on:keyup.esc="canclePay()" ref="PayRef"  v-on:keyup.enter="completePay(inputPay)" > </v-text-field>
+                <v-text-field single-line outlined required v-model="inputPay" v-on:keyup.esc="cancelPay()" ref="PayRef"  v-on:keyup.enter="completePay(inputPay)" > </v-text-field>
               </td>
             </tr>
 
@@ -97,7 +97,7 @@
             <tr v-if="!toggleDownPayment">
               <td> 계약금 </td>
               <td>
-                <v-text-field single-line outlined required v-model="inputDownPayment" v-on:keyup.esc="cancleDownPayment()" ref="DownPaymentRef" v-on:keyup.enter="completeDownPayment(inputDownPayment)" > </v-text-field>
+                <v-text-field single-line outlined required v-model="inputDownPayment" v-on:keyup.esc="cancelDownPayment()" ref="DownPaymentRef" v-on:keyup.enter="completeDownPayment(inputDownPayment)" > </v-text-field>
               </td>
             </tr>
 
@@ -108,7 +108,7 @@
             <tr v-if="!toggleBalance">
               <td>잔금</td>
               <td v-if="!toggleBalance">
-                <v-text-field single-line outlined required v-model="inputBalance" v-on:keyup.esc="cancleBalance()" ref="BalanceRef" v-on:keyup.enter="completeBalance(inputBalance)" > </v-text-field>
+                <v-text-field single-line outlined required v-model="inputBalance" v-on:keyup.esc="cancelBalance()" ref="BalanceRef" v-on:keyup.enter="completeBalance(inputBalance)" > </v-text-field>
               </td>
             </tr>
 
@@ -119,7 +119,7 @@
             <tr v-if="!togglePenalty" >
               <td> 위약금 </td>
               <td>
-                <v-text-field single-line outlined required v-model="inputPenalty" v-on:keyup.esc="canclePenalty()" ref="PenaltyRef" v-on:keyup.enter="completePenalty(inputPenalty)" > </v-text-field>
+                <v-text-field single-line outlined required v-model="inputPenalty" v-on:keyup.esc="cancelPenalty()" ref="PenaltyRef" v-on:keyup.enter="completePenalty(inputPenalty)" > </v-text-field>
               </td>
             </tr>
 
@@ -130,7 +130,7 @@
             <tr v-if="!toggleContractDate">
               <td> 계약일</td>
               <td>
-                <v-text-field single-line outlined required v-model="inputContractDate" ref="ContractDateRef" v-on:keyup.esc="cancleContractDate()" v-on:keyup.enter="completeContractDate(inputContractDate)" > </v-text-field>
+                <v-text-field single-line outlined required v-model="inputContractDate" ref="ContractDateRef" v-on:keyup.esc="cancelContractDate()" v-on:keyup.enter="completeContractDate(inputContractDate)" > </v-text-field>
               </td>
             </tr>
 
@@ -153,7 +153,7 @@
             <tr v-if="!toggleCompany">
               <td> 책임자 </td>
               <td>
-                <v-text-field single-line outlined required v-model="inputCompany" ref="CompanyRef" v-on:keyup.esc="cancleCompany()" v-on:keyup.enter="completeCompany(inputCompany)" > </v-text-field>
+                <v-text-field single-line outlined required v-model="inputCompany" ref="CompanyRef" v-on:keyup.esc="cancelCompany()" v-on:keyup.enter="completeCompany(inputCompany)" > </v-text-field>
               </td>
             </tr>
 
@@ -164,7 +164,7 @@
             <tr v-if="!toggleAddr">
               <td> 유저주소 </td>
               <td>
-                <v-text-field single-line outlined required v-model="inputAddr" ref="AddrRef" v-on:keyup.esc="cancleAddr()" v-on:keyup.enter="completeAddr(inputAddr)" > </v-text-field>
+                <v-text-field single-line outlined required v-model="inputAddr" ref="AddrRef" v-on:keyup.esc="cancelAddr()" v-on:keyup.enter="completeAddr(inputAddr)" > </v-text-field>
               </td>
             </tr>
 
@@ -175,7 +175,7 @@
             <tr v-if="!toggleRrn" >
               <td> 유저주민번호 </td>
               <td>
-                <v-text-field single-line outlined required v-model="inputRrn" ref="RrnRef" v-on:keyup.esc="cancleRrn()" v-on:keyup.enter="completeRrn(inputRrn)" > </v-text-field>
+                <v-text-field single-line outlined required v-model="inputRrn" ref="RrnRef" v-on:keyup.esc="cancelRrn()" v-on:keyup.enter="completeRrn(inputRrn)" > </v-text-field>
               </td>
             </tr>
 
@@ -469,7 +469,7 @@ export default {
       this.$nextTick(() => this.$refs.ProjectTermRef.focus());
     }
     },
-    cancleProjectTerm() {
+    cancelProjectTerm() {
       this.toggleProjectTerm = !this.toggleProjectTerm;
       this.inputProjectTerm = this.mainData.projectTerm;
     },
@@ -487,7 +487,7 @@ export default {
         this.$nextTick(() => this.$refs.PayRef.focus());
       }
     },
-    canclePay() {
+    cancelPay() {
       this.togglePay = !this.togglePay;
       this.inputPay = this.mainData.pay;
     },
@@ -505,7 +505,7 @@ export default {
         this.$nextTick(() => this.$refs.DownPaymentRef.focus());
       }
     },
-    cancleDownPayment() {
+    cancelDownPayment() {
       this.toggleDownPayment = !this.toggleDownPayment;
       this.inputDownPayment = this.mainData.DownPayment;
     },
@@ -523,7 +523,7 @@ export default {
         this.$nextTick(() => this.$refs.BalanceRef.focus());
       }
     },
-    cancleBalance() {
+    cancelBalance() {
       this.toggleBalance = !this.toggleBalance;
       this.inputBalance = this.mainData.Balance;
     },
@@ -541,7 +541,7 @@ export default {
         this.$nextTick(() => this.$refs.PenaltyRef.focus());
       }
     },
-    canclePenalty() {
+    cancelPenalty() {
       this.togglePenalty = !this.togglePenalty;
       this.inputPenalty = this.mainData.Penalty;
     },
@@ -559,7 +559,7 @@ export default {
         this.$nextTick(() => this.$refs.ContractDateRef.focus());
       }
     },
-    cancleContractDate() {
+    cancelContractDate() {
       this.toggleContractDate = !this.toggleContractDate;
       this.inputContractDate = this.mainData.ContractDate;
     },
@@ -577,7 +577,7 @@ export default {
         this.$nextTick(() => this.$refs.CompanyRef.focus());
       }
     },
-    cancleCompany() {
+    cancelCompany() {
       this.toggleCompany = !this.toggleCompany;
       this.inputCompany = this.mainData.Company;
     },
@@ -597,7 +597,7 @@ export default {
         }
       }
     },
-    cancleRrn() {
+    cancelRrn() {
       this.toggleRrn = !this.toggleRrn;
       this.inputRrn = this.mainData.Rrn;
     },
@@ -615,7 +615,7 @@ export default {
         this.$nextTick(() => this.$refs.AddrRef.focus());
       }
     },
-    cancleAddr() {
+    cancelAddr() {
       this.toggleAddr = !this.toggleAddr;
       this.inputAddr = this.mainData.Addr;
     },
