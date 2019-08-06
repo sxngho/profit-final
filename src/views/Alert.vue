@@ -53,6 +53,7 @@ export default {
       var unread_alert = document.querySelector("#unread_alret")
       unread_alert.innerText = this.unread_alertlist.length
       // console.log(unread_alert)
+
     },
     async move(check, url, alertindex) {
       window.open(document.location.origin + url)

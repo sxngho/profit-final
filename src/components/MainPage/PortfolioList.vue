@@ -1,9 +1,13 @@
 <template>
   <div class="PortfolioList__container">
     <div class="PortfolioList__container__content">
-      <div v-for="item in this.$store.state.showPortfolioList" class="content__portfolioList"  v-if="item.data.state < 3">
+      <div
+        v-for="item in this.$store.state.showPortfolioList"
+        class="content__portfolioList"
+        v-if="item.data.state < 3"
+      >
         <!-- {{item.data.state}} -->
-        <Portfolio v-bind:portfolio="item"/>
+        <Portfolio v-bind:portfolio="item" />
       </div>
     </div>
     <button class="mainMoreBtn" @click="morePortfolio">MORE</button>
@@ -33,12 +37,14 @@ export default {
   methods: {
     async SELECT_ALLProjects() {
       this.allPortfolio = await FirebaseService.SELECT_ALLProjects();
+      console.log("SELECT_ALLProjects",this.allPortfolio.length);
       for (let i = this.start; i < this.end; i++) {
         this.bottolePortfolio.push(this.allPortfolio[i]);
       }
       this.$store.commit("selectAllPortfolioList", this.allPortfolio);
     },
     morePortfolio() {
+      console.log("aaaaaaaaaa")
       if (this.end < this.PageLength) {
         this.end += 6;
         this.start += 6;
