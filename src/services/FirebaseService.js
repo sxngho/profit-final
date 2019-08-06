@@ -682,6 +682,8 @@ export default {
     return firestore
       .collection("recruitInfo")
       .where("companyId", "==", id)
+      .orderBy("contract")
+      .orderBy("createDay", 'desc')
       .get()
       .then(docSnapshots => {
         return docSnapshots.docs.map(doc => {
@@ -926,7 +928,7 @@ export default {
                   interests: interests,
                   followerlist: [],
                   followinglist: [],
-                  level: "3",
+                  level: 3,
                   company_logo: "",
                   industry: "",
                   mount: "",
