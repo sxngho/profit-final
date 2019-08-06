@@ -61,40 +61,67 @@
       </v-card>
     </v-dialog>
 
-    <v-btn
-      text
-      v-if="(Level == '0' || Level =='1') && user !=='' && user !== undefined "
-      style="height:100%;"
-    >{{user}}</v-btn>
+    <div style="display:inline-block; height:100%">
+      <v-btn
+        text
+        v-if="(nowLevel == '0' || nowLevel =='1') && user !=='' && user !== undefined "
+        style="height:100%;"
+      >{{user}}</v-btn>
 
-    <v-btn
-      text
-      v-if="Level == '2' && user !=='' && user !== undefined "
-      :to="{ name: 'story', params: { id: user }}"
-      style="height:100%;"
-    >{{user}}</v-btn>
+      <v-btn
+        text
+        v-if="nowLevel == '2' && user !=='' && user !== undefined "
+        :to="{ name: 'story', params: { id: user }}"
+        style="height:100%;"
+      >{{user}}</v-btn>
 
-    <v-btn
-      text
-      v-if="Level == '3' && user !=='' && user !== undefined"
-      :to="{ name: 'company', params: { id: user }}"
-      style="height:100%;"
-    >{{user}}</v-btn>
+      <v-btn
+        text
+        v-if="nowLevel == '3' && user !=='' && user !== undefined"
+        :to="{ name: 'company', params: { id: user }}"
+        style="height:100%;"
+      >{{user}}</v-btn>
 
-    <v-btn text @click="Logout()" v-if="user!=='' && user!==undefined" style="height:100%;">Log Out</v-btn>
-    <!-- <v-btn text> -->
-      <!-- <i class="fa fa-globe" aria-hidden="true"></i> -->
-      <!-- 여기에 알람을 넣어야하나.. -->
-    <!-- </v-btn> -->
+      <v-btn text @click="Logout()" v-if="user!=='' && user!==undefined" style="height:100%;">Log Out</v-btn>
+
+      <v-dialog v-model="alertModal" max-width="500px" v-if="nowLevel == '2' && user !=='' && user !== undefined ">
+        <template v-slot:activator="scope">
+          <v-btn text v-on="scope.on" >
+            <i class="fa fa-globe" aria-hidden="true"></i>
+            <span id="unread_alret" style="color:red;">{{unread_alertlist.length}}</span>
+          </v-btn>
+        </template>
+        <v-card>
+          <v-card-title>알람 리스트</v-card-title>
+          <v-card-text>
+            <v-list>
+              <v-list-item v-for="(alert, index) in alertlist.slice().reverse()">
+                <v-list-item-content>
+                  <v-btn>
+                    <v-list-item-title :style="{color:colorcheck(alert.check)}" v-html="alert.message" @click="move(alert.check, alert.url, index,alert.user)"></v-list-item-title>
+                  </v-btn>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn color="primary" text @click="alertModal=false">Close</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </div>
   </div>
 </template>
 
-
+<script src="https://www.gstatic.com/firebasejs/3.6.2/firebase.js"></script>
 <script>
-import FirebaseService from "@/services/FirebaseService";
-
 import SignupforCompanyModal from "./SignUpForCompany";
 import SignupforUserModal from "./SignUpForUser";
+import FirebaseService from "@/services/FirebaseService";
+import Vue from "vue";
+var firebase = require('firebase/app');
+require('firebase/auth');
+require('firebase/database');
 
 export default {
   data: () => ({
@@ -102,13 +129,17 @@ export default {
 
     dialog: false,
     signupmodal: false,
+    alertModal : false,
     userpage: "",
     LoginId: "",
     LoginPassword: "",
-
+    alertlist : [],
     signupforuser: false,
     signupforcompany: false,
-    Level: ""
+    nowLevel: "",
+    unread_alertlist:[],
+    check:false,
+    userdata:[],
   }),
   components: {
     SignupforCompanyModal,
@@ -116,9 +147,8 @@ export default {
   },
   mounted() {
     this.user = this.$session.get("session_id");
-    this.Level = this.$session.get('level');
+    this.nowLevel = this.$session.get('level');
     this.userpage = "/story/" + this.user;
-    this.Level = this.$session.get("level");
   },
   methods: {
     showNotification(group, type, title, text) {
@@ -128,6 +158,62 @@ export default {
         text,
         type
       });
+    },
+    async fetchData(id) {
+     this.unread_alertlist = [];
+     firebase.database().ref('/chat/').once('value').then(snapshot => {
+       var chats = snapshot.val();
+       for(var i in chats) {
+         if ( chats[i].userId == this.user ) {
+           if ( !chats[i].chatting[chats[i].chatting.length-1].isReadUser ) {
+             console.log("읽않채")
+             var msg = "["+ chats[i].projectTitle +"] 읽지 않은 채팅방이 있습니다. ";
+              this.unread_alertlist.push(1);
+              this.alertlist.push({check:false, message: msg, url : chats[i].link, user : "!Chat"})
+           }
+         }
+       }
+     });
+     var userdata = await FirebaseService.SELECT_Userdata(id);
+     this.userdata = userdata;
+     if (userdata.length) {
+       this.check = true
+       var alerts = userdata[0].alertlist
+       this.alertlist = alerts
+       for (var i in alerts) {
+         console.log(alerts[i]);
+         if (alerts[i].check === false) {
+           this.unread_alertlist.push(alerts[i])
+         }
+       }
+     } else {
+       this.check = false
+     }
+    },
+
+    async move(check, url, alertindex,user) {
+      // if (!check)
+      //   this.fetchData(this.$session.get("session_id"))
+      if(!this.alertlist[this.alertlist.length-alertindex-1].check) {
+        this.alertlist[this.alertlist.length-alertindex-1].check = true;
+        this.unread_alertlist.pop();
+      }
+
+      if( user === "!Chat" ) {
+        window.open(document.location.origin + '/' + url)
+        FirebaseService.INSERT_alert_Chat(this.alertlist,this.$session.get("session_id"))
+      } else {
+        window.open(document.location.origin + url)
+        var result = await FirebaseService.alertcheck(this.alertlist, this.alertlist.length-alertindex-1, this.$session.get("session_id"))
+      }
+
+    },
+    colorcheck(check) {
+      if (check) {
+        return
+      } else {
+        return 'red'
+      }
     },
     async Logout() {
       var res = await FirebaseService.Logout();
@@ -150,49 +236,32 @@ export default {
 
     async Signin(id, password) {
       this.check = await FirebaseService.Signin(id, password);
-      var userlist = await FirebaseService.SELECT_AllUserdata();
-      var companylist = await FirebaseService.SELECT_AllCompanydata();
-
-      var level = -1;
-
       if (this.check == true) {
         var user_nickname = await FirebaseService.SELECT_UserdataEmail(id);
         var company_nickname = await FirebaseService.SELECT_Companydata(id);
         // console.log(user_nickname[0])
         if (user_nickname[0] !== undefined) {
           this.$session.set("session_id", user_nickname[0].nickname);
+          this.$session.set("level", user_nickname[0].level);
           this.user = this.$session.get("session_id");
+          this.nowLevel = this.$session.get("level");
+          this.fetchData(this.$session.get("session_id"));
         } else if (company_nickname[0] !== undefined) {
           // console.log(company_nickname[0].company_name);
           this.$session.set("session_id", company_nickname[0].company_name);
+          this.$session.set("level", company_nickname[0].level);
           this.user = this.$session.get("session_id");
+          this.nowLevel = this.$session.get("level");
         }
-
-        for (var user in userlist) {
-          if (userlist[user].name == id) {
-            this.$session.set("level", userlist[user].level);
-            level = userlist[user].level;
-            this.Level = this.$session.get("level");
-            // console.log(this.Level, '올라왔냐')
-          }
-        }
-        for (var company in companylist) {
-          if (companylist[company].name == id) {
-            this.$session.set("level", companylist[company].level);
-            level = companylist[company].level;
-            this.Level = this.$session.get("level");
-          }
-        }
-        this.$session.set("level", level);
         this.showNotification(
           "foo-css",
           "success",
-          level + `레벨의 ` + `${this.user}님 `,
+          this.nowLevel + `레벨의 ` + `${this.user}님 `,
           `로그인 완료!`
         );
         this.LoginId = "";
         this.LoginPassword = "";
-        this.$emit('login_success')
+        // this.$emit('login_success')
       }
     },
 

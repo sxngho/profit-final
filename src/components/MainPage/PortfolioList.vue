@@ -33,12 +33,14 @@ export default {
   methods: {
     async SELECT_ALLProjects() {
       this.allPortfolio = await FirebaseService.SELECT_ALLProjects();
+      console.log("SELECT_ALLProjects",this.allPortfolio.length);
       for (let i = this.start; i < this.end; i++) {
         this.bottolePortfolio.push(this.allPortfolio[i]);
       }
       this.$store.commit("selectAllPortfolioList", this.allPortfolio);
     },
     morePortfolio() {
+      console.log("aaaaaaaaaa")
       if (this.end < this.PageLength) {
         this.end += 6;
         this.start += 6;

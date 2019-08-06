@@ -2,7 +2,7 @@
   <div class="MainPage">
     <Banner />
     <Filters />
-    <PortfolioList />
+    <!-- <PortfolioList /> -->
     <!-- <button class="mainMoreBtn">MORE</button> -->
   </div>
 </template>
@@ -12,7 +12,7 @@
 import FirebaseService from "@/services/FirebaseService";
 import Banner from "../components/MainPage/Banner";
 import Filters from "../components/MainPage/Filters";
-import PortfolioList from "../components/MainPage/PortfolioList";
+// import PortfolioList from "../components/MainPage/PortfolioList";
 import ProfileRegister from "../components/MainPage/ProfileRegister";
 import Vue from "vue";
 
@@ -21,7 +21,7 @@ export default {
   components: {
     Filters,
     Banner,
-    PortfolioList,
+    // PortfolioList,
     ProfileRegister
   },
   created() {
