@@ -28,14 +28,15 @@
             <v-layout wrap style="position:relative; border-bottom:1px #cecece solid; padding:0px 5px;">
               <div
               @click="changeComponent()"
-              v-if="isMine && !statedetail && !stateupdate"
+              v-if="this.$store.getters.getSession==this.$route.params.id && !statedetail && !stateupdate"
               class="d-inline"
               style="display:inline;">
                 <div id="toggletext">
                   <div
-                    v-if="!stateAdd && this.$store.getters.getSession==this.$route.params.id"
+                    v-if="!stateAdd"
                     style="cursor:pointer;background: rgb(117, 199, 145); padding: 5px 20px; border-radius: 20px; color: white;margin:3px;"
                   >프로젝트 생성하기</div>
+
                   <img
                     src="../assets/icon_set/back.png"
                     alt="backtoList"
@@ -155,6 +156,8 @@ export default {
       }
     },
     async fetchData() {
+      console.log(this.$session.get('session_id'), '떳냐')
+
       this.userid = this.$session.get('session_id')
       this.$store.commit('setSession', this.$session.get("session_id"))
       if (this.$session.get("session_id") !== "") {
