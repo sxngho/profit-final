@@ -143,6 +143,7 @@ export default {
         this.$session.set("level", "");
         this.user = "";
         this.$store.commit('changeLevel', "")
+        this.$store.commit('setSession', "")
         this.$emit('logout_success')
         // console.log(this.$store.getters.getSession,"setSession")
         // console.log(this.$session.get('session_id'))
@@ -194,6 +195,7 @@ export default {
         this.LoginId = "";
         this.LoginPassword = "";
         this.$store.commit('changeLevel', level)
+        this.$store.commit('setSession', this.$session.get('session_id'))
         this.$emit('login_success')
       }
     },
