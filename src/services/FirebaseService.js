@@ -926,7 +926,7 @@ export default {
                   interests: interests,
                   followerlist: [],
                   followinglist: [],
-                  level: "3",
+                  level: 3,
                   company_logo: "",
                   industry: "",
                   mount: "",
