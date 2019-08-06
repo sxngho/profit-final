@@ -1,9 +1,13 @@
 <template>
   <div class="PortfolioList__container">
     <div class="PortfolioList__container__content">
-      <div v-for="item in this.$store.state.showPortfolioList" class="content__portfolioList"  v-if="item.data.state < 3">
+      <div
+        v-for="item in this.$store.state.showPortfolioList"
+        class="content__portfolioList"
+        v-if="item.data.state < 3"
+      >
         <!-- {{item.data.state}} -->
-        <Portfolio v-bind:portfolio="item"/>
+        <Portfolio v-bind:portfolio="item" />
       </div>
     </div>
     <button class="mainMoreBtn" @click="morePortfolio">MORE</button>

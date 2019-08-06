@@ -1,7 +1,9 @@
 <template>
   <div class="banner__container">
     <div class="banner__content">
+      <!-- User가 일반 유저인 경우에는 아래의 router-link 가 노출됩니다. -->
       <router-link to="/studio" class="bannerBox" style="text-decoration:none">
+        <!-- <router-link to="/studio" class="bannerBox" style="text-decoration:none" v-if="isUserCheck()"> -->
         <div class="studio contentBox">
           <div class="iconBox">
             <i class="far fa-keyboard fa-7x" style="color:blueviolet"></i>
@@ -12,6 +14,19 @@
           </div>
         </div>
       </router-link>
+
+      <!-- User가 일반 유저가 아닌 경우, studio로 가는 활동을 막기 위해 fake로 아래 div를 노출합니다. -->
+      <!-- <div class="bannerBox" style="text-decoration:none; cursor:pointer;" v-if="!isUserCheck()" @click="alert_message()">
+        <div class="studio contentBox">
+          <div class="iconBox">
+            <i class="far fa-keyboard fa-7x" style="color:blueviolet"></i>
+          </div>
+          <br />
+          <div class="studio_title titleBox">
+            <span class="fontStyle">작업실</span>
+          </div>
+        </div>
+      </div> -->
 
       <router-link to="/recruits" class="bannerBox" style="text-decoration:none">
         <div class="recruitList contentBox">
@@ -63,6 +78,7 @@ export default {
     return {
       userdata : "",
       randId : "",
+      level:"",
     };
   },
   mounted() {
@@ -73,10 +89,21 @@ export default {
       this.userdata = await FirebaseService.SELECT_ALLUser();
       var result = Math.floor(Math.random() * this.userdata.length);
       this.randId = this.userdata[result].nickname;
+      this.level = this.$session.get('level')
     },
     async randomUser() {
       var result = Math.floor(Math.random() * this.userdata.length);
       this.randId = this.userdata[result].nickname;
+    },
+    isUserCheck() {
+      if ( this.level === 2 ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    alert_message() {
+      alert('권한이 필요합니다. 필요 level 2 (유저)')
     }
   }
 };
