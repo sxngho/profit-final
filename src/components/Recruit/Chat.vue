@@ -17,11 +17,13 @@
                 v-if='message.chatId !== "" && message.chatMsg !== "" '
                 class="messageBox">
                   <v-layout justify-end v-if='message.chatId == user'>
-                    <div v-if="!message.isReadCompany">1</div>
+                    <div v-if="nowLevel =='2' && !message.isReadCompany">1</div>
+                    <div v-if="nowLevel =='3' && !message.isReadUser">1</div>
                     <div style="background:#ffffab;" class="speech_bubble">{{message.chatMsg}}</div>
                   </v-layout>
                   <v-layout v-else>
-                    <div v-if="!message.isReadUser">1</div>
+                    <div v-if="nowLevel =='2' && !message.isReadCompany">1</div>
+                    <div v-if="nowLevel =='3' && !message.isReadUser">1</div>
                     <div style="background:#d6ddff;" class="speech_bubble">
                       {{message.chatMsg}}
                     </div>
@@ -330,8 +332,10 @@ export default {
   components: {
   },
   created() {
-    this.user = this.$session.get("session_id");
     this.$store.state.no_header = true;
+  },
+  mounted() {
+    this.user = this.$session.get("session_id");
     this.fetchData();
   },
   data() {

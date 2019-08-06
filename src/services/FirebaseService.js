@@ -133,6 +133,7 @@ export default {
       .doc(alert_person)
       .get()
       .then(docSnapshot => {
+        console.log("이거 여러번면 나오면 슬기조땜", 1)
         var old_alertlist = docSnapshot.data().alertlist;
         old_alertlist.push({
           check: false,
@@ -140,12 +141,14 @@ export default {
           message: `${project.session_id}님이 새 프로젝트를 생성하였습니다`,
           user: project.session_id
         });
+        console.log("이거 여러번면 나오면 슬기조땜", 3)
         firestore
           .collection("users")
           .doc(alert_person)
           .update({
             alertlist: old_alertlist
           });
+          console.log("이거 여러번면 나오면 슬기조땜", 4)
       });
   },
 
@@ -1009,6 +1012,11 @@ export default {
           .update({
             alertlist: old_alertlist
           });
+      });
+  },
+  INSERT_alert_Chat(alert,userId) {
+    firestore.collection("users").doc(userId).update({
+        alertlist: alert
       });
   },
 
