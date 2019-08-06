@@ -20,6 +20,14 @@ export default {
     Header,
     Footer
   },
+  created() {
+    if (this.$session.get("session_id")===undefined) {
+      this.$session.set('session_id', "")
+    }
+    if (this.$session.get("level")===undefined) {
+      this.$session.set('level', "")
+    }
+  }
 };
 </script>
 

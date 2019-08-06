@@ -39,7 +39,7 @@ export default new Vuex.Store({
     companyList: [],
     showCompanyList: [],
     showCompanyListBottomBar: [],
-    level:-1
+    level:""
   },
   // Getter : get 함수 정의
   // 정의 -> return state.변수명

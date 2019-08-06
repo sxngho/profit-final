@@ -86,18 +86,19 @@
       <v-layout row wrap>
         <v-flex xs12 sm10 offset-sm1>
           <v-card style="width:100%" outlined>
-            <v-card-title>기업정보</v-card-title>
+            <v-card-title>기업정보 <span v-if="this.$route.params.id==this.$store.getters.getSession">(수정가능 (이멘트 나중에 수정해주셈))</span> </v-card-title>
             <v-card-text id="company_detail">
               <v-simple-table>
                 <tbody class="text-center">
                   <tr>
                     <th>산업</th>
-                    <td v-if="!toggleIndustry" @click="Function_Industry()">{{company.industry}}</td>
+                    <td v-if="this.$route.params.id!==this.$store.getters.getSession">{{company.industry}}</td>
+                    <td v-if="!toggleIndustry && this.$route.params.id==this.$store.getters.getSession" @click="Function_Industry()">{{company.industry}}</td>
                     <td>
                       <input
                         type="text"
                         v-model="company.industry"
-                        v-if="toggleIndustry"
+                        v-if="toggleIndustry && this.$route.params.id==this.$store.getters.getSession"
                         style="text-align:center"
                         ref="IndustryRef"
                         @keyup.enter="Submit_Industry()"
@@ -106,12 +107,13 @@
                   </tr>
                   <tr>
                     <th>사원수</th>
-                    <td v-if="!toggleMount" @click="Function_Mount()">{{company.mount}}</td>
+                    <td v-if="this.$route.params.id!==this.$store.getters.getSession">{{company.mount}}</td>
+                    <td v-if="!toggleMount && this.$route.params.id==this.$store.getters.getSession" @click="Function_Mount()">{{company.mount}}</td>
                     <td>
                       <input
                         type="text"
                         v-model="company.mount"
-                        v-if="toggleMount"
+                        v-if="toggleMount && this.$route.params.id==this.$store.getters.getSession"
                         style="text-align:center"
                         ref="MountRef"
                         @keyup.enter="Submit_Mount()"
@@ -120,12 +122,13 @@
                   </tr>
                   <tr>
                     <th>기업구분</th>
-                    <td v-if="!toggleComsize" @click="Function_Comsize()">{{company.comsize}}</td>
+                    <td v-if="this.$route.params.id!==this.$store.getters.getSession">{{company.comsize}}</td>
+                    <td v-if="!toggleComsize && this.$route.params.id==this.$store.getters.getSession" @click="Function_Comsize()">{{company.comsize}}</td>
                     <td>
                       <input
                         type="text"
                         v-model="company.comsize"
-                        v-if="toggleComsize"
+                        v-if="toggleComsize && this.$route.params.id==this.$store.getters.getSession"
                         style="text-align:center"
                         ref="ComsizeRef"
                         @keyup.enter="Submit_Comsize()"
@@ -134,12 +137,13 @@
                   </tr>
                   <tr>
                     <th>홈페이지</th>
-                    <td v-if="!toggleHomepage" @click="Function_Homepage()">{{company.homepage}}</td>
+                    <td v-if="this.$route.params.id!==this.$store.getters.getSession">{{company.homepage}}</td>
+                    <td v-if="!toggleHomepage && this.$route.params.id==this.$store.getters.getSession" @click="Function_Homepage()">{{company.homepage}}</td>
                     <td>
                       <input
                         type="text"
                         v-model="company.homepage"
-                        v-if="toggleHomepage"
+                        v-if="toggleHomepage && this.$route.params.id==this.$store.getters.getSession"
                         style="text-align:center"
                         ref="HomepageRef"
                         @keyup.enter="Submit_Homepage()"
@@ -148,12 +152,13 @@
                   </tr>
                   <tr>
                     <th>주소</th>
-                    <td v-if="!toggleAddress" @click="Function_Address()">{{company.address}}</td>
+                    <td v-if="this.$route.params.id!==this.$store.getters.getSession">{{company.address}}</td>
+                    <td v-if="!toggleAddress && this.$route.params.id==this.$store.getters.getSession" @click="Function_Address()">{{company.address}}</td>
                     <td>
                       <input
                         type="text"
                         v-model="company.address"
-                        v-if="toggleAddress"
+                        v-if="toggleAddress && this.$route.params.id==this.$store.getters.getSession"
                         style="text-align:center"
                         ref="AddressRef"
                         @keyup.enter="Submit_Address()"
@@ -162,15 +167,12 @@
                   </tr>
                   <tr>
                     <th>설립일</th>
-                    <td
-                      v-if="!toggleEstablishedDate"
-                      @click="Function_EstablishedDate()"
-                    >{{company.establishedDate}}</td>
-                    <td>
+                    <td v-if="this.$route.params.id!==this.$store.getters.getSession">{{company.establishedDate}}</td>
+                    <td v-if="!toggleEstablishedDate && this.$route.params.id==this.$store.getters.getSession" @click="Function_EstablishedDate()">{{company.establishedDate}}</td>
                       <input
                         type="text"
                         v-model="company.establishedDate"
-                        v-if="toggleEstablishedDate"
+                        v-if="toggleEstablishedDate && this.$route.params.id==this.$store.getters.getSession"
                         style="text-align:center"
                         ref="EstablishedDateRef"
                         @keyup.enter="Submit_EstablishedDate()"
@@ -179,12 +181,13 @@
                   </tr>
                   <tr>
                     <th>대표자</th>
-                    <td v-if="!toggleRepresent" @click="Function_Represent()">{{company.represent}}</td>
+                    <td v-if="this.$route.params.id!==this.$store.getters.getSession">{{company.represent}}</td>
+                    <td v-if="!toggleRepresent && this.$route.params.id==this.$store.getters.getSession" @click="Function_Represent()">{{company.represent}}</td>
                     <td>
                       <input
                         type="text"
                         v-model="company.represent"
-                        v-if="toggleRepresent"
+                        v-if="toggleRepresent && this.$route.params.id==this.$store.getters.getSession"
                         style="text-align:center"
                         ref="RepresentRef"
                         @keyup.enter="Submit_Represent()"
@@ -209,8 +212,9 @@
         <v-flex xs12 sm10 offset-sm1>
           <v-card style="width:100%" outlined>
             <v-card-title>회사소개</v-card-title>
-            <v-card-text v-if="!toggleDescript" @click="Function_Descript()">{{company.descript}}</v-card-text>
-            <v-card-text v-if="toggleDescript">
+            <v-card-text v-if="this.$route.params.id!==this.$store.getters.getSession">{{company.descript}}</v-card-text>
+            <v-card-text v-if="!toggleDescript && this.$route.params.id==this.$store.getters.getSession" @click="Function_Descript()">{{company.descript}}</v-card-text>
+            <v-card-text v-if="toggleDescript && this.$route.params.id==this.$store.getters.getSession">
               <textarea
                 v-model="company.descript"
                 ref="DescriptRef"
@@ -231,7 +235,7 @@
             <v-card-title>
               공고
               <router-link
-                v-if="isMineCheck()"
+                v-if="this.$route.params.id==this.$store.getters.getSession"
                 to="/recruiteditorpage"
                 style="text-decoration:none"
               >
@@ -261,7 +265,7 @@
                       <v-container>
                         <v-layout row wrap>
                           <!-- 1. 로그인한 사람이 회사가 아닐 때 : 공고 상세 내용 -->
-                          <v-flex v-if="!isMineCheck()" xs12 style="padding:1em;">
+                          <v-flex v-if="$route.params.id!==$store.getters.getSession" xs12 style="padding:1em;">
                             <!-- 제목과 기술스택 -->
                             <v-layout row wrap>
                               <div>
@@ -311,7 +315,7 @@
 
                           <!-- 2. 로그인한 사람이 해당 회사일 때 : 공고 상세 내용 -->
                           <v-flex
-                            v-if="isMineCheck()"
+                            v-if="$route.params.id==$store.getters.getSession"
                             xs12
                             sm7
                             style="padding:1em; border-right:1px solid black;"
@@ -365,7 +369,7 @@
 
                           <!-- 채팅방 목록들 ==> 즉, 찜한 유저 리스트-->
                           <!-- 아직 계약이 되지 않았을때 -->
-                          <v-flex xs12 sm5 v-if="isMineCheck() && !recruit.data.contract ">
+                          <v-flex xs12 sm5 v-if="$route.params.id==$store.getters.getSession && !recruit.data.contract ">
                             <h3>찜한 유저들</h3>
                             <v-layout row wrap>
                               <v-flex
@@ -385,32 +389,41 @@
                           </v-flex>
 
                           <!-- 계약이 된 상태라면 -->
-                          <v-flex xs12 sm5 v-if="isMineCheck() && recruit.data.contract">
+                          <v-flex xs12 sm5 v-if="$route.params.id==$store.getters.getSession && recruit.data.contract">
                             <h3>작업중인 유저</h3>
                             <v-layout row wrap>
                               <v-flex xs11 offset-xs1>
-                                <v-btn
-                                  text
-                                  outlined
-                                  @click="openWorkChat(recruit.data.responsibility,recruit.id)"
-                                >{{recruit.data.responsibility}}</v-btn>
+
                               </v-flex>
                             </v-layout>
                           </v-flex>
                         </v-layout>
-                        <v-layout justify-center v-if="isMineCheck()">
+                        <v-layout justify-center v-if="$route.params.id==$store.getters.getSession">
                           <div v-if="!recruit.data.contract">
                             <v-btn flex outlined color="red">삭제</v-btn>
                           </div>
                           <div v-else>
-                            <v-btn flex outlined color="blue">계약완료</v-btn>
-                            <v-btn
-                              flex
-                              outlined
-                              color="orange"
-                              @click="openContract(recruit.id,recruit.data.responsibility)"
-                            >계약서</v-btn>
-                            <v-btn flex outlined color="red">계약파기</v-btn>
+                            <div v-if="recruit.data.UserComplete == 0 && recruit.data.CompanyComplete == 0">
+                              <v-btn flex outlined color="blue" @click="complete(recruit.id)">계약완료</v-btn>
+                              <v-btn flex outlined color="orange" @click="openContract(recruit.id,recruit.data.responsibility)">계약서</v-btn>
+                              <v-btn text outlined @click="openWorkChat(recruit.data.responsibility,recruit.id)">{{recruit.data.responsibility}}</v-btn>
+                              <v-btn flex outlined color="red" @click="cancle(recruit.id)">계약파기</v-btn>
+                            </div>
+                            <div v-if="recruit.data.UserComplete == 0 && recruit.data.CompanyComplete == 2">
+                              <p> 완료 처리됨 // 상대방의 처리를 기다리는중</p>
+                              <v-btn flex outlined color="orange" @click="openContract(recruit.id,recruit.data.responsibility)">계약서</v-btn>
+                              <v-btn text outlined @click="openWorkChat(recruit.data.responsibility,recruit.id)">{{recruit.data.responsibility}}</v-btn>
+                            </div>
+                            <div v-if="recruit.data.UserComplete == 2 && recruit.data.CompanyComplete == 0">
+                              <p> 상대방이 완료를 누른 상태입니다. 계약이 정상적으로 종료되었다면 완료를 눌러주세요.</p>
+                              <v-btn flex outlined color="blue" @click="complete(recruit.id)">계약완료</v-btn>
+                              <v-btn flex outlined color="orange" @click="openContract(recruit.id,recruit.data.responsibility)">계약서</v-btn>
+                              <v-btn text outlined @click="openWorkChat(recruit.data.responsibility,recruit.id)">{{recruit.data.responsibility}}</v-btn>
+                              <v-btn flex outlined color="red" @click="cancle(recruit.id)">계약파기</v-btn>
+                            </div>
+                            <div v-if="recruit.data.UserComplete == 1 || recruit.data.CompanyComplete == 1">
+                              <p> 이미 파기된 계약입니다. 이거 처리해주세용</p>
+                            </div>
                           </div>
                         </v-layout>
                       </v-container>
@@ -447,12 +460,32 @@ export default {
   },
   mounted() {
     this.loading = true;
-
     this.fetchData();
     this.nowLevel = this.$session.get("level");
+    this.user = this.$session.get("session_id")
+    this.$store.commit('setSession', this.user)
     this.loading = false;
+
   },
   methods: {
+    complete(recruit) {
+      if (confirm("알림 : 한번 완료 처리한 계약은 수정이 불가능합니다. 정말 완료 처리하시겠습니까?")) {
+        FirebaseService.UPDATE_RecruitCompleteByCompany(recruit.recruitPK,"success")
+        var dataRef = firebase.database().ref('/'+recruit.link);
+        dataRef.update({
+          CompanyComplete : 2,
+        });
+      }
+    },
+    cancle(recruit) {
+      if (confirm("알림 : 한번 파기 처리한 계약은 수정이 불가능합니다. 정말 계약을 파기하시겠습니까?")) {
+        FirebaseService.UPDATE_RecruitCompleteByCompany(recruit.recruitPK,"fail")
+        var dataRef = firebase.database().ref('/'+recruit.link);
+        dataRef.update({
+          CompanyComplete : 1,
+        });
+      }
+    },
     Function_Industry() {
       this.toggleIndustry = true;
       this.toggleMount = false;
@@ -552,6 +585,7 @@ export default {
     },
 
     async Submit_Industry() {
+      if (this.$route.params.id==this.$store.getters.getSession)
       this.toggleIndustry = !this.toggleIndustry;
       await FirebaseService.UPDATE_Companys(
         this.company,
@@ -654,14 +688,6 @@ export default {
         "",
         `내용이 성공적으로 수정되었습니다.!`
       );
-    },
-
-    isMineCheck() {
-      if (this.$route.params.id == this.$session.get("session_id")) {
-        return true;
-      } else {
-        return false;
-      }
     },
     async fetchData() {
       //this.company = await FirebaseService.SELECT_CompanyById(this.$route.params.id);
@@ -853,7 +879,8 @@ export default {
       toggleDescript: false,
       toggleCompany_logo: false,
       showUpImgBtn: false,
-      showRmImgBtn: false
+      showRmImgBtn: false,
+      user: "",
     };
   }
 };
