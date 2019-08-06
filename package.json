@@ -23,6 +23,7 @@
     "velocity-animate": "^1.5.2",
     "vue": "^2.6.10",
     "vue-axios": "^2.1.4",
+    "vue-burger-menu": "^2.0.2",
     "vue-chart.js": "^0.2.0",
     "vue-chartjs": "^3.4.2",
     "vue-chartkick": "^0.5.2",
