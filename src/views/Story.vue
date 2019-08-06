@@ -28,7 +28,7 @@
             <v-layout wrap style="position:relative; border-bottom:1px #cecece solid; padding:0px 5px;">
               <div
               @click="changeComponent()"
-              v-if="isMine && !statedetail && !stateupdate"
+              v-if="this.$store.getters.getSession==this.$route.params.id && !statedetail && !stateupdate"
               class="d-inline"
               style="display:inline;">
                 <div id="toggletext">
@@ -36,6 +36,7 @@
                     v-if="!stateAdd"
                     style="cursor:pointer;background: rgb(117, 199, 145); padding: 5px 20px; border-radius: 20px; color: white;margin:3px;"
                   >프로젝트 생성하기</div>
+
                   <img
                     src="../assets/icon_set/back.png"
                     alt="backtoList"
@@ -138,6 +139,7 @@ export default {
       viewFollowing: false,
       showAddProject: false,
       Filter : "",
+      userid:"",
     };
   },
   created() {
@@ -154,9 +156,12 @@ export default {
       }
     },
     async fetchData() {
-      var session = this.$session.get("session_id");
-      if (session !== "") {
-        this.toggleView = await FirebaseService.SELECT_userAddon(session);
+      console.log(this.$session.get('session_id'), '떳냐')
+
+      this.userid = this.$session.get('session_id')
+      this.$store.commit('setSession', this.$session.get("session_id"))
+      if (this.$session.get("session_id") !== "") {
+        this.toggleView = await FirebaseService.SELECT_userAddon(this.$session.get("session_id"));
       }
     },
     updateToggle() {

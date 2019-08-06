@@ -3,9 +3,8 @@
   <v-container>
     <v-layout wrap justify-center>
       <v-flex
-        v-for="i in projects.length > max_project ? max_project : projects.length" xs12 sm6 lg4 v-if="( projects[i-1].data.state < 3 || projects[i-1].data.session_id==login ) && filtering(i,techfilter) && layout==1 "
+        v-for="i in projects.length > max_project ? max_project : projects.length" xs12 sm6 lg4 v-if="( projects[i-1].data.state < 3 || projects[i-1].data.session_id==$store.getters.getSession ) && filtering(i,techfilter) && layout==1 "
         style="padding:10px 5px;" v-bind:class="[`project_${i-1}`]">
-
         <ProjectDetail v-on:popdetail="toStory"
           v-on:UPDATE_Project="toStoryUpdate"
           v-on:delete="DELETE_project"
@@ -22,7 +21,7 @@
         </ProjectDetail>
       </v-flex>
 
-      <v-flex v-for="i in projects.length > max_project ? max_project : projects.length" xs12 v-if="( projects[i-1].data.state < 3 || projects[i-1].data.session_id==login ) && filtering(i,techfilter) && layout==2">
+      <v-flex v-for="i in projects.length > max_project ? max_project : projects.length" xs12 v-if="( projects[i-1].data.state < 3 || projects[i-1].data.session_id==$store.getters.getSession ) && filtering(i,techfilter) && layout==2">
         <ProjectDetail0 v-on:popdetail="toStory"
           :projectimage="projects[i-1].data.projectimage"
           :projecttitle="projects[i-1].data.projecttitle"
@@ -38,7 +37,7 @@
         <v-divider></v-divider>
       </v-flex>
 
-      <v-flex v-for="i in projects.length > max_project ? max_project : projects.length" xs12 v-if="( projects[i-1].data.state < 3 || projects[i-1].data.session_id==login ) && filtering(i,techfilter) && layout==3">
+      <v-flex v-for="i in projects.length > max_project ? max_project : projects.length" xs12 v-if="( projects[i-1].data.state < 3 || projects[i-1].data.session_id==$store.getters.getSession ) && filtering(i,techfilter) && layout==3">
         <ProjectDetail1 v-on:popdetail="toStory"
           :projectimage="projects[i-1].data.projectimage"
           :projecttitle="projects[i-1].data.projecttitle"
@@ -86,8 +85,6 @@ export default {
       techs : ["전체보기", "c", "c#", "javascript", "android", "jquery"],
       techfilter:[],
       filter_projects:[],
-      seeall : true,
-      login:'',
     };
   },
   components: {
@@ -100,12 +97,7 @@ export default {
   mounted() {
     this.SELECT_Projects();
     this.user = this.$route.params.id;
-    this.login = this.$session.get('session_id')
-    if ( this.user == this.login ) {
-      this.isMine = true;
-    } else {
-      this.isMine = false;
-    }
+    this.$store.commit('setSession', this.$session.get('session_id'))
     this.amount_Projects();
   },
   props: {

@@ -38,7 +38,7 @@ export default {
   },
   methods: {
     async SELECT_Userdata() {
-      if (this.level !== undefined) {
+      if (this.level !== "") {
         // 로그인한 경우
         if (this.level == 3) {
           // 회사인 경우
