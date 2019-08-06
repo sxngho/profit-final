@@ -2,14 +2,16 @@
   <div class="PortfolioList__container">
     <div class="PortfolioList__container__content">
       <div
-        v-for="item in bottolePortfolio"
+        v-for="item in this.$store.state.showPortfolioList"
         class="content__portfolioList"
+        v-if="item.data.state < 3"
       >
-        <!-- {{item.data.state}} -->
-        <Portfolio v-bind:portfolio="item"/>
+        <Portfolio v-bind:portfolio="item" />
       </div>
     </div>
-    <button class="mainMoreBtn" v-if="moreBtn" @click="morePortfolio">MORE</button>
+    <div class="morebtnContent">
+      <button class="mainMoreBtn" @click="morePortfolio">MORE</button>
+    </div>
   </div>
 </template>
 
@@ -27,30 +29,17 @@ export default {
       end: 6,
       start: 0,
       PageLength: "",
-      PortfolioList: [],
-      moreBtn : true,
+      PortfolioList: []
     };
   },
-  mounted() {
+  created() {
     this.SELECT_ALLProjects();
   },
   methods: {
     async SELECT_ALLProjects() {
       this.allPortfolio = await FirebaseService.SELECT_ALLProjects();
-      this.PageLength = this.allPortfolio.length
-      if( this.PageLength <= 6  ) {
-        this.moreBtn = false;
-      }
       for (let i = this.start; i < this.end; i++) {
-        if ( this.allPortfolio[i].data.state == 3 ) {
-          this.start++;
-          this.end++;
-          if (this.end > this.PageLength) {
-            this.end = this.PageLength;
-          }
-        } else {
-          this.bottolePortfolio.push(this.allPortfolio[i]);
-        }
+        this.bottolePortfolio.push(this.allPortfolio[i]);
       }
       this.$store.commit("selectAllPortfolioList", this.allPortfolio);
     },
@@ -60,9 +49,6 @@ export default {
         this.start += 6;
         if (this.end > this.PageLength) {
           this.end = this.PageLength;
-        }
-        if( this.PageLength <= this.end ) {
-          this.moreBtn = false;
         }
         this.SELECT_ALLProjects();
       }
@@ -74,21 +60,37 @@ export default {
 <style scoped>
 .PortfolioList__container__content {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1fr;
   grid-gap: 1rem;
 }
 .PortfolioList__container {
-  padding-left: 100px;
-  padding-right: 40px;
   padding-top: 50px;
 }
+.morebtnContent {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
 .mainMoreBtn {
-  margin-left: 550px;
   font-size: 20px;
   background: #929292;
   color: white;
-  border-radius: 5%;
-  width: 80px;
+  width: 100%;
   height: 35px;
+}
+.content__portfolioList {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+@media screen and (min-width: 500px) {
+  .PortfolioList__container__content {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media screen and (min-width: 850px) {
+  .PortfolioList__container__content {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 </style>

@@ -1,9 +1,13 @@
 <template>
   <div class="banner__container">
     <div class="banner__content">
-
       <!-- User가 일반 유저인 경우에는 아래의 router-link 가 노출됩니다. -->
-      <router-link :to="{ name: 'story', params: { id: this.$session.get('session_id') }}" class="bannerBox" style="text-decoration:none" v-if="this.$store.getters.getLevel==2" >
+      <router-link
+        :to="{ name: 'story', params: { id: this.$session.get('session_id') }}"
+        class="bannerBox"
+        style="text-decoration:none"
+        v-if="this.$store.getters.getLevel==2"
+      >
         <!-- <router-link to="/studio" class="bannerBox" style="text-decoration:none" v-if="isUserCheck()"> -->
         <div class="studio contentBox">
           <div class="iconBox">
@@ -17,7 +21,12 @@
       </router-link>
 
       <!-- User가 일반 유저가 아닌 경우, studio로 가는 활동을 막기 위해 fake로 아래 div를 노출합니다. -->
-      <div class="bannerBox" style="text-decoration:none; cursor:pointer;" v-if="this.$store.getters.getLevel!==2" @click="alert_message_user()">
+      <div
+        class="bannerBox"
+        style="text-decoration:none; cursor:pointer;"
+        v-if="this.$store.getters.getLevel!==2"
+        @click="alert_message_user()"
+      >
         <div class="studio contentBox">
           <div class="iconBox">
             <i class="far fa-keyboard fa-7x" style="color:blueviolet"></i>
@@ -30,7 +39,12 @@
       </div>
 
       <!-- User가 일반 유저인 경우에는 아래의 router-link 가 노출됩니다. -->
-      <router-link to="/recruits" class="bannerBox" style="text-decoration:none" v-if="typeof(this.$store.getters.getLevel)=='number'">
+      <router-link
+        to="/recruits"
+        class="bannerBox"
+        style="text-decoration:none"
+        v-if="typeof(this.$store.getters.getLevel)=='number'"
+      >
         <div class="recruitList contentBox">
           <div class="iconBox">
             <i class="far fa-handshake fa-7x" style="color:blueviolet"></i>
@@ -38,13 +52,17 @@
           <br />
           <div class="recruitList_title titleBox">
             <span class="fontStyle">외주 공고 리스트</span>
-
           </div>
         </div>
       </router-link>
 
       <!-- User가 일반 유저가 아닌 경우, studio로 가는 활동을 막기 위해 fake로 아래 div를 노출합니다. -->
-      <div class="bannerBox" style="text-decoration:none; cursor:pointer;" v-if="typeof(this.$store.getters.getLevel)=='string'" @click="alert_message_login()">
+      <div
+        class="bannerBox"
+        style="text-decoration:none; cursor:pointer;"
+        v-if="typeof(this.$store.getters.getLevel)=='string'"
+        @click="alert_message_login()"
+      >
         <div class="studio contentBox">
           <div class="iconBox">
             <i class="far fa-handshake fa-7x" style="color:blueviolet"></i>
@@ -55,7 +73,6 @@
           </div>
         </div>
       </div>
-
 
       <router-link to="/companyListPage" class="bannerBox" style="text-decoration:none">
         <div class="companyList contentBox">
@@ -69,7 +86,11 @@
         </div>
       </router-link>
 
-      <router-link :to="{ name: 'story', params: { id: randId }}" class="bannerBox" style="text-decoration:none">
+      <router-link
+        :to="{ name: 'story', params: { id: randId }}"
+        class="bannerBox"
+        style="text-decoration:none"
+      >
         <button class="bannerBox" @click="randomUser()">
           <div class="randomList contentBox">
             <div class="iconBox">
@@ -82,10 +103,8 @@
           </div>
         </button>
       </router-link>
-
     </div>
   </div>
-
 </template>
 
 <script>
@@ -93,9 +112,9 @@ import FirebaseService from "@/services/FirebaseService";
 export default {
   data() {
     return {
-      userdata : "",
-      randId : "",
-      level:"",
+      userdata: "",
+      randId: "",
+      level: ""
     };
   },
   mounted() {
@@ -106,25 +125,25 @@ export default {
       this.userdata = await FirebaseService.SELECT_ALLUser();
       var result = Math.floor(Math.random() * this.userdata.length);
       this.randId = this.userdata[result].nickname;
-      this.$store.commit('changeLevel', this.$session.get('level'))
+      this.$store.commit("changeLevel", this.$session.get("level"));
     },
     async randomUser() {
       var result = Math.floor(Math.random() * this.userdata.length);
       this.randId = this.userdata[result].nickname;
     },
     isUserCheck() {
-      if ( this.level === 2 ) {
+      if (this.level === 2) {
         return true;
       } else {
         return false;
       }
     },
     alert_message_user() {
-      alert('권한이 필요합니다. 필요 level 2 (유저)')
+      alert("권한이 필요합니다. 필요 level 2 (유저)");
     },
     alert_message_login() {
-      alert('권한이 필요합니다. 로그인')
-    },
+      alert("권한이 필요합니다. 로그인");
+    }
   }
 };
 </script>
@@ -132,25 +151,23 @@ export default {
 <style scoped>
 .banner__container {
   width: 100%;
-  height: 300px;
+  height: 250px;
   background-color: white;
 }
 .banner__content {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-gap: 0.02rem;
+  display: block;
   background-color: lightgrey;
 }
 .bannerBox {
-  height: 300px;
+  height: 50px;
   background-color: white;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .contentBox {
-  height: 250px;
-  width: 80%;
+  height: 50px;
+  width: 100%;
 }
 .titleBox {
   display: flex;
@@ -158,13 +175,76 @@ export default {
   justify-content: center;
 }
 .iconBox {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-top: 30px;
+  display: none;
 }
 .fontStyle {
   font-size: 20px;
   color: grey;
+}
+@media screen and (min-width: 500px) {
+  .banner__content {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 0.02rem;
+    background-color: lightgrey;
+  }
+  .contentBox {
+    font-size: 15px;
+  }
+  .fontStyle {
+    font-size: 12px;
+  }
+  .iconBox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 30px;
+  }
+  .contentBox {
+    height: 250px;
+    width: 80%;
+  }
+  .bannerBox {
+    height: 300px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .banner__container {
+    width: 100%;
+    height: 300px;
+    background-color: white;
+  }
+}
+@media screen and (min-width: 850px) {
+  .contentBox {
+    font-size: 20px;
+  }
+  .fontStyle {
+    font-size: 20px;
+  }
+  .iconBox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 30px;
+  }
+  .contentBox {
+    height: 250px;
+    width: 80%;
+  }
+  .bannerBox {
+    height: 300px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .banner__container {
+    width: 100%;
+    height: 300px;
+    background-color: white;
+  }
 }
 </style>
