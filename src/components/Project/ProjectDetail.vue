@@ -9,14 +9,14 @@
     </div>
     <div style="float:right; margin-right:1vw;">
       <v-flex
-        v-if="isMine"
+        v-if="this.$store.getters.getSession==this.$route.params.id"
         @click="UPDATE_Project(project_id)"
         class="d-inline"
         style="margin-right:1vw;">
         <img src="../../assets/icon_set/technics.png" alt="Smiley" style="cursor: pointer; height:25px;"/>
       </v-flex>
       <v-flex
-        v-if="isMine"
+        v-if="this.$store.getters.getSession==this.$route.params.id"
         @click="DELETE_Project(project_id, index)"
         class="d-inline"
         style="margin-right:1vw;">
@@ -56,7 +56,6 @@ export default {
     projectData : '',
     user:'',
     login:'',
-    isMine: '',
   }),
   methods: {
     popdetail(pcode) {
@@ -89,11 +88,7 @@ export default {
   created() {
     this.user = this.$route.params.id;
     this.login = this.$session.get("session_id");
-    if (this.user == this.login) {
-      this.isMine = true;
-    } else {
-      this.isMine = false;
-    }
+    this.$store.commit('setSession', this.login)
   }
 };
 </script>
