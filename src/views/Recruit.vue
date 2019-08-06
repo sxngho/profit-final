@@ -2,7 +2,7 @@
   <v-container wrap>
     <!-- 개발자라면 아래 레이아웃 출력 -->
       <!-- 모집중공고 리스트 -->
-      <div v-if='nowLevel == "2"'>
+      <div v-if="this.$store.getters.getLevel == 2">
         <v-layout wrap row>
           <h1>지원할 수 있는 공고 리스트</h1>
           <p> 총 {{recruits.length}}개의 공고 중에 {{myRecruits.length}}개의 공고 지원가능합니다.</p>
@@ -37,7 +37,7 @@
       </div>
 
     <!-- 회사라면 아래 레이아웃 출력 -->
-    <div v-else-if='nowLevel == "0" || nowLevel=="1" || nowLevel=="3"'>
+    <div v-if="this.$store.getters.getLevel ===0 || this.$store.getters.getLevel ===1 || this.$store.getters.getLevel ===3">
       <v-layout wrap row>
         <v-flex xs12 sm6 md4 v-for="recruit in recruits" style="padding:10px;">
           <v-card outlined class="text-center" style="padding:25px 10px 5px 10px;">
@@ -65,7 +65,7 @@
     </div>
 
     <!-- 비 로그인 유저라면 아래 레이아웃 출력 -->
-    <div v-else>
+    <div v-if="typeof(this.$store.getters.getLevel) =='string'">
       <v-layout wrap row>
         <h1>비로그인이당</h1>
       </v-layout>
@@ -97,45 +97,48 @@ export default {
       };
   },
   mounted() {
-
     this.fetchData();
   },
   methods: {
     async fetchData() {
-      this.nowLevel = this.$session.get('level');
-      this.user = this.$session.get('session_id');
+      this.$store.commit('setSession', this.$session.get('session_id'));
+      this.$store.commit('changeLevel', this.$session.get('level'));
+
       this.recruits = await FirebaseService.SELECT_RecruitInfo();
       this.mySkills = await FirebaseService.SELECT_Userdata(this.$session.get('session_id'));
       console.log(this.recruits,"공고들");
-      //일단 모든 나의 스킬을 대문자로 만들어준다.
-      for(var ii in this.mySkills[0].userSkills) {
-        this.mySkills[0].userSkills[ii] = this.mySkills[0].userSkills[ii].toUpperCase();
-      }
-      //모든 공고를 탐색하는데,
-      for(var i in this.recruits) {
-        var notIncludeExist = this.recruits[i].data.contract; //공고 요구 스킬중, 나한테 없는 스킬이 있는지 여부판단          if(notIncludeExist) continue; //만약 누군가와 계약이 성상된 공고라면, 출력할 필요가 없다
-          for(var j in this.recruits[i].data.requiredSkills) {
-            var rs = this.recruits[i].data.requiredSkills[j].toUpperCase();
-            if( !this.mySkills[0].userSkills.includes(rs) ) {
-              notIncludeExist = true;
-              break;
-            }
-          }
-          if(!notIncludeExist){
-            var flag = false;
-            if (this.mySkills[0].dibs.includes(this.recruits[i].id)){
-              flag = true;
-            }
-            this.myRecruits.push({id:this.recruits[i].id, data:this.recruits[i].data, flag: flag})
-            // this.myRecruits.push(this.recruits[i]);
 
+      if (this.$store.getters.getLevel===2) {
+        //일단 모든 나의 스킬을 대문자로 만들어준다.
+        for(var ii in this.mySkills[0].userSkills) {
+          this.mySkills[0].userSkills[ii] = this.mySkills[0].userSkills[ii].toUpperCase();
+        }
+        //모든 공고를 탐색하는데,
+        for(var i in this.recruits) {
+          var notIncludeExist = this.recruits[i].data.contract; //공고 요구 스킬중, 나한테 없는 스킬이 있는지 여부판단          if(notIncludeExist) continue; //만약 누군가와 계약이 성상된 공고라면, 출력할 필요가 없다
+            for(var j in this.recruits[i].data.requiredSkills) {
+              var rs = this.recruits[i].data.requiredSkills[j].toUpperCase();
+              if( !this.mySkills[0].userSkills.includes(rs) ) {
+                notIncludeExist = true;
+                break;
+              }
+            }
+            if(!notIncludeExist){
+              var flag = false;
+              if (this.mySkills[0].dibs.includes(this.recruits[i].id)){
+                flag = true;
+              }
+              this.myRecruits.push({id:this.recruits[i].id, data:this.recruits[i].data, flag: flag})
+              // this.myRecruits.push(this.recruits[i]);
+
+            }
           }
-        }
-        if ( this.myRecruits.length == 0 ) {
-          this.isEmpty = true;
-        } else {
-          this.isEmpty = false;
-        }
+          if ( this.myRecruits.length == 0 ) {
+            this.isEmpty = true;
+          } else {
+            this.isEmpty = false;
+          }
+      }
     },
 
     popRecruitDetail(rdcode) {
