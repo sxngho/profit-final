@@ -13,7 +13,7 @@
     <v-toolbar-items>
       <Sign v-on:login_success="login_success" v-on:logout_success="logout_success"/>
 
-      <v-btn text class="font-bold-light" to="/Manager" v-if="nowLevel===0 || nowLevel===1">Manager</v-btn>
+      <v-btn text class="font-bold-light" to="/Manager" v-if="this.$store.getters.getLevel===0 || this.$store.getters.getLevel===1">Manager</v-btn>
     </v-toolbar-items>
   </v-toolbar>
 </template>
@@ -29,19 +29,20 @@ export default {
   },
   data: () => ({
     unread_alertlist:[],
-    nowLevel : "",
+    user:"",
     check:false,
     userdata:[],
   }),
   mounted() {
+    this.user = this.$session.get("session_id")
     // this.get_userdata(this.$session.get("session_id"));
-    this.nowLevel = this.$session.get("level");
+    this.$store.commit('setSession', this.$session.get("session_id"))
+    this.$store.commit('changeLevel', this.$session.get("level"))
   },
   methods : {
     async get_userdata(id) {
      this.unread_alertlist = [];
-     this.nowLevel = this.$session.get("level");
-     if ( this.nowLevel === 2 ) {
+     if ( this.$store.getters.getLevel === 2 ) {
       var userdata = await FirebaseService.SELECT_Userdata(id)
       this.userdata = userdata
       if (userdata.length) {
@@ -59,14 +60,11 @@ export default {
     },
     login_success() {
       this.check = true
-      // this.get_userdata(this.$session.get("session_id"))
     },
     logout_success() {
       this.check = false
-      this.nowLevel = this.$session.get("level");
     }
   },
-
 
 };
 </script>
