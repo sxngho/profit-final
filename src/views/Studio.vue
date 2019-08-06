@@ -16,10 +16,25 @@
                 {{recruit.companyId}}
               </v-card-text>
               <v-card-actions>
-                <v-btn @click="cancle()" outlined color="red">계약파기</v-btn>
-                <v-btn @click="complete()" outlined color="blue">완료</v-btn>
-                <v-btn @click="popChat('test')" outlined color="orange">채팅창</v-btn>
-                <v-btn @click="popContract('test')" outlined color="orange">계약서</v-btn>
+                <div v-if="recruit.UserComplete == 0 && recruit.CompanyComplete == 0">
+                  <v-btn @click="complete(recruit)" outlined color="blue">완료</v-btn>
+                  <v-btn @click="popContract('test')" outlined color="orange">계약서</v-btn>
+                  <v-btn @click="popChat('test')" outlined color="orange">채팅창</v-btn>
+                  <v-btn @click="cancle(recruit)" outlined color="red">계약파기</v-btn>
+                </div>
+                <div v-if="recruit.UserComplete == 2 && recruit.CompanyComplete == 0">
+                  <p> 완료 처리됨 // 상대방의 처리를 기다리는중</p>
+                  <v-btn @click="popContract('test')" outlined color="orange">계약서</v-btn>
+                  <v-btn @click="popChat('test')" outlined color="orange">채팅창</v-btn>
+                </div>
+                <div v-if="recruit.UserComplete == 0 && recruit.CompanyComplete == 2">
+                  <p> 상대방이 완료를 누른 상태입니다. 계약이 정상적으로 종료되었다면 완료를 눌러주세요.</p>
+                  <v-btn @click="popContract('test')" outlined color="orange">계약서</v-btn>
+                  <v-btn @click="popChat('test')" outlined color="orange">채팅창</v-btn>
+                </div>
+                <div v-if="recruit.UserComplete == 1 || recruit.CompanyComplete == 1">
+                  <p> 이미 파기된 계약입니다. 이거 처리해주세용</p>
+                </div>
               </v-card-actions>
             </v-card>
         </v-layout>
@@ -104,6 +119,24 @@ export default {
         }
       });
     },
+    complete(recruit) {
+      if (confirm("알림 : 한번 완료 처리한 계약은 수정이 불가능합니다. 정말 완료 처리하시겠습니까?")) {
+        FirebaseService.UPDATE_RecruitCompleteByUser(recruit.recruitPK,"success")
+        var dataRef = firebase.database().ref('/'+recruit.link);
+        dataRef.update({
+          UserComplete : 2,
+        });
+      }
+    },
+    cancle(recruit) {
+      if (confirm("알림 : 한번 파기 처리한 계약은 수정이 불가능합니다. 정말 계약을 파기하시겠습니까?")) {
+        FirebaseService.UPDATE_RecruitCompleteByUser(recruit.recruitPK,"fail")
+        var dataRef = firebase.database().ref('/'+recruit.link);
+        dataRef.update({
+          UserComplete : 1,
+        });
+      }
+    },
     popChat(ccode){
 
       this.createChatRoom(ccode);
@@ -148,6 +181,8 @@ export default {
           userId : nickname,
           companyVerification : false,
           userVerification: false,
+          UserComplete : false,
+          CompanyComplete : false,
         });
       }
     },

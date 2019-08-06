@@ -1,14 +1,11 @@
 <template>
   <div>
-    <!--loading-overlay-->
-    <div class="vld-parent">
-      <Loading
-        :active.sync="isLoading"
-        :can-cancel="true"
-        :on-cancel="onCancel"
-        :is-full-page="true"
-      ></Loading>
-    </div>
+      <div v-if="loading">
+        <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+        <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+        <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+        <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+      </div>
     <!-- 회사배너 -->
     <v-layout wrap id="companyBanner">
       <v-flex xs12 sm10 offset-sm1>
@@ -406,14 +403,14 @@
                             <v-btn flex outlined color="red">삭제</v-btn>
                           </div>
                           <div v-else>
-                            <v-btn flex outlined color="blue">완료</v-btn>
+                            <v-btn flex outlined color="blue">계약완료</v-btn>
                             <v-btn
                               flex
                               outlined
                               color="orange"
                               @click="openContract(recruit.id,recruit.data.responsibility)"
                             >계약서</v-btn>
-                            <v-btn flex outlined color="red">프로젝트 종료(실패)</v-btn>
+                            <v-btn flex outlined color="red">계약파기</v-btn>
                           </div>
                         </v-layout>
                       </v-container>
@@ -436,8 +433,6 @@
 import FirebaseService from "@/services/FirebaseService";
 import Vue from "vue";
 import Main from "../components/Manager/Main";
-import Loading from "vue-loading-overlay";
-import "vue-loading-overlay/dist/vue-loading.css";
 
 var firebase = require("firebase/app");
 require("firebase/auth");
@@ -446,18 +441,16 @@ require("firebase/database");
 export default {
   name: "Company",
   components: {
-    Loading
   },
   created() {
-    this.isLoading = true;
-    // simulate AJAX
-    setTimeout(() => {
-      this.isLoading = false;
-    }, 400);
+
   },
   mounted() {
+    this.loading = true;
+
     this.fetchData();
     this.nowLevel = this.$session.get("level");
+    this.loading = false;
   },
   methods: {
     Function_Industry() {
@@ -672,6 +665,7 @@ export default {
     },
     async fetchData() {
       //this.company = await FirebaseService.SELECT_CompanyById(this.$route.params.id);
+      this.$loading(true);
       this.recruitlist = await FirebaseService.SELECT_RecruitInfoById(
         this.$route.params.id
       );
@@ -720,6 +714,8 @@ export default {
       this.company.homepage = comInfo[0].homepage;
       this.company.address = comInfo[0].address;
       this.company.descript = comInfo[0].descript;
+
+      this.$loading(false);
     },
     showNotification(group, type, title, text) {
       this.$notify({
@@ -821,16 +817,7 @@ export default {
       this.company.company_logo = "";
       this.submit();
     }
-    // doAjax() {
-    //   this.isLoading = true;
-    //   // simulate AJAX
-    //   setTimeout(() => {
-    //     this.isLoading = false;
-    //   }, 10000);
-    // },
-    // onCancel() {
-    //   console.log("User cancelled the loader.");
-    // }
+
   },
   data() {
     return {
@@ -848,11 +835,10 @@ export default {
         establishedDate: "",
         represent: "",
         homepage: "",
-        address: "",
-        descript: "",
-        isLoading: false,
-        fullPage: true
+        address : "",
+        descript : "",
       },
+      loading : false,
       recruitlist: [],
       workingUser: "",
       dibsUsers: "",

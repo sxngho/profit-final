@@ -1294,10 +1294,37 @@ export default {
       projectContent: recruitInfo.projectContent,
       requiredSkills: recruitInfo.requiredSkills,
       closingDate: recruitInfo.closingDate,
-      companyId: recruitInfo.session_id
+      companyId: recruitInfo.session_id,
+      contract : false,
+      UserComplete : false,
+      CompanyComplete : false,
+      responsibility : "",
+
     });
   },
 
+  UPDATE_RecruitCompleteByUser(recruitPK,state) {
+    if ( state === "success") {
+      firestore.collection("recruitInfo").doc(recruitPK).update({
+          UserComplete : 2,
+      })
+    } else {
+      firestore.collection("recruitInfo").doc(recruitPK).update({
+          UserComplete : 1,
+      })
+    }
+  },
+  UPDATE_RecruitCompleteByCompany(recruitPK,state) {
+    if ( state === "success") {
+      firestore.collection("recruitInfo").doc(recruitPK).update({
+          CompanyComplete : 2,
+      })
+    } else {
+      firestore.collection("recruitInfo").doc(recruitPK).update({
+          CompanyComplete : 1,
+      })
+    }
+  },
   // --------------------------------------------------------------------recruit
   // ---------------------------------------------------------------------------------------------------------------------------------
 
