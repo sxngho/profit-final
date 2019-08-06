@@ -4,7 +4,7 @@
       <v-flex hidden-sm-and-down>
         <Slide right width="600" disableOutsideClick >
             <v-container>
-              여기다가 스튜디오를 고대~~~로 붙이면 됨! // 컨테이너 안에만 넣어주세요!!!
+              <Studio/>
             </v-container>
         </Slide>
       </v-flex>
@@ -130,6 +130,7 @@ import ProjectList from "../components/UserInfoPage/ProjectList";
 import ProjectEditor from "../components/UserInfoPage/ProjectEditor";
 import Project from "../components/Project/Project";
 import ProjectUpdator from "../components/UserInfoPage/ProjectUpdator";
+import Studio from "../components/UserInfoPage/Studio";
 import { mapState } from "vuex";
 import { Slide } from 'vue-burger-menu';
 
@@ -249,6 +250,7 @@ export default {
     ProjectUpdator,
     FollowerList,
     Slide,
+    Studio,
   },
   computed: mapState(["followerView", "followingView"]), // 뷰엑스 값을 여기서 참조하겠다.
   watch: {

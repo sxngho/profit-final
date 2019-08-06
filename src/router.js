@@ -12,7 +12,6 @@ import Manager from "./views/Manager.vue";
 import Chat from "./views/chat.vue";
 import Recruit from "./views/Recruit.vue";
 import RecruitDetail from "./components/Recruit/RecruitDetail.vue";
-import Studio from "./views/Studio.vue";
 import ReChat from "./components/Recruit/Chat.vue";
 import Consult from "./components/Recruit/Consult.vue";
 import Contract from "./components/Recruit/Contract.vue";
@@ -76,11 +75,6 @@ export default new Router({
       path: "/recruit/:rcode",
       name: "recruit",
       component: RecruitDetail
-    },
-    {
-      path: "/studio",
-      name: "studio",
-      component: Studio
     },
     {
       path: "/chat/:ccode",

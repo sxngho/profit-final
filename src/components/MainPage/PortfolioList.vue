@@ -2,15 +2,14 @@
   <div class="PortfolioList__container">
     <div class="PortfolioList__container__content">
       <div
-        v-for="item in this.$store.state.showPortfolioList"
+        v-for="item in bottolePortfolio"
         class="content__portfolioList"
-        v-if="item.data.state < 3"
       >
         <!-- {{item.data.state}} -->
-        <Portfolio v-bind:portfolio="item" />
+        <Portfolio v-bind:portfolio="item"/>
       </div>
     </div>
-    <button class="mainMoreBtn" @click="morePortfolio">MORE</button>
+    <button class="mainMoreBtn" v-if="moreBtn" @click="morePortfolio">MORE</button>
   </div>
 </template>
 
@@ -28,28 +27,42 @@ export default {
       end: 6,
       start: 0,
       PageLength: "",
-      PortfolioList: []
+      PortfolioList: [],
+      moreBtn : true,
     };
   },
-  created() {
+  mounted() {
     this.SELECT_ALLProjects();
   },
   methods: {
     async SELECT_ALLProjects() {
       this.allPortfolio = await FirebaseService.SELECT_ALLProjects();
-      console.log("SELECT_ALLProjects",this.allPortfolio.length);
+      this.PageLength = this.allPortfolio.length
+      if( this.PageLength <= 6  ) {
+        this.moreBtn = false;
+      }
       for (let i = this.start; i < this.end; i++) {
-        this.bottolePortfolio.push(this.allPortfolio[i]);
+        if ( this.allPortfolio[i].data.state == 3 ) {
+          this.start++;
+          this.end++;
+          if (this.end > this.PageLength) {
+            this.end = this.PageLength;
+          }
+        } else {
+          this.bottolePortfolio.push(this.allPortfolio[i]);
+        }
       }
       this.$store.commit("selectAllPortfolioList", this.allPortfolio);
     },
     morePortfolio() {
-      console.log("aaaaaaaaaa")
       if (this.end < this.PageLength) {
         this.end += 6;
         this.start += 6;
         if (this.end > this.PageLength) {
           this.end = this.PageLength;
+        }
+        if( this.PageLength <= this.end ) {
+          this.moreBtn = false;
         }
         this.SELECT_ALLProjects();
       }
