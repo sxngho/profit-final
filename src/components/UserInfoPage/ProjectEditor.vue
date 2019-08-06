@@ -223,7 +223,7 @@
           session_id : "",
         }
       },
-    created() {
+    mounted() {
       this.getSessionid()
       if(this.project_id != ''){
         this.getProject()
@@ -312,6 +312,7 @@
                          Json.session_id = session_id
                          // console.log(user_followerlist[i], '한명 떳냐')
                          FirebaseService.INSERT_alert_Project(user_followerlist[i], Json, userdata_dic)
+                         console.log("에디터1")
                        }
                      })
                    })

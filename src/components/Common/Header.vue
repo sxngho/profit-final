@@ -12,10 +12,7 @@
     <!-- <div id="google_translate_element"></div> -->
     <v-toolbar-items>
       <Sign v-on:login_success="login_success" v-on:logout_success="logout_success"/>
-      <v-btn v-if="check" text to="/Alert">
-        <i class="fa fa-globe" aria-hidden="true"></i>
-        <span id="unread_alret" style="color:red;">{{unread_alertlist.length}}</span>
-      </v-btn>
+
       <v-btn text class="font-bold-light" to="/Manager" v-if="nowLevel===0 || nowLevel===1">Manager</v-btn>
     </v-toolbar-items>
   </v-toolbar>
@@ -37,7 +34,7 @@ export default {
     userdata:[],
   }),
   mounted() {
-    this.get_userdata(this.$session.get("session_id"));
+    // this.get_userdata(this.$session.get("session_id"));
     this.nowLevel = this.$session.get("level");
   },
   methods : {
@@ -62,7 +59,7 @@ export default {
     },
     login_success() {
       this.check = true
-      this.get_userdata(this.$session.get("session_id"))
+      // this.get_userdata(this.$session.get("session_id"))
     },
     logout_success() {
       this.check = false
