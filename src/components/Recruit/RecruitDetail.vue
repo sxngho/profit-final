@@ -62,12 +62,10 @@
 
 <script>
 import FirebaseService from "@/services/FirebaseService";
-import VueStar from 'vue-star'
 
 export default {
   name: "RecruitDetail",
   components: {
-    VueStar
   },
   created() {
     this.$store.state.no_header = true;
