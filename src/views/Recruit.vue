@@ -67,7 +67,17 @@
     <!-- 비 로그인 유저라면 아래 레이아웃 출력 -->
     <div v-if="typeof(this.$store.getters.getLevel) =='string'">
       <v-layout wrap row>
-        <h1>비로그인이당</h1>
+        <router-link to="/" class="bannerBox" style="text-decoration:none">
+          <div class="studio contentBox">
+            <div class="iconBox">
+              <i class="fas fa-home fa-7x" style="color:blueviolet"></i>
+            </div>
+            <br />
+            <div class="studio_title titleBox">
+              <h1><span class="fontStyle">홈페이지로 돌아가기</span></h1>
+            </div>
+          </div>
+        </router-link>
       </v-layout>
     </div>
 
@@ -90,10 +100,7 @@ export default {
         recruits : "",
         mySkills : "",
         myRecruits : [],
-        userlevel:"",
-        nowLevel:"-1",
         isEmpty : false,
-        user : "",
       };
   },
   mounted() {
@@ -106,7 +113,7 @@ export default {
 
       this.recruits = await FirebaseService.SELECT_RecruitInfo();
       this.mySkills = await FirebaseService.SELECT_Userdata(this.$session.get('session_id'));
-      console.log(this.recruits,"공고들");
+      // console.log(this.recruits,"공고들");
 
       if (this.$store.getters.getLevel===2) {
         //일단 모든 나의 스킬을 대문자로 만들어준다.
