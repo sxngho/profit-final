@@ -86,7 +86,7 @@
       <v-layout row wrap>
         <v-flex xs12 sm10 offset-sm1>
           <v-card style="width:100%" outlined>
-            <v-card-title>기업정보</v-card-title>
+            <v-card-title>기업정보 <span v-if="this.$route.params.id==this.$store.getters.getSession">(수정가능 (이멘트 나중에 수정해주셈))</span> </v-card-title>
             <v-card-text id="company_detail">
               <v-simple-table>
                 <tbody class="text-center">
@@ -393,11 +393,7 @@
                             <h3>작업중인 유저</h3>
                             <v-layout row wrap>
                               <v-flex xs11 offset-xs1>
-                                <v-btn
-                                  text
-                                  outlined
-                                  @click="openWorkChat(recruit.data.responsibility,recruit.id)"
-                                >{{recruit.data.responsibility}}</v-btn>
+
                               </v-flex>
                             </v-layout>
                           </v-flex>
@@ -407,14 +403,27 @@
                             <v-btn flex outlined color="red">삭제</v-btn>
                           </div>
                           <div v-else>
-                            <v-btn flex outlined color="blue">계약완료</v-btn>
-                            <v-btn
-                              flex
-                              outlined
-                              color="orange"
-                              @click="openContract(recruit.id,recruit.data.responsibility)"
-                            >계약서</v-btn>
-                            <v-btn flex outlined color="red">계약파기</v-btn>
+                            <div v-if="recruit.data.UserComplete == 0 && recruit.data.CompanyComplete == 0">
+                              <v-btn flex outlined color="blue" @click="complete(recruit.id)">계약완료</v-btn>
+                              <v-btn flex outlined color="orange" @click="openContract(recruit.id,recruit.data.responsibility)">계약서</v-btn>
+                              <v-btn text outlined @click="openWorkChat(recruit.data.responsibility,recruit.id)">{{recruit.data.responsibility}}</v-btn>
+                              <v-btn flex outlined color="red" @click="cancle(recruit.id)">계약파기</v-btn>
+                            </div>
+                            <div v-if="recruit.data.UserComplete == 0 && recruit.data.CompanyComplete == 2">
+                              <p> 완료 처리됨 // 상대방의 처리를 기다리는중</p>
+                              <v-btn flex outlined color="orange" @click="openContract(recruit.id,recruit.data.responsibility)">계약서</v-btn>
+                              <v-btn text outlined @click="openWorkChat(recruit.data.responsibility,recruit.id)">{{recruit.data.responsibility}}</v-btn>
+                            </div>
+                            <div v-if="recruit.data.UserComplete == 2 && recruit.data.CompanyComplete == 0">
+                              <p> 상대방이 완료를 누른 상태입니다. 계약이 정상적으로 종료되었다면 완료를 눌러주세요.</p>
+                              <v-btn flex outlined color="blue" @click="complete(recruit.id)">계약완료</v-btn>
+                              <v-btn flex outlined color="orange" @click="openContract(recruit.id,recruit.data.responsibility)">계약서</v-btn>
+                              <v-btn text outlined @click="openWorkChat(recruit.data.responsibility,recruit.id)">{{recruit.data.responsibility}}</v-btn>
+                              <v-btn flex outlined color="red" @click="cancle(recruit.id)">계약파기</v-btn>
+                            </div>
+                            <div v-if="recruit.data.UserComplete == 1 || recruit.data.CompanyComplete == 1">
+                              <p> 이미 파기된 계약입니다. 이거 처리해주세용</p>
+                            </div>
                           </div>
                         </v-layout>
                       </v-container>
@@ -459,6 +468,24 @@ export default {
 
   },
   methods: {
+    complete(recruit) {
+      if (confirm("알림 : 한번 완료 처리한 계약은 수정이 불가능합니다. 정말 완료 처리하시겠습니까?")) {
+        FirebaseService.UPDATE_RecruitCompleteByCompany(recruit.recruitPK,"success")
+        var dataRef = firebase.database().ref('/'+recruit.link);
+        dataRef.update({
+          CompanyComplete : 2,
+        });
+      }
+    },
+    cancle(recruit) {
+      if (confirm("알림 : 한번 파기 처리한 계약은 수정이 불가능합니다. 정말 계약을 파기하시겠습니까?")) {
+        FirebaseService.UPDATE_RecruitCompleteByCompany(recruit.recruitPK,"fail")
+        var dataRef = firebase.database().ref('/'+recruit.link);
+        dataRef.update({
+          CompanyComplete : 1,
+        });
+      }
+    },
     Function_Industry() {
       this.toggleIndustry = true;
       this.toggleMount = false;
