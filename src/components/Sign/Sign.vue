@@ -142,6 +142,7 @@ export default {
         this.$session.set("session_id", "");
         this.$session.set("level", "");
         this.user = "";
+        this.$store.commit('changeLevel', "")
         this.$emit('logout_success')
         // console.log(this.$store.getters.getSession,"setSession")
         // console.log(this.$session.get('session_id'))
@@ -149,7 +150,6 @@ export default {
     },
 
     async Signin(id, password) {
-      console.log(this.$store.getters.getLevel, '처음에 -1이냐')
       this.check = await FirebaseService.Signin(id, password);
       var userlist = await FirebaseService.SELECT_AllUserdata();
       var companylist = await FirebaseService.SELECT_AllCompanydata();
@@ -194,7 +194,6 @@ export default {
         this.LoginId = "";
         this.LoginPassword = "";
         this.$store.commit('changeLevel', level)
-        console.log(this.$store.getters.getLevel, '떳냐')
         this.$emit('login_success')
       }
     },

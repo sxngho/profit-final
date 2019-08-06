@@ -89,7 +89,7 @@ export default {
       this.userdata = await FirebaseService.SELECT_ALLUser();
       var result = Math.floor(Math.random() * this.userdata.length);
       this.randId = this.userdata[result].nickname;
-      this.level = this.$session.get('level')
+      this.$store.commit('changeLevel', this.$session.get('level'))
     },
     async randomUser() {
       var result = Math.floor(Math.random() * this.userdata.length);
