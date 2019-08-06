@@ -17,7 +17,6 @@ import Consult from "./components/Recruit/Consult.vue";
 import Contract from "./components/Recruit/Contract.vue";
 import RecruitEditorPage from "./views/RecruitEditorPage.vue";
 import CompanyListPage from "./views/CompanyListPage.vue";
-import Alert from "./views/Alert.vue";
 import Company from "./views/Company.vue";
 
 Vue.use(Vuex);
@@ -95,11 +94,6 @@ export default new Router({
       path: "/recruiteditorpage",
       name: "recruiteditorpage",
       component: RecruitEditorPage
-    },
-    {
-      path: "/alert",
-      name: "alert",
-      component: Alert
     },
     {
       path: "/company/:id",

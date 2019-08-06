@@ -407,7 +407,7 @@
                               <v-btn flex outlined color="blue" @click="complete(recruit.id)">계약완료</v-btn>
                               <v-btn flex outlined color="orange" @click="openContract(recruit.id,recruit.data.responsibility)">계약서</v-btn>
                               <v-btn text outlined @click="openWorkChat(recruit.data.responsibility,recruit.id)">{{recruit.data.responsibility}}</v-btn>
-                              <v-btn flex outlined color="red" @click="cancle(recruit.id)">계약파기</v-btn>
+                              <v-btn flex outlined color="red" @click="cancel(recruit.id)">계약파기</v-btn>
                             </div>
                             <div v-if="recruit.data.UserComplete == 0 && recruit.data.CompanyComplete == 2">
                               <p> 완료 처리됨 // 상대방의 처리를 기다리는중</p>
@@ -419,7 +419,7 @@
                               <v-btn flex outlined color="blue" @click="complete(recruit.id)">계약완료</v-btn>
                               <v-btn flex outlined color="orange" @click="openContract(recruit.id,recruit.data.responsibility)">계약서</v-btn>
                               <v-btn text outlined @click="openWorkChat(recruit.data.responsibility,recruit.id)">{{recruit.data.responsibility}}</v-btn>
-                              <v-btn flex outlined color="red" @click="cancle(recruit.id)">계약파기</v-btn>
+                              <v-btn flex outlined color="red" @click="cancel(recruit.id)">계약파기</v-btn>
                             </div>
                             <div v-if="recruit.data.UserComplete == 1 || recruit.data.CompanyComplete == 1">
                               <p> 이미 파기된 계약입니다. 이거 처리해주세용</p>
@@ -477,7 +477,7 @@ export default {
         });
       }
     },
-    cancle(recruit) {
+    cancel(recruit) {
       if (confirm("알림 : 한번 파기 처리한 계약은 수정이 불가능합니다. 정말 계약을 파기하시겠습니까?")) {
         FirebaseService.UPDATE_RecruitCompleteByCompany(recruit.recruitPK,"fail")
         var dataRef = firebase.database().ref('/'+recruit.link);
@@ -693,8 +693,8 @@ export default {
       //this.company = await FirebaseService.SELECT_CompanyById(this.$route.params.id);
       this.$loading(true);
       this.recruitlist = await FirebaseService.SELECT_RecruitInfoById(
-        this.$route.params.id
-      );
+        this.$route.params.id);
+      console.log(this.recruitlist)
       this.dibsUsers = [];
       var recruitsbyCompany = await FirebaseService.SELECT_RecruitInfoByCompany(
         this.$route.params.id
@@ -705,7 +705,7 @@ export default {
         "value",
         snapshot => {
           chatRooms = snapshot.val();
-          console.log(chatRooms, "챗룸");
+          // console.log(chatRooms, "챗룸");
           for (var ii in recruitsbyCompany) {
             for (var i in chatRooms) {
               if (chatRooms[i].recruitPK == recruitsbyCompany[ii].id) {
@@ -718,11 +718,11 @@ export default {
           }
         },
         function(error) {
-          console.error(error, "유저리스트 불러오기 에러");
+          // console.error(error, "유저리스트 불러오기 에러");
         }
       );
 
-      console.log(this.dibsUsers, "찜유저리스트");
+      // console.log(this.dibsUsers, "찜유저리스트");
 
       const comInfo = await FirebaseService.SELECT_CompanyInfo(
         this.$route.params.id

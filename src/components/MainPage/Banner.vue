@@ -1,6 +1,7 @@
 <template>
   <div class="banner__container">
     <div class="banner__content">
+
       <!-- User가 일반 유저인 경우에는 아래의 router-link 가 노출됩니다. -->
       <router-link :to="{ name: 'story', params: { id: this.$session.get('session_id') }}" class="bannerBox" style="text-decoration:none" v-if="this.$store.getters.getLevel==2" >
         <!-- <router-link to="/studio" class="bannerBox" style="text-decoration:none" v-if="isUserCheck()"> -->
@@ -16,7 +17,7 @@
       </router-link>
 
       <!-- User가 일반 유저가 아닌 경우, studio로 가는 활동을 막기 위해 fake로 아래 div를 노출합니다. -->
-      <div class="bannerBox" style="text-decoration:none; cursor:pointer;" v-if="this.$store.getters.getLevel!==2" @click="alert_message()">
+      <div class="bannerBox" style="text-decoration:none; cursor:pointer;" v-if="this.$store.getters.getLevel!==2" @click="alert_message_user()">
         <div class="studio contentBox">
           <div class="iconBox">
             <i class="far fa-keyboard fa-7x" style="color:blueviolet"></i>
@@ -28,7 +29,8 @@
         </div>
       </div>
 
-      <router-link to="/recruits" class="bannerBox" style="text-decoration:none">
+      <!-- User가 일반 유저인 경우에는 아래의 router-link 가 노출됩니다. -->
+      <router-link to="/recruits" class="bannerBox" style="text-decoration:none" v-if="typeof(this.$store.getters.getLevel)=='number'">
         <div class="recruitList contentBox">
           <div class="iconBox">
             <i class="far fa-handshake fa-7x" style="color:blueviolet"></i>
@@ -36,9 +38,24 @@
           <br />
           <div class="recruitList_title titleBox">
             <span class="fontStyle">외주 공고 리스트</span>
+
           </div>
         </div>
       </router-link>
+
+      <!-- User가 일반 유저가 아닌 경우, studio로 가는 활동을 막기 위해 fake로 아래 div를 노출합니다. -->
+      <div class="bannerBox" style="text-decoration:none; cursor:pointer;" v-if="typeof(this.$store.getters.getLevel)=='string'" @click="alert_message_login()">
+        <div class="studio contentBox">
+          <div class="iconBox">
+            <i class="far fa-handshake fa-7x" style="color:blueviolet"></i>
+          </div>
+          <br />
+          <div class="studio_title titleBox">
+            <span class="fontStyle">외주 공고 리스트</span>
+          </div>
+        </div>
+      </div>
+
 
       <router-link to="/companyListPage" class="bannerBox" style="text-decoration:none">
         <div class="companyList contentBox">
@@ -102,9 +119,12 @@ export default {
         return false;
       }
     },
-    alert_message() {
+    alert_message_user() {
       alert('권한이 필요합니다. 필요 level 2 (유저)')
-    }
+    },
+    alert_message_login() {
+      alert('권한이 필요합니다. 로그인')
+    },
   }
 };
 </script>

@@ -17,7 +17,7 @@
                   <v-btn @click="complete(recruit)" outlined color="blue">완료</v-btn>
                   <v-btn @click="popContract('test')" outlined color="orange">계약서</v-btn>
                   <v-btn @click="popChat(recruit)" outlined color="orange">채팅창</v-btn>
-                  <v-btn @click="cancle(recruit)" outlined color="red">계약파기</v-btn>
+                  <v-btn @click="cancel(recruit)" outlined color="red">계약파기</v-btn>
                 </div>
                 <div v-if="recruit.UserComplete == 2 && recruit.CompanyComplete == 0">
                   <p> 완료 처리됨 // 상대방의 처리를 기다리는중</p>
@@ -90,6 +90,8 @@ export default {
     async fetchData() {
       this.nowLevel = this.$session.get('level');
       this.userid = this.$session.get('session_id');
+      this.$store.commit('setSession', this.userid)
+      console.log(this.$store.getters.getSession, 123)
       if (this.nowLevel !==2) {
         alert('권한이 없습니다. 필요 level : 2 (유저)')
         location.href=`${document.location.origin}`
@@ -124,7 +126,7 @@ export default {
         });
       }
     },
-    cancle(recruit) {
+    cancel(recruit) {
       if (confirm("알림 : 한번 파기 처리한 계약은 수정이 불가능합니다. 정말 계약을 파기하시겠습니까?")) {
         FirebaseService.UPDATE_RecruitCompleteByUser(recruit.recruitPK,"fail")
         var dataRef = firebase.database().ref('/'+recruit.link);
