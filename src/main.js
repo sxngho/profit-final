@@ -8,6 +8,7 @@ import ToggleButton from 'vue-js-toggle-button'
 import Notifications from 'vue-notification'
 import VueLoading from 'vuejs-loading-plugin'
 import VueHtml2Canvas from 'vue-html2canvas';
+import VueStar from 'vue-star'
 
 import axios from 'axios'
 import store from './store'

@@ -9,22 +9,22 @@
 
         <v-layout wrap row>
           <v-flex xs12 sm6 md4 v-for="recruit in myRecruits" style="padding:10px;">
-            <v-card outlined class="text-center" style="padding:25px 10px 5px 10px;">
-                <p class="display-1" style="font-size: 24px; font-weight: bold;">{{ recruit.data.projectTitle }}</p>
+            <v-card outlined class="text-center" style="padding:25px 10px 5px 10px; height:100%; position:relative;">
+              <div v-if="recruit.flag" style="position:absolute; right:-40px;top:9px;"> <img src="../assets/tape.png" style="transform:rotate(45deg); width:100px;"/></div>
+              <p class="display-1" style="font-size: 24px; font-weight: bold;">{{ recruit.data.projectTitle }}</p>
               <div>
                 <div>
-                  <v-chip v-for="skill in recruit.data.requiredSkills" outlined small class="pa-2" color="indigo">{{skill}}</v-chip>
+                  <v-chip v-for="skill in recruit.data.requiredSkills" outlined small class="pa-2 ma-1" color="indigo">{{skill}}</v-chip>
                 </div>
-                <span class="indigo--text headline">{{recruit.data.closingDate}}</span>
-                <p class="grey--text">{{recruit.data.projectSummary}}</p>
+                <span class="indigo--text headline">{{recruit.data.closingDate}}</span><br/>
+                <span class="grey--text">{{recruit.data.projectSummary}}</span><br/>
                 <span class="caption">
-                  {{recruit.data.companyId}} 
+                  {{recruit.data.companyId}}
                   {{recruit.data.endDay}}</span>
               </div>
-              <v-card-actions justify-center>
-                <v-spacer/>
+              <v-layout row justify-center>
                 <v-btn @click="popRecruitDetail(recruit.id)" text outlined>자세히보기</v-btn>
-              </v-card-actions>
+              </v-layout>
             </v-card>
           </v-flex>
         </v-layout>
@@ -75,29 +75,35 @@ export default {
   methods: {
     async fetchData() {
       this.nowLevel = this.$session.get('level');
-      console.log("내 렙은? : ",this.noewLevel);
       this.recruits = await FirebaseService.SELECT_RecruitInfo();
       this.mySkills = await FirebaseService.SELECT_Userdata(this.$session.get('session_id'));
-      console.log(this.recruits,"공고들")
+      console.log(this.recruits,"공고들");
+
+      //일단 모든 나의 스킬을 대문자로 만들어준다.
+      for(var ii in this.mySkills[0].userSkills) {
+        this.mySkills[0].userSkills[ii] = this.mySkills[0].userSkills[ii].toUpperCase();
+      }
+
+      //모든 공고를 탐색하는데,
       for(var i in this.recruits) {
-        console.log(this.recruits[i],"공고정보")
-        if (this.recruits[i].data.requiredSkills.length == 0) {
-          this.myRecruits.push(this.recruits[i]);
-          console.log("기업이 요구하는 스킬이없으면 바로출력")
-          continue;
-        }
-        for(var ii in this.mySkills[0].userSkills) {
-          this.mySkills[0].userSkills[ii] = this.mySkills[0].userSkills[ii].toUpperCase();
-        }
+        var notIncludeExist = this.recruits[i].data.contract; //공고 요구 스킬중, 나한테 없는 스킬이 있는지 여부판단
+        if(notIncludeExist) continue; //만약 누군가와 계약이 성상된 공고라면, 출력할 필요가 없다
+
         for(var j in this.recruits[i].data.requiredSkills) {
           var rs = this.recruits[i].data.requiredSkills[j].toUpperCase();
           if( !this.mySkills[0].userSkills.includes(rs) ) {
-            console.log(rs,"이거안나와야해")
+            notIncludeExist = true;
             break;
-          } else if( j == (this.recruits[i].data.requiredSkills.length-1) ) {
-            console.log("푸시",this.recruits[i])
-            this.myRecruits.push(this.recruits[i]);
           }
+        }
+
+        if(!notIncludeExist){
+          var flag = false;
+          if (this.mySkills[0].dibs.includes(this.recruits[i].id)){
+            flag = true;
+          }
+          this.myRecruits.push({id:this.recruits[i].id, data:this.recruits[i].data, flag: flag})
+          // this.myRecruits.push(this.recruits[i]);
         }
       }
     },
