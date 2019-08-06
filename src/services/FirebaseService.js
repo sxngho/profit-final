@@ -313,6 +313,7 @@ export default {
   },
 
   UPDATE_userDibs(dibs, userId) {
+    console.log("user Dibs update!");
     return firestore
       .collection("users")
       .doc(userId)

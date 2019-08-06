@@ -1,92 +1,116 @@
 <template>
   <v-container>
 
-    <v-layout row style="margin:20px"/>
+    <v-layout row wrap class="ma-3">
+      <v-card style="width:100%;min-height:560px;" outlined>
+        <v-flex xs12 class="ma-4">
+          <p class="text-center font-weight-bold display-1">{{recruit.data.projectTitle}}</p>
+        </v-flex>
 
-    <v-layout row wrap justify-ceneter>
-      <v-flex xs12>
-        <p class="text-center font-weight-bold display-1">{{recruit.data.projectTitle}}</p>
-      </v-flex>
+        <v-flex xs12>
+          <p class="text-center grey--text">{{recruit.data.projectSummary}}</p>
+        </v-flex>
+
+        <v-flex xs8 offset-xs2>
+          <table style="width:100%" class="text-center">
+            <tr>
+              <th><span class="caption">category </span></th>
+              <td><v-chip small color="red" outlined>{{recruit.data.category}}</v-chip></td>
+            </tr>
+            <tr>
+              <th><span class="caption">Term</span></th>
+              <td><span class="indigo--text title">{{recruit.data.closingDate}}</span></td>
+            </tr>
+            <tr>
+              <th><span class="caption">Pay</span></th>
+              <td><span class="indigo--text title">{{recruit.data.budget}}</span></td>
+            </tr>
+          </table>
+        </v-flex>
+
+        <v-divider style="margin:20px 0px;"/>
+
+        <v-flex xs10 offset-xs1>
+          <p v-html="recruit.data.projectContent"></p>
+        </v-flex>
+
+        <v-flex style="width:100%; margin:20px;">
+          <v-layout row justify-center>
+            <!-- <vue-star animate="animated rubberBand" color="#ff7d7d" v-show="!alreadyDibs" >
+              <i slot="icon" class="fa fa-heart" color="#cecece" ></i>
+            </vue-star>
+            <i class="fa fa-heart" color="#ff7d7d" v-show="alreadyDibs"/> -->
+
+            <!-- @click="dib(recruit_id)"-->
+              <v-btn @click="dib(recruit_id)" v-if="!alreadyDibs" outlined color="red">
+              찜!
+              </v-btn>
+              <v-btn  @click="dib(recruit_id)" v-if="alreadyDibs" outlined color="red">
+              찜 취소
+            </v-btn>
+
+  <!-- @click="dib(recruit_id)" -->
+          </v-layout>
+        </v-flex>
+
+
+      </v-card>
     </v-layout>
 
-    <v-layout row wrap justify-ceneter>
-      <v-flex xs12>
-        <p class="text-center grey--text">{{recruit.data.projectSummary}}</p>
-      </v-flex>
-    </v-layout>
-
-    <v-layout row wrap>
-      <v-flex xs12 class="text-xs-center">
-        <span class="grey--text">{{projectSummary}}</span>
-      </v-flex>
-
-      <v-flex xs12 class="text-xs-center">
-        <p>모집 마감일 : <span class="red--text">{{recruit.data.closingDate}}</span>,
-          현재 신청자 수 : <span class="red--text">{{recruit.data.applicationStack}}</span></p>
-      </v-flex>
-
-      <v-flex xs12 class="text-xs-center ">
-        <v-chip color="red" outlined>{{recruit.data.category}}</v-chip>
-        <v-chip color="orange" outlined>{{recruit.data.endDay}}</v-chip>
-        <v-chip color="blue" outlined>{{recruit.data.budget}}원</v-chip>
-      </v-flex>
-
-      <v-flex xs12 style="height:40px"/>
-
-      <v-flex xs12>
-        <p v-html="recruit.data.projectContent"></p>
-      </v-flex>
-
-      <v-btn @click="dib(recruit_id)">
-        찜!
-      </v-btn>
-    </v-layout>
   </v-container>
 </template>
 
 <script>
 import FirebaseService from "@/services/FirebaseService";
+import VueStar from 'vue-star'
 
 export default {
   name: "RecruitDetail",
   components: {
+    VueStar
   },
   created() {
     this.$store.state.no_header = true;
   },
   mounted() {
     this.fetchData(this.$route.params.rcode);
-    this.recruit_id = this.$route.params.rcode;
   },
   methods: {
     async fetchData(recruitId) {
-      console.log(recruitId,"이공고를찾아라");
+      console.log("this is fetchData");
       this.recruit = await FirebaseService.SELECT_RecruitInfoByRecruitId(recruitId);
       this.userdata = await FirebaseService.SELECT_Userdata(this.$session.get('session_id'));
-      console.log(this.recruit,"공고좀보자");
+      this.recruit_id = this.$route.params.rcode;
+      this.alreadyDibs = this.userdata[0].dibs.includes(this.recruit_id);
     },
     dib(recruit_id) {
+      console.log("this is dib");
       if ( !this.userdata[0].dibs.includes(recruit_id) ) {
         this.userdata[0].dibs.push(recruit_id);
         FirebaseService.UPDATE_userDibs(this.userdata[0].dibs, this.$session.get('session_id'));
+        console.log("complete!");
       } else {
-        console.log("이미 찜!되어있는 공고입니다");
+        this.userdata[0].dibs.splice(this.userdata[0].dibs.indexOf(recruit_id),1);
+        FirebaseService.UPDATE_userDibs(this.userdata[0].dibs, this.$session.get('session_id'));
       }
+      this.alreadyDibs = !this.alreadyDibs;
     },
   },
   data() {
     return {
-      recruit : "",
+      alreadyDibs : false,
+      recruit : {
+        id:"",
+        data:{
+          projectTitle:"",
+          projectSummary:"",
+          category:"",
+          closingDate:"",
+          budget:"",
+          projectContent:"",
+        }
+      },
       recruit_id : "",
-      category:"웹", //웹 / 앱 등 분류
-      closingDate:"2019-10-12", //모집 마감 날짜
-      projectTitle:"이거해주실분~", // 제목
-      duration:"1달", //개발 기간
-      budget:"1,000,000", // 예산
-      projectContent:"<h1>해야만합니다!!!</h1> 무언가를 어떻게해서 저렇게 해주세요!",//프로젝트 완전 정밀 설명
-      techlist:['c','bluetooth','java'], //필수 스킬 리스트
-      projectSummary : "누구 이 프로젝트 해주실분 계신가요~~~~", //프로젝틍 요약설명
-      applicationStack : 4,
     };
   },
 };
