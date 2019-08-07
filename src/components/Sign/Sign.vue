@@ -141,6 +141,7 @@ export default {
     this.user = this.$session.get("session_id");
     this.nowLevel = this.$session.get('level');
     this.userpage = "/story/" + this.user;
+    this.$store.commit('changealertList', this.$session.get('alertList'))
   },
   methods: {
     showNotification(group, type, title, text) {
