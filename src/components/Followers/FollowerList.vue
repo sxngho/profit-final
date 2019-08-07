@@ -38,7 +38,10 @@ export default {
   },
   methods: {
     async SELECT_Userdata() {
-      console.log(1123123);
+      console.log("현재 story 주인공");
+      // console.log("값 >>" + this.$route.toPath());
+      console.log(this.$route.params.id);
+
       if (this.level !== "") {
         // 로그인한 경우
         if (this.level == 3) {
@@ -51,7 +54,7 @@ export default {
         } else {
           // 회사가 아닌 경우
           this.userdata = await FirebaseService.SELECT_Userdata(
-            this.$session.get("session_id")
+            this.$route.params.id
           );
           this.followers = this.userdata[0].followerlist;
           this.followings = this.userdata[0].followinglist;
