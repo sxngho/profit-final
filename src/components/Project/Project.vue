@@ -1,15 +1,12 @@
 <template>
-  <div>
+  <v-container>
     <v-btn @click="goBackpage()" text outlined> 뒤로가기 </v-btn>
     <v-divider/>
 
-    <v-layout>
+    <v-layout row wrap>
       <v-toolbar-title class="font-weight-medium" style="padding-left:10px;">
-         <span class="font-weight-bold">{{project.projecttitle}} </span>
-         <span class="font-weight-thin font-italic subheading">{{project.developer}}</span>
-         <v-flex class="caption">
-           {{ project.projectdescription }}
-         </v-flex>
+         <span class="font-weight-bold title">{{project.projecttitle}} </span>
+         <span class="font-weight-thin font-italic subheading">{{project.developer}}</span><!-- TODO 이거 필드명 맞춰조라 -->
        </v-toolbar-title>
 
        <v-btn text color="yellow" @click="submitObjection()" v-if="this.$route.params.id==this.$store.getters.getSession && project.state > 0">
@@ -17,229 +14,237 @@
        </v-btn>
 
       <v-spacer/>
-      <v-btn text icon color="pink">
-        <i id="likecheck" class="far fa-heart fa-2x" @click="like_project()"></i>
-        {{likeit.length}}
-        <!-- 이미 좋아요 눌렀다면 다른 fa 를 보여주는 것도 좋겠다. -->
-      </v-btn>
+      <div>
+        <!-- 좋아요! -->
+        <!-- <v-btn text icon color="pink"> -->
+          <!-- 이미 좋아요 눌렀다면 다른 fa 를 보여주는 것도 좋겠다. -->
+          <!-- <i id="likecheck" class="far fa-heart fa-2x" @click="like_project()"></i>
+          {{likeit.length}}
+        </v-btn> -->
 
-      <v-btn text icon color="yellow">
-        <i class="fa fa-star fa-2x"></i>
-      </v-btn>
+        <v-badge color="#E74C3C" overlap>
+          <template slot="badge"> {{likeit.length}} </template>
+          <v-btn text icon color="pink">
+            <!-- 이미 좋아요 눌렀다면 다른 fa 를 보여주는 것도 좋겠다. -->
+            <i id="likecheck" class="far fa-heart fa-2x" @click="like_project()"></i>
+          </v-btn>
+        </v-badge>
 
-    </v-layout>
+        <!-- 신고하기 -->
+        <template>
+          <v-layout justify-center d-inline>
+            <v-dialog v-model="sirendialog" max-width="290">
+              <template v-slot:activator="{ on }">
+                <v-btn v-if="$store.getters.getSession" text color="primary" dark v-on="on"><i class="fa fa-bell fa-2x" style="color:orange"></i></v-btn>
+              </template>
 
-    <template>
-    <v-layout justify-center d-inline>
-      <v-dialog v-model="sirendialog" max-width="290">
-        <template v-slot:activator="{ on }">
-          <v-btn v-if="$store.getters.getSession" text color="primary" dark v-on="on"><i class="fa fa-bell fa-2x" style="color:orange"></i></v-btn>
+              <v-card>
+                <v-card-title class="headline">
+                  <span class="headline">신고하기</span>
+                </v-card-title>
+                <v-card-text>
+                  <v-layout wrap>
+                    <v-flex xs12>
+                      <v-combobox
+                      v-model="reportSelect"
+                      :items="reportItems"
+                      label="신고 사유를 선택해주세요."
+                      ></v-combobox>
+                    </v-flex>
+                    <v-flex xs12 v-if="reportSelect=='기타'">
+                      <input type="text" v-model="reportText"/>
+                    </v-flex>
+                    <v-flex xs12>
+                      <v-text-field v-model="reportDesc" required @keyup.enter="sirendialog = false, submitReport(reportSelect,reportText,reportDesc)"></v-text-field>
+                    </v-flex>
+                  </v-layout>
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="blue darken-1" text @click="sirendialog = false">취소</v-btn>
+                  <v-btn color="blue darken-1" text @click="sirendialog = false, submitReport(reportSelect,reportText,reportDesc)">신고하기</v-btn>
+                  <br />
+                </v-card-actions>
+              </v-card>
+
+            </v-dialog>
+          </v-layout>
         </template>
-
-        <v-card>
-          <v-card-title class="headline">
-            <span class="headline">신고하기</span>
-          </v-card-title>
-          <v-card-text>
-            <v-layout wrap>
-              <v-flex xs12>
-                <v-combobox
-                v-model="reportSelect"
-                :items="reportItems"
-                label="신고 사유를 선택해주세요."
-                ></v-combobox>
-              </v-flex>
-              <v-flex xs12 v-if="reportSelect=='기타'">
-                <input type="text" v-model="reportText"/>
-              </v-flex>
-              <v-flex xs12>
-                <v-text-field v-model="reportDesc" required @keyup.enter="sirendialog = false, submitReport(reportSelect,reportText,reportDesc)"></v-text-field>
-              </v-flex>
-            </v-layout>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" text @click="sirendialog = false">취소</v-btn>
-            <v-btn color="blue darken-1" text @click="sirendialog = false, submitReport(reportSelect,reportText,reportDesc)">신고하기</v-btn>
-            <br />
-          </v-card-actions>
-        </v-card>
-
-      </v-dialog>
+      </div>
     </v-layout>
-  </template>
+
 
     <!-- card -->
     <v-layout>
-      <v-container grid-list-md>
+      <v-container>
         <v-layout wrap>
           <!-- Project Main Thumbnail -->
           <v-flex xs12>
             <BigImg v-bind:imgSrc="project.projectimage" />
           </v-flex>
-          <!--  left detail -->
-          <v-flex xs12 md9>
-            <v-layout column>
-              <!-- project description -->
-              <v-layout row style="padding: 2vw 0vw; border-bottom: 1px solid #cecece;">
 
+          <!-- detail -->
+          <v-flex xs12 sm10 offset-sm1>
+              <!-- project description -->
+              <v-layout row wrap style="padding: 2vw 0vw;">
 
               <!--comment -->
-                <v-flex>
-                  <span class="title">{{project.projecttitle}}</span>
-                  <v-flex class="d-inline caption tag" rounded outlined>{{ project.projectterm }}</v-flex>
-                  <v-flex class="d-inline caption tag" rounded outlined>{{ project.projectrank }}</v-flex>
-                  <br />
+                <v-flex xs12>
+                  <span class="title"  style="margin-right:5px;">{{project.projecttitle}}</span>
+                  <v-chip outlined label small color="purple dark" style="margin-right:5px;">
+                    {{ project.projectterm }}
+                  </v-chip>
+                  <v-chip outlined label small color="purple dark" style="margin-right:5px;">
+                    {{ project.projectrank }}
+                  </v-chip>
+                  <div style="padding:5px 0;">
+                    <v-chip v-for="tech in project.projecttech" outlined small color="grey dark" style="margin-right:5px;">
+                      {{ tech }}
+                    </v-chip>
+                  </div>
+                  <v-divider/>
 
-                  <v-layout class="d-block" style="padding: 1vw 0vw;">
-                    <v-flex
-                      v-for="tech in project.projecttech"
-                      class="tech d-inline-block caption"
-                    >{{ tech }}</v-flex>
-                  </v-layout>
 
                   <p v-html="project.projectcontent" />
                 </v-flex>
               </v-layout>
 
             <!--comment -->
-              <v-flex>
-                <form  v-if="this.$store.getters.getSession">
-
-                  <!-- 여기에 태그한 사람들의 이름이 박스로 체크됩니다. -->
+              <v-flex xs12>
+                <form  v-if="this.$store.getters.getSession" style="position:relative;">
+                  <!-- 언급한 사람, 댓글 입력 필드 -->
                   <div>
-                    태그 : <v-btn style="display:inline-block;" v-for="nickname in real_taglist" @click="delete_taglist(nickname)">{{nickname}}</v-btn>
-                    <v-text-field style="width:100%;" placeholder="댓글을 입력해주세요" v-model="comment" v-on:keyup.enter="INSERT_Comment(real_taglist, comment)"></v-text-field>
+                    <span v-if="real_taglist.length >0">언급한 사람 :</span>
+                    <v-chip v-for="nickname in real_taglist"  @click="delete_taglist(nickname)" color="#2980B9" class="white--text" style="margin:0 2px;" small>
+                      <span><i class="fa fa-user-circle"/> {{nickname}}</span>
+                    </v-chip>
+                    <v-flex >
+                      <v-text-field
+                        style="width:100%;"
+                        placeholder="댓글을 입력해주세요"
+                        v-model="comment"
+                        v-on:keyup.enter="INSERT_Comment(real_taglist, comment)">
+                          <template v-slot:append-outer>
+                            <v-btn text outlined @click="INSERT_Comment(real_taglist, comment)">
+                              등록
+                              </v-btn>
+                          </template>
+                        </v-text-field>
+                      </v-flex>
                   </div>
 
-                  <!-- 여기에서 태그 가능한 사람들의 목록을 보여줄 것입니다.-->
-                  <v-list style="position:absolute; z-index:1; background-color:#fff;">
+                  <!-- 태그 검색어 관련 유저 리스트 -->
+                  <v-list-item-group v-if="tmp_taglist.length>0" style="position:absolute; z-index:1; background-color:#fff; border:1px solid; padding:10px 3px;">
                     <v-list-item v-for="nickname in tmp_taglist">
-                      <v-list-item-content style="border-bottom:1px solid; width:500px;">
-                        <v-list-item-title v-html="nickname" @click="insert_taglist(nickname)"></v-list-item-title>
-                      </v-list-item-content>
+                        <v-list-item-title  @click="insert_taglist(nickname)"
+                          style="width:500px; padding:3px 0 3px 10px;">
+                          <i class="fa fa-user-circle"/> {{nickname}}
+                        </v-list-item-title>
                     </v-list-item>
-                  </v-list>
+                  </v-list-item-group>
 
-                  <v-btn @click="INSERT_Comment(real_taglist, comment)">submit</v-btn>
 
                   </form>
 
+
                 <!-- comment sort -->
-                <v-flex>
-
-                  <span>sort</span>
-
-                  <v-btn text depressed small>oldest</v-btn>
-                  <v-btn text depressed small>newest</v-btn>
-                  <v-btn text depressed small>liked</v-btn>
-                </v-flex>
-
+                <v-layout row ma-2>
+                  <v-spacer/>
+                  <div>
+                    <span>sort</span>&nbsp&nbsp&nbsp
+                    <v-btn-toggle>
+                      <v-btn text small>oldest</v-btn>
+                      <v-btn text small>newest</v-btn>
+                      <v-btn text small>liked</v-btn>
+                    </v-btn-toggle>
+                  </div>
+                </v-layout>
 
                 <!-- comment list -->
-                <v-list>
-                  <v-list-item v-for="(com, index) in comments" style="border-bottom: 1px solid #9E6E2E; margin:10px; padding:10px;">
+                <v-layout row wrap justify-center>
+                  <v-flex xs12 v-for="(com, index) in comments">
+                    <v-card outlined style="width:100%; padding:10px 25px; margin:2px 0;">
+                      <div v-bind:class="[`before_${index}`]">
+                        <span v-if="com.state==3" style="color:red;" @click="seecomment(index)">이 댓글은 신고 누적으로 블라인드 처리</span>
+                        <span class="overline grey--text"> {{com.User}} </span>
+                        <span class="overline grey--text"> | 작성시간도 있으면 좋겠다 </span> <br/>
+                        <span v-if="com.state < 3" class="subtitle-1"> {{com.Comment}} </span>
+                        <span v-bind:class="[`blind_${index}`]" class="subtitle-1" style="display:none;"> {{com.Comment}} </span>
 
-                    <!-- 수정 전에 보여주는 댓글리스트 -->
-                    <v-list-item-content v-bind:class="[`before_${index}`]" style="width:70%;">
-                      <span v-if="com.state==3" style="color:red;" @click="seecomment(index)">이 댓글은 신고 누적으로 블라인드 처리</span>
-                      <v-list-item-title v-if="com.state < 3" v-html="com.Comment"></v-list-item-title>
-                      <v-list-item-title v-html="com.Comment" v-bind:class="[`blind_${index}`]" style="display:none;"></v-list-item-title>
-                      <v-list-item-title v-html="com.User"></v-list-item-title>
-                    </v-list-item-content>
-                    <!--  -->
-                    <!-- 수정 그림을 누르면 보여주는 구역 , 바로 비동기적으로 구현됨.-->
-                    <div v-bind:class="[`after_${index}`]" style="display:none; width:100%; margin:10px; padding:10px; ">
-                      <input v-bind:class="[`aftertext_${index}`]" style="display:inline-block; width:100%; border: 1px solid #ff0000;" v-model="update_commenttext"><br>
-                      <v-btn @click="change_comment(comments, index, update_commenttext)">수정</v-btn>
-                      <v-btn @click="cancel(comments, index)">취소</v-btn>
-                    </div>
-                    <!--  -->
+                        <!-- action btn -->
+                        <v-layout>
+                          <v-spacer/>
+                          <div style="display:inline;" class="caption">
+                              <i v-bind:id="[`commentlike_${index}`]" class="far fa-heart" style="color:red; cursor:pointer;" @click="like_comment(com, index)"/>
+                              <span class="caption">{{com.like.length}}</span>
 
-                    <v-list-item-action>
-                      <div style='display:inline-block;'>
-                        &nbsp;
-                        <i v-bind:id="[`commentlike_${index}`]" class="far fa-heart" style="color:red; cursor:pointer;" @click="like_comment(com, index)"></i>
-                        {{com.like.length}}
-                        &nbsp;
-                        <i v-bind:id="[`commentunlike_${index}`]" class="far fa-heart" style="cursor:pointer;" @click="unlike_comment(com, index)"></i>
-                        {{com.unlike.length}}
-                        &nbsp;
-                        <img v-if="com.User==$store.getters.getSession" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA3QAAAN0BcFOiBwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAVySURBVFiFpZdbbBtVGoC/c2bG43FiB5HAQuMWEAWppRel6S5IrVaBAuFSpCKQECDuFITYFxAPy2pZWsTuFi2qKA/cBeIBUYQAiVS9glAlLiqhlKYXoALUJk2ApS34NvbYM/PvQ3FqOx7H0Z6385///N/nOWfOHCsRYfP2/N89Xx4JAxzDZMLSesO1gx3P8H+00XF/BcgdoC4D4ojKotiBEWyYc1bsYDVPffp56arfsv6WbC6oK2Db6ohtGddffXliz0zABw8SS6aC9aLkwYiUd+b0mjdWO1pE/taVNEgljbosz5Nz8m6we2hbYWjTJhLtCiRTwXMt4BkVylO1AQ2cBdBMIgxFucVgZZncic3b83+eDj46EVwnSu6JgmuRwdmzreGRA8Wbd+/1Rke+8a7TAsPVjGYSABVfbEGtnk6AUP4SNRIiV6XT1q79X1duc4vqDc+T2X5ZPaUNrV6rzWwmYZnak3LH/dPgNYoVEWO/uhlr/8iB0r35QvB6GKIAKpXwAn3JUvsDhLdaSVT80BYz/34r+vc/0wNMfXxALhd2Z91SNl/g5SocQARDA4gfPgzkWkm4pXDF+9vyW6MEJEcGqDSBk8mG1IJPNRVqgGXLEhMgaxqHGyWKxXBwaFthqJnA3Ll4wHfN4FHNinFEVztl13kWxT4ABZMHxZQnUQxWbtqWe6+x2OiE/zgwr104gGUaz08KDAzg+8i1KO7y3PhiYG2dROcpiUJRVm3a7r5dA/8HwpqZwONxvW/RfPNpJSKRSZ9+XloDPF7tZ7IB2fypEzPh6HcXLYh/peCJmcDtuPrWMe2l8+eTbykwnUR6lsXsXmsytxFumcqr+GJX+zGL41ZMP7/4othj1di0AlESqZRuCXcctbNvoT2waxepWHc53Tc3dgjwG2u3JdAokUpqUqnJ7RMJb6du2wIAnw2X/tXZqR/tagG3TI79cUn8jHZrmm3TgfQss1Cr22zD/TBa7hn/yR9zjM4/DQ7y43Q19XQJ1TY67j8q8GQr+NhEGQCvHKbPfmHd2Lcr1z7BNC1yCb47QWru6biAP3rU/yuKf0fBbVvx31/8ybdj3kvr6dmyEYXCIfbMabL3obYExn4MVkkoq4GT1ygoAt8Afa3gnneyRiYb0Lv+P/Rs2VgHsYnt7qZ7OfJRqanA4cPEtVV5EdTtUabN4PG4Gi2VZE6137P1Q/6w5jEK4k6Za2FmHIzlnbJ3f21cAygrWD9TuOOonUsW2eeh2FGFn792HUlx6MCZMr+C31Wg/FVGLbyiTuDwUX9AIQ/MFP77ex6WdeWWnq07jp+/dh0qPJmTJEEChwwBAaeWOECMIv7WrOq7ZlJAK7lzJnDLVF7tITPQnzzW8fWhh9C67pWwMfERxinXSYSIdikN5VTfKgB15GhlDEi3AwdQCmI63tHfT91CB2rZagUv1cZ+JccELgUCeolh1NxJDLTfSSqtYcqCCZCL+qqJgG3T3Rg35JOXgVdrY6eRZBYJOjCmPImA0CzhbtaIytbMyWvh0mLe7M3lw8gzesECxpvFNbEHgS+rfdVEorZogD9Pi2JLFY7m6nTa3On5pZua3+EgFtPHgeYffPmopAlvAI43SvSSoBOjcVPGtYm/AXhHFINzzjY/3n+wcrdbrF/L2mZZvBI1dlLis8Oa8Ergt0aJeZxJV82fLBNdfyEZOVC5wy0Gr0X9ettWR/oX2+e2FJikLl8aIh8AXY1DOVwKFIljb6z7GFX88J9R8Hhc7cEpL20LDiAff6HhCmCscShJghQde05n5NY6AcvmAcfRw5als1orsUxVtG11KJky7luyyF7Sf2HyWNsCAPLJsMZbCGwA9gEngDcFbuxEXYxI+D+6CroL3crOgwAAAABJRU5ErkJggg==" alt="Smiley" style="cursor: pointer; height:20px; display:inline-block;"
-                        @click="UPDATE_comment(comments, index)">
-                        &nbsp;
-                        <img v-if="com.User==$store.getters.getSession" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAsQAAALEBxi1JjQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAHUSURBVFiF7Za/SxthGMc/76sFOU2q0aFWLf0fusmN/hh0ClkydFHpUMGpVOiQ2uIiKoj4o0J1CaVL7Fp0cTkoFVqE/gelxslEY0jDVe/tEDw8zUXvuFNEn+2e5+75fu75ce8JPNrQxIyqFV+beCW85JNeAYK2er8Pnn/TyyrjZjdegQv9Gl/6OICSK0BHwFp/EOrF1Mvhr2edFyug5IcQxAE6lRIr553VWtAZgjgAArquAnCtdg/g+tXaG0v42ms3a5/PVNW68QrcA9xCAFHjtK0VCwRACNrezNH6ehoZeegIaXofj2Y/0/BMDxEAUP9MHnQ8JTaasiE0vZ9oYgSkBNMMEUAp8suTHO/9pr79CbHRFI29caKJYQAKmVXKv7ZDBACso0NyC+84zlYgIoPJivj6GiVjw2s6f1tgFQv8/WnY1yeHOco73/yk8geg6f1EBpKgFCcH+9Q1tzpmIlQATe9z9Hx/ZtwxE7IpGiKAlETjQ7Z4ydiozMTiextC6+7xlNLbX7FlcfBpAUzTMe2ng6l191D6vhUiAFD+YVT1W8UCxc0vXtPdxrPgLgFkgxIRsOsdQJAOCsBCueZy3YJci0jF8goUz4HHPrWzCNL5FvnW7Yb/F8CPuY2PJ7UAAAAASUVORK5CYII=" alt="Smiley" style="cursor: pointer; height:20px; display:inline-block;" @click="DELETE_comment(comments, index)">
+                              <i v-bind:id="[`commentunlike_${index}`]" class="far fa-heart" style="cursor:pointer;" @click="unlike_comment(com, index)"/>
+                              <span class="caption">{{com.unlike.length}}</span>
 
-                        &nbsp;
-                        <template>
-                        <v-layout justify-center d-inline>
-                          <v-dialog v-model="Commentdialog" max-width="290">
-                            <template v-slot:activator="{ on }">
-                              <v-btn v-if="$store.getters.getSession" text color="primary" dark v-on="on"><i class="fa fa-bell" style="color:orange"></i></v-btn>
-                            </template>
+                              <v-icon class="fa fa-wrench" color="#8390b4" style="margin-right:2px;" v-if="com.User==$store.getters.getSession" @click="UPDATE_comment(comments, index)"/>
+                              <v-icon class="fa fa-trash" color="#777688"  style="margin-right:2px;" v-if="com.User==$store.getters.getSession" @click="DELETE_comment(comments, index)"/>
 
-                            <v-card>
-                              <v-card-title class="headline">
-                                <span class="headline">신고하기</span>
-                              </v-card-title>
-                              <v-card-text>
-                                <v-layout wrap>
-                                  <v-flex xs12>
-                                    <v-combobox
-                                    v-model="reportCommentSelect"
-                                    :items="reportCommentItems"
-                                    label="댓글신고 사유를 선택해주세요."
-                                    ></v-combobox>
-                                  </v-flex>
-                                  <v-flex xs12 v-if="reportCommentSelect=='기타'">
-                                    <input type="text" v-model="reportCommentText"/>
-                                  </v-flex>
-                                  <v-flex xs12>
-                                    <v-text-field v-model="reportCommentDesc" required @keyup.enter="Commentdialog = false, submitCommentReport(reportCommentSelect,reportCommentText,reportCommentDesc)"></v-text-field>
-                                  </v-flex>
+                              <template>
+                                <v-layout justify-center d-inline>
+                                  <v-dialog v-model="Commentdialog" max-width="290">
+                                    <template v-slot:activator="{ on }">
+                                      <v-icon small class="fa fa-bell fa-1x" v-on="on" color="#ffa76a"></v-icon>
+                                      <!-- <v-btn v-if="$store.getters.getSession" text color="primary" dark v-on="on"><i class="fa fa-bell" style="color:orange"></i></v-btn> -->
+                                    </template>
+
+                                    <v-card>
+                                      <v-card-title class="headline">
+                                        <span class="headline">신고하기</span>
+                                      </v-card-title>
+                                      <v-card-text>
+                                        <v-layout wrap>
+                                          <v-flex xs12>
+                                            <v-combobox
+                                            v-model="reportCommentSelect"
+                                            :items="reportCommentItems"
+                                            label="댓글신고 사유를 선택해주세요."
+                                            ></v-combobox>
+                                          </v-flex>
+                                          <v-flex xs12 v-if="reportCommentSelect=='기타'">
+                                            <input type="text" v-model="reportCommentText"/>
+                                          </v-flex>
+                                          <v-flex xs12>
+                                            <v-text-field v-model="reportCommentDesc" required @keyup.enter="Commentdialog = false, submitCommentReport(reportCommentSelect,reportCommentText,reportCommentDesc)"></v-text-field>
+                                          </v-flex>
+                                        </v-layout>
+                                      </v-card-text>
+                                      <v-card-actions>
+                                        <v-spacer></v-spacer>
+                                        <v-btn color="blue darken-1" text @click="Commentdialog = false">취소</v-btn>
+                                        <v-btn color="blue darken-1" text @click="Commentdialog = false, submitCommentReport(reportCommentSelect,reportCommentText,reportCommentDesc, comments, index)">신고하기</v-btn>
+                                        <br />
+                                      </v-card-actions>
+                                    </v-card>
+
+                                  </v-dialog>
                                 </v-layout>
-                              </v-card-text>
-                              <v-card-actions>
-                                <v-spacer></v-spacer>
-                                <v-btn color="blue darken-1" text @click="Commentdialog = false">취소</v-btn>
-                                <v-btn color="blue darken-1" text @click="Commentdialog = false, submitCommentReport(reportCommentSelect,reportCommentText,reportCommentDesc, comments, index)">신고하기</v-btn>
-                                <br />
-                              </v-card-actions>
-                            </v-card>
-
-                          </v-dialog>
+                              </template>
+                          </div>
                         </v-layout>
-                        </template>
-
-
-
                       </div>
-                    </v-list-item-action>
-                    <br>
-                  </v-list-item>
-                </v-list>
 
-                <!-- end xs9 -->
+                      <div v-bind:class="[`after_${index}`]" style="display:none; width:100%; margin:10px; padding:10px; ">
+                        <input v-bind:class="[`aftertext_${index}`]" style="display:inline-block; width:100%; border: 1px solid #ff0000;" v-model="update_commenttext"><br>
+                        <v-btn @click="change_comment(comments, index, update_commenttext)">수정</v-btn>
+                        <v-btn @click="cancel(comments, index)">취소</v-btn>
+                      </div>
+                    </v-card>
+                  </v-flex>
+                </v-layout>
+
               </v-flex>
-            </v-layout>
           </v-flex>
 
-        <!-- right detail -->
-        <v-flex xs12 md3 justify-center>
-          <v-flex>Etc Project</v-flex>
-          <img
-            v-for="e in project.etcproject"
-            xs4
-            md1
-            :src="e.url"
-            style="width:70px; height:70px; padding:3px;"
-          />
-        </v-flex>
       </v-layout>
     </v-container>
   </v-layout>
 
-  </div>
+</v-container>
 </template>
 
 
