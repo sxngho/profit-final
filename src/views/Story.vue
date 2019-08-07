@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Studio -->
-    <v-layout row wrap>
+    <v-layout row wrap v-if="this.$route.params.id==this.$store.getters.getSession">
       <v-flex hidden-sm-and-down>
         <Slide right width="600" disableOutsideClick >
             <v-container>
@@ -56,7 +56,7 @@
             {{user.userName}}
             <v-flex
             fab text outlined small
-            v-if="!isMine && !isFollow"
+            v-if="!isMine && !isFollow && this.$store.getters.getSession"
             @click="follow()"
             >
               <img src="../assets/icon_set/add-user.png" alt="follow" style="cursor:pointer; width:25px;height:25px;"/>
@@ -64,7 +64,7 @@
 
             <v-flex
             fab text outlined small
-            v-if="!isMine && isFollow"
+            v-if="!isMine && isFollow && this.$store.getters.getSession"
             @click="unfollow()"
             >
             <img src="../assets/icon_set/followers2.png" alt="unfollow" style="cursor:pointer; width:25px;height:25px;"/>
