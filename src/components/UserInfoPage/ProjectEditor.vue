@@ -1,177 +1,190 @@
 <template>
-  <v-stepper v-model="idx" style="width:100%" alt-labels>
-    <v-stepper-header>
-      <v-stepper-step :complete="idx > 1" step="1" editable>시작하기!</v-stepper-step>
-      <v-divider/>
-      <v-stepper-step :complete="idx > 2" step="2" editable>대표 이미지</v-stepper-step>
-      <v-divider/>
-      <v-stepper-step :complete="idx > 3" step="3" editable>옵션</v-stepper-step>
-      <v-divider/>
-      <v-stepper-step step="4" editable>상세설명</v-stepper-step>
-    </v-stepper-header>
+  <v-container>
+    <v-layout row wrap v-if="project_id != '' && project_id != undefined">
+      <v-flex  @click="goBackpage()">
+        <img
+        src="../../assets/icon_set/back.png"
+        alt="backtoList"
+        style="cursor:pointer;width:25px;height:25px;"
+        />
+      </v-flex>
+    </v-layout>
+    <v-layout row wrap>
+      <v-stepper v-model="idx" style="width:100%" alt-labels>
+        <v-stepper-header>
+          <v-stepper-step :complete="idx > 1" step="1" editable>시작하기!</v-stepper-step>
+          <v-divider/>
+          <v-stepper-step :complete="idx > 2" step="2" editable>대표 이미지</v-stepper-step>
+          <v-divider/>
+          <v-stepper-step :complete="idx > 3" step="3" editable>옵션</v-stepper-step>
+          <v-divider/>
+          <v-stepper-step step="4" editable>상세설명</v-stepper-step>
+        </v-stepper-header>
 
-    <v-stepper-items>
-      <v-stepper-content step="1">
-        <div>
-          <span>프로젝트 제목</span>
-          <small>*필수항목입니다</small>
-          <v-text-field
-          label="필수항목 입니다"
-          single-line
-          outlined
-          v-model="projecttitle"
-          required
-          ></v-text-field>
-          <span>프로젝트 설명</span>
-          <v-textarea
-          outlined
-          name="input-7-4"
-          label="프로젝트 설명"
-          v-model="projectdescription"
-          ></v-textarea>
-        </div>
-        <v-layout justify-center>
-          <v-btn color="primary" text @click="idx = 2">다음단계로</v-btn>
-        </v-layout>
-      </v-stepper-content>
+        <v-stepper-items>
+          <v-stepper-content step="1">
+            <div>
+              <span>프로젝트 제목</span>
+              <small>*필수항목입니다</small>
+              <v-text-field
+              label="필수항목 입니다"
+              single-line
+              outlined
+              v-model="projecttitle"
+              required
+              ></v-text-field>
+              <span>프로젝트 설명</span>
+              <v-textarea
+              outlined
+              name="input-7-4"
+              label="프로젝트 설명"
+              v-model="projectdescription"
+              ></v-textarea>
+            </div>
+            <v-layout justify-center>
+              <v-btn color="primary" text @click="idx = 2">다음단계로</v-btn>
+            </v-layout>
+          </v-stepper-content>
 
-      <v-stepper-content step="2">
-        <div>
-          <div v-if="!projectimage">
-            <input type="file" @change="onFileChange" />
-          </div>
-          <div v-else>
-            <img :src="projectimage" width="200px" height="200px"/><br>
-            <v-btn @click="removeImage">Remove image</v-btn>
-          </div>
-        </div>
-        <v-layout justify-center>
-          <v-btn color="primary" text @click="idx = 1">이전으로</v-btn>
-          <v-btn color="primary" text @click="idx = 3">다음단계로</v-btn>
-        </v-layout>
-      </v-stepper-content>
-
-      <v-stepper-content step="3">
-        <div>
-          <v-stepper v-model="subidx" vertical>
-            <v-stepper-step :complete="subidx > 1" step="1" style="display: inline-block;" editable>
-              진행기간
-              <small>프로젝트를 진행했던 기간을 입력해 주세요</small>
-            </v-stepper-step>
-
-            <v-stepper-content step="1">
-              <div>
-                <div>
-                  프로젝트 시작일 :  {{picker}}<br/>
-                  프로젝트 기간 : {{projectterm}}
-                </div>
-
-                <v-date-picker v-model="picker" landscape color="green lighten-1"/>
-
-                <div>
-                  <v-btn v-for="item in pterm" small text outlined rounded @click="termselect(item)">{{ item }}</v-btn>
-                </div>
+          <v-stepper-content step="2">
+            <div>
+              <div v-if="!projectimage">
+                <input id="inputfile" type="file" @change="onFileChange" />
               </div>
-
-              <div>
-                <v-btn color="primary" @click="subidx = 2">다음</v-btn>
+              <div v-else>
+                <img :src="projectimage" width="200px" height="200px"/><br>
+                <v-btn @click="removeImage">Remove image</v-btn>
               </div>
-            </v-stepper-content>
+            </div>
+            <v-layout justify-center>
+              <v-btn color="primary" text @click="idx = 1">이전으로</v-btn>
+              <v-btn color="primary" text @click="idx = 3">다음단계로</v-btn>
+            </v-layout>
+          </v-stepper-content>
 
-            <v-stepper-step :complete="subidx > 2" step="2" style="display: inline-block;" editable>
-              기술 스택
-              <small>프로젝트에 사용된 기술들을 등록하세요</small>
-            </v-stepper-step>
+          <v-stepper-content step="3">
+            <div>
+              <v-stepper v-model="subidx" vertical>
+                <v-stepper-step :complete="subidx > 1" step="1" style="display: inline-block;" editable>
+                  진행기간
+                  <small>프로젝트를 진행했던 기간을 입력해 주세요</small>
+                </v-stepper-step>
 
-            <v-stepper-content step="2">
-              <div>
-                <h3>현재 추가된 스킬</h3>
-                <div style="padding:15px; border:2px solid #3f51b51a; border-radius:15px;" v-if="projecttech != ''">
-                  <v-chip
-                   v-for="(item, index) in projecttech"
-                   text-color="white"
-                   color="indigo light-3"
-                   style="margin:3px;"
-                   small close @click="deleteTech(index)"> <!-- @click:close="deleteTech(index) -->
-                   {{ item }}</v-chip>
-                 </div>
-              </div>
-              <v-divider/>
-              <div>
-                <h3>직접 입력</h3>
-                <v-flex xs6>
-                  <v-text-field
-                  v-model="tech"
-                  v-on:keyup.enter="addNewTech()"
-                  />
-                </v-flex>
-              </div>
-              <v-divider/>
-              <div>
-                <h3>Hot Skills</h3>
-                <v-chip
-                 v-for="(item, index) in techlist"
-                 small outlined color="indigo darken-3" @click="addTech(item)">{{ item }}</v-chip>
-              </div>
-              <v-btn color="primary" @click="subidx = 1">이전</v-btn>
-              <v-btn color="primary" @click="subidx = 3">다음</v-btn>
-            </v-stepper-content>
+                <v-stepper-content step="1">
+                  <div>
+                    <div>
+                      프로젝트 시작일 :  {{picker}}<br/>
+                      프로젝트 기간 : {{projectterm}}
+                    </div>
 
-            <v-stepper-step :complete="subidx > 3" step="3" style="display: inline-block;" editable>
-              등급
-              <small>프로젝트의 대략적인 등급을 설정해 주세요</small>
-            </v-stepper-step>
+                    <v-date-picker v-model="picker" landscape color="green lighten-1"/>
 
-            <v-stepper-content step="3">
-              <div>
-                <v-flex xs6>
-                  <v-text-field
-                  suffix="수준"
-                  v-model="projectrank"/>
-                </v-flex>
-                <div>
-                  <v-btn v-for="item in ranklist"
-                  small text outlined rounded
-                  @click="selectRank(item)">
-                  {{ item }}</v-btn>
-                </div>
-                <v-btn color="primary" @click="subidx = 2">이전</v-btn>
-              </div>
+                    <div>
+                      <v-btn v-for="item in pterm" small text outlined rounded @click="termselect(item)">{{ item }}</v-btn>
+                    </div>
+                  </div>
 
-              <div>
-              </div>
-            </v-stepper-content>
+                  <div>
+                    <v-btn color="primary" @click="subidx = 2">다음</v-btn>
+                  </div>
+                </v-stepper-content>
 
-          </v-stepper>
-        </div>
-        <v-layout justify-center>
-          <v-btn color="primary" text @click="idx = 2">이전으로</v-btn>
-          <v-btn color="primary" text @click="idx = 4">다음단계로</v-btn>
-        </v-layout>
-      </v-stepper-content>
+                <v-stepper-step :complete="subidx > 2" step="2" style="display: inline-block;" editable>
+                  기술 스택
+                  <small>프로젝트에 사용된 기술들을 등록하세요</small>
+                </v-stepper-step>
 
-      <v-stepper-content step="4">
-        <div>
-          <vue-editor v-model="projectcontent"/>
-        </div>
+                <v-stepper-content step="2">
+                  <div>
+                    <h3>현재 추가된 스킬</h3>
+                    <div style="padding:15px; border:2px solid #3f51b51a; border-radius:15px;" v-if="projecttech != ''">
+                      <v-chip
+                       v-for="(item, index) in projecttech"
+                       text-color="white"
+                       color="indigo light-3"
+                       style="margin:3px;"
+                       small close @click="deleteTech(index)"> <!-- @click:close="deleteTech(index) -->
+                       {{ item }}</v-chip>
+                     </div>
+                  </div>
+                  <v-divider/>
+                  <div>
+                    <h3>직접 입력</h3>
+                    <v-flex xs6>
+                      <v-text-field
+                      v-model="tech"
+                      v-on:keyup.enter="addNewTech()"
+                      />
+                    </v-flex>
+                  </div>
+                  <v-divider/>
+                  <div>
+                    <h3>Hot Skills</h3>
+                    <v-chip
+                     v-for="(item, index) in techlist"
+                     small outlined color="indigo darken-3" @click="addTech(item)">{{ item }}</v-chip>
+                  </div>
+                  <v-btn color="primary" @click="subidx = 1">이전</v-btn>
+                  <v-btn color="primary" @click="subidx = 3">다음</v-btn>
+                </v-stepper-content>
 
-        <v-layout justify-center>
-          <v-btn color="primary" text @click="idx = 3">이전으로</v-btn>
-          <v-btn color="primary" text
-          @click="submit(projecttitle,
-           projectdescription,
-           projectterm,
-           projectcontent,
-           projecttech,
-           projectimage,
-           projectrank,
-           session_id)" :editorToolbar="customToolbar">완성하기</v-btn>
-           <br/><small>*언제든지 수정할 수 있습니다!</small>
-        </v-layout>
-      </v-stepper-content>
+                <v-stepper-step :complete="subidx > 3" step="3" style="display: inline-block;" editable>
+                  등급
+                  <small>프로젝트의 대략적인 등급을 설정해 주세요</small>
+                </v-stepper-step>
 
-    </v-stepper-items>
-  </v-stepper>
+                <v-stepper-content step="3">
+                  <div>
+                    <v-flex xs6>
+                      <v-text-field
+                      suffix="수준"
+                      v-model="projectrank"/>
+                    </v-flex>
+                    <div>
+                      <v-btn v-for="item in ranklist"
+                      small text outlined rounded
+                      @click="selectRank(item)">
+                      {{ item }}</v-btn>
+                    </div>
+                    <v-btn color="primary" @click="subidx = 2">이전</v-btn>
+                  </div>
+
+                  <div>
+                  </div>
+                </v-stepper-content>
+
+              </v-stepper>
+            </div>
+            <v-layout justify-center>
+              <v-btn color="primary" text @click="idx = 2">이전으로</v-btn>
+              <v-btn color="primary" text @click="idx = 4">다음단계로</v-btn>
+            </v-layout>
+          </v-stepper-content>
+
+          <v-stepper-content step="4">
+            <div>
+              <vue-editor v-model="projectcontent"/>
+            </div>
+
+            <v-layout justify-center>
+              <v-btn color="primary" text @click="idx = 3">이전으로</v-btn>
+              <v-btn color="primary" text
+              @click="submit(projecttitle,
+               projectdescription,
+               projectterm,
+               projectcontent,
+               projecttech,
+               projectimage,
+               projectrank,
+               session_id)" :editorToolbar="customToolbar">완성하기</v-btn>
+               <br/><small>*언제든지 수정할 수 있습니다!</small>
+            </v-layout>
+          </v-stepper-content>
+
+        </v-stepper-items>
+      </v-stepper>
+    </v-layout>
+</v-container>
 </template>
 
 <script>
@@ -238,6 +251,9 @@
              type,
            })
          },
+        goBackpage() {
+           this.$emit('goBackpage')
+        },
         getSessionid() {
           this.session_id = this.$session.get('session_id')
         },
@@ -339,7 +355,7 @@
                    data, this.project, this.project_id);
                   this.reload_userskill(this.session_id)
                   this.$swal(
-                     '프로젝트 업로드 성공!',
+                     '프로젝트 수정 성공!',
                      '프로젝트가 정상적으로 수정되었습니다.',
                      'success'
                    )
@@ -358,28 +374,40 @@
         },
         onFileChange(e) {
           // file 세팅
-          let files = e.target.files || e.dataTransfer.files;
-          if (!files.length) {
-            return;
+          if (e.target.files[0].type.substr(0, 5)=='image') {
+            let files = e.target.files || e.dataTransfer.files;
+            if (!files.length) {
+              return;
+            }
+            const apiUrl = "https://api.imgur.com/3/image";
+            let data = new FormData();
+            let content = {
+              method: "POST",
+              headers: {
+                Authorization: "Client-ID f96b8964f338658",
+                Accept: "application/json"
+              },
+              body: data,
+              mimeType: "multipart/form-data"
+            };
+            data.append("image", files[0]);
+            fetch(apiUrl, content)
+            .then(response => response.json())
+            .then(success => {
+              this.projectimage = success.data.link;
+            })
+            .catch();
+          } else {
+            var image_file = document.querySelector('#inputfile')
+            image_file.value=""
+            this.$swal(
+               '이미지 오류!',
+               '이미지 파일만 올려주세요.',
+               'error'
+             )
           }
-          const apiUrl = "https://api.imgur.com/3/image";
-          let data = new FormData();
-          let content = {
-            method: "POST",
-            headers: {
-              Authorization: "Client-ID f96b8964f338658",
-              Accept: "application/json"
-            },
-            body: data,
-            mimeType: "multipart/form-data"
-          };
-          data.append("image", files[0]);
-          fetch(apiUrl, content)
-          .then(response => response.json())
-          .then(success => {
-            this.projectimage = success.data.link;
-          })
-          .catch();
+
+
         },
         async getProject() {
           this.project = await FirebaseService.SELECT_Project(this.project_id)

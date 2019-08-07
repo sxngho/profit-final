@@ -11,6 +11,12 @@
       </v-flex>
     </v-layout>
 
+    <div v-if="loading" style="position:relative; background:white; height:1000px; z-index:11">
+      <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+      <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+      <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+      <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+    </div>
     <!-- Banner -->
     <div>
       <!-- User Banner Img -->
@@ -66,7 +72,7 @@
       <v-layout row wrap align-center justify-space-around style="margin:20px 0;">
         <div style="display:inline-block;">
           <button @click="followerView()">Follower : {{user.followerlist.length}} </button>
-          <span>&nbsp&nbsp&nbsp</span>
+          <span>&nbsp;&nbsp;&nbsp;</span>
           <button @click="followingView()">Following : {{user.followinglist.length}} </button>
         </div>
       </v-layout>
@@ -127,13 +133,13 @@
 
             <div style="display:inline!important; float:right; right:50%;" v-if="!stateAdd && !stateupdate && !statedetail">
               <v-btn-toggle small>
-                <v-btn small text  @click="layout1()" id="toggletext">
+                <v-btn small text  @click="ChangeLayout(1)" id="toggletext">
                   <i class="fa fa-th-large fa-1x"/>
                 </v-btn>
-                <v-btn small text @click="layout2()" id="toggletext">
+                <v-btn small text @click="ChangeLayout(2)" id="toggletext">
                   <i class="fa fa-th-list fa-1x"/>
                 </v-btn>
-                <v-btn small text @click="layout3()" id="toggletext">
+                <v-btn small text @click="ChangeLayout(3)" id="toggletext">
                   <i class="fa fa-bars fa-1x"/>
                 </v-btn>
               </v-btn-toggle>
@@ -223,6 +229,14 @@ export default {
     this.isFollowCheck();
   },
   methods: {
+    showNotification (group, type ,title, text) {
+         this.$notify({
+           group,
+           title,
+           text,
+           type,
+         })
+    },
     isMineCheck() {
       if (this.$route.params.id == this.$session.get("session_id")) {
         this.isMine = true;
@@ -246,10 +260,12 @@ export default {
     },
     updateToggle() {
       if (this.$session.get("session_id") !== "") {
-        FirebaseService.UPDATE_userAddon(
-          this.$session.get("session_id"),
-          this.toggleView
-        );
+        FirebaseService.UPDATE_userAddon(this.$session.get("session_id"),this.toggleView);
+      }
+      if ( this.toggleView ) {
+        this.showNotification('foo-css','success','보기 모드 전환','새 창에서 보기 모드로 설정되었습니다.')
+      } else {
+        this.showNotification('foo-css','success','보기 모드 전환','현재 창에서 보기 모드로 설정되었습니다.')
       }
       this.$store.commit("convertPVT", this.toggleView);
     },
@@ -288,14 +304,8 @@ export default {
         this.$loading(false);
       }
     },
-    layout1() {
-      this.layout = "1";
-    },
-    layout2() {
-      this.layout = "2";
-    },
-    layout3() {
-      this.layout = "3";
+    ChangeLayout(number) {
+      this.layout = number.toString();
     },
     UPDATE_Project(pcode) {
       this.pcode2 = pcode;
@@ -321,42 +331,66 @@ export default {
     },
 
     removeImage(){
-      FirebaseService.DELETE_userImage(this.$route.params.id);
-      this.image = "";
+      this.$swal({
+         title: '정말 삭제하시겠습니까?',
+         text: "삭제한 이미지는 되돌릴 수 없습니다!",
+         type: 'warning',
+         showCancelButton: true,
+         confirmButtonColor: '#3085d6',
+         cancelButtonColor: '#d33',
+         confirmButtonText: '삭제',
+         cancelButtonText: '취소',
+        }).then((result) => {
+         if (result.value) {
+           this.$swal('Deleted!','프로필 이미지 삭제가 완료되었습니다.','success')
+           FirebaseService.DELETE_userImage(this.$route.params.id);
+           this.image = "";
+         }
+       })
+    },
+    onFileChange(e) {
+            // file 세팅
+            if (e.target.files[0].type.substr(0, 5)=='image') {
+              let files = e.target.files || e.dataTransfer.files;
+              if (!files.length) {
+                return;
+              }
+              const apiUrl = "https://api.imgur.com/3/image";
+              let data = new FormData();
+              let content = {
+                method: "POST",
+                headers: {
+                  Authorization: "Client-ID f96b8964f338658",
+                  Accept: "application/json"
+                },
+                body: data,
+                mimeType: "multipart/form-data"
+              };
+              data.append("image", files[0]);
+              fetch(apiUrl, content)
+              .then(response => response.json())
+              .then(success => {
+                this.projectimage = success.data.link;
+              })
+              .catch();
+            } else {
+              var image_file = document.querySelector('#inputfile')
+              image_file.value=""
+              this.$swal(
+                 '이미지 오류!',
+                 '이미지 파일만 올려주세요.',
+                 'error'
+              )
+      }
     },
     setFile() {
       var file = document.querySelector('#file')
       file.click();
     },
-    onFileChange(e) {
-      // file 세팅
-      let files = e.target.files || e.dataTransfer.files;
-      if (!files.length) {
-        return;
-      }
-      const apiUrl = "https://api.imgur.com/3/image";
-      let data = new FormData();
-      let content = {
-        method: "POST",
-        headers: {
-          Authorization: "Client-ID f96b8964f338658",
-          Accept: "application/json"
-        },
-        body: data,
-        mimeType: "multipart/form-data"
-      };
-      data.append("image", files[0]);
-      fetch(apiUrl, content)
-      .then(response => response.json())
-      .then(success => {
-        this.image = success.data.link;
-        FirebaseService.UPDATE_userImage(this.image,this.$route.params.id)
-      })
-      .catch();
-    },
     receiveIntro(intro) {
       FirebaseService.UPDATE_userIntro(intro,this.$route.params.id);
       this.user.userIntro = intro;
+      this.$swal('수정 완료!','자기소개 수정이 완료되었습니다.','success')
     },
     async follow(){
       var follower = await FirebaseService.SELECT_Userdata(this.$route.params.id);
