@@ -1,59 +1,6 @@
 <!-- UserSideInfo -->
 <template>
   <div style="padding:3vw; border-right:1px #cecece solid;">
-    <!-- USER Profile Img -->
-    <!-- <v-layout wrap align-center justify-space-around>
-
-      <div v-if="!image" class="text-center" justify-center style="position:relative"
-        @mouseover="showUpImgBtn=true" @mouseleave="showUpImgBtn=false">
-        <div  @click="setFile()" v-show="showUpImgBtn" style="position: absolute; top: 54px; z-index: 2">
-          <p class="text-center" style="background: #ffffff91;padding: 10px 5px; cursor:pointer;">
-            사진을 등록하세요!
-          </p>
-        </div>
-        <v-avatar size="150" class="grey lighten-2"  @click="setFile()" style="cursor:pointer;">
-          <img src="https://i.imgur.com/aTI4OeZ.png?1">
-        </v-avatar>
-        <input type="file" name="file" id="file" style="width:100%; display:none" @change="onFileChange" />
-      </div>
-
-      <div v-else style="position:relative;"
-       @mouseover="showRmImgBtn=true" @mouseleave="showRmImgBtn=false">
-        <div
-          @click="removeImage()"
-          v-show="showRmImgBtn"
-          style="z-index:2; right:0; position: absolute;">
-          <img src="../../assets/icon_set/delete.png" alt="delimg" style="cursor:pointer;width:25px;height:25px;"/>
-        </div>
-        <v-avatar size="150" class="grey lighten-2">
-          <img :src="image"/>
-        </v-avatar>
-      </div>
-    </v-layout> -->
-
-    <!--USER Intro-->
-    <!-- <v-layout style="margin-top:1vw;">
-      <v-flex class="text-md-center">
-        <span class="title text-md-center">{{userdata[0].userName}}  </span>
-        <v-flex
-        fab text outlined small
-        v-if="!isMine && !isFollow"
-        @click="follow()"
-        >
-          <img src="../../assets/icon_set/add-user.png" alt="follow" style="cursor:pointer; width:25px;height:25px;"/>
-        </v-flex>
-        <v-flex
-        fab text outlined small
-        v-if="!isMine && isFollow"
-        @click="unfollow()"
-        >
-        <img src="../../assets/icon_set/followers2.png" alt="unfollow" style="cursor:pointer; width:25px;height:25px;"/>
-        </v-flex>
-        <div class="subheading grey--text"> {{userdata[0].userIntro}}
-         <IntroEditor v-on:sendIntro="receiveIntro" :introinput="userdata[0].userIntro" v-if="isMine"/>
-         </div>
-      </v-flex>
-    </v-layout> -->
 
     <!--USER SKILLS-->
     <v-layout wrap>
@@ -83,7 +30,7 @@
          <v-chip-group
           multiple
           column
-          active-class="indigo"
+          active-class="primary--text primary"
           >
            <v-chip
             v-for="s in userdata[0].showSkillList"
@@ -115,7 +62,7 @@
         @mouseover="showRmCarBtn(index)" @mouseleave="hideRmCarBtn(index)"
         style="position:relative; padding:15px 6px; border-bottom:1px #cecece solid;">
           <v-flex
-            v-on:click="rmCareer(userdata[0].userCareers,c,userdata[0].nickname,reload)"
+            v-on:click="rmCareer(userdata[0].userCareers,c,userdata[0].nickname,reload,index)"
             v-show:false
             class ="carbtn"  v-if="isMine"
             style="z-index:2; right:0; top:35%; position: absolute; display: none;">
@@ -149,7 +96,7 @@
           style="position:relative; padding:15px 6px; border-bottom:1px #cecece solid;"
           >
           <v-flex
-            v-on:click="rmEducation(userdata[0].userEducations,e,userdata[0].nickname,reload)"
+            v-on:click="rmEducation(userdata[0].userEducations,e,userdata[0].nickname,reload,index)"
             v-show:false
             text outlined small absolute fab
             class ="edubtn"  v-if="isMine"
@@ -215,6 +162,14 @@ export default {
     toStoryFilter(tech) {
       this.$emit('toStoryFilter',tech)
     },
+    showNotification (group, type ,title, text) {
+      this.$notify({
+        group,
+        title,
+        text,
+        type,
+      })
+    },
     async SELECT_Userdata() {
       this.toStory(true);
       this.userdata = await FirebaseService.SELECT_Userdata(this.$route.params.id);
@@ -245,27 +200,25 @@ export default {
       }
       this.toStory(false);
     },
-    receiveIntro(intro) {
-      FirebaseService.UPDATE_userIntro(intro,this.$route.params.id);
-      this.userdata[0].userIntro = intro;
-
-    },
     receiveSkill(selectList,unselectList) {
       FirebaseService.UPDATE_userSkill(selectList,this.$route.params.id);
       this.userdata[0].showSkillList = selectList;
       this.userdata[0].userSkills = unselectList;
+      this.$swal('수정 완료!','내 스킬정보 수정이 완료되었습니다.','success')
     },
     async receiveEdu(edu) {
       this.userEducations = await FirebaseService.SELECT_Userdata(this.$route.params.id);
       FirebaseService.UPDATE_userEdu(edu,this.userEducations[0].userEducations,this.$route.params.id);
       // 새로운 데이터 값을 가지는 유저데이터를 가져옴
       this.SELECT_Userdata();
+      this.$swal('수정 완료!','내 교육정보 등록이 완료되었습니다.','success')
     },
     async receiveCar(car) {
       this.userCareers = await FirebaseService.SELECT_Userdata(this.$route.params.id);
       FirebaseService.UPDATE_userCar(car,this.userCareers[0].userCareers,this.$route.params.id);
       // 새로운 데이터 값을 가지는 유저데이터를 가져옴
       this.SELECT_Userdata();
+      this.$swal('수정 완료!','내 경력정보 등록이 완료되었습니다.','success')
     },
     isMineCheck() {
       if ( this.$route.params.id == this.$session.get('session_id') ) {
@@ -314,36 +267,6 @@ export default {
     toStory(load) {
       this.$emit('toStory',load);
     },
-    removeImage(){
-      FirebaseService.DELETE_userImage(this.$route.params.id);
-      this.image = "";
-    },
-    onFileChange(e) {
-      // file 세팅
-      let files = e.target.files || e.dataTransfer.files;
-      if (!files.length) {
-        return;
-      }
-      const apiUrl = "https://api.imgur.com/3/image";
-      let data = new FormData();
-      let content = {
-        method: "POST",
-        headers: {
-          Authorization: "Client-ID f96b8964f338658",
-          Accept: "application/json"
-        },
-        body: data,
-        mimeType: "multipart/form-data"
-      };
-      data.append("image", files[0]);
-      fetch(apiUrl, content)
-      .then(response => response.json())
-      .then(success => {
-        this.image = success.data.link;
-        FirebaseService.UPDATE_userImage(this.image,this.$route.params.id)
-      })
-      .catch();
-    },
     showRmEduBtn(index) {
       $('.edubtn').eq(index).show();
     },
@@ -357,24 +280,52 @@ export default {
       $('.carbtn').eq(index).hide();
     },
 
-    async rmCareer(userCareers, c, userId, reload){
-      var reload = await FirebaseService.DELETE_userCareer(userCareers,c,userId,reload);
-      this.userdata = await FirebaseService.SELECT_Userdata(this.$route.params.id);
-      if ( this.userdata[0].userCareers.length == 0 ) {
-        this.careerToggle = true;
-      } else {
-        this.careerToggle = false;
-      }
-
+    async rmCareer(userCareers, c, userId, reload,index){
+      this.$swal({
+         title: '정말 삭제하시겠습니까?',
+         text: "삭제한 경력정보는 되돌릴 수 없습니다!",
+         type: 'warning',
+         showCancelButton: true,
+         confirmButtonColor: '#3085d6',
+         cancelButtonColor: '#d33',
+         confirmButtonText: '삭제',
+         cancelButtonText: '취소',
+        }).then((result) => {
+         if (result.value) {
+           this.$swal('Deleted!','경력정보 삭제가 완료되었습니다.','success')
+           var reload = FirebaseService.DELETE_userCareer(userCareers,c,userId,reload)
+           // this.userdata[0].userCareers.splice(index,1);
+           if ( this.userdata[0].userCareers.length == 0 ) {
+             this.careerToggle = true;
+           } else {
+             this.careerToggle = false;
+           }
+         }
+       })
+       // this.userdata = await FirebaseService.SELECT_Userdata(this.$route.params.id);
     },
-    async rmEducation(userEducations, e, userId, reload){
-      var reload = await FirebaseService.DELETE_userEducations(userEducations, e, userId, reload);
-      this.userdata = await FirebaseService.SELECT_Userdata(this.$route.params.id);
-      if ( this.userdata[0].userEducations.length == 0 ) {
-        this.educationToggle = true;
-      } else {
-        this.educationToggle = false;
-      }
+    async rmEducation(userEducations, e, userId, reload,index){
+      this.$swal({
+         title: '정말 삭제하시겠습니까?',
+         text: "삭제한 교육정보는 되돌릴 수 없습니다!",
+         type: 'warning',
+         showCancelButton: true,
+         confirmButtonColor: '#3085d6',
+         cancelButtonColor: '#d33',
+         confirmButtonText: '삭제',
+         cancelButtonText: '취소',
+        }).then((result) => {
+         if (result.value) {
+           this.$swal('Deleted!','교육정보 삭제가 완료되었습니다.','success')
+           var reload = FirebaseService.DELETE_userEducations(userEducations, e, userId, reload);
+           if ( this.userdata[0].userEducations.length == 0 ) {
+             this.educationToggle = true;
+           } else {
+             this.educationToggle = false;
+           }
+         }
+       })
+      // this.userdata = await FirebaseService.SELECT_Userdata(this.$route.params.id);
     },
     setFile() {
       var file = document.querySelector('#file')
