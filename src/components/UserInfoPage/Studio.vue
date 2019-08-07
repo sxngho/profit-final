@@ -92,10 +92,6 @@ export default {
       this.userid = this.$session.get('session_id');
       this.$store.commit('setSession', this.userid)
       console.log(this.$store.getters.getSession, 123)
-      if (this.nowLevel !==2) {
-        alert('권한이 없습니다. 필요 level : 2 (유저)')
-        location.href=`${document.location.origin}`
-      }
       this.userdata = await FirebaseService.SELECT_Userdata(this.$session.get('session_id'));
       this.recruits = await FirebaseService.SELECT_RecruitInfo();
       var userProceedList = await FirebaseService.SELECT_UserProceedList(this.$session.get('session_id'));

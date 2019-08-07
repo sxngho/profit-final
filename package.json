@@ -37,6 +37,7 @@
     "vue-session": "^1.0.0",
     "vue-simplemde": "^0.5.2",
     "vue-star": "0.0.4",
+    "vue-sweetalert2": "^2.1.1",
     "vue2-editor": "^2.9.1",
     "vuejs-loading-plugin": "^1.0.5",
     "vuetify": "^2.0.1",
