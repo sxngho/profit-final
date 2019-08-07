@@ -27,6 +27,9 @@ export default {
     if (this.$session.get("level")===undefined) {
       this.$session.set('level', "")
     }
+    if (this.$session.get("alertList")===undefined) {
+      this.$session.set('alertList', {alert : [], unread : []})
+    }
   }
 };
 </script>

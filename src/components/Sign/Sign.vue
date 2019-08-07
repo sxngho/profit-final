@@ -85,14 +85,14 @@
         <template v-slot:activator="scope">
           <v-btn icon v-on="scope.on">
             <v-badge color="red" overlap>
-              <template slot="badge"> {{$session.get('alertList').unread.length}} </template>
+              <template slot="badge"> {{$store.getters.getalertList.unread.length}} </template>
               <v-icon color="black"> notifications </v-icon>
             </v-badge>
           </v-btn>
         </template>
         <v-card>
           <v-list dense>
-            <v-list-item v-for="(alert, index) in this.$session.get('alertList').alert.slice().reverse()">
+            <v-list-item v-for="(alert, index) in this.$store.getters.getalertList.alert.slice().reverse()">
               <v-list-item-content>
                 <v-btn text style="padding:1px 0">
                   <v-list-item-title :style="{color:colorcheck(alert.check)}" v-html="alert.message" @click="move(alert.check, alert.url, index,alert.user)"></v-list-item-title>
@@ -180,12 +180,13 @@ export default {
      } else {
        this.check = false
      }
+     // 여기에서 vuex 관련된것만들자~
+     this.$store.commit('changealertList', { alert : this.alertlist, unread : this.unread_alertlist})
      this.$session.set('alertList',{ alert : this.alertlist, unread : this.unread_alertlist});
+     // console.log(this.$session.get('alertList'), 111)
     },
 
     async move(check, url, alertindex,user) {
-      // if (!check)
-      //   this.fetchData(this.$session.get("session_id"))
       if(!this.alertlist[this.alertlist.length-alertindex-1].check) {
         this.alertlist[this.alertlist.length-alertindex-1].check = true;
         this.unread_alertlist.pop();
