@@ -171,13 +171,13 @@
                       />
                     </div> -->
                     <v-btn-toggle small>
-                      <v-btn small text  @click="layout1()">
+                      <v-btn small text  @click="layout1()" id="toggletext">
                         <i class="fa fa-th-large fa-1x"/>
                       </v-btn>
-                      <v-btn small text @click="layout2()">
+                      <v-btn small text @click="layout2()" id="toggletext">
                         <i class="fa fa-th-list fa-1x"/>
                       </v-btn>
-                      <v-btn small text @click="layout3()">
+                      <v-btn small text @click="layout3()" id="toggletext">
                         <i class="fa fa-bars fa-1x"/>
                       </v-btn>
                     </v-btn-toggle>
