@@ -58,7 +58,7 @@
       </v-card>
     </v-dialog>
 
-    <div style="display:inline-block; height:100%">
+    <div style="display:inline-block; height:100%" v-if="user !=='' && user !==undefined">
       <v-btn
         text
         v-if="(nowLevel == '0' || nowLevel =='1') && user !=='' && user !== undefined "
@@ -103,7 +103,7 @@
         </v-card>
       </v-menu>
     </div>
-  </div>
+    </div>
 </template>
 
 <script src="https://www.gstatic.com/firebasejs/3.6.2/firebase.js"></script>

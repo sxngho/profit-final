@@ -69,4 +69,9 @@ export default {
   align-items: center;
   color: #999999;
 }
+@media screen and (max-width: 500px) {
+  .content__intro {
+    font-size: 7px;
+  }
+}
 </style>
