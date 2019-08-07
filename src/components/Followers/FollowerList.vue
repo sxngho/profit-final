@@ -38,7 +38,6 @@ export default {
   },
   methods: {
     async SELECT_Userdata() {
-      console.log(1123123);
       if (this.level !== "") {
         // 로그인한 경우
         if (this.level == 3) {

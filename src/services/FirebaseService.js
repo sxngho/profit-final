@@ -238,7 +238,14 @@ export default {
         userImage: image
       });
   },
-
+  UPDATE_userImageBanner(image, userId) {
+    return firestore
+      .collection("users")
+      .doc(userId)
+      .update({
+        storyBanner: image
+      });
+  },
   // Function :: 유저의 자기소개 정보를 업데이트합니다.
   UPDATE_userIntro(intro, userId) {
     return firestore
@@ -367,6 +374,15 @@ export default {
       .doc(userId)
       .update({
         userImage: ""
+      });
+  },
+
+  DELETE_userImageBanner(userId) {
+    firestore
+      .collection("users")
+      .doc(userId)
+      .update({
+        storyBanner: ""
       });
   },
 

@@ -19,22 +19,38 @@
     </div>
     <!-- Banner -->
     <div>
+
       <!-- User Banner Img -->
+      <v-layout row wrap style="margin:0px 10px;">
+        <v-layout row wrap v-bind:style="{ 'backgroundImage': 'url(' + storyBanner   + ')' }" style="background-size:100%; margin-bottom: 95px;"  @mouseover="showUpImgBanner=true" @mouseleave="showUpImgBanner=false">
 
-
-        <v-layout row wrap v-bind:style="{ 'backgroundImage': 'url(' + storyBanner + ')' }" style="background-size:100%;margin-bottom: 95px;" >
-          <div class="text-center" justify-center style="position:relative" @mouseover="showUpImgBanner=true" @mouseleave="showUpImgBanner=false">
-            123123
-            <div v-show="showUpImgBanner">
-              234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957
-              234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957
-              234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957
+            <div v-show="showUpImgBanner && this.$route.params.id==this.$store.getters.getSession" style="position: absolute; border:1px solid;"
+            @click="setBanner()">
+              <p style="background: #ffffff91; cursor:pointer; margin:0px;">배경화면 수정하기</p>
+              <input
+                type="file"
+                id="Banner"
+                style="width:100%; display:none"
+                @change="onFileChangeBanner"
+              />
             </div>
-          </div>
+
+            <div
+              @click="removeImageBanner()"
+              v-show="showUpImgBanner && this.$route.params.id==this.$store.getters.getSession && storyBanner"
+              style="z-index:2; right:0; position: absolute;"
+            >
+              <img
+                src="../assets/icon_set/delete.png"
+                alt="delimg"
+                style="cursor:pointer;width:25px;height:25px;"
+              />
+            </div>
 
           <v-flex xs12 style="height:220px;">
           </v-flex>
         </v-layout>
+      </v-layout>
 
       <!-- ProfileImg -->
       <v-layout row wrap>
@@ -273,7 +289,7 @@ export default {
       showAddProject: false,
       Filter : "",
       userid:"",
-      storyBanner : "https://i.imgur.com/KnVfJVQ.png",
+      storyBanner : "",
       image:"",
       user:{
         userName:"",
@@ -432,6 +448,28 @@ export default {
         }
       });
     },
+    removeImageBanner() {
+      this.$swal({
+        title: "정말 삭제하시겠습니까?",
+        text: "삭제한 이미지는 되돌릴 수 없습니다!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "삭제",
+        cancelButtonText: "취소"
+      }).then(result => {
+        if (result.value) {
+          this.$swal(
+            "Deleted!",
+            "프로필 이미지 삭제가 완료되었습니다.",
+            "success"
+          );
+          FirebaseService.DELETE_userImageBanner(this.$route.params.id);
+          this.storyBanner = "";
+        }
+      });
+    },
     onFileChange(e) {
       // file 세팅
       if (e.target.files[0].type.substr(0, 5) == "image") {
@@ -454,7 +492,40 @@ export default {
         fetch(apiUrl, content)
           .then(response => response.json())
           .then(success => {
-            this.projectimage = success.data.link;
+            FirebaseService.UPDATE_userImage(success.data.link, this.$route.params.id)
+            this.image = success.data.link;
+          })
+          .catch();
+      } else {
+        var image_file = document.querySelector("#inputfile");
+        image_file.value = "";
+        this.$swal("이미지 오류!", "이미지 파일만 올려주세요.", "error");
+      }
+    },
+    onFileChangeBanner(e) {
+      // file 세팅
+      if (e.target.files[0].type.substr(0, 5) == "image") {
+        let files = e.target.files || e.dataTransfer.files;
+        if (!files.length) {
+          return;
+        }
+        const apiUrl = "https://api.imgur.com/3/image";
+        let data = new FormData();
+        let content = {
+          method: "POST",
+          headers: {
+            Authorization: "Client-ID f96b8964f338658",
+            Accept: "application/json"
+          },
+          body: data,
+          mimeType: "multipart/form-data"
+        };
+        data.append("image", files[0]);
+        fetch(apiUrl, content)
+          .then(response => response.json())
+          .then(success => {
+            FirebaseService.UPDATE_userImageBanner(success.data.link, this.$route.params.id)
+            this.storyBanner = success.data.link;
           })
           .catch();
       } else {
@@ -466,6 +537,10 @@ export default {
     setFile() {
       var file = document.querySelector("#file");
       file.click();
+    },
+    setBanner() {
+      var Banner = document.querySelector("#Banner");
+      Banner.click();
     },
     receiveIntro(intro) {
       FirebaseService.UPDATE_userIntro(intro, this.$route.params.id);
