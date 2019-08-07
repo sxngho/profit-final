@@ -53,12 +53,10 @@ export default {
       }
     },
     followerView() {
-      // this.$store.commit("setFollowerView", !this.$store.state.followerView);
-      // this.$store.commit("setFollowingView", !this.$store.state.followingView);
-
-      this.$store.state.followerView = true;
+      this.$store.commit("setFollowerView", true);
+      // this.$store.state.followerView = true;
       if (this.$store.state.followingView === this.$store.state.followerView) {
-        this.$store.state.followingView = !this.$store.state.followingView;
+        this.$store.commit("setFollowingView", !this.$store.state.followingView);
       }
     },
     followingView() {

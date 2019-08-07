@@ -496,6 +496,17 @@ export default {
       });
   },
 
+  async SELECT_UserImage(nickname){
+    return firestore
+      .collection("users")
+      .doc(nickname)
+      .get()
+      .then(docSnapshots => {
+        return { profileImg : docSnapshots.data().userImage,
+                    banner:docSnapshots.data().storyBanner};
+      });
+  },
+
   DELETE_user(id) {
     firestore
       .collection("users")
