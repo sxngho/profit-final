@@ -2,12 +2,11 @@
 <template>
   <div style="padding:3vw; border-right:1px #cecece solid;">
     <!-- USER Profile Img -->
-    <v-layout wrap align-center justify-space-around>
+    <!-- <v-layout wrap align-center justify-space-around>
 
       <div v-if="!image" class="text-center" justify-center style="position:relative"
         @mouseover="showUpImgBtn=true" @mouseleave="showUpImgBtn=false">
         <div  @click="setFile()" v-show="showUpImgBtn" style="position: absolute; top: 54px; z-index: 2">
-          <!-- <i class="fa fa-camera" aria-hidden="true"></i> -->
           <p class="text-center" style="background: #ffffff91;padding: 10px 5px; cursor:pointer;">
             사진을 등록하세요!
           </p>
@@ -30,10 +29,10 @@
           <img :src="image"/>
         </v-avatar>
       </div>
-    </v-layout>
+    </v-layout> -->
 
     <!--USER Intro-->
-    <v-layout style="margin-top:1vw;">
+    <!-- <v-layout style="margin-top:1vw;">
       <v-flex class="text-md-center">
         <span class="title text-md-center">{{userdata[0].userName}}  </span>
         <v-flex
@@ -54,12 +53,12 @@
          <IntroEditor v-on:sendIntro="receiveIntro" :introinput="userdata[0].userIntro" v-if="isMine"/>
          </div>
       </v-flex>
-    </v-layout>
+    </v-layout> -->
 
     <!--USER SKILLS-->
-    <v-layout wrap style="margin-top:2vw;">
+    <v-layout wrap>
 
-      <v-flex xs12 class="text-md-center title">
+      <v-flex xs12 class="text-center title">
         Skills
         <SkillEditor
         v-on:sendSkill="receiveSkill"
@@ -99,7 +98,7 @@
 
     <!--USER Careers-->
     <v-layout wrap style="margin-top:2vw;">
-      <v-flex xs12 class="text-md-center title">
+      <v-flex xs12 class="text-center title">
         Career
         <CareerEditor v-on:sendCar="receiveCar" v-if="isMine"/>
       </v-flex>
@@ -135,7 +134,7 @@
 
     <!--USER Education-->
     <v-layout wrap style="margin-top:2vw;">
-      <v-flex xs12 class="text-md-center title"> Education <EducationEditor v-on:sendEdu="receiveEdu" v-if="isMine"/></v-flex>
+      <v-flex xs12 class="text-center title"> Education <EducationEditor v-on:sendEdu="receiveEdu" v-if="isMine"/></v-flex>
       <v-flex xs12>
         <!-- v-for Education -->
         <div v-if="educationToggle" class="caption">
