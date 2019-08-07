@@ -14,10 +14,21 @@
     <!-- Banner -->
     <div>
       <!-- User Banner Img -->
-      <v-layout row wrap v-bind:style="{ 'backgroundImage': 'url(' + storyBanner + ')' }" style="background-size:100%;margin-bottom: 95px;" >
-        <v-flex xs12 style="height:220px;">
-        </v-flex>
-      </v-layout>
+
+
+        <v-layout row wrap v-bind:style="{ 'backgroundImage': 'url(' + storyBanner + ')' }" style="background-size:100%;margin-bottom: 95px;" >
+          <div class="text-center" justify-center style="position:relative" @mouseover="showUpImgBanner=true" @mouseleave="showUpImgBanner=false">
+            123123
+            <div v-show="showUpImgBanner">
+              234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957
+              234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957
+              234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957
+            </div>
+          </div>
+
+          <v-flex xs12 style="height:220px;">
+          </v-flex>
+        </v-layout>
 
       <!-- ProfileImg -->
       <v-layout row wrap>
@@ -230,6 +241,7 @@ export default {
     return {
       showUpImgBtn:false,
       showRmImgBtn:false,
+      showUpImgBanner:false, // 슬기가 잠시 만듦
       isMine: false,
       stateAdd: false,
       userurl: "",
@@ -245,7 +257,7 @@ export default {
       showAddProject: false,
       Filter : "",
       userid:"",
-      storyBanner : "../assets/coding.jpg",
+      storyBanner : "https://i.imgur.com/KnVfJVQ.png",
       image:"",
       user:{
         userName:"",
@@ -357,7 +369,9 @@ export default {
       var userImg = await FirebaseService.SELECT_UserImage(this.$route.params.id);
       console.log("유저의 이미지!", userImg);
       //디비에서 받아온 유저의 배너이미지와, 프로필 사진 이미지를 붙인다
-      this.storyBanner = userImg.banner;
+      if (userImg.banner) {
+        this.storyBanner = userImg.banner;
+      }
       this.image = userImg.profileImg;
     },
 
