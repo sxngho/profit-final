@@ -39,7 +39,8 @@ export default new Vuex.Store({
     companyList: [],
     showCompanyList: [],
     showCompanyListBottomBar: [],
-    level:""
+    level:"",
+    alertList:{alert:[], unread:[]}
   },
   // Getter : get 함수 정의
   // 정의 -> return state.변수명
@@ -56,6 +57,9 @@ export default new Vuex.Store({
     },
     getLevel: function(state) {
       return state.level;
+    },
+    getalertList: function(state) {
+      return state.alertList
     }
   },
 
@@ -167,6 +171,9 @@ export default new Vuex.Store({
     changeLevel: function(state, payload) {
       state.level = payload;
     },
+    changealertList: function(state, payload) {
+      state.alertList = payload;
+    }
   },
 
   // Action : 값변경 / 비동기
