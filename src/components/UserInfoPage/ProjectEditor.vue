@@ -38,7 +38,7 @@
       <v-stepper-content step="2">
         <div>
           <div v-if="!projectimage">
-            <input type="file" @change="onFileChange" />
+            <input id="inputfile" type="file" @change="onFileChange" />
           </div>
           <div v-else>
             <img :src="projectimage" width="200px" height="200px"/><br>
@@ -358,28 +358,40 @@
         },
         onFileChange(e) {
           // file 세팅
-          let files = e.target.files || e.dataTransfer.files;
-          if (!files.length) {
-            return;
+          if (e.target.files[0].type.substr(0, 5)=='image') {
+            let files = e.target.files || e.dataTransfer.files;
+            if (!files.length) {
+              return;
+            }
+            const apiUrl = "https://api.imgur.com/3/image";
+            let data = new FormData();
+            let content = {
+              method: "POST",
+              headers: {
+                Authorization: "Client-ID f96b8964f338658",
+                Accept: "application/json"
+              },
+              body: data,
+              mimeType: "multipart/form-data"
+            };
+            data.append("image", files[0]);
+            fetch(apiUrl, content)
+            .then(response => response.json())
+            .then(success => {
+              this.projectimage = success.data.link;
+            })
+            .catch();
+          } else {
+            var image_file = document.querySelector('#inputfile')
+            image_file.value=""
+            this.$swal(
+               '이미지 오류!',
+               '이미지 파일만 올려주세요.',
+               'error'
+             )
           }
-          const apiUrl = "https://api.imgur.com/3/image";
-          let data = new FormData();
-          let content = {
-            method: "POST",
-            headers: {
-              Authorization: "Client-ID f96b8964f338658",
-              Accept: "application/json"
-            },
-            body: data,
-            mimeType: "multipart/form-data"
-          };
-          data.append("image", files[0]);
-          fetch(apiUrl, content)
-          .then(response => response.json())
-          .then(success => {
-            this.projectimage = success.data.link;
-          })
-          .catch();
+
+
         },
         async getProject() {
           this.project = await FirebaseService.SELECT_Project(this.project_id)
