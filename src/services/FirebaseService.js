@@ -886,7 +886,8 @@ export default {
                     showSkillList: [],
                     dibs: [],
                     alertlist: [],
-                    proceedList: []
+                    proceedList: [],
+                    storyBanner:"",
                   });
                 firestore
                   .collection("user_addon")
