@@ -1,4 +1,5 @@
 <template>
+  <div>
   <v-btn @click="goBackpage()"> 뒤로가기 </v-btn>
   <v-stepper v-model="idx" style="width:100%" alt-labels>
     <v-stepper-header>
@@ -173,6 +174,7 @@
 
     </v-stepper-items>
   </v-stepper>
+</div>
 </template>
 
 <script>
