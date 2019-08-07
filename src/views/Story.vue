@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Studio -->
-    <v-layout row wrap>
+    <v-layout row wrap v-if="this.$route.params.id==this.$store.getters.getSession">
       <v-flex hidden-sm-and-down>
         <Slide right width="600" disableOutsideClick>
           <v-container>
@@ -20,14 +20,21 @@
     <!-- Banner -->
     <div>
       <!-- User Banner Img -->
-      <v-layout
-        row
-        wrap
-        v-bind:style="{ 'backgroundImage': 'url(' + storyBanner + ')' }"
-        style="background-size:100%;margin-bottom: 95px;"
-      >
-        <v-flex xs12 style="height:220px;"></v-flex>
-      </v-layout>
+
+
+        <v-layout row wrap v-bind:style="{ 'backgroundImage': 'url(' + storyBanner + ')' }" style="background-size:100%;margin-bottom: 95px;" >
+          <div class="text-center" justify-center style="position:relative" @mouseover="showUpImgBanner=true" @mouseleave="showUpImgBanner=false">
+            123123
+            <div v-show="showUpImgBanner">
+              234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957
+              234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957
+              234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957
+            </div>
+          </div>
+
+          <v-flex xs12 style="height:220px;">
+          </v-flex>
+        </v-layout>
 
       <!-- ProfileImg -->
       <v-layout row wrap>
@@ -120,7 +127,7 @@
       <v-layout row wrap align-center justify-space-around style="margin:20px 0;">
         <div style="display:inline-block;">
           <button @click="followerTest">Follower : {{user.followerlist.length}}</button>
-          <span>&nbsp&nbsp&nbsp</span>
+          <span>&nbsp;&nbsp;&nbsp;</span>
           <button @click="followingTest">Following : {{user.followinglist.length}}</button>
         </div>
       </v-layout>
@@ -248,8 +255,9 @@ export default {
   name: "Story",
   data() {
     return {
-      showUpImgBtn: false,
-      showRmImgBtn: false,
+      showUpImgBtn:false,
+      showRmImgBtn:false,
+      showUpImgBanner:false, // 슬기가 잠시 만듦
       isMine: false,
       stateAdd: false,
       userurl: "",
@@ -263,15 +271,15 @@ export default {
       viewFollower: false,
       viewFollowing: false,
       showAddProject: false,
-      Filter: "",
-      userid: "",
-      storyBanner: "../assets/coding.jpg",
-      image: "",
-      user: {
-        userName: "",
-        userIntro: "",
-        followerlist: [],
-        followinglist: []
+      Filter : "",
+      userid:"",
+      storyBanner : "https://i.imgur.com/KnVfJVQ.png",
+      image:"",
+      user:{
+        userName:"",
+        userIntro:"",
+        followerlist:[],
+        followinglist:[],
       },
       isFollow: false,
       followerNumber: "",
@@ -302,10 +310,8 @@ export default {
       }
     },
     async fetchData() {
-      console.log(this.$session.get("session_id"), "떳냐");
-
-      this.userid = this.$session.get("session_id");
-      this.$store.commit("setSession", this.$session.get("session_id"));
+      this.userid = this.$session.get('session_id')
+      this.$store.commit('setSession', this.$session.get("session_id"))
       if (this.$session.get("session_id") !== "") {
         this.toggleView = await FirebaseService.SELECT_userAddon(
           this.$session.get("session_id")
@@ -398,7 +404,9 @@ export default {
       );
       console.log("유저의 이미지!", userImg);
       //디비에서 받아온 유저의 배너이미지와, 프로필 사진 이미지를 붙인다
-      this.storyBanner = userImg.banner;
+      if (userImg.banner) {
+        this.storyBanner = userImg.banner;
+      }
       this.image = userImg.profileImg;
     },
 
