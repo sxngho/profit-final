@@ -12,13 +12,11 @@ import Manager from "./views/Manager.vue";
 import Chat from "./views/chat.vue";
 import Recruit from "./views/Recruit.vue";
 import RecruitDetail from "./components/Recruit/RecruitDetail.vue";
-import Studio from "./views/Studio.vue";
 import ReChat from "./components/Recruit/Chat.vue";
 import Consult from "./components/Recruit/Consult.vue";
 import Contract from "./components/Recruit/Contract.vue";
 import RecruitEditorPage from "./views/RecruitEditorPage.vue";
 import CompanyListPage from "./views/CompanyListPage.vue";
-import Alert from "./views/Alert.vue";
 import Company from "./views/Company.vue";
 
 Vue.use(Vuex);
@@ -78,11 +76,6 @@ export default new Router({
       component: RecruitDetail
     },
     {
-      path: "/studio",
-      name: "studio",
-      component: Studio
-    },
-    {
       path: "/chat/:ccode",
       name: "chat",
       component: ReChat
@@ -101,11 +94,6 @@ export default new Router({
       path: "/recruiteditorpage",
       name: "recruiteditorpage",
       component: RecruitEditorPage
-    },
-    {
-      path: "/alert",
-      name: "alert",
-      component: Alert
     },
     {
       path: "/company/:id",

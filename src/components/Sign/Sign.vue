@@ -126,7 +126,6 @@ require('firebase/database');
 export default {
   data: () => ({
     user: "",
-
     dialog: false,
     signupmodal: false,
     alertModal : false,
@@ -263,7 +262,7 @@ export default {
         );
         this.LoginId = "";
         this.LoginPassword = "";
-        this.$store.commit('changeLevel', this.nowLevel)
+        this.$store.commit('changeLevel', this.$session.get('level'))
         this.$store.commit('setSession', this.$session.get('session_id'))
         this.$emit('login_success')
       }

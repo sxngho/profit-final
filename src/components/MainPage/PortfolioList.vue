@@ -6,11 +6,12 @@
         class="content__portfolioList"
         v-if="item.data.state < 3"
       >
-        <!-- {{item.data.state}} -->
         <Portfolio v-bind:portfolio="item" />
       </div>
     </div>
-    <button class="mainMoreBtn" @click="morePortfolio">MORE</button>
+    <div class="morebtnContent">
+      <button class="mainMoreBtn" @click="morePortfolio">MORE</button>
+    </div>
   </div>
 </template>
 
@@ -37,14 +38,12 @@ export default {
   methods: {
     async SELECT_ALLProjects() {
       this.allPortfolio = await FirebaseService.SELECT_ALLProjects();
-      console.log("SELECT_ALLProjects",this.allPortfolio.length);
       for (let i = this.start; i < this.end; i++) {
         this.bottolePortfolio.push(this.allPortfolio[i]);
       }
       this.$store.commit("selectAllPortfolioList", this.allPortfolio);
     },
     morePortfolio() {
-      console.log("aaaaaaaaaa")
       if (this.end < this.PageLength) {
         this.end += 6;
         this.start += 6;
@@ -61,21 +60,37 @@ export default {
 <style scoped>
 .PortfolioList__container__content {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1fr;
   grid-gap: 1rem;
 }
 .PortfolioList__container {
-  padding-left: 100px;
-  padding-right: 40px;
   padding-top: 50px;
 }
+.morebtnContent {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
 .mainMoreBtn {
-  margin-left: 550px;
   font-size: 20px;
   background: #929292;
   color: white;
-  border-radius: 5%;
-  width: 80px;
+  width: 100%;
   height: 35px;
+}
+.content__portfolioList {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+@media screen and (min-width: 500px) {
+  .PortfolioList__container__content {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media screen and (min-width: 850px) {
+  .PortfolioList__container__content {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 </style>

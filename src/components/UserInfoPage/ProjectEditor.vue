@@ -256,15 +256,17 @@
           this.projecttech.splice(index,1);
         },
         addNewTech(){
-          if (this.tech) {
-            this.projecttech.push(this.tech);
-            this.tech = '';
+          if (this.projecttech.includes((this.tech).toUpperCase())) {
+            this.showNotification('foo-css','warn','Tech Stack 추가 오류','이미 추가되어있는 TECH입니다')
+          } else if (this.tech) {
+              this.projecttech.push(this.tech.toUpperCase());
+              this.tech = '';
           } else {
             this.showNotification('foo-css','warn','Tech Stack 추가 오류','추가할 TECH를 입력해주세요')
-
           }
         },
         addTech(t){
+          t = t.toUpperCase();
           if (!this.projecttech.includes(t)) {
               this.projecttech.push(t);
           } else {
