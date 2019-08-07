@@ -16,7 +16,7 @@
         <!-- container -->
         <v-card-text>
           <v-layout row wrap>
-
+            <p> - 자신있는 기술스택을 선택하여 다른 사용자에게 보여주세요!</p>
             <v-flex xs12>
               <span class="subheading font-weight-bold">Show</span><br/>
               <v-btn
@@ -25,6 +25,7 @@
               @click="deleteTech(item)">
                 {{ item }}
               </v-btn>
+
             </v-flex>
 
             <br/><br/>

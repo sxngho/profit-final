@@ -82,14 +82,22 @@ export default {
       this.alreadyDibs = this.userdata[0].dibs.includes(this.recruit_id);
     },
     dib(recruit_id) {
-      console.log("this is dib");
       if ( !this.userdata[0].dibs.includes(recruit_id) ) {
         this.userdata[0].dibs.push(recruit_id);
         FirebaseService.UPDATE_userDibs(this.userdata[0].dibs, this.$session.get('session_id'));
-        console.log("complete!");
+        this.$swal(
+           '찜!',
+           '해당 공고가 찜목록에 추가되었습니다.',
+           'success'
+         )
       } else {
         this.userdata[0].dibs.splice(this.userdata[0].dibs.indexOf(recruit_id),1);
         FirebaseService.UPDATE_userDibs(this.userdata[0].dibs, this.$session.get('session_id'));
+        this.$swal(
+           '찜 목록에서 삭제',
+           '해당 공고가 찜목록에서 삭제되었습니다.',
+           'success'
+         )
       }
       this.alreadyDibs = !this.alreadyDibs;
     },

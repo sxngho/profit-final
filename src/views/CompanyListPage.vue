@@ -96,6 +96,7 @@ export default {
       this.allCompanyList = await FirebaseService.SELECT_AllCompany();
     },
     searchOnClick(company) {
+      this.inputKeyword = company.company_name;
       this.showCompanyList = [];
       for (let i = 0; i < this.allCompanyList.length; i++) {
         if (
@@ -105,6 +106,7 @@ export default {
           this.showCompanyList.push(this.allCompanyList[i]);
         }
       }
+
     },
     seacrh() {
       this.noneEnter = false;

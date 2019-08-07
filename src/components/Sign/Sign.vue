@@ -2,12 +2,12 @@
   <div class="display:inline">
     <v-dialog v-model="dialog" max-width="600px" v-if=" user== '' || user == undefined ">
       <template v-slot:activator="{ on }">
-        <v-btn text v-on="on" style="height:100%;">Sign In</v-btn>
+        <v-btn text v-on="on" style="height:100%;">로그인</v-btn>
       </template>
 
       <v-card>
         <v-card-title>
-          <span class="headline">Sign In</span>
+          <span class="headline">로그인</span>
         </v-card-title>
 
         <v-card-text>
@@ -19,7 +19,7 @@
 
               <v-flex xs12>
                 <v-text-field
-                  label="Password*"
+                  label="Password"
                   type="password"
                   required
                   v-model="LoginPassword"
@@ -34,34 +34,31 @@
         </v-card-text>
 
         <v-card-actions>
-          <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
-          <v-btn
-            color="blue darken-1"
-            text
-            @click="dialog = false, Signin(LoginId, LoginPassword)"
-          >Login</v-btn>
-          <br />
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="dialog = false, Signin(LoginId, LoginPassword)">로그인</v-btn>
+          <v-btn color="blue darken-1" text @click="dialog = false">닫기</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
 
     <v-dialog v-model="signupmodal" max-width="500px" v-if=" user== '' || user == undefined ">
       <template v-slot:activator="{ on: { click } }">
-        <v-btn text v-on:click="click" style="height:100%;">Sign Up</v-btn>
+        <v-btn text v-on:click="click" style="height:100%;">회원가입</v-btn>
       </template>
       <v-card>
-        <v-card-title>Sign Up</v-card-title>
+        <v-card-title>회원가입</v-card-title>
         <v-card-text>
           <SignupforUserModal v-on:signup="signupsuccess" />
           <SignupforCompanyModal v-on:signup="signupsuccess" />
         </v-card-text>
         <v-card-actions>
-          <v-btn color="primary" text @click="signupmodal=false">Close</v-btn>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" text @click="signupmodal=false">닫기</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
 
-    <div style="display:inline-block; height:100%">
+    <div style="display:inline-block; height:100%" v-if="user !=='' && user !==undefined">
       <v-btn
         text
         v-if="(nowLevel == '0' || nowLevel =='1') && user !=='' && user !== undefined "
@@ -84,33 +81,29 @@
 
       <v-btn text @click="Logout()" v-if="user!=='' && user!==undefined" style="height:100%;">Log Out</v-btn>
 
-      <v-dialog v-model="alertModal" max-width="500px" v-if="nowLevel == '2' && user !=='' && user !== undefined ">
+      <v-menu offset-y v-if="nowLevel == '2' && user !=='' && user !== undefined ">
         <template v-slot:activator="scope">
-          <v-btn text v-on="scope.on" >
-            <i class="fa fa-globe" aria-hidden="true"></i>
-            <span id="unread_alret" style="color:red;">{{unread_alertlist.length}}</span>
+          <v-btn icon v-on="scope.on">
+            <v-badge color="red" overlap>
+              <template slot="badge"> {{$session.get('alertList').unread.length}} </template>
+              <v-icon color="black"> notifications </v-icon>
+            </v-badge>
           </v-btn>
         </template>
         <v-card>
-          <v-card-title>알람 리스트</v-card-title>
-          <v-card-text>
-            <v-list>
-              <v-list-item v-for="(alert, index) in alertlist.slice().reverse()">
-                <v-list-item-content>
-                  <v-btn>
-                    <v-list-item-title :style="{color:colorcheck(alert.check)}" v-html="alert.message" @click="move(alert.check, alert.url, index,alert.user)"></v-list-item-title>
-                  </v-btn>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
-          </v-card-text>
-          <v-card-actions>
-            <v-btn color="primary" text @click="alertModal=false">Close</v-btn>
-          </v-card-actions>
+          <v-list dense>
+            <v-list-item v-for="(alert, index) in this.$session.get('alertList').alert.slice().reverse()">
+              <v-list-item-content>
+                <v-btn text style="padding:1px 0">
+                  <v-list-item-title :style="{color:colorcheck(alert.check)}" v-html="alert.message" @click="move(alert.check, alert.url, index,alert.user)"></v-list-item-title>
+                </v-btn>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
         </v-card>
-      </v-dialog>
+      </v-menu>
     </div>
-  </div>
+    </div>
 </template>
 
 <script src="https://www.gstatic.com/firebasejs/3.6.2/firebase.js"></script>
@@ -165,8 +158,7 @@ export default {
        for(var i in chats) {
          if ( chats[i].userId == this.user ) {
            if ( !chats[i].chatting[chats[i].chatting.length-1].isReadUser ) {
-             console.log("읽않채")
-             var msg = "["+ chats[i].projectTitle +"] 읽지 않은 채팅방이 있습니다. ";
+             var msg = "["+ chats[i].projectTitle +"] 읽지 않은 채팅이 있습니다. ";
               this.unread_alertlist.push(1);
               this.alertlist.push({check:false, message: msg, url : chats[i].link, user : "!Chat"})
            }
@@ -188,6 +180,7 @@ export default {
      } else {
        this.check = false
      }
+     this.$session.set('alertList',{ alert : this.alertlist, unread : this.unread_alertlist});
     },
 
     async move(check, url, alertindex,user) {
@@ -257,8 +250,8 @@ export default {
         this.showNotification(
           "foo-css",
           "success",
-          this.nowLevel + `레벨의 ` + `${this.user}님 `,
-          `로그인 완료!`
+          ``,
+          `${this.user}님  로그인 완료!`
         );
         this.LoginId = "";
         this.LoginPassword = "";

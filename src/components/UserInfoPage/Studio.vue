@@ -1,8 +1,5 @@
 <template>
   <div>
-
-    <v-container wrap >
-      <!-- 작업중 리스트 -->
       <div>
         <h1>작업중인 리스트</h1>
         <v-layout row wrap style="margin:20px 0;" v-for="recruit in proceedList">
@@ -19,18 +16,18 @@
                 <div v-if="recruit.UserComplete == 0 && recruit.CompanyComplete == 0">
                   <v-btn @click="complete(recruit)" outlined color="blue">완료</v-btn>
                   <v-btn @click="popContract('test')" outlined color="orange">계약서</v-btn>
-                  <v-btn @click="popChat('test')" outlined color="orange">채팅창</v-btn>
+                  <v-btn @click="popChat(recruit)" outlined color="orange">채팅창</v-btn>
                   <v-btn @click="cancel(recruit)" outlined color="red">계약파기</v-btn>
                 </div>
                 <div v-if="recruit.UserComplete == 2 && recruit.CompanyComplete == 0">
                   <p> 완료 처리됨 // 상대방의 처리를 기다리는중</p>
                   <v-btn @click="popContract('test')" outlined color="orange">계약서</v-btn>
-                  <v-btn @click="popChat('test')" outlined color="orange">채팅창</v-btn>
+                  <v-btn @click="popChat(recruit)" outlined color="orange">채팅창</v-btn>
                 </div>
                 <div v-if="recruit.UserComplete == 0 && recruit.CompanyComplete == 2">
                   <p> 상대방이 완료를 누른 상태입니다. 계약이 정상적으로 종료되었다면 완료를 눌러주세요.</p>
                   <v-btn @click="popContract('test')" outlined color="orange">계약서</v-btn>
-                  <v-btn @click="popChat('test')" outlined color="orange">채팅창</v-btn>
+                  <v-btn @click="popChat(recruit)" outlined color="orange">채팅창</v-btn>
                 </div>
                 <div v-if="recruit.UserComplete == 1 || recruit.CompanyComplete == 1">
                   <p> 이미 파기된 계약입니다. 이거 처리해주세용</p>
@@ -54,13 +51,12 @@
                 회사명, 기술 스택들, 요약, 마감기간
               </v-card-text>
               <v-card-actions>
-                <v-btn @click="popChat(recruit)" outlined color="orange">채팅방</v-btn>
+                <v-btn @click="popDibChat(recruit)" outlined color="orange">채팅방</v-btn>
               </v-card-actions>
             </v-card>
         </v-layout>
       </div>
-
-    </v-container>
+    </v-layout>
   </div>
 </template>
 
@@ -96,10 +92,6 @@ export default {
       this.userid = this.$session.get('session_id');
       this.$store.commit('setSession', this.userid)
       console.log(this.$store.getters.getSession, 123)
-      if (this.nowLevel !==2) {
-        alert('권한이 없습니다. 필요 level : 2 (유저)')
-        location.href=`${document.location.origin}`
-      }
       this.userdata = await FirebaseService.SELECT_Userdata(this.$session.get('session_id'));
       this.recruits = await FirebaseService.SELECT_RecruitInfo();
       var userProceedList = await FirebaseService.SELECT_UserProceedList(this.$session.get('session_id'));
@@ -140,9 +132,17 @@ export default {
       }
     },
     popChat(ccode){
-
       this.createChatRoom(ccode);
+      var curl = ccode.link
+      window.open(
+        "../" + curl,
+        "name(이름지정)",
+        "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=1000,height=600"
+      );
+    },
 
+    popDibChat(ccode){
+      this.createChatRoom(ccode);
       var curl = ccode.id+ this.$session.get('session_id');
       window.open(
         "../chat/" + curl,
@@ -150,7 +150,6 @@ export default {
         "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=1000,height=600"
       );
     },
-
     async createChatRoom(recruit) {
       var nickname = this.$session.get('session_id');
       var exist = await this.existChatRoom(recruit,nickname);
