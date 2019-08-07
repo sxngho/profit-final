@@ -1,4 +1,6 @@
 <template>
+  <div>
+  <v-btn @click="goBackpage()"> 뒤로가기 </v-btn>
   <v-stepper v-model="idx" style="width:100%" alt-labels>
     <v-stepper-header>
       <v-stepper-step :complete="idx > 1" step="1" editable>시작하기!</v-stepper-step>
@@ -172,6 +174,7 @@
 
     </v-stepper-items>
   </v-stepper>
+</div>
 </template>
 
 <script>
@@ -238,6 +241,9 @@
              type,
            })
          },
+        goBackpage() {
+           this.$emit('goBackpage')
+        },
         getSessionid() {
           this.session_id = this.$session.get('session_id')
         },
