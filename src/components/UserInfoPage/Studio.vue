@@ -91,7 +91,6 @@ export default {
       this.nowLevel = this.$session.get('level');
       this.userid = this.$session.get('session_id');
       this.$store.commit('setSession', this.userid)
-      console.log(this.$store.getters.getSession, 123)
       this.userdata = await FirebaseService.SELECT_Userdata(this.$session.get('session_id'));
       this.recruits = await FirebaseService.SELECT_RecruitInfo();
       var userProceedList = await FirebaseService.SELECT_UserProceedList(this.$session.get('session_id'));

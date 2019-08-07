@@ -274,8 +274,6 @@ export default {
       }
     },
     async fetchData() {
-      console.log(this.$session.get('session_id'), '떳냐')
-
       this.userid = this.$session.get('session_id')
       this.$store.commit('setSession', this.$session.get("session_id"))
       if (this.$session.get("session_id") !== "") {
