@@ -4,9 +4,9 @@
     <v-layout row wrap>
       <v-flex hidden-sm-and-down>
         <Slide right width="600" disableOutsideClick >
-            <v-container>
-              <Studio/>
-            </v-container>
+          <v-container>
+            <Studio/>
+          </v-container>
         </Slide>
       </v-flex>
     </v-layout>
@@ -22,8 +22,7 @@
       <!-- ProfileImg -->
       <v-layout row wrap>
         <v-layout wrap align-center justify-space-around style="position: absolute; top: 148px; right: 50%; left: 50%;">
-          <div v-if="!image" class="text-center" justify-center style="position:relative"
-            @mouseover="showUpImgBtn=true" @mouseleave="showUpImgBtn=false">
+          <div v-if="!image" class="text-center" justify-center style="position:relative" @mouseover="showUpImgBtn=true" @mouseleave="showUpImgBtn=false">
             <div  @click="setFile()" v-show="showUpImgBtn" style="position: absolute; top: 54px; z-index: 2">
               <p class="text-center" style="background: #ffffff91;padding: 10px 5px; cursor:pointer;">
                 사진을 등록하세요!
@@ -35,45 +34,33 @@
             </v-avatar>
             <input type="file" name="file" id="file" style="width:100%; display:none" @change="onFileChange" />
           </div>
-          <div v-else style="position:relative;"
-             @mouseover="showRmImgBtn=true" @mouseleave="showRmImgBtn=false">
-              <div
-                @click="removeImage()"
-                v-show="showRmImgBtn"
-                style="z-index:2; right:0; position: absolute;">
-                <img src="../assets/icon_set/delete.png" alt="delimg" style="cursor:pointer;width:25px;height:25px;"/>
-              </div>
-              <v-avatar size="150" class="grey lighten-2">
-                <img :src="image"/>
-              </v-avatar>
+          <div v-else style="position:relative;" @mouseover="showRmImgBtn=true" @mouseleave="showRmImgBtn=false">
+            <div @click="removeImage()" v-show="showRmImgBtn" style="z-index:2; right:0; position: absolute;">
+              <img src="../assets/icon_set/delete.png" alt="delimg" style="cursor:pointer;width:25px;height:25px;"/>
             </div>
+            <v-avatar size="150" class="grey lighten-2">
+              <img :src="image"/>
+            </v-avatar>
+          </div>
         </v-layout>
       </v-layout>
 
-        <!-- Intro -->
+      <!-- Intro -->
       <v-layout row wrap align-center justify-space-around>
-          <span class="text-center title" style="width:100%">
-            {{user.userName}}
-            <v-flex
-            fab text outlined small
-            v-if="!isMine && !isFollow"
-            @click="follow()"
-            >
-              <img src="../assets/icon_set/add-user.png" alt="follow" style="cursor:pointer; width:25px;height:25px;"/>
-            </v-flex>
+        <span class="text-center title" style="width:100%">
+          {{user.userName}}
+          <v-flex fab text outlined small v-if="!isMine && !isFollow" @click="follow()" >
+            <img src="../assets/icon_set/add-user.png" alt="follow" style="cursor:pointer; width:25px;height:25px;"/>
+          </v-flex>
 
-            <v-flex
-            fab text outlined small
-            v-if="!isMine && isFollow"
-            @click="unfollow()"
-            >
+          <v-flex fab text outlined small v-if="!isMine && isFollow" @click="unfollow()" >
             <img src="../assets/icon_set/followers2.png" alt="unfollow" style="cursor:pointer; width:25px;height:25px;"/>
-            </v-flex>
-          </span>
-          <span class="subheading grey--text text-center"  style="width:100%">
-            {{user.userIntro}}
-            <IntroEditor v-on:sendIntro="receiveIntro" :introinput="user.userIntro" v-if="isMine"/>
-          </span>
+          </v-flex>
+        </span>
+        <span class="subheading grey--text text-center"  style="width:100%">
+          {{user.userIntro}}
+          <IntroEditor v-on:sendIntro="receiveIntro" :introinput="user.userIntro" v-if="isMine"/>
+        </span>
       </v-layout>
 
       <v-layout row wrap align-center justify-space-around style="margin:20px 0;">
@@ -85,128 +72,98 @@
       </v-layout>
     </div>
 
-    <!-- contents -->
-    <v-container>
-      <v-layout>
-        <v-flex xs12 style="border-top:1px #cecece solid;">
+<!-- contents -->
+<v-container>
+  <v-layout>
+    <v-flex xs12 style="border-top:1px #cecece solid;">
+      <!-- Loading -->
+      <div v-if="loading">
+        <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+        <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+        <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+        <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+      </div>
 
-          <div v-if="loading">
-            <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-            <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-            <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-            <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-          </div>
+      <!-- Follower List / Following List -->
+      <FollowerList v-show="this.viewFollower || this.viewFollowing" />
 
-          <!-- TOP BAR -->
-          <!-- <v-layout row wrap>
-            <v-flex xs12>
-              <TopBar/>
-            </v-flex>
-          </v-layout> -->
-
-          <FollowerList v-show="this.viewFollower || this.viewFollowing"></FollowerList>
-
-          <v-layout v-if="!this.viewFollower && !this.viewFollowing" row wrap>
-            <v-flex xs12 sm4 md3>
-              <LeftSide xs12 sm4 md3 :isMine="isMine" v-on:toStory="fromLeftSide" v-on:toStoryFilter="toFilterFunction"/>
-            </v-flex>
-
-            <v-flex xs12 sm8 md9>
-              <v-layout wrap style="position:relative; padding:0px 5px;">
-                <div
-                @click="changeComponent()"
-                v-if="this.$store.getters.getSession==this.$route.params.id && !statedetail && !stateupdate"
-                class="d-inline"
-                style="display:inline;">
-                  <div id="toggletext">
-                    <div
-                      v-if="!stateAdd"
-                      style="cursor:pointer;background: rgb(117, 199, 145); padding: 5px 20px; border-radius: 20px; color: white;margin:3px;"
-                    >프로젝트 생성하기</div>
-
-                    <img
-                      src="../assets/icon_set/back.png"
-                      alt="backtoList"
-                      style="cursor:pointer;width:25px;height:25px;"
-                      v-if="stateAdd"
-                    />
-                  </div>
-                </div>
-
-                <div style="position: absolute; display: inline; right: 5px; top:7px;">
-                  <div style="display:inline!important; float:right; right:50%;" v-if="!stateAdd ">
-                    <toggle-button
-                      d-inline
-                      v-if="!stateAdd && !stateupdate && !statedetail"
-                      :width="50"
-                      v-model="toggleView"
-                      :sync="true"
-                      :labels="{checked: '새창', unchecked: ''}"
-                    />
-                  </div>
-
-                  <div style="display:inline!important; float:right; right:50%;" v-if="!stateAdd && !stateupdate && !statedetail">
-                    <!-- <div class="d-inline" @click="layout1()">
-                      <img
-                        id="toggletext"
-                        src="../assets/icon_set/layout1.png"
-                        alt="delimg"
-                        style="cursor:pointer;width:25px;height:25px; margin-right:5px;"
-                      />
-                    </div>
-                    <div class="d-inline" @click="layout2()">
-                      <img
-                        id="toggletext"
-                        src="../assets/icon_set/layout2.png"
-                        alt="delimg"
-                        style="cursor:pointer;width:25px;height:25px;margin-right:5px;"
-                      />
-                    </div>
-                    <div class="d-inline" @click="layout3()">
-                      <img
-                        id="toggletext"
-                        src="../assets/icon_set/layout3.png"
-                        alt="delimg"
-                        style="cursor:pointer;width:25px;height:25px;margin-right:5px;"
-                      />
-                    </div> -->
-                    <v-btn-toggle small>
-                      <v-btn small text  @click="layout1()" id="toggletext">
-                        <i class="fa fa-th-large fa-1x"/>
-                      </v-btn>
-                      <v-btn small text @click="layout2()" id="toggletext">
-                        <i class="fa fa-th-list fa-1x"/>
-                      </v-btn>
-                      <v-btn small text @click="layout3()" id="toggletext">
-                        <i class="fa fa-bars fa-1x"/>
-                      </v-btn>
-                    </v-btn-toggle>
-                  </div>
-                </div>
-              </v-layout>
-
-              <v-layout wrap>
-                <ProjectList
-                  v-if="!stateAdd && !statedetail && !stateupdate"
-                  v-on:toStory="cc"
-                  v-on:goup="update_project"
-                  v-on:toStoryUpdate="UPDATE_Project"
-                  :layout="layout"
-                  :toFilter="Filter" v-on:toStoryList="resetFilter"
-                />
-                <ProjectEditor v-if="stateAdd && !statedetail && !stateupdate" v-on:insert_success="gbp4" />
-                <Project v-if="statedetail" :pcode="pcode" v-on:goBackpage="gbp" />
-                <ProjectEditor v-if="stateupdate" :project_id="pcode2" v-on:goBackpage="gbp2" v-on:update_success="gbp3" />
-                <!-- <ProjectUpdator v-if="stateupdate" :project_id="pcode2" v-on:goBackpage="gbp2" v-on:update_success="gbp3" /> -->
-                <!-- <v-btn @click="check_stateupdate(state)"></v-btn> -->
-              </v-layout>
-            </v-flex>
-          </v-layout>
+      <!-- LeftSid, ProjectList -->
+      <v-layout v-if="!this.viewFollower && !this.viewFollowing" row wrap>
+        <!-- LeftSide -->
+        <v-flex xs12 sm4 md3>
+          <LeftSide xs12 sm4 md3 :isMine="isMine" v-on:toStory="fromLeftSide" v-on:toStoryFilter="toFilterFunction"/>
         </v-flex>
-      </v-layout>
-    </v-container>
 
-  </div>
+        <!-- btn Toolbar -->
+        <v-flex xs12 sm8 md9>
+          <v-layout wrap style="position:relative; padding:0px 5px;">
+            <div @click="changeComponent()" v-if="this.$store.getters.getSession==this.$route.params.id && !statedetail && !stateupdate" class="d-inline" style="display:inline;">
+              <div id="toggletext">
+                <div
+                v-if="!stateAdd"
+                style="cursor:pointer;background: rgb(117, 199, 145); padding: 5px 20px; border-radius: 20px; color: white;margin:3px;"
+                >프로젝트 생성하기</div>
+
+                <img
+                src="../assets/icon_set/back.png"
+                alt="backtoList"
+                style="cursor:pointer;width:25px;height:25px;"
+                v-if="stateAdd"
+                />
+              </div>
+            </div>
+
+            <div style="position: absolute; display: inline; right: 5px; top:7px;">
+            <div style="display:inline!important; float:right; right:50%;" v-if="!stateAdd ">
+              <toggle-button
+                d-inline
+                v-if="!stateAdd && !stateupdate && !statedetail"
+                :width="50"
+                v-model="toggleView"
+                :sync="true"
+                :labels="{checked: '새창', unchecked: ''}"
+              />
+            </div>
+
+            <div style="display:inline!important; float:right; right:50%;" v-if="!stateAdd && !stateupdate && !statedetail">
+              <v-btn-toggle small>
+                <v-btn small text  @click="layout1()" id="toggletext">
+                  <i class="fa fa-th-large fa-1x"/>
+                </v-btn>
+                <v-btn small text @click="layout2()" id="toggletext">
+                  <i class="fa fa-th-list fa-1x"/>
+                </v-btn>
+                <v-btn small text @click="layout3()" id="toggletext">
+                  <i class="fa fa-bars fa-1x"/>
+                </v-btn>
+              </v-btn-toggle>
+            </div>
+          </div>
+          </v-layout>
+
+        <!-- List Option -->
+        <v-layout wrap>
+          <ProjectList
+            v-if="!stateAdd && !statedetail && !stateupdate"
+            v-on:toStory="cc"
+            v-on:goup="update_project"
+            v-on:toStoryUpdate="UPDATE_Project"
+            :layout="layout"
+            :toFilter="Filter" v-on:toStoryList="resetFilter"/>
+          <ProjectEditor v-if="stateAdd && !statedetail && !stateupdate" v-on:insert_success="gbp4" />
+          <Project v-if="statedetail" :pcode="pcode" v-on:goBackpage="gbp" />
+          <ProjectEditor v-if="stateupdate" :project_id="pcode2" v-on:goBackpage="gbp2" v-on:update_success="gbp3" />
+          <!-- <ProjectUpdator v-if="stateupdate" :project_id="pcode2" v-on:goBackpage="gbp2" v-on:update_success="gbp3" /> -->
+          <!-- <v-btn @click="check_stateupdate(state)"></v-btn> -->
+        </v-layout>
+
+      </v-flex>
+    </v-layout>
+  </v-flex>
+</v-layout>
+</v-container>
+
+</div>
 </template>
 
 <script>
@@ -485,73 +442,75 @@ export default {
 <!-- 아래 스타일은 절대 scope로 두면 안됩니다!! -->
 <style>
   .bm-burger-button {
-      position: fixed;
-      cursor: pointer;
-      left: auto;
-      right: -25px!important;
-      background: #2C3E50;
-      width: 50px;
-      height: 85px;
-      border-radius: 20px;
-      top: 50%;
-      z-index: 3;
-    }
-    .bm-burger-bars {
-      background-color: #373a47;
-    }
-    .line-style {
-      position: absolute;
-      height: 20%;
-      left: 0;
-      right: 0;
-    }
-    .cross-style {
-      position: absolute;
-      top: 12px;
-      right: 2px;
-      cursor: pointer;
-    }
-    .bm-cross {
-      background: #bdc3c7;
-    }
-    .bm-cross-button {
-      height: 24px;
-      width: 24px;
-    }
-    .bm-menu {
-      height: 100%; /* 100% Full-height */
-      width: 0; /* 0 width - change this with JavaScript */
-      position: fixed; /* Stay in place */
-      z-index: 1000; /* Stay on top */
-      top: 0;
-      left: 0;
-      background-color: #2C3E50 ; /* Black*/
-      overflow-x: hidden; /* Disable horizontal scroll */
-      padding-top: 60px; /* Place content 60px from the top */
-      transition: 0.5s; /*0.5 second transition effect to slide in the sidenav*/
-    }
+    position: fixed;
+    cursor: pointer;
+    left: auto;
+    right: -25px!important;
+    background: #2C3E50;
+    width: 50px;
+    height: 85px;
+    border-radius: 20px;
+    top: 50%;
+    z-index: 3;
+    color:#2980B9;
+  }
+  .bm-burger-bars {
+    background-color: #373a47;
+  }
+  .line-style {
+    position: absolute;
+    height: 20%;
+    left: 0;
+    right: 0;
+  }
+  .cross-style {
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    color:#2980B9;
+    cursor: pointer;
+  }
+  .bm-cross {
+    background: #bdc3c7;
+  }
+  .bm-cross-button {
+    height: 24px;
+    width: 24px;
+  }
+  .bm-menu {
+    height: 100%; /* 100% Full-height */
+    width: 0; /* 0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Stay on top */
+    top: 0;
+    left: 0;
+    background-color: #2C3E50 ; /* Black*/
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 60px; /* Place content 60px from the top */
+    transition: 0.5s; /*0.5 second transition effect to slide in the sidenav*/
+  }
 
-    .bm-overlay {
-      background: rgba(0, 0, 0, 0.3);
-    }
-    .bm-item-list {
-      color: #b8b7ad;
-      margin-left: 10%;
-      font-size: 20px;
-    }
-    .bm-item-list > * {
-      display: flex;
-      text-decoration: none;
-      padding: 0.7em;
-    }
-    .bm-item-list > * > span {
-      margin-left: 10px;
-      font-weight: 700;
-      color: white;
-    }
-    .studiopop{
-      color:#2980B9;
-      top:41%!important;
-      left:5px;
-    }
+  .bm-overlay {
+    background: rgba(0, 0, 0, 0.3);
+  }
+  .bm-item-list {
+    color: #b8b7ad;
+    margin-left: 10%;
+    font-size: 20px;
+  }
+  .bm-item-list > * {
+    display: flex;
+    text-decoration: none;
+    padding: 0.7em;
+  }
+  .bm-item-list > * > span {
+    margin-left: 10px;
+    font-weight: 700;
+    color: white;
+  }
+  .studiopop{
+    color:#2980B9;
+    top:41%!important;
+    left:5px;
+  }
 </style>
