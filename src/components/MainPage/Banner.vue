@@ -9,7 +9,7 @@
           <div class="iconBox">
             <i class="far fa-keyboard fa-7x" style="color:blueviolet"></i>
           </div>
-          <br />
+          <br/>
           <div class="studio_title titleBox">
             <span class="fontStyle">스토리</span>
           </div>
@@ -44,7 +44,7 @@
       </router-link>
 
       <!-- User가 일반 유저가 아닌 경우, studio로 가는 활동을 막기 위해 fake로 아래 div를 노출합니다. -->
-      <div class="bannerBox" style="text-decoration:none; cursor:pointer;" v-if="typeof(this.$store.getters.getLevel)=='string'" @click="alert_message_login()">
+      <div class="bannerBox" style="text-decoration:none; cursor:pointer;" v-if="typeof(this.$store.getters.getLevel)=='string'" @click="alert_message_user()">
         <div class="studio contentBox">
           <div class="iconBox">
             <i class="far fa-handshake fa-7x" style="color:blueviolet"></i>
@@ -120,7 +120,11 @@ export default {
       }
     },
     alert_message_user() {
-      alert('권한이 필요합니다. 필요 level 2 (유저)')
+      this.$swal(
+         '권한이 없습니다.',
+         '로그인이 필요한 기능입니다',
+         'error'
+       )
     },
     alert_message_login() {
       alert('권한이 필요합니다. 로그인')

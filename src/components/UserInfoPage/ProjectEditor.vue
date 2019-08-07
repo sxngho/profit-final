@@ -320,7 +320,11 @@
                    })
 
                  this.reload_userskill(this.session_id);
-                 this.showNotification('foo-css','success','업로드 성공','프로젝트가 정상적으로 업로드 되었습니다.')
+                 this.$swal(
+                    '프로젝트 업로드 성공!',
+                    '프로젝트가 정상적으로 업로드 되었습니다.',
+                    'success'
+                  )
                  this.$emit('insert_success')
                }else{
                  var data = {'projecttitle':projecttitle,
@@ -333,8 +337,12 @@
                  // console.log(this.project_id, '이게 나와야 한다')
                  FirebaseService.UPDATE_Project(
                    data, this.project, this.project_id);
-                this.reload_userskill(this.session_id)
-                this.showNotification('foo-css','success','업로드 성공','프로젝트가 정상적으로 수정되었습니다.')
+                  this.reload_userskill(this.session_id)
+                  this.$swal(
+                     '프로젝트 업로드 성공!',
+                     '프로젝트가 정상적으로 수정되었습니다.',
+                     'success'
+                   )
                 // 여기여기
                 this.$emit('update_success')
                }

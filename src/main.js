@@ -18,6 +18,14 @@ import 'vuetify/dist/vuetify.min.css'
 Vue.prototype.$http = axios
 Vue.config.productionTip = false
 
+import VueSweetalert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
+const saoptions = {
+ confirmButtonColor: '#41b882',
+ cancelButtonColor: '#ff7674'
+}
+Vue.use(VueSweetalert2, saoptions)
+
 Vue.use(VueHtml2Canvas);
 Vue.use(VueLoading)
 Vue.use(Notifications)
