@@ -1,16 +1,16 @@
 <template>
   <v-container>
-    <v-layout wrap v-if="!isWork">
+    <v-layout wrap row v-if="!isWork">
       <!-- 채팅창 -->
-      <v-flex xs7>
+      <v-flex xs12 sm7>
         <v-layout wrap>
           <v-flex xs12>
             <v-divider/><h1 class="text-center"> 채팅창 </h1><v-divider/>
           </v-flex>
 
           <v-flex xs12>
-            <v-container class="overflow-y-auto" style="max-height:700px">
-              <v-layout v-scroll:scroll-target="'#scrolling'" column>
+            <v-container v-chat-scroll="{always: true, smooth: true, scrollonremoved:true}" class="overflow-y-auto" style="max-height:600px">
+              <v-layout column>
                 <v-flex
                 xs12
                 v-for="message in messages"
@@ -37,13 +37,11 @@
               </v-layout>
             </v-container>
           </v-flex>
-
           <v-text-field single-line outlined required v-model="myMessage" v-on:keyup.enter="pushMessage(myMessage)" > </v-text-field>
         </v-layout>
       </v-flex>
-
       <!-- 공동 협의 서류 -->
-      <v-flex xs5>
+      <v-flex xs12 sm5>
         <div>
           <v-divider/>
           <h1 class="text-center"> 간이 계약서 </h1>
@@ -430,6 +428,9 @@ export default {
         // TODO auto scroll
         // let targetscroll = documnet.getElementById('scrolling');
         // targetscroll.scrollTop = 20;
+        var container = document.querySelector("#container");
+        console.log(container.scrollTop , " asd " ,container.scrollHeight)
+        container.scrollTop = container.scrollHeight;
 
       },function(error) {
         console.error(error,"채팅장 입장 에러입니다.");

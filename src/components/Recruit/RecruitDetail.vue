@@ -75,6 +75,7 @@ export default {
   },
   methods: {
     async fetchData(recruitId) {
+
       console.log("this is fetchData");
       this.recruit = await FirebaseService.SELECT_RecruitInfoByRecruitId(recruitId);
       this.userdata = await FirebaseService.SELECT_Userdata(this.$session.get('session_id'));
@@ -104,6 +105,7 @@ export default {
   },
   data() {
     return {
+      userdata : [],
       alreadyDibs : false,
       recruit : {
         id:"",
