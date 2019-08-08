@@ -152,11 +152,19 @@ export default {
     async createChatRoom(recruit) {
       var nickname = this.$session.get('session_id');
       var exist = await this.existChatRoom(recruit,nickname);
-      console.log(exist,"exist!");
-      if ( exist.res ) {
 
-      }
-      else if ( !exist.res ) {
+      var ar1 = recruit.data.createDay.split('-');
+      var ar2 = recruit.data.endDay.split('-');
+      var da1 = new Date(ar1[0], ar1[1], ar1[2]);
+      var da2 = new Date(ar2[0], ar2[1], ar2[2]);
+      var dif = da2 - da1;
+      var cDay = 24 * 60 * 60 * 1000;// 시 * 분 * 초 * 밀리세컨
+      var user = await FirebaseService.SELECT_Userdata(nickname);
+      var company = await FirebaseService.SELECT_CompanyInfo(recruit.data.companyId);
+      console.log( user[0].phonenumber , " 유저핸드폰번호 저장될거" )
+      console.log(company[0].address , "주소")
+      console.log(recruit.data.chief , " 책임자")
+      if ( !exist.res ) {
         // INIT CHATROOM
         firebase.database().ref('chat/'+recruit.id+nickname).set({
           link : 'chat/'+recruit.id+nickname,
@@ -165,21 +173,22 @@ export default {
         ],
 
           projectTitle : recruit.data.projectTitle,
-          projectTerm : "",
-          pay : 0,
-          downPayment : 0,
-          balance : 0,
-          penalty : "",
+          projectTerm : cDay,
+          pay : recruit.data.budget,
+          downPayment : Number(recruit.data.budget) * 0.2,
+          balance : Number(recruit.data.budget) - Number(recruit.data.budget) * 0.2,
+          penalty : recruit.data.penalty,
           contractDate : "",
 
           // company
           companyId : recruit.data.companyId,
-          companyAddr : "",
-          company : "", //책임자
+          companyAddr : company[0].address,
+          company : recruit.data.chief , //책임자
 
           //user
-          phonenumber : "",
+          phonenumber : user[0].phonenumber,
           userId : nickname,
+
           companyVerification : false,
           userVerification: false,
           UserComplete : false,

@@ -7,97 +7,99 @@
     <v-card>
       <!-- title -->
       <v-card-title>
-        <span class="headline">Sign up For User</span>
+        <span class="headline">유저 회원가입</span>
       </v-card-title>
 
       <v-card-text>
         <v-container grid-list-md>
           <v-layout wrap>
+
             <!-- User name -->
-            <v-flex xs12 sm6>
-              <v-text-field label="first name*" required v-model="first_name"></v-text-field>
-            </v-flex>
-            <v-flex xs12 sm6>
-              <v-text-field label="last name*" required v-model="last_name"></v-text-field>
-            </v-flex>
-
-            <v-flex xs12 sm6>
-              <v-text-field label="nickname*" required v-model="nickname"></v-text-field>
-            </v-flex>
-
             <!-- email -->
             <v-flex xs12>
-              <v-text-field label="Email*" required v-model="signup_id"></v-text-field>
+              <v-text-field @blur="idCheck" label="* 아이디 " placeholder="  user@gmail.com" required v-model="signup_id"></v-text-field>
+              <small style="color:red" v-if="!signup_id_Validation && signup_id_Msg!=='' && signup_id !== ''"> {{signup_id_Msg}} </small>
+              <small style="color:green" v-if="signup_id_Validation && signup_id_Msg!=='' && signup_id !== ''"> {{signup_id_Msg}} </small>
             </v-flex>
+
+            <v-flex xs12>
+              <v-text-field @blur="nicknameCheck" label="* 닉네임" required v-model="nickname"></v-text-field>
+              <small style="color:red" v-if="!nicknameValidation && nicknameMsg!=='' && nickname !== ''"> {{nicknameMsg}} </small>
+              <small style="color:green" v-if="nicknameValidation && nicknameMsg!=='' && nickname !== ''"> {{nicknameMsg}} </small>
+            </v-flex>
+
+            <v-flex xs12>
+              <v-text-field label="* 성명" required v-model="userName"></v-text-field>
+            </v-flex>
+
+
 
             <!-- Password -->
             <v-flex xs12>
-              <v-text-field label="Password*" type="password" required v-model="signup_password"></v-text-field>
+              <v-text-field class="pwfield" @blur="passwordCheck" label="* 비밀번호" type="password" required v-model="signup_password"></v-text-field>
+              <v-text-field class="pwfield" @blur="passwordCheck" label="* 비밀번호 확인 " type="password" required v-model="signup_password_check"></v-text-field>
+              <small style="color:red" v-if="!signup_password_Validation &&
+               signup_password_check !== '' && signup_password !== '' && signup_password_Msg !== '' "> {{signup_password_Msg}} </small>
+               <small style="color:green" v-if="signup_password_Validation &&
+                signup_password_check !== '' && signup_password !== '' && signup_password_Msg !== '' "> {{signup_password_Msg}} </small>
             </v-flex>
 
             <!-- PhoneNumber -->
             <v-flex xs12>
-              <v-text-field label="PhoneNumber*" v-model="phonenumber"></v-text-field>
+              <v-text-field @blur="phoneCheck" label="* 핸드폰 번호" required v-model="phonenumber"></v-text-field>
+              <small style="color:red" v-if="!phonenumberValidation &&
+               phonenumber !== '' && phonenumberMsg !== '' "> {{phonenumberMsg}} </small>
             </v-flex>
 
-            <!-- 경력 -->
-            <!--
-              <v-flex xs12>
-                <v-text-field label="경력을 입력하세요" v-model="career"></v-text-field>
-                <v-btn text @click="addNewCareer"> ADD </v-btn>
-                <v-list subheader>
-                  <v-list-tile    v-for="(career, index) in careers" >
-                    <v-list-tile-content>
-                      <v-list-tile-title v-html="career"></v-list-tile-title>
-                    </v-list-tile-content>
+            <small> *은 필수입력 항목입니다. </small>
 
-                    <v-list-tile-action>
-                      <i class="fa fa-minus-circle"  @click="deleteCareer(index)"></i>
-                    </v-list-tile-action>
-                  </v-list-tile>
-
-                </v-list>
-              </v-flex>
-            -->
-
-            <!-- 이미지 -->
-            <v-flex xs12>
-              <!-- TODO Add ImgUpload Btn-->
-              <v-flex xs12></v-flex>
-            </v-flex>
           </v-layout>
         </v-container>
-
-        <!-- *은 필수입력 항목입니다. -->
-        <small>*indicates required field</small>
       </v-card-text>
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="blue darken-1" text @click="signupforusermodal = false">Close</v-btn>
+        <v-btn color="blue darken-1" text @click="signupforusermodal = false">닫기</v-btn>
         <v-btn
           color="blue darken-1"
           text
-          @click="SignupUser(signup_id, signup_password, first_name, last_name, phonenumber, userSkills, userImage, userName, userIntro, userCareers, userEducations, nickname)"
-        >SignUp</v-btn>
+          v-if="signup_id_Validation && signup_password_Validation && phonenumberValidation && nicknameValidation"
+          @click="SignupUser(signup_id, signup_password, phonenumber, userSkills, userImage, userName, userIntro, userCareers, userEducations, nickname)"
+        >회원가입</v-btn>
+        <v-btn color="blue darken-1" text v-else disabled>회원가입</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 
 <script>
+document.ready
+
+</script>
+
+<script>
 import FirebaseService from "@/services/FirebaseService";
 
 export default {
   data: () => ({
+    userIdData : [],
+    idLabel : "* 아이디",
     signupforusermodal: false,
     careers: [],
     career: "",
     signup_id: "",
+    signup_id_Validation : false,
+    signup_id_Msg : "",
+
     signup_password: "",
-    first_name: "",
-    last_name: "",
+    signup_password_check : "",
+    signup_password_Validation : false,
+    signup_password_Msg : "",
+
     phonenumber: "",
+    phonenumberValidation : false,
+    phonenumberMsg : "",
+
     userSkills: [],
     userImage: "",
     userName: "",
@@ -105,65 +107,113 @@ export default {
     userCareers: [],
     userEducations: [],
     nickname : '',
+    nicknameValidation : false,
+    nicknameMsg : "",
   }),
+  mounted() {
+    this.fetchData();
+  },
+  watch: {
+    signup_password: function() {
+      // this.passwordCheck();
+    },
+    signup_password_check: function() {
+      // this.passwordCheck();
+    },
+ },
   methods: {
-    showNotification (group, type ,title, text) {
-       this.$notify({
-         group,
-         title,
-         text,
-         type,
-       })
-     },
+    phoneCheck() {
+      var phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$/;
+      if(this.phonenumber.match(phoneno)) {
+        this.phonenumberValidation = true;
+      } else {
+        this.phonenumberValidation = false;
+        this.phonenumberMsg = "핸드폰 번호 양식을 지켜주세요. ex ) 010-1234-5678"
+      }
+    },
+    nicknameCheck() {
+      for(var i in this.userIdData) {
+        if ( this.userIdData[i].id == this.nickname ) {
+          this.nicknameValidation = false;
+          this.nicknameMsg = "이미 존재하는 닉네임입니다.";
+          return ;
+        }
+      }
+      var pattern_spc = /[~!@#$%^&*()_+|<>?:{}]/; //특수문자 체크
+      if (pattern_spc.test(this.nickname)) {
+        this.nicknameValidation = false;
+        this.nicknameMsg = "닉네임에 특수문자는 사용이 불가능합니다.";
+      } else {
+        this.nicknameValidation = true;
+        this.nicknameMsg = "사용 가능한 닉네임입니다.";
+      }
+    },
+    idCheck() {
+      for(var i in this.userIdData) {
+        if ( this.userIdData[i].data.email == this.signup_id ) {
+          this.signup_id_Validation = false;
+          this.signup_id_Msg = "이미 존재하는 아이디입니다.";
+          return ;
+        }
+      }
+      var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+      if(this.signup_id.match(mailformat)) {
+        this.signup_id_Validation = true;
+        this.signup_id_Msg = "사용 가능한 아이디입니다.";
+      } else {
+        this.signup_id_Validation = false;
+        this.signup_id_Msg = "아이디를 이메일 형식으로 입력해주세요.";
+      }
+    },
+    passwordCheck() {
+      if ( this.signup_password_check !== '' && this.signup_password  !== '' ) {
+        if ( this.signup_password_check == this.signup_password ) {
+          this.signup_password_Validation = true;
+          this.signup_password_Msg = "비밀번호가 일치합니다.";
+        } else {
+          this.signup_password_Validation = false;
+          this.signup_password_Msg = "비밀번호가 일치하지 않습니다.";
+        }
+      }
+    },
+    async fetchData() {
+      this.userIdData = await FirebaseService.SELECT_UserIdData();
+    },
     addNewCareer() {
       this.careers.push(this.career);
     },
     deleteCareer(index) {
       this.careers.splice(index, 1);
     },
-    async SignupUser(
-      id,
-      password,
-      first_name,
-      last_name,
-      phonenumber,
-      userSkills,
-      userImage,
-      userName,
-      userIntro,
-      userCareers,
-      userEducations,
-      nickname
-    ) {
-      var result = await FirebaseService.SignupUser(
-        id,
-        password,
-        first_name,
-        last_name,
-        phonenumber,
-        userSkills,
-        userImage,
-        userName,
-        userIntro,
-        userCareers,
-        userEducations,
-        nickname
-      );
+    async SignupUser(id,password,phonenumber,userSkills,
+      userImage,userName,userIntro,userCareers,userEducations,nickname) {
+
+      var arr = phonenumber.split('-');
+      var pn = "";
+      for(var i in arr) {
+        pn += arr[i];
+      }
+      var result = await FirebaseService.SignupUser(id,password,pn,
+        userSkills,userImage,userName,userIntro,userCareers,userEducations,nickname);
       if (result == true) {
-        // this.$session.set("session_id", id);
-        // this.$store.commit("setSession", id);
         this.signupforusermodal = false;
-        this.first_name='';
-        this.last_name='';
+        this.userName='';
         this.nickname='';
         this.signup_id='';
         this.signup_password='';
         this.phonenumber='';
         this.$emit('signup')
-        // console.log(this.$store.getters.getSession,"setSession")
+        this.$swal('회원가입에 성공하였습니다.','스토리 페이지에서 정보를 입력해주세요!','success')
         // this.showNotification("foo-css","success",`${nickname}님`,`회원가입 완료!`);
       }
     }
   }
 };
 </script>
+
+
+<style>
+.pwfield {
+   font-family: 'monospace';
+}
+</style>
