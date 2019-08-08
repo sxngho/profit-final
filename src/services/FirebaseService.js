@@ -915,7 +915,7 @@ export default {
       })
   },
 
-  async SignupCompany(company_name, id, password, interests) {
+  async SignupCompany(company_name, id, password) {
     return firestore
       .collection("companys")
       .doc(company_name)
@@ -935,7 +935,6 @@ export default {
                 .set({
                   company_name: company_name,
                   id: id,
-                  interests: interests,
                   followerlist: [],
                   followinglist: [],
                   level: 3,
