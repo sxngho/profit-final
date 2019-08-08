@@ -238,7 +238,7 @@
       },
     mounted() {
       this.getSessionid()
-      if(this.project_id != ''){
+      if(this.project_id !== undefined){
         this.getProject()
       }
     },
@@ -410,6 +410,7 @@
 
         },
         async getProject() {
+          console.log(1)
           this.project = await FirebaseService.SELECT_Project(this.project_id)
           var data = this.project
           this.projectcontent = data.projectcontent
