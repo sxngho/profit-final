@@ -72,6 +72,23 @@ import FirebaseService from "@/services/FirebaseService";
       signup_password_Msg : "",
 
     }),
+    watch: {
+      signup_id: function() {
+        if ( this.signup_id.length == 0 ) {
+          this.signup_id_Msg = "";
+        }
+      },
+      signup_password: function() {
+        if ( this.signup_password.length == 0 ) {
+          this.signup_password_Msg = "";
+        }
+      },
+      signup_password_check: function() {
+        if ( this.signup_password_check.length == 0 ) {
+          this.signup_password_Msg = "";
+        }
+      },
+    },
     methods : {
       async SignupCompany(company_name, id, password, interests) {
       var result = await FirebaseService.SignupCompany(company_name, id, password, interests)
