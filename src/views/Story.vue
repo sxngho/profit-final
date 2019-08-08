@@ -431,8 +431,8 @@ export default {
           })
           .catch();
       } else {
-        var image_file = document.querySelector("#inputfile");
-        image_file.value = "";
+        // var image_file = document.querySelector("#inputfile");
+        // image_file.value = "";
         this.$swal("이미지 오류!", "이미지 파일만 올려주세요.", "error");
       }
     },
@@ -463,8 +463,6 @@ export default {
           })
           .catch();
       } else {
-        var image_file = document.querySelector("#inputfile");
-        image_file.value = "";
         this.$swal("이미지 오류!", "이미지 파일만 올려주세요.", "error");
       }
     },
