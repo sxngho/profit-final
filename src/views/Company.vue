@@ -304,10 +304,6 @@
                                   <td>{{item.recruit.data.createDay}}</td>
                                 </tr>
                                 <tr>
-                                  <th>모집종료</th>
-                                  <td>{{item.recruit.data.closingDate}}</td>
-                                </tr>
-                                <tr>
                                   <th>프로젝트 마감일</th>
                                   <td>{{item.recruit.data.endDay}}</td>
                                 </tr>
@@ -360,10 +356,6 @@
                                 <tr>
                                   <th>업로드일</th>
                                   <td>{{item.recruit.data.createDay}}</td>
-                                </tr>
-                                <tr>
-                                  <th>모집종료</th>
-                                  <td>{{item.recruit.data.closingDate}}</td>
                                 </tr>
                                 <tr>
                                   <th>프로젝트 마감일</th>

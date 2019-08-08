@@ -73,13 +73,6 @@
       </div>
       <ShowTechList />
       <SelectTechList />
-      <div class="closingDate__content contentBox">
-        <div class="closingDate__title titleBox">모집 마감일자</div>
-        <div class="closingDate__input inputBox">
-          <!-- <v-overflow-btn :items="closingDateList" label="마감일" v-model="closingDate"></v-overflow-btn> -->
-          <v-autocomplete v-model="closingDate" :items="closingDateList"></v-autocomplete>
-        </div>
-      </div>
       <button
         style="margin-left:350px; margin-top:50px; background:blueviolet; color:white; width:50px; height:30px"
         @click="submit"
@@ -106,7 +99,6 @@ export default {
       ],
       closingDateList: ["7일 후", "14일 후", "21일 후", "28일 후", "50일 후"],
       category: "",
-      closingDate: "",
       projectTitle: "",
       budget: "",
       projectContent: "",
@@ -179,7 +171,6 @@ export default {
         projectSummary: this.projectSummary,
         projectContent: this.projectContent,
         requiredSkills: this.$store.state.requiredSkills,
-        closingDate: this.closingDate,
         session_id: this.user,
         chief: this.chief,
         penalty: this.penalty
@@ -204,6 +195,10 @@ export default {
 </script>
 
 <style scoped>
+/* .recruitEditor__content {
+  display: grid;
+  grid-template-columns: 1fr;
+} */
 .recruitEditor__container {
   background-color: white;
   width: 1080px;

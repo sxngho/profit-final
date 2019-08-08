@@ -18,15 +18,18 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.showTechList__container {
+  display: flex;
+}
 .showTechBox {
-  width: 90px;
+  margin-right: 5px;
+  width: 110px;
   height: 40px;
   display: block;
   background-color: white;
   color: blueviolet;
   border: 1px solid blueviolet;
-  border-radius: 5%;
   margin-top: 10px;
 }
 </style>
