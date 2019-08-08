@@ -121,17 +121,6 @@
               </td>
             </tr>
 
-            <tr @click="changeContractDate(nowChatRoom.contractDate)" v-if="toggleContractDate">
-              <td> 계약일 </td>
-              <td> {{nowChatRoom.contractDate}} </td>
-            </tr>
-            <tr v-if="!toggleContractDate">
-              <td> 계약일</td>
-              <td>
-                <v-text-field single-line outlined required v-model="inputContractDate" ref="ContractDateRef" v-on:keyup.esc="cancelContractDate()" v-on:keyup.enter="completeContractDate(inputContractDate)" > </v-text-field>
-              </td>
-            </tr>
-
             <tr @click="changeCompanyId(nowChatRoom.companyId)" v-if="toggleCompanyId">
               <td> 기업명 </td>
               <td> {{nowChatRoom.companyId}} </td>
