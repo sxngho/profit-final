@@ -3,9 +3,9 @@
     <!-- Studio -->
     <v-layout row wrap v-if="this.$route.params.id==this.$store.getters.getSession">
       <v-flex hidden-sm-and-down>
-        <Slide right width="600" disableOutsideClick>
+        <Slide right width="600" disableOutsideClick >
           <v-container>
-            <Studio />
+            <Studio/>
           </v-container>
         </Slide>
       </v-flex>
@@ -17,79 +17,40 @@
           <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
           <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
     </div>
+
     <!-- Banner -->
     <div>
       <!-- User Banner Img -->
-
-
-        <v-layout row wrap v-bind:style="{ 'backgroundImage': 'url(' + storyBanner + ')' }" style="background-size:100%;margin-bottom: 95px;" >
-          <div class="text-center" justify-center style="position:relative" @mouseover="showUpImgBanner=true" @mouseleave="showUpImgBanner=false">
-            123123
-            <div v-show="showUpImgBanner">
-              234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957
-              234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957
-              234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957
-            </div>
+      <v-layout row wrap v-bind:style="{ 'backgroundImage': 'url(' + storyBanner + ')' }" style="background-size:100%;margin-bottom: 95px;" >
+        <div class="text-center" justify-center style="position:relative" @mouseover="showUpImgBanner=true" @mouseleave="showUpImgBanner=false">
+          123123
+          <div v-show="showUpImgBanner">
+            234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957
+            234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957
+            234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957
           </div>
+        </div>
 
-          <v-flex xs12 style="height:220px;">
-          </v-flex>
-        </v-layout>
+        <v-flex xs12 style="height:220px;">
+        </v-flex>
+      </v-layout>
 
       <!-- ProfileImg -->
       <v-layout row wrap>
-        <v-layout
-          wrap
-          align-center
-          justify-space-around
-          style="position:absolute; top: 148px; right: 50%; left: 50%; z-index:10"
-        >
-          <div
-            v-if="!image"
-            class="text-center"
-            justify-center
-            style="position:relative"
-            @mouseover="showUpImgBtn=true"
-            @mouseleave="showUpImgBtn=false"
-          >
-            <div
-              @click="setFile()"
-              v-show="showUpImgBtn"
-              style="position: absolute; top: 54px; z-index: 2"
-            >
-              <p
-                class="text-center"
-                style="background: #ffffff91;padding: 10px 5px; cursor:pointer;"
-              >사진을 등록하세요!</p>
+        <v-layout wrap align-center justify-space-around style="position:absolute; top: 148px; right: 50%; left: 50%; z-index:10">
+          <div v-if="!image" class="text-center" justify-center style="position:relative" @mouseover="showUpImgBtn=true" @mouseleave="showUpImgBtn=false" >
+            <div @click="setFile()" v-show="showUpImgBtn" style="position: absolute; top: 54px; z-index: 2" >
+              <p class="text-center" style="background: #ffffff91;padding: 10px 5px; cursor:pointer;" >사진을 등록하세요!</p>
             </div>
 
             <v-avatar size="150" class="grey lighten-2" @click="setFile()" style="cursor:pointer;">
               <img src="https://i.imgur.com/aTI4OeZ.png?1" />
             </v-avatar>
-            <input
-              type="file"
-              name="file"
-              id="file"
-              style="width:100%; display:none"
-              @change="onFileChange"
-            />
+            <input type="file" name="file" id="file" style="width:100%; display:none" @change="onFileChange" />
           </div>
-          <div
-            v-else
-            style="position:relative;"
-            @mouseover="showRmImgBtn=true"
-            @mouseleave="showRmImgBtn=false"
-          >
-            <div
-              @click="removeImage()"
-              v-show="showRmImgBtn"
-              style="z-index:2; right:0; position: absolute;"
-            >
-              <img
-                src="../assets/icon_set/delete.png"
-                alt="delimg"
-                style="cursor:pointer;width:25px;height:25px;"
-              />
+          <div v-else style="position:relative;" @mouseover="showRmImgBtn=true" @mouseleave="showRmImgBtn=false" >
+            <div @click="removeImage()" v-show="showRmImgBtn" style="z-index:2; right:0; position: absolute;" >
+              <img src="../assets/icon_set/delete.png" alt="delimg" style="cursor:pointer;width:25px;height:25px;"/>
             </div>
             <v-avatar size="150" class="grey lighten-2">
               <img :src="image" />
@@ -100,30 +61,25 @@
 
       <!-- Intro -->
       <v-layout row wrap align-center justify-space-around>
+        <!-- UserName & follow unfollow -->
         <span class="text-center title" style="width:100%">
           {{user.userName}}
           <v-flex fab text outlined small v-if="!isMine && !isFollow" @click="follow()">
-            <img
-              src="../assets/icon_set/add-user.png"
-              alt="follow"
-              style="cursor:pointer; width:25px;height:25px;"
-            />
+            <img src="../assets/icon_set/add-user.png" alt="follow" style="cursor:pointer; width:25px;height:25px;" />
           </v-flex>
-
           <v-flex fab text outlined small v-if="!isMine && isFollow" @click="unfollow()">
-            <img
-              src="../assets/icon_set/followers2.png"
-              alt="unfollow"
-              style="cursor:pointer; width:25px;height:25px;"
-            />
+            <img src="../assets/icon_set/followers2.png" alt="unfollow" style="cursor:pointer; width:25px;height:25px;"/>
           </v-flex>
         </span>
+
+        <!-- 유저 한줄소개 인트로 -->
         <span class="subheading grey--text text-center" style="width:100%">
           {{user.userIntro}}
           <IntroEditor v-on:sendIntro="receiveIntro" :introinput="user.userIntro" v-if="isMine" />
         </span>
       </v-layout>
 
+      <!-- follower 명시 -->
       <v-layout row wrap align-center justify-space-around style="margin:20px 0;">
         <div style="display:inline-block;">
           <button @click="followerTest">Follower : {{user.followerlist.length}}</button>
@@ -140,71 +96,55 @@
           <FollowerList v-show="this.viewFollower || this.viewFollowing"></FollowerList>
 
           <v-layout v-if="!this.viewFollower && !this.viewFollowing" row wrap>
+            <!-- leftSide -->
             <v-flex xs12 sm4 md3>
-              <LeftSide
-                xs12
-                sm4
-                md3
-                :isMine="isMine"
-                v-on:toStory="fromLeftSide"
-                v-on:toStoryFilter="toFilterFunction"
-              />
+              <LeftSide xs12 sm4 md3 :isMine="isMine" v-on:toStory="fromLeftSide" v-on:toStoryFilter="toFilterFunction" />
             </v-flex>
 
             <v-flex xs12 sm8 md9>
-              <v-layout wrap style="position:relative; padding:0px 5px;">
-                <div
-                  @click="changeComponent()"
-                  v-if="this.$store.getters.getSession==this.$route.params.id && !statedetail && !stateupdate"
-                  class="d-inline"
-                  style="display:inline;"
-                >
-                  <div id="toggletext">
-                    <div
-                      v-if="!stateAdd"
-                      style="cursor:pointer;background: rgb(117, 199, 145); padding: 5px 20px; border-radius: 20px; color: white;margin:3px;"
-                    >프로젝트 생성하기</div>
+              <!-- btn Toolbar -->
+              <v-container>
+                <v-layout wrap style="padding:0px 5px;">
+                  <div @click="changeComponent()" v-if="this.$store.getters.getSession==this.$route.params.id && !statedetail && !stateupdate" class="d-inline" style="display:inline;">
+                    <div id="toggletext">
+                      <div v-if="!stateAdd" style="cursor:pointer;background: rgb(117, 199, 145); padding: 5px 20px; border-radius: 20px; color: white;margin:3px;">
+                        프로젝트 생성하기
+                      </div>
 
-                    <img
-                      src="../assets/icon_set/back.png"
-                      alt="backtoList"
-                      style="cursor:pointer;width:25px;height:25px;"
-                      v-if="stateAdd"
-                    />
+                      <img src="../assets/icon_set/back.png" alt="backtoList" style="cursor:pointer;width:25px;height:25px;" v-if="stateAdd" />
+                    </div>
                   </div>
-                </div>
-
-                <div style="position: absolute; display: inline; right: 5px; top:7px;">
-                  <div style="display:inline!important; float:right; right:50%;" v-if="!stateAdd ">
-                    <toggle-button
-                      d-inline
-                      v-if="!stateAdd && !stateupdate && !statedetail"
-                      :width="50"
-                      v-model="toggleView"
-                      :sync="true"
-                      :labels="{checked: '새창', unchecked: ''}"
-                    />
+                  <v-spacer/>
+                  <div style="display: inline;">
+                    <div style="display:inline!important;"
+                      v-if="!stateAdd && !stateupdate && !statedetail" >
+                      <v-btn-toggle small>
+                        <v-btn small text @click="ChangeLayout(1)" id="toggletext">
+                          <i class="fa fa-th-large fa-1x" />
+                        </v-btn>
+                        <v-btn small text @click="ChangeLayout(2)" id="toggletext">
+                          <i class="fa fa-th-list fa-1x" />
+                        </v-btn>
+                        <v-btn small text @click="ChangeLayout(3)" id="toggletext">
+                          <i class="fa fa-bars fa-1x" />
+                        </v-btn>
+                      </v-btn-toggle>
+                    </div>
+                    <div style="display:inline!important;" v-if="!stateAdd ">
+                      <toggle-button
+                        d-inline
+                        v-if="!stateAdd && !stateupdate && !statedetail"
+                        :width="50"
+                        v-model="toggleView"
+                        :sync="true"
+                        :labels="{checked: '새창', unchecked: ''}"
+                      />
+                    </div>
                   </div>
+                </v-layout>
+              </v-container>
 
-                  <div
-                    style="display:inline!important; float:right; right:50%;"
-                    v-if="!stateAdd && !stateupdate && !statedetail"
-                  >
-                    <v-btn-toggle small>
-                      <v-btn small text @click="ChangeLayout(1)" id="toggletext">
-                        <i class="fa fa-th-large fa-1x" />
-                      </v-btn>
-                      <v-btn small text @click="ChangeLayout(2)" id="toggletext">
-                        <i class="fa fa-th-list fa-1x" />
-                      </v-btn>
-                      <v-btn small text @click="ChangeLayout(3)" id="toggletext">
-                        <i class="fa fa-bars fa-1x" />
-                      </v-btn>
-                    </v-btn-toggle>
-                  </div>
-                </div>
-              </v-layout>
-
+              <!-- List Option -->
               <v-layout wrap>
                 <ProjectList
                   v-if="!stateAdd && !statedetail && !stateupdate"
@@ -212,20 +152,10 @@
                   v-on:goup="update_project"
                   v-on:toStoryUpdate="UPDATE_Project"
                   :layout="layout"
-                  :toFilter="Filter"
-                  v-on:toStoryList="resetFilter"
-                />
-                <ProjectEditor
-                  v-if="stateAdd && !statedetail && !stateupdate"
-                  v-on:insert_success="gbp4"
-                />
+                  :toFilter="Filter" v-on:toStoryList="resetFilter"/>
+                <ProjectEditor v-if="stateAdd && !statedetail && !stateupdate" v-on:insert_success="gbp4" />
                 <Project v-if="statedetail" :pcode="pcode" v-on:goBackpage="gbp" />
-                <ProjectEditor
-                  v-if="stateupdate"
-                  :project_id="pcode2"
-                  v-on:goBackpage="gbp2"
-                  v-on:update_success="gbp3"
-                />
+                <ProjectEditor v-if="stateupdate" :project_id="pcode2" v-on:goBackpage="gbp2" v-on:update_success="gbp3" />
                 <!-- <ProjectUpdator v-if="stateupdate" :project_id="pcode2" v-on:goBackpage="gbp2" v-on:update_success="gbp3" /> -->
                 <!-- <v-btn @click="check_stateupdate(state)"></v-btn> -->
               </v-layout>
