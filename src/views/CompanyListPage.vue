@@ -106,7 +106,6 @@ export default {
           this.showCompanyList.push(this.allCompanyList[i]);
         }
       }
-
     },
     seacrh() {
       this.noneEnter = false;
@@ -156,7 +155,7 @@ export default {
 
 .companyList__container {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: 1fr;
   grid-gap: 0.1rem;
   padding-left: 90px;
   padding-right: 90px;
@@ -177,5 +176,25 @@ export default {
   justify-content: center;
   align-items: center;
   height: 70px;
+}
+@media screen and (min-width: 500px) {
+  .companyList__container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* grid-gap: 0.1rem;
+    padding-left: 90px;
+    padding-right: 90px;
+    background-color: white; */
+  }
+}
+@media screen and (min-width: 850px) {
+  .companyList__container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    /* grid-gap: 0.1rem;
+    padding-left: 90px;
+    padding-right: 90px;
+    background-color: white; */
+  }
 }
 </style>

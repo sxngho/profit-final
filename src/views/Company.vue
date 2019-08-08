@@ -296,12 +296,12 @@
                                   <td>{{item.recruit.data.budget}}</td>
                                 </tr>
                                 <tr>
-                                  <th>업로드일</th>
-                                  <td>{{item.recruit.data.createDay}}</td>
+                                  <th>위약금</th>
+                                  <td>{{item.recruit.data.penalty}}</td>
                                 </tr>
                                 <tr>
-                                  <th>모집종료</th>
-                                  <td>{{item.recruit.data.closingDate}}</td>
+                                  <th>업로드일</th>
+                                  <td>{{item.recruit.data.createDay}}</td>
                                 </tr>
                                 <tr>
                                   <th>프로젝트 마감일</th>
@@ -350,12 +350,12 @@
                                   <td>{{item.recruit.data.budget}}</td>
                                 </tr>
                                 <tr>
-                                  <th>업로드일</th>
-                                  <td>{{item.recruit.data.createDay}}</td>
+                                  <th>위약금</th>
+                                  <td>{{item.recruit.data.penalty}}</td>
                                 </tr>
                                 <tr>
-                                  <th>모집종료</th>
-                                  <td>{{item.recruit.data.closingDate}}</td>
+                                  <th>업로드일</th>
+                                  <td>{{item.recruit.data.createDay}}</td>
                                 </tr>
                                 <tr>
                                   <th>프로젝트 마감일</th>
