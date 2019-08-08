@@ -356,6 +356,8 @@ export default {
       //디비에서 받아온 유저의 배너이미지와, 프로필 사진 이미지를 붙인다
       if (userImg.banner) {
         this.storyBanner = userImg.banner;
+      } else {
+        this.storyBanner = "https://i.imgur.com/KnVfJVQ.png"
       }
       this.image = userImg.profileImg;
     },
