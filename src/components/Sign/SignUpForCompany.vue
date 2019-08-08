@@ -89,6 +89,16 @@ import FirebaseService from "@/services/FirebaseService";
       signup_password_check: function() {
         if ( this.signup_password_check.length == 0 ) {
           this.signup_password_Msg = "";
+        } else if ( this.signup_password_check.length == this.signup_password.length ) {
+          if ( this.signup_password_check !== '' && this.signup_password  !== '' ) {
+            if ( this.signup_password_check == this.signup_password ) {
+              this.signup_password_Validation = true;
+              this.signup_password_Msg = "비밀번호가 일치합니다.";
+            } else {
+              this.signup_password_Validation = false;
+              this.signup_password_Msg = "비밀번호가 일치하지 않습니다.";
+            }
+          }
         }
       },
     },
