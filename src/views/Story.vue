@@ -20,10 +20,24 @@
     <!-- Banner -->
     <div>
       <!-- User Banner Img -->
-      <v-layout row wrap v-bind:style="{ 'backgroundImage': 'url(' + storyBanner + ')' }" style="background-size:100%;margin-bottom: 95px;" >
+      <!-- <v-layout row wrap v-bind:style="{ 'backgroundImage': 'url(' + storyBanner + ')' }" style="background-size:100%;margin-bottom: 95px;" >
         <v-flex xs12 style="height:220px;">
         </v-flex>
-      </v-layout>
+      </v-layout> -->
+      <v-layout row wrap v-bind:style="{ 'backgroundImage': 'url(' + storyBanner + ')' }" style="background-size:100%;margin-bottom: 95px;" >
+          <div class="text-center" justify-center style="position:relative" @mouseover="showUpImgBanner=true" @mouseleave="showUpImgBanner=false">
+            123123
+            <div v-show="showUpImgBanner">
+              234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957
+              234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957
+              234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957
+            </div>
+          </div>
+
+          <v-flex xs12 style="height:220px;">
+          </v-flex>
+        </v-layout>
+
 
       <!-- ProfileImg -->
       <v-layout row wrap>
@@ -102,51 +116,52 @@
 
         <!-- btn Toolbar -->
         <v-flex xs12 sm8 md9>
-          <v-layout wrap style="position:relative; padding:0px 5px;">
-            <div @click="changeComponent()" v-if="this.$store.getters.getSession==this.$route.params.id && !statedetail && !stateupdate" class="d-inline" style="display:inline;">
-              <div id="toggletext">
-                <div
-                v-if="!stateAdd"
-                style="cursor:pointer;background: rgb(117, 199, 145); padding: 5px 20px; border-radius: 20px; color: white;margin:3px;"
-                >프로젝트 생성하기</div>
+          <v-container>
+            <v-layout wrap style="padding:0px 5px;">
+              <div @click="changeComponent()" v-if="this.$store.getters.getSession==this.$route.params.id && !statedetail && !stateupdate" class="d-inline" style="display:inline;">
+                <div id="toggletext">
+                  <div
+                  v-if="!stateAdd"
+                  style="cursor:pointer;background: rgb(117, 199, 145); padding: 5px 20px; border-radius: 20px; color: white;margin:3px;"
+                  >프로젝트 생성하기</div>
 
-                <img
-                src="../assets/icon_set/back.png"
-                alt="backtoList"
-                style="cursor:pointer;width:25px;height:25px;"
-                v-if="stateAdd"
-                />
+                  <img
+                  src="../assets/icon_set/back.png"
+                  alt="backtoList"
+                  style="cursor:pointer;width:25px;height:25px;"
+                  v-if="stateAdd"
+                  />
+                </div>
               </div>
-            </div>
 
-            <div style="position: absolute; display: inline; right: 5px; top:7px;">
-            <div style="display:inline!important; float:right; right:50%;" v-if="!stateAdd ">
-              <toggle-button
-                d-inline
-                v-if="!stateAdd && !stateupdate && !statedetail"
-                :width="50"
-                v-model="toggleView"
-                :sync="true"
-                :labels="{checked: '새창', unchecked: ''}"
-              />
-            </div>
-
-            <div style="display:inline!important; float:right; right:50%;" v-if="!stateAdd && !stateupdate && !statedetail">
-              <v-btn-toggle small>
-                <v-btn small text  @click="ChangeLayout(1)" id="toggletext">
-                  <i class="fa fa-th-large fa-1x"/>
-                </v-btn>
-                <v-btn small text @click="ChangeLayout(2)" id="toggletext">
-                  <i class="fa fa-th-list fa-1x"/>
-                </v-btn>
-                <v-btn small text @click="ChangeLayout(3)" id="toggletext">
-                  <i class="fa fa-bars fa-1x"/>
-                </v-btn>
-              </v-btn-toggle>
-            </div>
-          </div>
-          </v-layout>
-
+              <v-spacer/>
+              <div style="display: inline; ">
+                <div style="display:inline!important; margin-right:5px;" v-if="!stateAdd && !stateupdate && !statedetail">
+                  <v-btn-toggle small>
+                    <v-btn small text  @click="ChangeLayout(1)" id="toggletext">
+                      <i class="fa fa-th-large fa-1x"/>
+                    </v-btn>
+                    <v-btn small text @click="ChangeLayout(2)" id="toggletext">
+                      <i class="fa fa-th-list fa-1x"/>
+                    </v-btn>
+                    <v-btn small text @click="ChangeLayout(3)" id="toggletext">
+                      <i class="fa fa-bars fa-1x"/>
+                    </v-btn>
+                  </v-btn-toggle>
+                </div>
+                <div style="display:inline!important;" v-if="!stateAdd ">
+                  <toggle-button
+                    d-inline
+                    v-if="!stateAdd && !stateupdate && !statedetail"
+                    :width="50"
+                    v-model="toggleView"
+                    :sync="true"
+                    :labels="{checked: '새창', unchecked: ''}"
+                  />
+                </div>
+              </div>
+            </v-layout>
+          </v-container>
         <!-- List Option -->
         <v-layout wrap>
           <ProjectList
@@ -193,6 +208,7 @@ export default {
     return {
       showUpImgBtn:false,
       showRmImgBtn:false,
+      showUpImgBanner:false, // 슬기가 잠시 만듦
       isMine: false,
       stateAdd: false,
       userurl: "",
@@ -208,7 +224,7 @@ export default {
       showAddProject: false,
       Filter : "",
       userid:"",
-      storyBanner : "../assets/coding.jpg",
+      storyBanner : "https://i.imgur.com/KnVfJVQ.png",
       image:"",
       user:{
         userName:"",
@@ -326,7 +342,9 @@ export default {
       var userImg = await FirebaseService.SELECT_UserImage(this.$route.params.id);
       console.log("유저의 이미지!", userImg);
       //디비에서 받아온 유저의 배너이미지와, 프로필 사진 이미지를 붙인다
-      this.storyBanner = userImg.banner;
+      if (userImg.banner) {
+        this.storyBanner = userImg.banner;
+      }
       this.image = userImg.profileImg;
     },
 

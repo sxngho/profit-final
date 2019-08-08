@@ -15,13 +15,6 @@
 
       <v-spacer/>
       <div>
-        <!-- 좋아요! -->
-        <!-- <v-btn text icon color="pink"> -->
-          <!-- 이미 좋아요 눌렀다면 다른 fa 를 보여주는 것도 좋겠다. -->
-          <!-- <i id="likecheck" class="far fa-heart fa-2x" @click="like_project()"></i>
-          {{likeit.length}}
-        </v-btn> -->
-
         <v-badge color="#E74C3C" overlap>
           <template slot="badge"> {{likeit.length}} </template>
           <v-btn text icon color="pink">
