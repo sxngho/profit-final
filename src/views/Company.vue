@@ -86,112 +86,107 @@
       <v-layout row wrap>
         <v-flex xs12 sm10 offset-sm1>
           <v-card style="width:100%" outlined>
-            <v-card-title>기업정보 <v-spacer/> <span v-if="this.$route.params.id==this.$store.getters.getSession"><p style="font-size:0.5em">*데이터를 클릭하여 수정가능합니다.</p></span> </v-card-title>
+            <v-card-title>기업정보 <v-spacer/>
+              <div v-if="this.$route.params.id==this.$store.getters.getSession">
+              <v-btn v-if="!updatestate" @click="change_updatestate()">수정하기</v-btn>
+              <v-btn v-if="updatestate" @click="submit(
+                company.industry, company.mount, company.comsize, company.homepage
+                , company.address, company.establishedDate,  company.represent, company.annualsales
+                )">저장</v-btn>
+              <v-btn v-if="updatestate" @click="change_updatestate()">취소</v-btn>
+              </div>
+            </v-card-title>
             <v-card-text id="company_detail">
               <v-simple-table>
                 <tbody class="text-center">
                   <tr>
                     <th>산업</th>
                     <td v-if="this.$route.params.id!==this.$store.getters.getSession">{{company.industry}}</td>
-                    <td v-if="!toggleIndustry && this.$route.params.id==this.$store.getters.getSession" @click="Function_Industry()">{{company.industry}}</td>
+                    <td v-if="!updatestate && this.$route.params.id==this.$store.getters.getSession">{{company.industry}}</td>
                     <td>
                       <input
                         type="text"
                         v-model="company.industry"
-                        v-if="toggleIndustry && this.$route.params.id==this.$store.getters.getSession"
+                        v-if="updatestate && this.$route.params.id==this.$store.getters.getSession"
                         style="text-align:center"
-                        ref="IndustryRef"
-                        @keyup.enter="Submit_Industry()"
                       />
                     </td>
                   </tr>
                   <tr>
                     <th>사원수</th>
                     <td v-if="this.$route.params.id!==this.$store.getters.getSession">{{company.mount}}</td>
-                    <td v-if="!toggleMount && this.$route.params.id==this.$store.getters.getSession" @click="Function_Mount()">{{company.mount}}</td>
+                    <td v-if="!updatestate && this.$route.params.id==this.$store.getters.getSession">{{company.mount}}</td>
                     <td>
                       <input
                         type="text"
                         v-model="company.mount"
-                        v-if="toggleMount && this.$route.params.id==this.$store.getters.getSession"
+                        v-if="updatestate && this.$route.params.id==this.$store.getters.getSession"
                         style="text-align:center"
-                        ref="MountRef"
-                        @keyup.enter="Submit_Mount()"
                       />
                     </td>
                   </tr>
                   <tr>
                     <th>기업구분</th>
                     <td v-if="this.$route.params.id!==this.$store.getters.getSession">{{company.comsize}}</td>
-                    <td v-if="!toggleComsize && this.$route.params.id==this.$store.getters.getSession" @click="Function_Comsize()">{{company.comsize}}</td>
+                    <td v-if="!updatestate && this.$route.params.id==this.$store.getters.getSession">{{company.comsize}}</td>
                     <td>
                       <input
                         type="text"
                         v-model="company.comsize"
-                        v-if="toggleComsize && this.$route.params.id==this.$store.getters.getSession"
+                        v-if="updatestate && this.$route.params.id==this.$store.getters.getSession"
                         style="text-align:center"
-                        ref="ComsizeRef"
-                        @keyup.enter="Submit_Comsize()"
                       />
                     </td>
                   </tr>
                   <tr>
                     <th>홈페이지</th>
                     <td v-if="this.$route.params.id!==this.$store.getters.getSession">{{company.homepage}}</td>
-                    <td v-if="!toggleHomepage && this.$route.params.id==this.$store.getters.getSession" @click="Function_Homepage()">{{company.homepage}}</td>
+                    <td v-if="!updatestate && this.$route.params.id==this.$store.getters.getSession">{{company.homepage}}</td>
                     <td>
                       <input
                         type="text"
                         v-model="company.homepage"
-                        v-if="toggleHomepage && this.$route.params.id==this.$store.getters.getSession"
+                        v-if="updatestate && this.$route.params.id==this.$store.getters.getSession"
                         style="text-align:center"
-                        ref="HomepageRef"
-                        @keyup.enter="Submit_Homepage()"
                       />
                     </td>
                   </tr>
                   <tr>
                     <th>주소</th>
                     <td v-if="this.$route.params.id!==this.$store.getters.getSession">{{company.address}}</td>
-                    <td v-if="!toggleAddress && this.$route.params.id==this.$store.getters.getSession" @click="Function_Address()">{{company.address}}</td>
+                    <td v-if="!updatestate && this.$route.params.id==this.$store.getters.getSession">{{company.address}}</td>
                     <td>
                       <input
                         type="text"
                         v-model="company.address"
-                        v-if="toggleAddress && this.$route.params.id==this.$store.getters.getSession"
+                        v-if="updatestate && this.$route.params.id==this.$store.getters.getSession"
                         style="text-align:center"
-                        ref="AddressRef"
-                        @keyup.enter="Submit_Address()"
                       />
                     </td>
                   </tr>
                   <tr>
                     <th>설립일</th>
                     <td v-if="this.$route.params.id!==this.$store.getters.getSession">{{company.establishedDate}}</td>
-                    <td v-if="!toggleEstablishedDate && this.$route.params.id==this.$store.getters.getSession" @click="Function_EstablishedDate()">{{company.establishedDate}}</td>
+                    <td v-if="!updatestate && this.$route.params.id==this.$store.getters.getSession">{{company.establishedDate}}</td>
                     <td>
                       <input
                         type="text"
                         v-model="company.establishedDate"
-                        v-if="toggleEstablishedDate && this.$route.params.id==this.$store.getters.getSession"
+                        v-if="updatestate && this.$route.params.id==this.$store.getters.getSession"
                         style="text-align:center"
-                        ref="EstablishedDateRef"
-                        @keyup.enter="Submit_EstablishedDate()"
                       />
                     </td>
                   </tr>
                   <tr>
                     <th>대표자</th>
                     <td v-if="this.$route.params.id!==this.$store.getters.getSession">{{company.represent}}</td>
-                    <td v-if="!toggleRepresent && this.$route.params.id==this.$store.getters.getSession" @click="Function_Represent()">{{company.represent}}</td>
+                    <td v-if="!updatestate && this.$route.params.id==this.$store.getters.getSession">{{company.represent}}</td>
                     <td>
                       <input
                         type="text"
                         v-model="company.represent"
-                        v-if="toggleRepresent && this.$route.params.id==this.$store.getters.getSession"
+                        v-if="updatestate && this.$route.params.id==this.$store.getters.getSession"
                         style="text-align:center"
-                        ref="RepresentRef"
-                        @keyup.enter="Submit_Represent()"
                       />
                       <!-- <v-btn v-if="toggleRepresent && this.$route.params.id==this.$store.getters.getSession" style>취소</v-btn> -->
                     </td>
@@ -203,15 +198,13 @@
                   <tr>
                     <th>연매출</th>
                     <td v-if="this.$route.params.id!==this.$store.getters.getSession">{{company.annualsales}}</td>
-                    <td v-if="!toggleAnnualsales && this.$route.params.id==this.$store.getters.getSession" @click="Function_Annualsales()">{{company.annualsales}}</td>
+                    <td v-if="!updatestate && this.$route.params.id==this.$store.getters.getSession">{{company.annualsales}}</td>
                     <td>
                       <input
                         type="text"
                         v-model="company.annualsales"
-                        v-if="toggleAnnualsales && this.$route.params.id==this.$store.getters.getSession"
+                        v-if="updatestate && this.$route.params.id==this.$store.getters.getSession"
                         style="text-align:center"
-                        ref="AnnualsalesRef"
-                        @keyup.enter="Submit_Annualsales()"
                       />
                     </td>
                   </tr>
@@ -235,12 +228,10 @@
           <v-card style="width:100%" outlined>
             <v-card-title>회사소개</v-card-title>
             <v-card-text v-if="this.$route.params.id!==this.$store.getters.getSession">{{company.descript}}</v-card-text>
-            <v-card-text v-if="!toggleDescript && this.$route.params.id==this.$store.getters.getSession" @click="Function_Descript()">{{company.descript}}</v-card-text>
-            <v-card-text v-if="toggleDescript && this.$route.params.id==this.$store.getters.getSession">
+            <v-card-text v-if="!updatestate && this.$route.params.id==this.$store.getters.getSession">{{company.descript}}</v-card-text>
+            <v-card-text v-if="updatestate && this.$route.params.id==this.$store.getters.getSession">
               <textarea
                 v-model="company.descript"
-                ref="DescriptRef"
-                @keyup.enter="Submit_Descript()"
                 style="width:100%; height:150px"
               />
             </v-card-text>
@@ -518,243 +509,6 @@ export default {
         });
       }
     },
-    Function_Industry() {
-      this.toggleIndustry = true;
-      this.toggleMount = false;
-      this.toggleComsize = false;
-      this.toggleEstablishedDate = false;
-      this.toggleRepresent = false;
-      this.toggleHomepage = false;
-      this.toggleAddress = false;
-      this.toggelAnnualsales = false;
-      this.toggleDescript = false;
-      this.$nextTick(() => this.$refs.IndustryRef.focus());
-    },
-    Function_Mount() {
-      this.toggleIndustry = false;
-      this.toggleMount = true;
-      this.toggleComsize = false;
-      this.toggleEstablishedDate = false;
-      this.toggleRepresent = false;
-      this.toggleHomepage = false;
-      this.toggleAddress = false;
-      this.toggelAnnualsales = false;
-      this.toggleDescript = false;
-
-      this.$nextTick(() => this.$refs.MountRef.focus());
-    },
-    Function_Comsize() {
-      this.toggleIndustry = false;
-      this.toggleMount = false;
-      this.toggleComsize = true;
-      this.toggleEstablishedDate = false;
-      this.toggleRepresent = false;
-      this.toggleHomepage = false;
-      this.toggleAddress = false;
-      this.toggelAnnualsales = false;
-      this.toggleDescript = false;
-
-      this.$nextTick(() => this.$refs.ComsizeRef.focus());
-    },
-    Function_Homepage() {
-      this.toggleIndustry = false;
-      this.toggleMount = false;
-      this.toggleComsize = false;
-      this.toggleEstablishedDate = false;
-      this.toggleRepresent = false;
-      this.toggleHomepage = true;
-      this.toggleAddress = false;
-      this.toggelAnnualsales = false;
-      this.toggleDescript = false;
-
-      this.$nextTick(() => this.$refs.HomepageRef.focus());
-    },
-    Function_Address() {
-      this.toggleIndustry = false;
-      this.toggleMount = false;
-      this.toggleComsize = false;
-      this.toggleEstablishedDate = false;
-      this.toggleRepresent = false;
-      this.toggleHomepage = false;
-      this.toggleAddress = true;
-      this.toggelAnnualsales = false;
-      this.toggleDescript = false;
-
-      this.$nextTick(() => this.$refs.AddressRef.focus());
-    },
-    Function_EstablishedDate() {
-      this.toggleIndustry = false;
-      this.toggleMount = false;
-      this.toggleComsize = false;
-      this.toggleEstablishedDate = true;
-      this.toggleRepresent = false;
-      this.toggleHomepage = false;
-      this.toggleAddress = false;
-      this.toggelAnnualsales = false;
-      this.toggleDescript = false;
-
-      this.$nextTick(() => this.$refs.EstablishedDateRef.focus());
-    },
-
-    Function_Represent() {
-      this.toggleIndustry = false;
-      this.toggleMount = false;
-      this.toggleComsize = false;
-      this.toggleEstablishedDate = false;
-      this.toggleRepresent = true;
-      this.toggleHomepage = false;
-      this.toggleAddress = false;
-      this.toggelAnnualsales = false;
-      this.toggleDescript = false;
-
-      this.$nextTick(() => this.$refs.RepresentRef.focus());
-    },
-
-    Function_Annualsales() {
-      this.toggleIndustry = false;
-      this.toggleMount = false;
-      this.toggleComsize = false;
-      this.toggleEstablishedDate = false;
-      this.toggleRepresent = false;
-      this.toggleHomepage = false;
-      this.toggleAddress = false;
-      this.toggleAnnualsales = true;
-      this.toggleDescript = false;
-
-      this.$nextTick(() => this.$refs.AnnualsalesRef.focus());
-    },
-
-    Function_Descript() {
-      this.toggleIndustry = false;
-      this.toggleMount = false;
-      this.toggleComsize = false;
-      this.toggleEstablishedDate = false;
-      this.toggleRepresent = false;
-      this.toggleHomepage = false;
-      this.toggleAddress = false;
-      this.toggleDescript = true;
-
-      this.$nextTick(() => this.$refs.DescriptRef.focus());
-    },
-
-    async Submit_Industry() {
-      if (this.$route.params.id==this.$store.getters.getSession)
-      this.toggleIndustry = !this.toggleIndustry;
-      await FirebaseService.UPDATE_Companys(
-        this.company,
-        this.company.company_name
-      );
-      this.showNotification(
-        "foo-css",
-        "success",
-        "",
-        `내용이 성공적으로 수정되었습니다.!`
-      );
-    },
-    async Submit_Mount() {
-      this.toggleMount = !this.toggleMount;
-      await FirebaseService.UPDATE_Companys(
-        this.company,
-        this.company.company_name
-      );
-      this.showNotification(
-        "foo-css",
-        "success",
-        "",
-        `내용이 성공적으로 수정되었습니다.!`
-      );
-    },
-    async Submit_Comsize() {
-      this.toggleComsize = !this.toggleComsize;
-      await FirebaseService.UPDATE_Companys(
-        this.company,
-        this.company.company_name
-      );
-      this.showNotification(
-        "foo-css",
-        "success",
-        "",
-        `내용이 성공적으로 수정되었습니다.!`
-      );
-    },
-    async Submit_Homepage() {
-      this.toggleHomepage = !this.toggleHomepage;
-      await FirebaseService.UPDATE_Companys(
-        this.company,
-        this.company.company_name
-      );
-      this.showNotification(
-        "foo-css",
-        "success",
-        "",
-        `내용이 성공적으로 수정되었습니다.!`
-      );
-    },
-    async Submit_Address() {
-      this.toggleAddress = !this.toggleAddress;
-      await FirebaseService.UPDATE_Companys(
-        this.company,
-        this.company.company_name
-      );
-      this.showNotification(
-        "foo-css",
-        "success",
-        "",
-        `내용이 성공적으로 수정되었습니다.!`
-      );
-    },
-    async Submit_EstablishedDate() {
-      this.toggleEstablishedDate = !this.toggleEstablishedDate;
-      await FirebaseService.UPDATE_Companys(
-        this.company,
-        this.company.company_name
-      );
-      this.showNotification(
-        "foo-css",
-        "success",
-        "",
-        `내용이 성공적으로 수정되었습니다.!`
-      );
-    },
-    async Submit_Represent() {
-      this.toggleRepresent = !this.toggleRepresent;
-      await FirebaseService.UPDATE_Companys(
-        this.company,
-        this.company.company_name
-      );
-      this.showNotification(
-        "foo-css",
-        "success",
-        "",
-        `내용이 성공적으로 수정되었습니다.!`
-      );
-    },
-    async Submit_Annualsales() {
-      this.toggleAnnualsales = !this.toggleAnnualsales;
-      await FirebaseService.UPDATE_Companys(
-        this.company,
-        this.company.company_name
-      );
-      this.showNotification(
-        "foo-css",
-        "success",
-        "",
-        `내용이 성공적으로 수정되었습니다.!`
-      );
-    },
-    async Submit_Descript() {
-      this.toggleDescript = !this.toggleDescript;
-      await FirebaseService.UPDATE_Companys(
-        this.company,
-        this.company.company_name
-      );
-      this.showNotification(
-        "foo-css",
-        "success",
-        "",
-        `내용이 성공적으로 수정되었습니다.!`
-      );
-    },
     async fetchData() {
       //this.company = await FirebaseService.SELECT_CompanyById(this.$route.params.id);
       this.$loading(true);
@@ -864,28 +618,25 @@ export default {
         "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=1000,height=600"
       );
     },
-    async submit() {
-      if (this.toggleIndustry) this.toggleIndustry = !this.toggleIndustry;
-      this.toggleMount = !this.toggleMount;
-      this.toggleComsize = !this.toggleComsize;
-      this.toggleEstablishedDate = !this.toggleEstablishedDate;
-      this.toggleRepresent = !this.toggleRepresent;
-      this.toggleHomepage = !this.toggleHomepage;
-      this.toggleAddress = !this.toggleAddress;
-      this.toggleAnnualsales = !this.toggleAnnualsales;
-      this.toggleDescript = !this.toggleDescript;
-      this.toggleCompany_logo = !this.toggleCompany_logo;
-      const companyInfo = this.company;
-      let result = await FirebaseService.UPDATE_Companys(
-        companyInfo,
-        companyInfo.company_name
-      );
-      this.showNotification(
-        "foo-css",
-        "success",
-        "",
-        `내용이 성공적으로 수정되었습니다.!`
-      );
+    async submit(industry, mount, comsize, homepage, address, establishedDate, represent, annualsales) {
+      this.$swal({
+         title: '정말 수정하시겠습니까?',
+         text: "수정된 기업정보는 복구가 불가능합니다.",
+         type: 'warning',
+         showCancelButton: true,
+         confirmButtonColor: '#3085d6',
+         cancelButtonColor: '#d33',
+         confirmButtonText: '수정',
+         cancelButtonText: '취소',
+        }).then((result) => {
+         if (result.value) {
+           this.$swal('Updated!','기업정보가 수정되었습니다.','success')
+           this.updatestate = !this.updatestate
+           const companyInfo = this.company;
+           FirebaseService.UPDATE_Companys(companyInfo, companyInfo.company_name);
+         }
+       })
+
     },
     setFile() {
       var file = document.querySelector("#file");
@@ -940,6 +691,9 @@ export default {
          }
        })
     },
+    change_updatestate() {
+      this.updatestate = !this.updatestate
+    },
   },
   data() {
     return {
@@ -967,16 +721,7 @@ export default {
       workingUser: "",
       dibsUsers: "",
       nowLevel: "",
-      toggleIndustry: false,
-      toggleMount: false,
-      toggleComsize: false,
-      toggleEstablishedDate: false,
-      toggleRepresent: false,
-      toggleHomepage: false,
-      toggleAddress: false,
-      toggleAnnualsales: false,
-      toggleDescript: false,
-      toggleCompany_logo: false,
+      updatestate:false,
       showUpImgBtn: false,
       showRmImgBtn: false,
       user: "",

@@ -1435,7 +1435,7 @@ export default {
         company_name: companyInfo.company_name,
         id: companyInfo.id,
         interests: companyInfo.interests,
-        followerlist: companyInfocompanyInfo.followerlist,
+        followerlist: companyInfo.followerlist,
         followinglist: companyInfo.followinglist,
         level: companyInfo.level,
         address: companyInfo.address,
