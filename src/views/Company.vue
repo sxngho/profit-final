@@ -198,7 +198,7 @@
                     <td></td>
                   </tr> -->
                   <tr>
-                    <th>연매출 ( 천 단위 )</th>
+                    <th>연매출 ( 단위 : 만원 )</th>
                     <td v-if="this.$route.params.id!==this.$store.getters.getSession">{{company.annualsales}}</td>
                     <td v-if="!updatestate && this.$route.params.id==this.$store.getters.getSession">{{company.annualsales}}</td>
                     <td>
@@ -232,19 +232,19 @@
             <v-card-title>회사소개 <v-spacer/>
               <div v-if="this.$route.params.id==this.$store.getters.getSession">
               <v-btn v-if="!updatestate2" @click="change_updatestate2()">수정하기</v-btn>
-              <v-btn v-if="updatestate2" @click="submit2(company.descript)">저장</v-btn>
+              <v-btn v-if="updatestate2" @click="submit2()">저장</v-btn>
               <v-btn v-if="updatestate2" @click="cancel_updatestate2()">취소</v-btn>
               </div>
 
             </v-card-title>
 
-            <v-card-text v-if="this.$route.params.id!==this.$store.getters.getSession">{{company.descript}}</v-card-text>
-            <v-card-text v-if="!updatestate2 && this.$route.params.id==this.$store.getters.getSession">{{company.descript}}</v-card-text>
+            <v-card-text v-if="this.$route.params.id!==this.$store.getters.getSession"><p v-html="company.descript"></p></v-card-text>
+            <v-card-text v-if="!updatestate2 && this.$route.params.id==this.$store.getters.getSession"><p v-html="company.descript"></p></v-card-text>
             <v-card-text v-if="updatestate2 && this.$route.params.id==this.$store.getters.getSession">
               <textarea
-                v-model="company.descript"
+                id="company_descript"
+                v-html="company.descript"
                 style="width:100%; height:150px"
-                v-on:keyup.enter="br_check()"
               />
             </v-card-text>
           </v-card>
@@ -500,7 +500,6 @@ export default {
     this.user = this.$session.get("session_id")
     this.$store.commit('setSession', this.user)
     this.loading = false;
-
   },
   methods: {
     complete(recruit) {
@@ -584,7 +583,6 @@ export default {
       this.company.address = comInfo[0].address;
       this.company.annualsales = comInfo[0].annualsales;
       this.company.descript = comInfo[0].descript;
-      this.tmp_descript = comInfo[0].descript;
 
       this.$loading(false);
     },
@@ -673,8 +671,13 @@ export default {
       }
 
     },
-    async submit2(descript) {
-      console.log(descript)
+    async submit2() {
+      this.updatestate2 = !this.updatestate2
+      var str = document.querySelector('#company_descript').value;
+      str = str.replace(/(?:\r\n|\r|\n)/g, '<br/>');
+      this.company.descript = str
+      const companyInfo = this.company;
+      FirebaseService.UPDATE_Companys(companyInfo, companyInfo.company_name)
     },
     setFile() {
       var file = document.querySelector("#file");
@@ -734,6 +737,10 @@ export default {
     },
     change_updatestate2() {
       this.updatestate2 = !this.updatestate2
+      var str = this.company.descript
+      str = str.replace(/(<br>|<br\/>|<br \/>)/g, '\r\n');
+      console.log(str, '2')
+      this.company.descript = str
     },
     cancel_updatestate() {
 
@@ -750,10 +757,10 @@ export default {
     },
     cancel_updatestate2() {
       this.updatestate2 = !this.updatestate2
+      var str = document.querySelector('#company_descript').value;
+      str = str.replace(/(?:\r\n|\r|\n)/g, '<br/>');
+      this.company.descript = str
     },
-    br_check() {
-      console.log('일단 엔터 감지했다.')
-    }
   },
   data() {
     return {

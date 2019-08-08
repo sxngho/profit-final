@@ -929,7 +929,7 @@ export default {
            followerlist: [],
            followinglist: [],
            level: 3,
-           company_logo: "",
+           company_logo: 'http://design-ec.com/d/e_others_50/l_e_others_500.png',
            industry: "",
            mount: "",
            comsize: "",
@@ -1402,6 +1402,7 @@ export default {
   //-------------------------------------companyInfo--------------------------------------------//
   //--------------------------------------------------------------------------------------------//
   async UPDATE_Companys(companyInfo, company_name) {
+    // console.log(companyInfo.descript, '이걸로 들어갈겁니다.')
     return firestore
       .collection("companys")
       .doc(company_name)
