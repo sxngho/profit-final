@@ -169,6 +169,7 @@
                     <th>설립일</th>
                     <td v-if="this.$route.params.id!==this.$store.getters.getSession">{{company.establishedDate}}</td>
                     <td v-if="!toggleEstablishedDate && this.$route.params.id==this.$store.getters.getSession" @click="Function_EstablishedDate()">{{company.establishedDate}}</td>
+                    <td>
                       <input
                         type="text"
                         v-model="company.establishedDate"
@@ -192,12 +193,33 @@
                         ref="RepresentRef"
                         @keyup.enter="Submit_Represent()"
                       />
+                      <!-- <v-btn v-if="toggleRepresent && this.$route.params.id==this.$store.getters.getSession" style>취소</v-btn> -->
                     </td>
                   </tr>
-                  <tr>
+                  <!-- <tr>
                     <th></th>
                     <td></td>
+                  </tr> -->
+                  <tr>
+                    <th>연매출</th>
+                    <td v-if="this.$route.params.id!==this.$store.getters.getSession">{{company.annualsales}}</td>
+                    <td v-if="!toggleAnnualsales && this.$route.params.id==this.$store.getters.getSession" @click="Function_Annualsales()">{{company.annualsales}}</td>
+                    <td>
+                      <input
+                        type="text"
+                        v-model="company.annualsales"
+                        v-if="toggleAnnualsales && this.$route.params.id==this.$store.getters.getSession"
+                        style="text-align:center"
+                        ref="AnnualsalesRef"
+                        @keyup.enter="Submit_Annualsales()"
+                      />
+                    </td>
                   </tr>
+                  <!-- <tr>
+                    <th></th>
+                    <td></td>
+                  </tr> -->
+
                 </tbody>
               </v-simple-table>
             </v-card-text>
@@ -504,6 +526,7 @@ export default {
       this.toggleRepresent = false;
       this.toggleHomepage = false;
       this.toggleAddress = false;
+      this.toggelAnnualsales = false;
       this.toggleDescript = false;
       this.$nextTick(() => this.$refs.IndustryRef.focus());
     },
@@ -515,6 +538,7 @@ export default {
       this.toggleRepresent = false;
       this.toggleHomepage = false;
       this.toggleAddress = false;
+      this.toggelAnnualsales = false;
       this.toggleDescript = false;
 
       this.$nextTick(() => this.$refs.MountRef.focus());
@@ -527,6 +551,7 @@ export default {
       this.toggleRepresent = false;
       this.toggleHomepage = false;
       this.toggleAddress = false;
+      this.toggelAnnualsales = false;
       this.toggleDescript = false;
 
       this.$nextTick(() => this.$refs.ComsizeRef.focus());
@@ -539,6 +564,7 @@ export default {
       this.toggleRepresent = false;
       this.toggleHomepage = true;
       this.toggleAddress = false;
+      this.toggelAnnualsales = false;
       this.toggleDescript = false;
 
       this.$nextTick(() => this.$refs.HomepageRef.focus());
@@ -551,6 +577,7 @@ export default {
       this.toggleRepresent = false;
       this.toggleHomepage = false;
       this.toggleAddress = true;
+      this.toggelAnnualsales = false;
       this.toggleDescript = false;
 
       this.$nextTick(() => this.$refs.AddressRef.focus());
@@ -563,6 +590,7 @@ export default {
       this.toggleRepresent = false;
       this.toggleHomepage = false;
       this.toggleAddress = false;
+      this.toggelAnnualsales = false;
       this.toggleDescript = false;
 
       this.$nextTick(() => this.$refs.EstablishedDateRef.focus());
@@ -576,9 +604,24 @@ export default {
       this.toggleRepresent = true;
       this.toggleHomepage = false;
       this.toggleAddress = false;
+      this.toggelAnnualsales = false;
       this.toggleDescript = false;
 
       this.$nextTick(() => this.$refs.RepresentRef.focus());
+    },
+
+    Function_Annualsales() {
+      this.toggleIndustry = false;
+      this.toggleMount = false;
+      this.toggleComsize = false;
+      this.toggleEstablishedDate = false;
+      this.toggleRepresent = false;
+      this.toggleHomepage = false;
+      this.toggleAddress = false;
+      this.toggleAnnualsales = true;
+      this.toggleDescript = false;
+
+      this.$nextTick(() => this.$refs.AnnualsalesRef.focus());
     },
 
     Function_Descript() {
@@ -686,6 +729,19 @@ export default {
         `내용이 성공적으로 수정되었습니다.!`
       );
     },
+    async Submit_Annualsales() {
+      this.toggleAnnualsales = !this.toggleAnnualsales;
+      await FirebaseService.UPDATE_Companys(
+        this.company,
+        this.company.company_name
+      );
+      this.showNotification(
+        "foo-css",
+        "success",
+        "",
+        `내용이 성공적으로 수정되었습니다.!`
+      );
+    },
     async Submit_Descript() {
       this.toggleDescript = !this.toggleDescript;
       await FirebaseService.UPDATE_Companys(
@@ -760,6 +816,7 @@ export default {
       this.company.represent = comInfo[0].represent;
       this.company.homepage = comInfo[0].homepage;
       this.company.address = comInfo[0].address;
+      this.company.annualsales = comInfo[0].annualsales;
       this.company.descript = comInfo[0].descript;
 
       this.$loading(false);
@@ -815,6 +872,7 @@ export default {
       this.toggleRepresent = !this.toggleRepresent;
       this.toggleHomepage = !this.toggleHomepage;
       this.toggleAddress = !this.toggleAddress;
+      this.toggleAnnualsales = !this.toggleAnnualsales;
       this.toggleDescript = !this.toggleDescript;
       this.toggleCompany_logo = !this.toggleCompany_logo;
       const companyInfo = this.company;
@@ -900,6 +958,7 @@ export default {
         represent: "",
         homepage: "",
         address : "",
+        annualsales: "",
         descript : "",
       },
       loading : false,
@@ -915,6 +974,7 @@ export default {
       toggleRepresent: false,
       toggleHomepage: false,
       toggleAddress: false,
+      toggleAnnualsales: false,
       toggleDescript: false,
       toggleCompany_logo: false,
       showUpImgBtn: false,
