@@ -929,7 +929,8 @@ export default {
                   represent: "",
                   homepage: "",
                   address: "",
-                  descript: ""
+                  descript: "",
+                  annualsales : "",
                 });
               // alert(`${id}님, 회원가입이 완료되었습니다.`);
               return true;
@@ -1390,26 +1391,27 @@ export default {
 
   //-------------------------------------companyInfo--------------------------------------------//
   //--------------------------------------------------------------------------------------------//
-  async UPDATE_Companys(comapnyInfo, company_name) {
+  async UPDATE_Companys(companyInfo, company_name) {
     return firestore
       .collection("companys")
       .doc(company_name)
       .update({
-        company_name: comapnyInfo.company_name,
-        id: comapnyInfo.id,
-        interests: comapnyInfo.interests,
-        followerlist: comapnyInfo.followerlist,
-        followinglist: comapnyInfo.followinglist,
-        level: comapnyInfo.level,
-        address: comapnyInfo.address,
-        company_logo: comapnyInfo.company_logo,
-        comsize: comapnyInfo.comsize,
-        descript: comapnyInfo.descript,
-        establishedDate: comapnyInfo.establishedDate,
-        homepage: comapnyInfo.homepage,
-        industry: comapnyInfo.industry,
-        mount: comapnyInfo.mount,
-        represent: comapnyInfo.represent
+        company_name: companyInfo.company_name,
+        id: companyInfo.id,
+        interests: companyInfo.interests,
+        followerlist: companyInfo.followerlist,
+        followinglist: companyInfo.followinglist,
+        level: companyInfo.level,
+        address: companyInfo.address,
+        company_logo: companyInfo.company_logo,
+        comsize: companyInfo.comsize,
+        descript: companyInfo.descript,
+        establishedDate: companyInfo.establishedDate,
+        homepage: companyInfo.homepage,
+        industry: companyInfo.industry,
+        mount: companyInfo.mount,
+        represent: companyInfo.represent,
+        annualsales: companyInfo.annualsales,
       });
   },
 

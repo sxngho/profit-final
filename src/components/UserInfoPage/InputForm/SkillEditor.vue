@@ -98,7 +98,7 @@ import FirebaseService from "@/services/FirebaseService";
       },
       async initShowModal(){
         var skill = await FirebaseService.SELECT_UserSkillByNickname(this.$session.get('session_id'));
-        console.log(skill)
+        // console.log(skill)
         this.receiveUserSkills = skill[0].us;
         this.receiveShowSkillList = skill[0].ss;
         this.selectList = skill[0].ss;

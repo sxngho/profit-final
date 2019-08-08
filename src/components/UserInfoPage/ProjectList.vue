@@ -2,6 +2,10 @@
 <template>
   <v-container>
     <v-layout wrap justify-center>
+      <div v-if="!projects.length">
+        <div style="height:100px"></div>
+        프로젝트를 추가해주세요.
+      </div>
       <v-flex
         v-for="i in projects.length > max_project ? max_project : projects.length" xs12 sm6 lg4 v-if="( projects[i-1].data.state < 3 || projects[i-1].data.session_id==$store.getters.getSession ) && filtering(i,techfilter) && layout==1 "
         style="padding:30px 5px;" v-bind:class="[`project_${i-1}`]">
