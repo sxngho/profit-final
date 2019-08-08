@@ -915,50 +915,37 @@ export default {
       })
   },
 
-  async SignupCompany(company_name, id, password, interests) {
-    return firestore
-      .collection("companys")
-      .doc(company_name)
-      .get()
-      .then(docSnapshot => {
-        if (docSnapshot.exists) {
-          alert(`${company_name}은 이미 존재합니다.`);
-          return false;
-        } else {
-          return firebase
-            .auth()
-            .createUserWithEmailAndPassword(id, password)
-            .then(function () {
-              firestore
-                .collection("companys")
-                .doc(company_name)
-                .set({
-                  company_name: company_name,
-                  id: id,
-                  interests: interests,
-                  followerlist: [],
-                  followinglist: [],
-                  level: 3,
-                  company_logo: "",
-                  industry: "",
-                  mount: "",
-                  comsize: "",
-                  establishedDate: "",
-                  represent: "",
-                  homepage: "",
-                  address: "",
-                  descript: "",
-                  annualsales : "",
-                });
-              // alert(`${id}님, 회원가입이 완료되었습니다.`);
-              return true;
-            })
-            .catch(function (error) {
-              alert(error);
-              return false;
-            });
-        }
-      });
+  async SignupCompany(company_name, id, password) {
+    return firebase
+     .auth()
+     .createUserWithEmailAndPassword(id, password)
+     .then(function () {
+       firestore
+         .collection("companys")
+         .doc(company_name)
+         .set({
+           company_name: company_name,
+           id: id,
+           interests: [],
+           followerlist: [],
+           followinglist: [],
+           level: 3,
+           company_logo: "",
+           industry: "",
+           mount: "",
+           comsize: "",
+           establishedDate: "",
+           represent: "",
+           homepage: "",
+           address: "",
+           descript: "",
+           annualsales : "",
+         });
+         return true;
+       })
+       .catch(function(error) {
+         return false;
+       })
   },
 
   // --------------------------------------------------------------------SIGN
