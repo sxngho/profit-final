@@ -50,7 +50,7 @@
           <v-btn color="blue darken-1" text @click="signupforcompanymodal = false"> 닫기 </v-btn>
           <v-btn color="blue darken-1" text
           v-if="signup_id_Validation && signup_password_Validation"
-          @click="SignupCompany(company_name, signup_id, signup_password, interests)"> 회원가입 </v-btn>
+          @click="SignupCompany(company_name, signup_id, signup_password)"> 회원가입 </v-btn>
           <v-btn color="blue darken-1" text v-else disabled>회원가입</v-btn>
         </v-card-actions>
       </v-card>
@@ -103,7 +103,7 @@ import FirebaseService from "@/services/FirebaseService";
       },
     },
     methods : {
-      async SignupCompany(company_name, id, password, interests) {
+      async SignupCompany(company_name, id, password) {
       var result = await FirebaseService.SignupCompany(company_name, id, password)
         if (result == true) {
           this.signupforcompanymodal = false;
@@ -112,6 +112,8 @@ import FirebaseService from "@/services/FirebaseService";
           this.signup_password='';
           this.$emit('signup')
           this.$swal('회원가입에 성공하였습니다.','기업 페이지에서 정보를 입력해주세요!','success')
+        } else {
+          console.log('안됨')
         }
       },
       idCheck() {
