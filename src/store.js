@@ -39,8 +39,8 @@ export default new Vuex.Store({
     companyList: [],
     showCompanyList: [],
     showCompanyListBottomBar: [],
-    level:"",
-    alertList:{alert:[], unread:[]}
+    level: "",
+    alertList: { alert: [], unread: [] }
   },
   // Getter : get 함수 정의
   // 정의 -> return state.변수명
@@ -59,7 +59,7 @@ export default new Vuex.Store({
       return state.level;
     },
     getalertList: function(state) {
-      return state.alertList
+      return state.alertList;
     }
   },
 

@@ -75,6 +75,7 @@ export default {
     return firestore
       .collection("projects")
       .where("session_id", "==", id)
+      .orderBy('date', 'desc')
       .get()
       .then(docSnapshots => {
         return docSnapshots.docs.map(doc => {

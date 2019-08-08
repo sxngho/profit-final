@@ -1,7 +1,7 @@
 <template>
   <div class="banner__container">
     <div class="banner__content">
-      <!-- User가 일반 유저인 경우에는 아래의 router-link 가 노출됩니다. -->
+      <!-- 1-1 스토리 : User가 일반 유저인 경우에는 아래의 router-link 가 노출됩니다. -->
       <router-link
         :to="{ name: 'story', params: { id: this.$session.get('session_id') }}"
         class="bannerBox"
@@ -20,11 +20,29 @@
         </div>
       </router-link>
 
-      <!-- User가 일반 유저가 아닌 경우, studio로 가는 활동을 막기 위해 fake로 아래 div를 노출합니다. -->
+      <!-- 1-2 스토리 : User가 회사 유저인 경우에는 아래의 router-link 가 노출됩니다. -->
+      <router-link
+        :to="{ name: 'company', params: { id: this.$session.get('session_id') }}"
+        class="bannerBox"
+        style="text-decoration:none"
+        v-if="this.$store.getters.getLevel==3"
+      >
+        <div class="studio contentBox">
+          <div class="iconBox">
+            <i class="far fa-keyboard fa-7x" style="color:blueviolet"></i>
+          </div>
+          <br/>
+          <div class="studio_title titleBox">
+            <span class="fontStyle">스토리</span>
+          </div>
+        </div>
+      </router-link>
+
+      <!-- 1-3 스토리 : User가 로그인하지 않은 경우, studio로 가는 활동을 막기 위해 fake로 아래 div를 노출합니다. -->
       <div
         class="bannerBox"
         style="text-decoration:none; cursor:pointer;"
-        v-if="this.$store.getters.getLevel!==2"
+        v-if="typeof(this.$store.getters.getLevel)!=='number'"
         @click="alert_message_user()"
       >
         <div class="studio contentBox">
@@ -38,7 +56,7 @@
         </div>
       </div>
 
-      <!-- User가 일반 유저인 경우에는 아래의 router-link 가 노출됩니다. -->
+      <!-- 2-1 외주 공고 리스트 : User가 일반 유저인 경우에는 아래의 router-link 가 노출됩니다. -->
       <router-link
         to="/recruits"
         class="bannerBox"
@@ -56,7 +74,7 @@
         </div>
       </router-link>
 
-      <!-- User가 일반 유저가 아닌 경우, studio로 가는 활동을 막기 위해 fake로 아래 div를 노출합니다. -->
+      <!-- 2-2 외주 공고 리스트 : User가 일반 유저가 아닌 경우, studio로 가는 활동을 막기 위해 fake로 아래 div를 노출합니다. -->
       <div class="bannerBox" style="text-decoration:none; cursor:pointer;" v-if="typeof(this.$store.getters.getLevel)=='string'" @click="alert_message_user()">
         <div class="studio contentBox">
           <div class="iconBox">
@@ -69,6 +87,7 @@
         </div>
       </div>
 
+      <!-- 3 기업 리스트 -->
       <router-link to="/companyListPage" class="bannerBox" style="text-decoration:none">
         <div class="companyList contentBox">
           <div class="iconBox">
@@ -81,6 +100,7 @@
         </div>
       </router-link>
 
+      <!-- 4 유저 랜덤 리스트 -->
       <router-link
         :to="{ name: 'story', params: { id: randId }}"
         class="bannerBox"
@@ -93,7 +113,7 @@
             </div>
             <br />
             <div class="randomList_title titleBox">
-              <span class="fontStyle">유저 랜덤 리스트</span>
+              <span class="fontStyle">랜덤 스토리</span>
             </div>
           </div>
         </button>
