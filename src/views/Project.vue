@@ -168,7 +168,7 @@
                         <v-layout justify-center d-inline>
                           <v-dialog v-model="Commentdialog" max-width="290">
                             <template v-slot:activator="{ on }">
-                              <v-btn v-if="$store.getters.getSession" text color="primary" dark v-on="on"><i class="fas fa-bell" style="color:orange"></i></v-btn>
+                              <v-btn v-if="$store.getters.getSession" text color="primary" dark v-on="on" style=""><i class="fas fa-bell" style="color:orange;"></i></v-btn>
                             </template>
 
                             <v-card>
@@ -490,7 +490,7 @@ export default {
     async like_comment(com, index) {
       if (this.user) {
         // com 은 내용 , index 는 순서
-        var result = await FirebaseService.like_comment(this.user, this.pcode, this.comments, com.like, index)
+        var result = await FirebaseService.like_comment(this.user, this.project_id, this.comments, com.like, index)
         var heart2 = document.querySelector(`#commentlike_${index}`)
         if (result[index].like.includes(this.user)) {
           // 댓글 남긴 사람들 중에서 내가 있다는 뜻.

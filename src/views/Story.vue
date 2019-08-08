@@ -20,19 +20,37 @@
 
     <!-- Banner -->
     <div>
-      <!-- User Banner Img -->
-      <v-layout row wrap v-bind:style="{ 'backgroundImage': 'url(' + storyBanner + ')' }" style="background-size:100%;margin-bottom: 95px;" >
-        <div class="text-center" justify-center style="position:relative" @mouseover="showUpImgBanner=true" @mouseleave="showUpImgBanner=false">
-          123123
-          <div v-show="showUpImgBanner">
-            234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957
-            234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957
-            234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957234ㅕ817589734895298345892703957
-          </div>
-        </div>
 
-        <v-flex xs12 style="height:220px;">
-        </v-flex>
+      <!-- User Banner Img -->
+      <v-layout row wrap style="margin:0px 10px;">
+        <v-layout row wrap v-bind:style="{ 'backgroundImage': 'url(' + storyBanner   + ')' }" style="background-size:100%; margin-bottom: 95px;"  @mouseover="showUpImgBanner=true" @mouseleave="showUpImgBanner=false">
+
+            <div v-show="showUpImgBanner && this.$route.params.id==this.$store.getters.getSession" style="position: absolute; border:1px solid;"
+            @click="setBanner()">
+              <p style="background: #ffffff91; cursor:pointer; margin:0px;">배경화면 수정하기</p>
+              <input
+                type="file"
+                id="Banner"
+                style="width:100%; display:none"
+                @change="onFileChangeBanner"
+              />
+            </div>
+
+            <div
+              @click="removeImageBanner()"
+              v-show="showUpImgBanner && this.$route.params.id==this.$store.getters.getSession && storyBanner"
+              style="z-index:2; right:0; position: absolute;"
+            >
+              <img
+                src="../assets/icon_set/delete.png"
+                alt="delimg"
+                style="cursor:pointer;width:25px;height:25px;"
+              />
+            </div>
+
+          <v-flex xs12 style="height:220px;">
+          </v-flex>
+        </v-layout>
       </v-layout>
 
       <!-- ProfileImg -->
@@ -48,9 +66,23 @@
             </v-avatar>
             <input type="file" name="file" id="file" style="width:100%; display:none" @change="onFileChange" />
           </div>
-          <div v-else style="position:relative;" @mouseover="showRmImgBtn=true" @mouseleave="showRmImgBtn=false" >
-            <div @click="removeImage()" v-show="showRmImgBtn" style="z-index:2; right:0; position: absolute;" >
-              <img src="../assets/icon_set/delete.png" alt="delimg" style="cursor:pointer;width:25px;height:25px;"/>
+          <div
+            v-else
+            style="position:relative;"
+            @mouseover="showRmImgBtn=true"
+            @mouseleave="showRmImgBtn=false"
+          >
+            <div
+              @click="removeImage()"
+              v-show="showRmImgBtn"
+              style="z-index:2; right:0; position: absolute;"
+              v-if="this.$route.params.id==this.$store.getters.getSession"
+            >
+              <img
+                src="../assets/icon_set/delete.png"
+                alt="delimg"
+                style="cursor:pointer;width:25px;height:25px;"
+              />
             </div>
             <v-avatar size="150" class="grey lighten-2">
               <img :src="image" />
@@ -64,18 +96,27 @@
         <!-- UserName & follow unfollow -->
         <span class="text-center title" style="width:100%">
           {{user.userName}}
-          <v-flex fab text outlined small v-if="!isMine && !isFollow" @click="follow()">
-            <img src="../assets/icon_set/add-user.png" alt="follow" style="cursor:pointer; width:25px;height:25px;" />
+          <v-flex fab text outlined small v-if="this.$store.getters.getSession && this.$route.params.id!=this.$store.getters.getSession && !isFollow" @click="follow()">
+            <img
+              src="../assets/icon_set/add-user.png"
+              alt="follow"
+              style="cursor:pointer; width:25px;height:25px;"
+            />
           </v-flex>
-          <v-flex fab text outlined small v-if="!isMine && isFollow" @click="unfollow()">
-            <img src="../assets/icon_set/followers2.png" alt="unfollow" style="cursor:pointer; width:25px;height:25px;"/>
+
+          <v-flex fab text outlined small v-if="this.$store.getters.getSession && this.$route.params.id!=this.$store.getters.getSession && isFollow" @click="unfollow()">
+            <img
+              src="../assets/icon_set/followers2.png"
+              alt="unfollow"
+              style="cursor:pointer; width:25px;height:25px;"
+            />
           </v-flex>
         </span>
 
         <!-- 유저 한줄소개 인트로 -->
         <span class="subheading grey--text text-center" style="width:100%">
           {{user.userIntro}}
-          <IntroEditor v-on:sendIntro="receiveIntro" :introinput="user.userIntro" v-if="isMine" />
+          <IntroEditor v-on:sendIntro="receiveIntro" :introinput="user.userIntro" v-if="this.$route.params.id==this.$store.getters.getSession" />
         </span>
       </v-layout>
 
@@ -98,7 +139,13 @@
           <v-layout v-if="!this.viewFollower && !this.viewFollowing" row wrap>
             <!-- leftSide -->
             <v-flex xs12 sm4 md3>
-              <LeftSide xs12 sm4 md3 :isMine="isMine" v-on:toStory="fromLeftSide" v-on:toStoryFilter="toFilterFunction" />
+              <LeftSide
+                xs12
+                sm4
+                md3
+                v-on:toStory="fromLeftSide"
+                v-on:toStoryFilter="toFilterFunction"
+              />
             </v-flex>
 
             <v-flex xs12 sm8 md9>
@@ -188,7 +235,6 @@ export default {
       showUpImgBtn:false,
       showRmImgBtn:false,
       showUpImgBanner:false, // 슬기가 잠시 만듦
-      isMine: false,
       stateAdd: false,
       userurl: "",
       toggleView: false,
@@ -203,7 +249,7 @@ export default {
       showAddProject: false,
       Filter : "",
       userid:"",
-      storyBanner : "https://i.imgur.com/KnVfJVQ.png",
+      storyBanner : "",
       image:"",
       user:{
         userName:"",
@@ -219,9 +265,9 @@ export default {
   created() {
     // 컴포넌트 생성시 데이터를 패치한다
     this.fetchData();
-    this.isMineCheck();
     this.setStoryBanner();
     this.isFollowCheck();
+    this.$store.commit('setSession', this.$session.get('session_id'))
   },
   methods: {
     showNotification(group, type, title, text) {
@@ -231,13 +277,6 @@ export default {
         text,
         type
       });
-    },
-    isMineCheck() {
-      if (this.$route.params.id == this.$session.get("session_id")) {
-        this.isMine = true;
-      } else {
-        this.isMine = false;
-      }
     },
     async fetchData() {
       this.userid = this.$session.get('session_id')
@@ -362,6 +401,28 @@ export default {
         }
       });
     },
+    removeImageBanner() {
+      this.$swal({
+        title: "정말 삭제하시겠습니까?",
+        text: "삭제한 이미지는 되돌릴 수 없습니다!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "삭제",
+        cancelButtonText: "취소"
+      }).then(result => {
+        if (result.value) {
+          this.$swal(
+            "Deleted!",
+            "프로필 이미지 삭제가 완료되었습니다.",
+            "success"
+          );
+          FirebaseService.DELETE_userImageBanner(this.$route.params.id);
+          this.storyBanner = "";
+        }
+      });
+    },
     onFileChange(e) {
       // file 세팅
       if (e.target.files[0].type.substr(0, 5) == "image") {
@@ -384,7 +445,40 @@ export default {
         fetch(apiUrl, content)
           .then(response => response.json())
           .then(success => {
-            this.projectimage = success.data.link;
+            FirebaseService.UPDATE_userImage(success.data.link, this.$route.params.id)
+            this.image = success.data.link;
+          })
+          .catch();
+      } else {
+        var image_file = document.querySelector("#inputfile");
+        image_file.value = "";
+        this.$swal("이미지 오류!", "이미지 파일만 올려주세요.", "error");
+      }
+    },
+    onFileChangeBanner(e) {
+      // file 세팅
+      if (e.target.files[0].type.substr(0, 5) == "image") {
+        let files = e.target.files || e.dataTransfer.files;
+        if (!files.length) {
+          return;
+        }
+        const apiUrl = "https://api.imgur.com/3/image";
+        let data = new FormData();
+        let content = {
+          method: "POST",
+          headers: {
+            Authorization: "Client-ID f96b8964f338658",
+            Accept: "application/json"
+          },
+          body: data,
+          mimeType: "multipart/form-data"
+        };
+        data.append("image", files[0]);
+        fetch(apiUrl, content)
+          .then(response => response.json())
+          .then(success => {
+            FirebaseService.UPDATE_userImageBanner(success.data.link, this.$route.params.id)
+            this.storyBanner = success.data.link;
           })
           .catch();
       } else {
@@ -396,6 +490,10 @@ export default {
     setFile() {
       var file = document.querySelector("#file");
       file.click();
+    },
+    setBanner() {
+      var Banner = document.querySelector("#Banner");
+      Banner.click();
     },
     receiveIntro(intro) {
       FirebaseService.UPDATE_userIntro(intro, this.$route.params.id);
