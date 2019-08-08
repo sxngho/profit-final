@@ -79,7 +79,7 @@
         style="height:100%;"
       >{{user}}</v-btn>
 
-      <v-btn text @click="Logout()" v-if="user!=='' && user!==undefined" style="height:100%;">Log Out</v-btn>
+      <v-btn text @click="Logout()" v-if="user!=='' && user!==undefined" style="height:100%;">로그아웃</v-btn>
 
       <v-menu offset-y v-if="nowLevel == '2' && user !=='' && user !== undefined ">
         <template v-slot:activator="scope">

@@ -70,7 +70,7 @@
               <td>{{nowChatRoom.projectTitle}}</td>
             </tr>
 
-            <tr @click="changeProjectTerm(nowChatRoom.projectTerm)" v-if="toggleProjectTerm" v-bind:style="{ 'color': ProjectTermColor, 'font-weight':'bold'}">
+            <tr @click="changeProjectTerm(nowChatRoom.projectTerm)" v-if="toggleProjectTerm" v-bind:style="{ 'color': ProjectTermColor }">
               <td>프로젝트 기간</td>
               <td>{{nowChatRoom.projectTerm}}</td>
             </tr>
@@ -81,7 +81,7 @@
               </td>
             </tr>
 
-            <tr @click="changePay(nowChatRoom.pay,nowChatRoom.downPayment)" v-if="togglePay">
+            <tr @click="changePay(nowChatRoom.pay,nowChatRoom.downPayment)" v-if="togglePay" v-bind:style="{ 'color': PayColor  }">
               <td> 급여 </td>
               <td> {{nowChatRoom.pay}} </td>
             </tr>
@@ -92,7 +92,7 @@
               </td>
             </tr>
 
-            <tr @click="changeDownPayment(nowChatRoom.downPayment,nowChatRoom.pay)" v-if="toggleDownPayment">
+            <tr @click="changeDownPayment(nowChatRoom.downPayment,nowChatRoom.pay)" v-if="toggleDownPayment" v-bind:style="{ 'color': DownPaymentColor  }">
               <td> 계약금 </td>
               <td> {{nowChatRoom.downPayment}} </td>
             </tr>
@@ -108,7 +108,7 @@
               <td>{{nowChatRoom.balance}} </td>
             </tr>
 
-            <tr @click="changePenalty(nowChatRoom.penalty)" v-if="togglePenalty">
+            <tr @click="changePenalty(nowChatRoom.penalty)" v-if="togglePenalty" v-bind:style="{ 'color': PenaltyColor  }">
               <td> 위약금 </td>
               <td> {{nowChatRoom.penalty}} </td>
             </tr>
@@ -129,7 +129,7 @@
               <td>{{nowChatRoom.companyAddr}}</td>
             </tr>
 
-            <tr @click="changeCompany(nowChatRoom.company)" v-if="toggleCompany">
+            <tr @click="changeCompany(nowChatRoom.company)" v-if="toggleCompany" v-bind:style="{ 'color': CompanyColor  }">
               <td> 책임자 </td>
               <td> {{nowChatRoom.company}} </td>
             </tr>
@@ -140,7 +140,7 @@
               </td>
             </tr>
 
-            <tr @click="changePhonenumber(nowChatRoom.phonenumber)" v-if="togglePhonenumber" >
+            <tr @click="changePhonenumber(nowChatRoom.phonenumber)" v-if="togglePhonenumber" v-bind:style="{ 'color': PhonenumberColor  }">
               <td> 핸드폰번호 </td>
               <td> {{nowChatRoom.phonenumber}} </td>
             </tr>
@@ -165,7 +165,7 @@
       <v-btn v-if="!changeAllow" depressed color="red" outlined >이미 도장을 찍었습니다!</v-btn>
     </v-layout>
 
-    <v-layout row wrap justify-center v-if="!isWork">
+    <v-layout row wrap justify-center v-if="!isWork && isMine()">
       <v-dialog v-model="procedureDialog" scrollable max-width="700px">
       <template v-slot:activator="{ on }">
         <v-btn color="red" dark v-on="on">도장찍기</v-btn>
@@ -260,20 +260,25 @@
       <!-- 채팅창 -->
       <v-flex xs12>
           <v-divider/><h1 class="text-center"> 채팅창 </h1><v-divider/>
-
-            <v-container class="overflow-y-auto" style="max-height:700px">
-              <v-layout v-scroll:scroll-target="'#scrolling'" column>
+            <v-container v-chat-scroll="{always: true, smooth: true, scrollonremoved:true}" class="overflow-y-auto" style="max-height:700px">
+              <v-layout column>
                 <v-flex
                 xs12
                 v-for="message in messages"
                 v-if='message.chatId !== "" && message.chatMsg !== "" '
                 class="messageBox">
+                <v-layout style="justify-content: center;" v-if='message.chatId == "!SYSTEM"'>
+                  <div v-html="message.chatMsg" style="background:lightgrey;" class="speech_bubble caption text-center"></div>
+                </v-layout>
+
                   <v-layout justify-end v-if='message.chatId == user'>
-                    <div v-if="!message.isReadCompany">1</div>
+                    <div v-if="nowLevel =='2' && !message.isReadCompany">1</div>
+                    <div v-if="nowLevel =='3' && !message.isReadUser">1</div>
                     <div style="background:#ffffab;" class="speech_bubble">{{message.chatMsg}}</div>
                   </v-layout>
-                  <v-layout v-else>
-                    <div v-if="!message.isReadUser">1</div>
+                  <v-layout v-if='message.chatId !== user && message.chatId !=="!SYSTEM" '>
+                    <div v-if="nowLevel =='2' && !message.isReadCompany">1</div>
+                    <div v-if="nowLevel =='3' && !message.isReadUser">1</div>
                     <div style="background:#d6ddff;" class="speech_bubble">
                       {{message.chatMsg}}
                     </div>
@@ -352,12 +357,12 @@ export default {
       tmpData : "",
       tmpDataForBalance : "",
 
-      ProjectTermColor : "#E74C3C99",
-      PayColor : "white",
-      DownPaymentColor : "white",
-      PenaltyColor : "white",
-      CompanyColor : "white",
-      PhonenumberColor : "white",
+      ProjectTermColor : "#000000",
+      PayColor : "#000000",
+      DownPaymentColor : "#000000",
+      PenaltyColor : "#000000",
+      CompanyColor : "#000000",
+      PhonenumberColor : "#000000",
     };
   },
 
@@ -425,12 +430,6 @@ export default {
           });
         }
         this.nowChatRoom = snapshot.val();
-        // TODO auto scroll
-        // let targetscroll = documnet.getElementById('scrolling');
-        // targetscroll.scrollTop = 20;
-        var container = document.querySelector("#container");
-        console.log(container.scrollTop , " asd " ,container.scrollHeight)
-        container.scrollTop = container.scrollHeight;
 
       },function(error) {
         console.error(error,"채팅장 입장 에러입니다.");
@@ -438,18 +437,20 @@ export default {
     },
 
     pushMessage(myMessage) {
-      var tmp = this.nowChatRoom.chatting;
-      if ( this.nowLevel == "3") {
-        tmp.push({ chatMsg : myMessage, chatId : this.$session.get('session_id'), isReadCompany : true, isReadUser : false });
-      } else if ( this.nowLevel == "2" ) {
-        tmp.push({ chatMsg : myMessage, chatId : this.$session.get('session_id'), isReadCompany : false, isReadUser : true });
+      if(myMessage !== "") {
+        var tmp = this.nowChatRoom.chatting;
+        if ( this.nowLevel == "3") {
+          tmp.push({ chatMsg : myMessage, chatId : this.$session.get('session_id'), isReadCompany : true, isReadUser : false });
+        } else if ( this.nowLevel == "2" ) {
+          tmp.push({ chatMsg : myMessage, chatId : this.$session.get('session_id'), isReadCompany : false, isReadUser : true });
+        }
+        console.log(tmp,"이게찍히고잇는거겟죠?")
+        var dataRef = firebase.database().ref('/'+this.nowChatRoom.link);
+        dataRef.update({
+          chatting : tmp,
+        });
+        this.myMessage = "";
       }
-      console.log(tmp,"이게찍히고잇는거겟죠?")
-      var dataRef = firebase.database().ref('/'+this.nowChatRoom.link);
-      dataRef.update({
-        chatting : tmp,
-      });
-      this.myMessage = "";
     },
 
     changeProjectTerm(data) {
@@ -475,6 +476,7 @@ export default {
       dataRef.update({
         projectTerm : this.inputProjectTerm,
         chatting : tmp,
+        isChangeProjectTerm : true,
       });
     },
 
@@ -507,6 +509,7 @@ export default {
         pay : this.inputPay,
         chatting : tmp,
         balance : Number(balance),
+        isChangePay : true,
       });
     },
 
@@ -536,6 +539,7 @@ export default {
         downPayment : this.inputDownPayment,
         chatting : tmp,
         balance : Number(balance),
+        isChangeDownPayment : true,
       });
     },
 
@@ -562,32 +566,7 @@ export default {
       dataRef.update({
         penalty : this.inputPenalty,
         chatting : tmp,
-      });
-    },
-
-    changeContractDate(data) {
-      this.clearInput();
-      this.tmpData = data;
-      if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification)) {
-        this.toggleContractDate = !this.toggleContractDate;
-        this.$nextTick(() => this.$refs.ContractDateRef.focus());
-      }
-    },
-    cancelContractDate() {
-      this.toggleContractDate = !this.toggleContractDate;
-      this.inputContractDate = this.mainData.ContractDate;
-    },
-    completeContractDate() {
-      var tmp = this.nowChatRoom.chatting;
-      if ( this.tmpData !== this.inputContractDate ) {
-        tmp.push({ chatMsg : this.$session.get('session_id')+"님이 계약일을 ["+this.tmpData+"]에서 ["+this.inputContractDate+"]로 변경하였습니다.",
-        chatId : "!SYSTEM", isReadCompany : false, isReadUser : false });
-      }
-      this.toggleContractDate = !this.toggleContractDate;
-      var dataRef = firebase.database().ref('/'+this.nowChatRoom.link);
-      dataRef.update({
-        contractDate : this.inputContractDate,
-        chatting : tmp,
+        isChangePenalty : true,
       });
     },
 
@@ -614,6 +593,7 @@ export default {
       dataRef.update({
         company : this.inputCompany,
         chatting : tmp,
+        isChangeCompany: true,
       });
     },
 
@@ -642,6 +622,7 @@ export default {
       dataRef.update({
         rrn : this.inputPhonenumber,
         chatting : tmp,
+        isChangePhonenumber : true,
       });
     },
     clearInput() {
@@ -711,6 +692,15 @@ export default {
         this.changeAllow = !(this.nowChatRoom.userVerification);
       }else{
         this.changeAllow = !(this.nowChatRoom.companyVerification);
+      }
+    },
+    isMine() {
+      if ( this.$store.getters.getLevel == 2 && !this.nowChatRoom.userVerification ) {
+        return true;
+      } else if (this.$store.getters.getLevel == 3 && !this.nowChatRoom.companyVerification) {
+        return true;
+      } else {
+        return false;
       }
     }
   },

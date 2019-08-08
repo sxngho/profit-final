@@ -17,7 +17,7 @@
         <v-card outlined style="width:100%; padding:12px;">
           <div class="subtitle-1" v-if="!((recruit.UserComplete == 2 && recruit.CompanyComplete == 0)|| (recruit.UserComplete == 0 && recruit.CompanyComplete == 2) || (recruit.UserComplete == 1 || recruit.CompanyComplete == 1))">
             <span class="headline font-weight-bold">{{recruit.projectTitle}}</span>
-            <span class="caption grey--text">&nbsp{{recruit.companyId}}</span>
+            <span class="caption grey--text">&nbsp;{{recruit.companyId}}</span>
             <br/>
             <div style="display:block;">
               <p style="width:100%;" class="text-center display-1 purple--text">
@@ -31,7 +31,7 @@
 
           <div v-else>
             <span class="headline font-weight-bold">{{recruit.projectTitle}}</span>
-            <span class="caption grey--text">&nbsp{{recruit.companyId}}</span>
+            <span class="caption grey--text">&nbsp;{{recruit.companyId}}</span>
             <br/>
             <div style="display:block;">
               <p style="width:100%;" class="text-center title grey--text">
@@ -171,7 +171,7 @@ export default {
         allChatRoom = snapshot.val();
         for(var j in userProceedList)
           for(var i in allChatRoom) {
-            if ( allChatRoom[i].recruitPK == userProceedList[j]) {
+            if ( allChatRoom[i].recruitPK == userProceedList[j] && allChatRoom[i].userId == this.$session.get('session_id')) {
               this.proceedList.push(allChatRoom[i]);
               break;
           }
@@ -221,7 +221,7 @@ export default {
 
       var ar1 = recruit.data.createDay.split('-');
       var ar2 = recruit.data.endDay.split('-');
-      var da1 = new Date(ar1[0], ar1[1], ar1[2]);
+      var da1 = new Date(ar1[0], ar1[1], ar1[  2]);
       var da2 = new Date(ar2[0], ar2[1], ar2[2]);
       var dif = da2 - da1;
       var cDay = 24 * 60 * 60 * 1000;// 시 * 분 * 초 * 밀리세컨
@@ -259,7 +259,7 @@ export default {
           userVerification: false,
           UserComplete : false,
           CompanyComplete : false,
-          
+
           isChangeProjectTerm : false,
           isChangePay : false,
           isChangeDownPayment : false,

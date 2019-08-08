@@ -235,9 +235,7 @@
               <v-btn v-if="updatestate2" @click="submit2(company.descript)">저장</v-btn>
               <v-btn v-if="updatestate2" @click="cancel_updatestate2()">취소</v-btn>
               </div>
-
             </v-card-title>
-
             <v-card-text v-if="this.$route.params.id!==this.$store.getters.getSession">{{company.descript}}</v-card-text>
             <v-card-text v-if="!updatestate2 && this.$route.params.id==this.$store.getters.getSession">{{company.descript}}</v-card-text>
             <v-card-text v-if="updatestate2 && this.$route.params.id==this.$store.getters.getSession">
@@ -402,11 +400,11 @@
                                 v-if="user.recruit==item.recruit.id"
                               >
                                 <!-- 여기서 user는 chatting 입니다 혼동하기 쉬울거같아서 남겨놓습니다.-->
-                                <v-btn
-                                  text
-                                  outlined
-                                  @click="openChat(user.chat)"
-                                >{{user.chat.userId}}</v-btn>
+                                <v-badge color="red" overlap v-if="user.length !== 0">
+                                  <template slot="badge"> {{user.length}} </template>
+                                  <v-btn text outlined @click="openChat(user.chat)">{{user.chat.userId}}</v-btn>
+                                </v-badge>
+                                <v-btn text outlined @click="openChat(user.chat)" v-if="user.length == 0">{{user.chat.userId}}</v-btn>
                               </v-flex>
                             </v-layout>
                           </v-flex>
@@ -534,20 +532,13 @@ export default {
           for (var ii in recruitsbyCompany) {
             var flag = 0;
             for (var i in chatRooms) {
-              if (chatRooms[i].recruitPK == recruitsbyCompany[ii].id) {
-                this.dibsUsers.push({
-                  recruit: recruitsbyCompany[ii].id,
-                  chat: chatRooms[i]
-                });
+              if (chatRooms[i].recruitPK == recruitsbyCompany[ii].id && recruitsbyCompany[ii].data.contract && recruitsbyCompany[ii].data.responsibility == chatRooms[i].userId) {
                 var unreadChat = chatRooms[i].chatting;
                 var unreadLength = 0;
-                console.log("랭스를 읽고있따 ",unreadChat.length)
                 for(var j=unreadChat.length-1; j>=0; j--) {
                     if(unreadChat[j].isReadCompany) {
-                      console.log( j , " 브레이크야임마")
                       break;
                     } else {
-                      console.log("안읽은채팅창갯수를 세고있따",unreadLength)
                       unreadLength++;
                     }
                 }
@@ -556,7 +547,32 @@ export default {
                 break;
               }
             }
-            if ( flag == 0 ) {
+            var tmpLength = 0;
+            for (var i in chatRooms) {
+              if (chatRooms[i].recruitPK == recruitsbyCompany[ii].id && !recruitsbyCompany[ii].data.contract) {
+                var unreadChat = chatRooms[i].chatting;
+                var unreadLength = 0;
+                for(var j=unreadChat.length-1; j>=0; j--) {
+                    if(unreadChat[j].isReadCompany) {
+                      break;
+                    } else {
+                      unreadLength++;
+                      tmpLength++;
+                    }
+                }
+                this.dibsUsers.push({
+                  recruit: recruitsbyCompany[ii].id,
+                  chat: chatRooms[i],
+                  length : unreadLength,
+                });
+              }
+              if( flag !== 1 ) {
+                flag = 2;
+              }
+            }
+            if ( flag == 2 ) {
+              this.MyRecruits.push({ recruit : recruitsbyCompany[ii], length : tmpLength })
+            } else if ( flag == 0 ) {
               this.MyRecruits.push({ recruit : recruitsbyCompany[ii], length : 0 })
             }
           }
@@ -567,7 +583,7 @@ export default {
         }
       );
       console.log(this.MyRecruits,"asdasdasdadasdsasa")
-      // console.log(this.dibsUsers, "찜유저리스트");
+      console.log(this.dibsUsers, "찜유저리스트");
 
       const comInfo = await FirebaseService.SELECT_CompanyInfo(this.$route.params.id);
       this.comInfo = comInfo[0]
