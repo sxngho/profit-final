@@ -248,6 +248,14 @@ export default {
       });
   },
 
+  DELETE_userImageBanner(userId) {
+    return firestore
+      .collection("users")
+      .doc(userId)
+      .update({
+        storyBanner: ""
+      });
+  },
 
   // Function :: 유저의 자기소개 정보를 업데이트합니다.
   UPDATE_userIntro(intro, userId) {
@@ -907,50 +915,42 @@ export default {
       })
   },
 
-  async SignupCompany(company_name, id, password, interests) {
-    return firestore
-      .collection("companys")
-      .doc(company_name)
-      .get()
-      .then(docSnapshot => {
-        if (docSnapshot.exists) {
-          alert(`${company_name}은 이미 존재합니다.`);
-          return false;
-        } else {
-          return firebase
-            .auth()
-            .createUserWithEmailAndPassword(id, password)
-            .then(function () {
-              firestore
-                .collection("companys")
-                .doc(company_name)
-                .set({
-                  company_name: company_name,
-                  id: id,
-                  interests: interests,
-                  followerlist: [],
-                  followinglist: [],
-                  level: 3,
-                  company_logo: "",
-                  industry: "",
-                  mount: "",
-                  comsize: "",
-                  establishedDate: "",
-                  represent: "",
-                  homepage: "",
-                  address: "",
-                  descript: "",
-                  annualsales : "",
-                });
-              // alert(`${id}님, 회원가입이 완료되었습니다.`);
-              return true;
-            })
-            .catch(function (error) {
-              alert(error);
-              return false;
-            });
-        }
-      });
+  async SignupCompany(company_name, id, password) {
+    return firebase
+     .auth()
+     .createUserWithEmailAndPassword(id, password)
+     .then(function () {
+       firestore
+         .collection("companys")
+         .doc(company_name)
+         .set({
+           company_name: company_name,
+           id: id,
+           followerlist: [],
+           followinglist: [],
+           level: 3,
+           company_logo: "",
+           industry: "",
+           mount: "",
+           comsize: "",
+           establishedDate: "",
+           represent: "",
+           homepage: "",
+           address: "",
+           descript: "",
+           annualsales : "",
+         });
+         firestore
+         .collection("user_addon")
+         .doc(company_name)
+         .set({
+           toggleView: false
+         });
+         return true;
+       })
+       .catch(function(error) {
+         return false;
+       })
   },
 
   // --------------------------------------------------------------------SIGN

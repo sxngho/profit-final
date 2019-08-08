@@ -114,11 +114,43 @@ export default {
     this.fetchData();
   },
   watch: {
+    signup_id: function() {
+      if ( this.signup_id.length == 0 ) {
+        this.signup_id_Msg = "";
+      }
+    },
+    nickname: function() {
+      if ( this.nickname.length == 0 ) {
+        this.nicknameMsg = "";
+      }
+    },
     signup_password: function() {
-      // this.passwordCheck();
+      if ( this.signup_password.length == 0 ) {
+        this.signup_password_Msg = "";
+      }
     },
     signup_password_check: function() {
-      // this.passwordCheck();
+      if ( this.signup_password_check.length == 0 ) {
+        this.signup_password_Msg = "";
+      }
+    },
+    phonenumber: function() {
+      var arr = this.phonenumber.split('-');
+      var pn = "";
+      for(var i in arr) {
+        pn += arr[i];
+      }
+      if ( this.phonenumber.length == 0 ) {
+        this.phonenumberMsg = "";
+      } else if ( pn.length > 10 ){
+        var phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$/;
+        if(this.phonenumber.match(phoneno)) {
+          this.phonenumberValidation = true;
+        } else {
+          this.phonenumberValidation = false;
+          this.phonenumberMsg = "핸드폰 번호 양식을 지켜주세요. ex ) 010-1234-5678"
+        }
+      }
     },
  },
   methods: {

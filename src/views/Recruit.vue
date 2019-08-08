@@ -97,6 +97,7 @@ export default {
   },
   data() {
       return {
+        user : "",
         recruits : "",
         mySkills : "",
         myRecruits : [],
@@ -110,7 +111,7 @@ export default {
     async fetchData() {
       this.$store.commit('setSession', this.$session.get('session_id'));
       this.$store.commit('changeLevel', this.$session.get('level'));
-
+      this.user = this.$session.get('session_id');
       this.recruits = await FirebaseService.SELECT_RecruitInfo();
       this.mySkills = await FirebaseService.SELECT_Userdata(this.$session.get('session_id'));
       // console.log(this.recruits,"공고들");

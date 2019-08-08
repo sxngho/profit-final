@@ -48,7 +48,10 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="signupforcompanymodal = false"> 닫기 </v-btn>
-          <v-btn color="blue darken-1" text @click="SignupCompany(company_name, signup_id, signup_password, interests)"> 회원가입 </v-btn>
+          <v-btn color="blue darken-1" text
+          v-if="signup_id_Validation && signup_password_Validation"
+          @click="SignupCompany(company_name, signup_id, signup_password)"> 회원가입 </v-btn>
+          <v-btn color="blue darken-1" text v-else disabled>회원가입</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -72,17 +75,45 @@ import FirebaseService from "@/services/FirebaseService";
       signup_password_Msg : "",
 
     }),
+    watch: {
+      signup_id: function() {
+        if ( this.signup_id.length == 0 ) {
+          this.signup_id_Msg = "";
+        }
+      },
+      signup_password: function() {
+        if ( this.signup_password.length == 0 ) {
+          this.signup_password_Msg = "";
+        }
+      },
+      signup_password_check: function() {
+        if ( this.signup_password_check.length == 0 ) {
+          this.signup_password_Msg = "";
+        } else if ( this.signup_password_check.length == this.signup_password.length ) {
+          if ( this.signup_password_check !== '' && this.signup_password  !== '' ) {
+            if ( this.signup_password_check == this.signup_password ) {
+              this.signup_password_Validation = true;
+              this.signup_password_Msg = "비밀번호가 일치합니다.";
+            } else {
+              this.signup_password_Validation = false;
+              this.signup_password_Msg = "비밀번호가 일치하지 않습니다.";
+            }
+          }
+        }
+      },
+    },
     methods : {
-      async SignupCompany(company_name, id, password, interests) {
-      var result = await FirebaseService.SignupCompany(company_name, id, password, interests)
+      async SignupCompany(company_name, id, password) {
+      var result = await FirebaseService.SignupCompany(company_name, id, password)
         if (result == true) {
           this.signupforcompanymodal = false;
           this.company_name='';
           this.signup_id='';
           this.signup_password='';
-          this.interests=[];
           this.$emit('signup')
           this.$swal('회원가입에 성공하였습니다.','기업 페이지에서 정보를 입력해주세요!','success')
+        } else {
+          console.log('안됨')
         }
       },
       idCheck() {

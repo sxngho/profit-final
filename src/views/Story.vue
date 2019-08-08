@@ -260,17 +260,15 @@ export default {
       });
     },
     async fetchData() {
-      this.userid = this.$session.get('session_id')
+      this.userid = this.$route.params.id
       this.$store.commit('setSession', this.$session.get("session_id"))
       if (this.$session.get("session_id") !== "") {
         this.toggleView = await FirebaseService.SELECT_userAddon(
           this.$session.get("session_id")
         );
       }
-      // var userdata = await FirebaseService.SELECT_Userdata(this.$route.params.id).userIntro;
-      // this.userIntro = userdata.userIntro;
-      this.user = await FirebaseService.SELECT_Userdata(this.$route.params.id);
-      this.user = this.user[0];
+      var result = await FirebaseService.SELECT_Userdata(this.$route.params.id);
+      this.user = result[0];
     },
     updateToggle() {
       if (this.$session.get("session_id") !== "") {
@@ -352,10 +350,12 @@ export default {
       var userImg = await FirebaseService.SELECT_UserImage(
         this.$route.params.id
       );
-      console.log("유저의 이미지!", userImg);
+      // console.log("유저의 이미지!", userImg);
       //디비에서 받아온 유저의 배너이미지와, 프로필 사진 이미지를 붙인다
       if (userImg.banner) {
         this.storyBanner = userImg.banner;
+      } else {
+        this.storyBanner = "https://i.imgur.com/KnVfJVQ.png"
       }
       this.image = userImg.profileImg;
     },
@@ -431,8 +431,8 @@ export default {
           })
           .catch();
       } else {
-        var image_file = document.querySelector("#inputfile");
-        image_file.value = "";
+        // var image_file = document.querySelector("#inputfile");
+        // image_file.value = "";
         this.$swal("이미지 오류!", "이미지 파일만 올려주세요.", "error");
       }
     },
@@ -463,8 +463,6 @@ export default {
           })
           .catch();
       } else {
-        var image_file = document.querySelector("#inputfile");
-        image_file.value = "";
         this.$swal("이미지 오류!", "이미지 파일만 올려주세요.", "error");
       }
     },

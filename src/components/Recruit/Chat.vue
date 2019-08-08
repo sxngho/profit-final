@@ -1,16 +1,16 @@
 <template>
   <v-container>
-    <v-layout wrap v-if="!isWork">
+    <v-layout wrap row v-if="!isWork">
       <!-- 채팅창 -->
-      <v-flex xs7>
+      <v-flex xs12 sm7>
         <v-layout wrap>
           <v-flex xs12>
             <v-divider/><h1 class="text-center"> 채팅창 </h1><v-divider/>
           </v-flex>
 
           <v-flex xs12>
-            <v-container class="overflow-y-auto" style="max-height:700px">
-              <v-layout v-scroll:scroll-target="'#scrolling'" column>
+            <v-container v-chat-scroll="{always: true, smooth: true, scrollonremoved:true}" class="overflow-y-auto" style="max-height:600px">
+              <v-layout column>
                 <v-flex
                 xs12
                 v-for="message in messages"
@@ -37,13 +37,11 @@
               </v-layout>
             </v-container>
           </v-flex>
-
           <v-text-field single-line outlined required v-model="myMessage" v-on:keyup.enter="pushMessage(myMessage)" > </v-text-field>
         </v-layout>
       </v-flex>
-
       <!-- 공동 협의 서류 -->
-      <v-flex xs5>
+      <v-flex xs12 sm5>
         <div>
           <v-divider/>
           <h1 class="text-center"> 간이 계약서 </h1>
@@ -72,7 +70,7 @@
               <td>{{nowChatRoom.projectTitle}}</td>
             </tr>
 
-            <tr @click="changeProjectTerm(nowChatRoom.projectTerm)" v-if="toggleProjectTerm">
+            <tr @click="changeProjectTerm(nowChatRoom.projectTerm)" v-if="toggleProjectTerm" v-bind:style="{ 'color': ProjectTermColor, 'font-weight':'bold'}">
               <td>프로젝트 기간</td>
               <td>{{nowChatRoom.projectTerm}}</td>
             </tr>
@@ -105,7 +103,7 @@
               </td>
             </tr>
 
-            <tr v-if="toggleBalance">
+            <tr>
               <td>잔금 </td>
               <td>{{nowChatRoom.balance}} </td>
             </tr>
@@ -121,17 +119,15 @@
               </td>
             </tr>
 
-            <tr @click="changeCompanyId(nowChatRoom.companyId)" v-if="toggleCompanyId">
+            <tr>
               <td> 기업명 </td>
               <td> {{nowChatRoom.companyId}} </td>
             </tr>
 
-
-            <tr @click="changeCompanyAddr(nowChatRoom.companyAddr)" v-if="toggleCompanyAddr">
+            <tr>
               <td>기업주소</td>
               <td>{{nowChatRoom.companyAddr}}</td>
             </tr>
-
 
             <tr @click="changeCompany(nowChatRoom.company)" v-if="toggleCompany">
               <td> 책임자 </td>
@@ -155,10 +151,11 @@
               </td>
             </tr>
 
-            <tr @click="changeUserId(nowChatRoom.userId)" v-if="toggleUserId">
+            <tr>
               <td> 유저이름 </td>
               <td> {{nowChatRoom.userId}} </td>
             </tr>
+
           </tbody>
         </v-simple-table>
       </v-flex>
@@ -354,6 +351,13 @@ export default {
 
       tmpData : "",
       tmpDataForBalance : "",
+
+      ProjectTermColor : "#E74C3C99",
+      PayColor : "white",
+      DownPaymentColor : "white",
+      PenaltyColor : "white",
+      CompanyColor : "white",
+      PhonenumberColor : "white",
     };
   },
 
@@ -393,10 +397,17 @@ export default {
       this.isOnProcedure();
       var dataRef = firebase.database().ref('/'+this.nowChatRoom.link);
       firebase.database().ref(this.nowChatRoom.link).on('value', snapshot => {
-        // this.changeAllow = (!(snapshot.val().userVerification || snapshot.val().companyVerification));
-        // console.log("띠요오옹 ",this.changeAllow);
-        // console.log(snapshot.val().userVerification,snapshot.val().companyVerification);
+
         this.mainData = snapshot.val();
+
+        if ( this.mainData.isChangeProjectTerm ) this.ProjectTermColor="#E74C3C"
+        if ( this.mainData.isChangePay ) this.PayColor="#E74C3C"
+        if ( this.mainData.isChangeDownPayment ) this.DownPaymentColor="#E74C3C"
+        if ( this.mainData.isChangeCompany ) this.CompanyColor="#E74C3C"
+        if ( this.mainData.isChangePenalty ) this.PenaltyColor="#E74C3C"
+        if ( this.mainData.isChangePhonenumber ) this.PhonenumberColor="#E74C3C"
+
+
         this.messages = snapshot.val().chatting;
         if ( this.nowLevel == "3" ) {
           for(var i in this.messages) {
@@ -417,6 +428,9 @@ export default {
         // TODO auto scroll
         // let targetscroll = documnet.getElementById('scrolling');
         // targetscroll.scrollTop = 20;
+        var container = document.querySelector("#container");
+        console.log(container.scrollTop , " asd " ,container.scrollHeight)
+        container.scrollTop = container.scrollHeight;
 
       },function(error) {
         console.error(error,"채팅장 입장 에러입니다.");
