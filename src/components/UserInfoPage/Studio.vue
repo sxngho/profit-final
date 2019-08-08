@@ -193,6 +193,14 @@ export default {
           userVerification: false,
           UserComplete : false,
           CompanyComplete : false,
+          
+          isChangeProjectTerm : false,
+          isChangePay : false,
+          isChangeDownPayment : false,
+          isChangePenalty : false,
+          isChangeCompany : false,
+          isChangePhonenumber : false,
+
         });
       }
     },
