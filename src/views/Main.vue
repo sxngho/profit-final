@@ -19,12 +19,10 @@ export default {
   name: "Main",
   components: {
     Filters,
-    Banner,
+    Banner
     // PortfolioList,
   },
-  created() {
-  },
-  methods: {
-  },
+  created() {},
+  methods: {}
 };
 </script>

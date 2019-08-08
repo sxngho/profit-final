@@ -20,13 +20,6 @@
 
        <div v-else
          style="padding:10px 0px;">
-         <!-- <v-flex
-          v-for="s in userdata[0].showSkillList"
-          d-inline-block
-          style="zzcursor:pointer;border:1px solid #cecece; padding:2px 10px; border-radius:8px; margin:2px 4px;"
-          v-on:click="toStoryFilter(s)">
-           {{s}}
-         </v-flex> -->
          <v-chip-group
           multiple
           column
@@ -44,7 +37,7 @@
    </v-layout>
 
     <!--USER Careers-->
-    <v-layout wrap style="margin-top:2vw;">
+    <v-layout wrap style="margin-top:3vw;">
       <v-flex xs12 class="text-center title">
         Career
         <CareerEditor v-on:sendCar="receiveCar" v-if="this.$route.params.id==this.$store.getters.getSession"/>
@@ -98,7 +91,7 @@
     </v-layout>
 
     <!--USER Education-->
-    <v-layout wrap style="margin-top:2vw;">
+    <v-layout wrap style="margin-top:4vw;">
       <v-flex xs12 class="text-center title"> Education <EducationEditor v-on:sendEdu="receiveEdu" v-if="this.$route.params.id==this.$store.getters.getSession"/></v-flex>
       <v-flex xs12>
         <!-- v-for Education -->

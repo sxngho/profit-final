@@ -3,9 +3,9 @@
     <!-- Studio -->
     <v-layout row wrap v-if="this.$route.params.id==this.$store.getters.getSession">
       <v-flex hidden-sm-and-down>
-        <Slide right width="600" disableOutsideClick>
+        <Slide right width="600" disableOutsideClick >
           <v-container>
-            <Studio />
+            <Studio/>
           </v-container>
         </Slide>
       </v-flex>
@@ -17,6 +17,7 @@
           <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
           <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
     </div>
+
     <!-- Banner -->
     <div>
 
@@ -54,41 +55,16 @@
 
       <!-- ProfileImg -->
       <v-layout row wrap>
-        <v-layout
-          wrap
-          align-center
-          justify-space-around
-          style="position:absolute; top: 148px; right: 50%; left: 50%; z-index:10"
-        >
-          <div
-            v-if="!image"
-            class="text-center"
-            justify-center
-            style="position:relative"
-            @mouseover="showUpImgBtn=true"
-            @mouseleave="showUpImgBtn=false"
-          >
-            <div
-              @click="setFile()"
-              v-show="showUpImgBtn"
-              style="position: absolute; top: 54px; z-index: 2"
-            >
-              <p
-                class="text-center"
-                style="background: #ffffff91;padding: 10px 5px; cursor:pointer;"
-              >사진을 등록하세요!</p>
+        <v-layout wrap align-center justify-space-around style="position:absolute; top: 148px; right: 50%; left: 50%; z-index:10">
+          <div v-if="!image" class="text-center" justify-center style="position:relative" @mouseover="showUpImgBtn=true" @mouseleave="showUpImgBtn=false" >
+            <div @click="setFile()" v-show="showUpImgBtn" style="position: absolute; top: 54px; z-index: 2" >
+              <p class="text-center" style="background: #ffffff91;padding: 10px 5px; cursor:pointer;" >사진을 등록하세요!</p>
             </div>
 
             <v-avatar size="150" class="grey lighten-2" @click="setFile()" style="cursor:pointer;">
               <img src="https://i.imgur.com/aTI4OeZ.png?1" />
             </v-avatar>
-            <input
-              type="file"
-              name="file"
-              id="file"
-              style="width:100%; display:none"
-              @change="onFileChange"
-            />
+            <input type="file" name="file" id="file" style="width:100%; display:none" @change="onFileChange" />
           </div>
           <div
             v-else
@@ -117,6 +93,7 @@
 
       <!-- Intro -->
       <v-layout row wrap align-center justify-space-around>
+        <!-- UserName & follow unfollow -->
         <span class="text-center title" style="width:100%">
           {{user.userName}}
           <v-flex fab text outlined small v-if="this.$store.getters.getSession && this.$route.params.id!=this.$store.getters.getSession && !isFollow" @click="follow()">
@@ -135,12 +112,15 @@
             />
           </v-flex>
         </span>
+
+        <!-- 유저 한줄소개 인트로 -->
         <span class="subheading grey--text text-center" style="width:100%">
           {{user.userIntro}}
           <IntroEditor v-on:sendIntro="receiveIntro" :introinput="user.userIntro" v-if="this.$route.params.id==this.$store.getters.getSession" />
         </span>
       </v-layout>
 
+      <!-- follower 명시 -->
       <v-layout row wrap align-center justify-space-around style="margin:20px 0;">
         <div style="display:inline-block;">
           <button @click="followerTest">Follower : {{user.followerlist.length}}</button>
@@ -157,6 +137,7 @@
           <FollowerList v-show="this.viewFollower || this.viewFollowing"></FollowerList>
 
           <v-layout v-if="!this.viewFollower && !this.viewFollowing" row wrap>
+            <!-- leftSide -->
             <v-flex xs12 sm4 md3>
               <LeftSide
                 xs12
@@ -168,59 +149,49 @@
             </v-flex>
 
             <v-flex xs12 sm8 md9>
-              <v-layout wrap style="position:relative; padding:0px 5px;">
-                <div
-                  @click="changeComponent()"
-                  v-if="this.$store.getters.getSession==this.$route.params.id && !statedetail && !stateupdate"
-                  class="d-inline"
-                  style="display:inline;"
-                >
-                  <div id="toggletext">
-                    <div
-                      v-if="!stateAdd"
-                      style="cursor:pointer;background: rgb(117, 199, 145); padding: 5px 20px; border-radius: 20px; color: white;margin:3px;"
-                    >프로젝트 생성하기</div>
+              <!-- btn Toolbar -->
+              <v-container>
+                <v-layout wrap style="padding:0px 5px;">
+                  <div @click="changeComponent()" v-if="this.$store.getters.getSession==this.$route.params.id && !statedetail && !stateupdate" class="d-inline" style="display:inline;">
+                    <div id="toggletext">
+                      <div v-if="!stateAdd" style="cursor:pointer;background: rgb(117, 199, 145); padding: 5px 20px; border-radius: 20px; color: white;margin:3px;">
+                        프로젝트 생성하기
+                      </div>
 
-                    <img
-                      src="../assets/icon_set/back.png"
-                      alt="backtoList"
-                      style="cursor:pointer;width:25px;height:25px;"
-                      v-if="stateAdd"
-                    />
+                      <img src="../assets/icon_set/back.png" alt="backtoList" style="cursor:pointer;width:25px;height:25px;" v-if="stateAdd" />
+                    </div>
                   </div>
-                </div>
-
-                <div style="position: absolute; display: inline; right: 5px; top:7px;">
-                  <div style="display:inline!important; float:right; right:50%;" v-if="!stateAdd ">
-                    <toggle-button
-                      d-inline
-                      v-if="!stateAdd && !stateupdate && !statedetail"
-                      :width="50"
-                      v-model="toggleView"
-                      :sync="true"
-                      :labels="{checked: '새창', unchecked: ''}"
-                    />
+                  <v-spacer/>
+                  <div style="display: inline;">
+                    <div style="display:inline!important;"
+                      v-if="!stateAdd && !stateupdate && !statedetail" >
+                      <v-btn-toggle small>
+                        <v-btn small text @click="ChangeLayout(1)" id="toggletext">
+                          <i class="fa fa-th-large fa-1x" />
+                        </v-btn>
+                        <v-btn small text @click="ChangeLayout(2)" id="toggletext">
+                          <i class="fa fa-th-list fa-1x" />
+                        </v-btn>
+                        <v-btn small text @click="ChangeLayout(3)" id="toggletext">
+                          <i class="fa fa-bars fa-1x" />
+                        </v-btn>
+                      </v-btn-toggle>
+                    </div>
+                    <div style="display:inline!important;" v-if="!stateAdd ">
+                      <toggle-button
+                        d-inline
+                        v-if="!stateAdd && !stateupdate && !statedetail"
+                        :width="50"
+                        v-model="toggleView"
+                        :sync="true"
+                        :labels="{checked: '새창', unchecked: ''}"
+                      />
+                    </div>
                   </div>
+                </v-layout>
+              </v-container>
 
-                  <div
-                    style="display:inline!important; float:right; right:50%;"
-                    v-if="!stateAdd && !stateupdate && !statedetail"
-                  >
-                    <v-btn-toggle small>
-                      <v-btn small text @click="ChangeLayout(1)" id="toggletext">
-                        <i class="fa fa-th-large fa-1x" />
-                      </v-btn>
-                      <v-btn small text @click="ChangeLayout(2)" id="toggletext">
-                        <i class="fa fa-th-list fa-1x" />
-                      </v-btn>
-                      <v-btn small text @click="ChangeLayout(3)" id="toggletext">
-                        <i class="fa fa-bars fa-1x" />
-                      </v-btn>
-                    </v-btn-toggle>
-                  </div>
-                </div>
-              </v-layout>
-
+              <!-- List Option -->
               <v-layout wrap>
                 <ProjectList
                   v-if="!stateAdd && !statedetail && !stateupdate"
@@ -228,20 +199,10 @@
                   v-on:goup="update_project"
                   v-on:toStoryUpdate="UPDATE_Project"
                   :layout="layout"
-                  :toFilter="Filter"
-                  v-on:toStoryList="resetFilter"
-                />
-                <ProjectEditor
-                  v-if="stateAdd && !statedetail && !stateupdate"
-                  v-on:insert_success="gbp4"
-                />
+                  :toFilter="Filter" v-on:toStoryList="resetFilter"/>
+                <ProjectEditor v-if="stateAdd && !statedetail && !stateupdate" v-on:insert_success="gbp4" />
                 <Project v-if="statedetail" :pcode="pcode" v-on:goBackpage="gbp" />
-                <ProjectEditor
-                  v-if="stateupdate"
-                  :project_id="pcode2"
-                  v-on:goBackpage="gbp2"
-                  v-on:update_success="gbp3"
-                />
+                <ProjectEditor v-if="stateupdate" :project_id="pcode2" v-on:goBackpage="gbp2" v-on:update_success="gbp3" />
                 <!-- <ProjectUpdator v-if="stateupdate" :project_id="pcode2" v-on:goBackpage="gbp2" v-on:update_success="gbp3" /> -->
                 <!-- <v-btn @click="check_stateupdate(state)"></v-btn> -->
               </v-layout>
@@ -635,76 +596,79 @@ export default {
 };
 </script>
 
+
 <!-- 아래 스타일은 절대 scope로 두면 안됩니다!! -->
 <style>
-.bm-burger-button {
-  position: fixed;
-  cursor: pointer;
-  left: auto;
-  right: -25px !important;
-  background: #2c3e50;
-  width: 50px;
-  height: 85px;
-  border-radius: 20px;
-  top: 50%;
-  z-index: 3;
-}
-.bm-burger-bars {
-  background-color: #373a47;
-}
-.line-style {
-  position: absolute;
-  height: 20%;
-  left: 0;
-  right: 0;
-}
-.cross-style {
-  position: absolute;
-  top: 12px;
-  right: 2px;
-  cursor: pointer;
-}
-.bm-cross {
-  background: #bdc3c7;
-}
-.bm-cross-button {
-  height: 24px;
-  width: 24px;
-}
-.bm-menu {
-  height: 100%; /* 100% Full-height */
-  width: 0; /* 0 width - change this with JavaScript */
-  position: fixed; /* Stay in place */
-  z-index: 1000; /* Stay on top */
-  top: 0;
-  left: 0;
-  background-color: #2c3e50; /* Black*/
-  overflow-x: hidden; /* Disable horizontal scroll */
-  padding-top: 60px; /* Place content 60px from the top */
-  transition: 0.5s; /*0.5 second transition effect to slide in the sidenav*/
-}
+  .bm-burger-button {
+    position: fixed;
+    cursor: pointer;
+    left: auto;
+    right: -25px!important;
+    background: #2C3E50;
+    width: 50px;
+    height: 85px;
+    border-radius: 20px;
+    top: 50%;
+    z-index: 3;
+    color:#2980B9;
+  }
+  .bm-burger-bars {
+    background-color: #373a47;
+  }
+  .line-style {
+    position: absolute;
+    height: 20%;
+    left: 0;
+    right: 0;
+  }
+  .cross-style {
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    color:#2980B9;
+    cursor: pointer;
+  }
+  .bm-cross {
+    background: #bdc3c7;
+  }
+  .bm-cross-button {
+    height: 24px;
+    width: 24px;
+  }
+  .bm-menu {
+    height: 100%; /* 100% Full-height */
+    width: 0; /* 0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Stay on top */
+    top: 0;
+    left: 0;
+    background-color: #2C3E50 ; /* Black*/
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 60px; /* Place content 60px from the top */
+    transition: 0.5s; /*0.5 second transition effect to slide in the sidenav*/
+  }
 
-.bm-overlay {
-  background: rgba(0, 0, 0, 0.3);
-}
-.bm-item-list {
-  color: #b8b7ad;
-  margin-left: 10%;
-  font-size: 20px;
-}
-.bm-item-list > * {
-  display: flex;
-  text-decoration: none;
-  padding: 0.7em;
-}
-.bm-item-list > * > span {
-  margin-left: 10px;
-  font-weight: 700;
-  color: white;
-}
-.studiopop {
-  color: #2980b9;
-  top: 41% !important;
-  left: 5px;
-}
+  .bm-overlay {
+    background: rgba(0, 0, 0, 0.3);
+  }
+  .bm-item-list {
+    color: #b8b7ad;
+    margin-left: 10%;
+    font-size: 20px;
+  }
+  .bm-item-list > * {
+    display: flex;
+    text-decoration: none;
+    padding: 0.7em;
+  }
+  .bm-item-list > * > span {
+    margin-left: 10px;
+    font-weight: 700;
+    color: white;
+  }
+  .studiopop{
+    color:#2980B9;
+    top:41%!important;
+    left:5px;
+  }
 </style>

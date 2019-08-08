@@ -15,7 +15,7 @@ import { mapState } from "vuex";
 export default {
   props: ["portfolio"],
   watch: {
-    portfolio(to, from) {
+    portfolio() {
       this.SELECT_Project();
     }
   },

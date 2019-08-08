@@ -50,14 +50,12 @@ export default {
         } else {
           // 회사가 아닌 경우
           this.userdata = await FirebaseService.SELECT_Userdata(
-            this.$session.get("session_id")
+            this.$route.params.id
           );
           this.followers = this.userdata[0].followerlist;
           this.followings = this.userdata[0].followinglist;
         }
       }
-      // this.$store.state.followerView = false;
-      // this.$store.state.followingView = false;
     }
   },
   mounted() {
