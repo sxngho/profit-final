@@ -1325,7 +1325,6 @@ export default {
       projectSummary: recruitInfo.projectSummary,
       projectContent: recruitInfo.projectContent,
       requiredSkills: recruitInfo.requiredSkills,
-      closingDate: recruitInfo.closingDate,
       companyId: recruitInfo.session_id,
       contract: false,
       UserComplete: false,
