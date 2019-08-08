@@ -17,6 +17,7 @@
       </v-btn>
 
       <v-btn text icon color="pink">
+        <!-- 이미 좋아요 눌렀다면 다른 fa 를 보여주는 것도 좋겠다. -->
         <i id="likecheck" class="far fa-heart fa-2x" @click="like_project()"></i>
         {{likeit.length}}
       </v-btn>
@@ -25,6 +26,7 @@
         <i class="fa fa-star fa-2x"></i>
       </v-btn>
 
+      <!-- 신고하기 -->
       <template>
       <v-layout justify-center d-inline>
         <v-dialog v-model="sirendialog" max-width="290">
@@ -84,52 +86,68 @@
 
               <!--comment -->
                 <v-flex>
-                  <span class="title">{{project.projecttitle}}</span>
-                  <v-flex class="d-inline caption tag" rounded outlined>{{ project.projectterm }}</v-flex>
-                  <v-flex class="d-inline caption tag" rounded outlined>{{ project.projectrank }}</v-flex>
-                  <br />
-                  <v-layout class="d-block" style="padding: 1vw 0vw;">
-                    <v-flex
-                      v-for="tech in project.projecttech"
-                      class="tech d-inline-block caption"
-                    >{{ tech }}</v-flex>
-                  </v-layout>
+                  <span class="title"  style="margin-right:5px;">{{project.projecttitle}}</span>
+                  <v-chip outlined label small color="purple dark" style="margin-right:5px;">
+                    {{ project.projectterm }}
+                  </v-chip>
+                  <v-chip outlined label small color="purple dark" style="margin-right:5px;">
+                    {{ project.projectrank }}
+                  </v-chip>
+                  <div style="padding:5px 0;">
+                    <v-chip v-for="tech in project.projecttech" outlined small color="grey dark" style="margin-right:5px;">
+                      {{ tech }}
+                    </v-chip>
+                  </div>
+                  <v-divider/>
+
 
                   <p v-html="project.projectcontent" />
                 </v-flex>
               </v-layout>
 
             <!--comment -->
-              <v-flex>
-                <!-- comment input -->
-
+              <v-flex xs12>
                 <form v-if="this.$store.getters.getSession">
-                  <!-- 여기에 태그한 사람들의 이름이 박스로 체크됩니다. -->
-                  <div >
-                    태그 : <v-btn style="display:inline-block;" v-for="nickname in real_taglist" @click="delete_taglist(nickname)">{{nickname}}</v-btn>
-                    <v-text-field style="width:100%;" placeholder="댓글을 입력해주세요" v-model="comment"></v-text-field>
+                  <!-- 언급한 사람, 댓글 입력 필드 -->
+                  <div>
+                    <span v-if="real_taglist.length >0">언급한 사람 :</span>
+                    <v-chip v-for="nickname in real_taglist"  @click="delete_taglist(nickname)" color="#2980B9" class="white--text" style="margin:0 2px;" small>
+                      <span><i class="fa fa-user-circle"/> {{nickname}}</span>
+                    </v-chip>
+                    <v-flex >
+                      <v-text-field
+                        style="width:100%;"
+                        placeholder="댓글을 입력해주세요"
+                        v-model="comment"
+                        v-on:keyup.enter="INSERT_Comment(real_taglist, comment)">
+                          <template v-slot:append-outer>
+                            <v-btn text outlined @click="INSERT_Comment(real_taglist, comment)">
+                              등록
+                              </v-btn>
+                          </template>
+                        </v-text-field>
+                      </v-flex>
                   </div>
 
-                  <!-- 여기에서 태그 가능한 사람들의 목록을 보여줄 것입니다.-->
-                  <v-list style="position:absolute; z-index:1; background-color:#fff;">
+                  <!-- 태그 검색어 관련 유저 리스트 -->
+                  <v-list-item-group v-if="tmp_taglist.length>0" style="position:absolute; z-index:1; background-color:#fff; border:1px solid; padding:10px 3px;">
                     <v-list-item v-for="nickname in tmp_taglist">
-                      <v-list-item-content style="border-bottom:1px solid; width:500px;">
-                        <v-list-item-title v-html="nickname" @click="insert_taglist(nickname)"></v-list-item-title>
-                      </v-list-item-content>
+                        <v-list-item-title  @click="insert_taglist(nickname)"
+                          style="width:500px; padding:3px 0 3px 10px;">
+                          <i class="fa fa-user-circle"/> {{nickname}}
+                        </v-list-item-title>
                     </v-list-item>
-                  </v-list>
-
-                  <v-btn @click="INSERT_Comment(real_taglist, comment)">submit</v-btn>
+                  </v-list-item-group>
 
                   </form>
 
                 <!-- comment sort -->
-                <v-flex>
+                <!-- <v-flex>
                   <span>sort</span>
                   <v-btn text depressed small>oldest</v-btn>
                   <v-btn text depressed small>newest</v-btn>
                   <v-btn text depressed small>liked</v-btn>
-                </v-flex>
+                </v-flex> -->
 
                 <!-- comment list -->
                 <v-list>
@@ -137,9 +155,12 @@
                     <!-- 수정 전에 보여주는 댓글리스트 -->
                     <v-list-item-content v-bind:class="[`before_${index}`]" style="width:70%;" >
                       <span v-if="com.state==3" style="color:red;" @click="seecomment(index)">이 댓글은 신고 누적으로 블라인드 처리</span>
+                      <span class="overline grey--text"> {{com.User}} </span>
+                      <span class="overline grey--text"> | {{com.date}} </span> <br/>
                       <v-list-item-title v-if="com.state < 3" v-html="com.Comment"></v-list-item-title>
                       <v-list-item-title v-html="com.Comment" v-bind:class="[`blind_${index}`]" style="display:none;"></v-list-item-title>
-                      <v-list-item-title v-html="com.User"></v-list-item-title>
+
+
                     </v-list-item-content>
                     <!--  -->
 
@@ -153,17 +174,15 @@
                     <v-spacer/>
                     <v-list-item-action>
                       <div style='display:flex;'>
-                        &nbsp;&nbsp;
-                        <i v-bind:id="[`commentlike_${index}`]" class="far fa-heart" style="color:red; cursor:pointer;" @click="like_comment(com, index)"></i>
-                        {{com.like.length}}
-                        &nbsp;&nbsp;
-                        <i v-bind:id="[`commentunlike_${index}`]" class="far fa-heart" style="cursor:pointer;" @click="unlike_comment(com, index)"></i>
-                        {{com.unlike.length}}
-                        &nbsp;&nbsp;
-                        <img v-if="com.User==$store.getters.getSession" src="data:image/png;base64,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" alt="Smiley" style="cursor: pointer; height:20px; display:inline-block;"
-                        @click="UPDATE_comment(comments, index)">
-                        &nbsp;&nbsp;
-                        <img v-if="com.User==$store.getters.getSession" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAsQAAALEBxi1JjQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAHUSURBVFiF7Za/SxthGMc/76sFOU2q0aFWLf0fusmN/hh0ClkydFHpUMGpVOiQ2uIiKoj4o0J1CaVL7Fp0cTkoFVqE/gelxslEY0jDVe/tEDw8zUXvuFNEn+2e5+75fu75ce8JPNrQxIyqFV+beCW85JNeAYK2er8Pnn/TyyrjZjdegQv9Gl/6OICSK0BHwFp/EOrF1Mvhr2edFyug5IcQxAE6lRIr553VWtAZgjgAArquAnCtdg/g+tXaG0v42ms3a5/PVNW68QrcA9xCAFHjtK0VCwRACNrezNH6ehoZeegIaXofj2Y/0/BMDxEAUP9MHnQ8JTaasiE0vZ9oYgSkBNMMEUAp8suTHO/9pr79CbHRFI29caKJYQAKmVXKv7ZDBACso0NyC+84zlYgIoPJivj6GiVjw2s6f1tgFQv8/WnY1yeHOco73/yk8geg6f1EBpKgFCcH+9Q1tzpmIlQATe9z9Hx/ZtwxE7IpGiKAlETjQ7Z4ydiozMTiextC6+7xlNLbX7FlcfBpAUzTMe2ng6l191D6vhUiAFD+YVT1W8UCxc0vXtPdxrPgLgFkgxIRsOsdQJAOCsBCueZy3YJci0jF8goUz4HHPrWzCNL5FvnW7Yb/F8CPuY2PJ7UAAAAASUVORK5CYII=" alt="Smiley" style="cursor: pointer; height:20px; display:inline-block;" @click="DELETE_comment(comments, index)">
+                        <i v-bind:id="[`commentlike_${index}`]" class="far fa-heart" style="color:red; cursor:pointer;" @click="like_comment(com, index)"/>
+                        <span class="caption">{{com.like.length}}</span>
+
+                        <i v-bind:id="[`commentunlike_${index}`]" class="far fa-heart" style="cursor:pointer;" @click="unlike_comment(com, index)"/>
+                        <span class="caption">{{com.unlike.length}}</span>
+
+                        <v-icon class="fa fa-wrench" color="#8390b4" style="margin-right:2px;" v-if="com.User==$store.getters.getSession" @click="UPDATE_comment(comments, index)"/>
+                        <v-icon class="fa fa-trash" color="#777688"  style="margin-right:2px;" v-if="com.User==$store.getters.getSession" @click="DELETE_comment(comments, index)"/>
+
                         <template>
                         <v-layout justify-center d-inline>
                           <v-dialog v-model="Commentdialog" max-width="290">
@@ -210,22 +229,10 @@
                   </v-list-item>
                 </v-list>
 
-                <!-- end xs9 -->
               </v-flex>
             </v-layout>
           </v-flex>
 
-        <!-- right detail -->
-        <!-- <v-flex xs12 md3 justify-center>
-          <v-flex>Etc Project</v-flex>
-          <img
-            v-for="e in project.etcproject"
-            xs4
-            md1
-            :src="e.url"
-            style="width:70px; height:70px; padding:3px;"
-          />
-        </v-flex> -->
       </v-layout>
     </v-container>
   </v-layout>
@@ -376,6 +383,8 @@ export default {
         Json.unlike = [];
         Json.reportUserList = [];
         Json.state = 0;
+        var date = new Date();
+        Json.date = (date.getFullYear()-2000) + "." + (date.getMonth()+1) + "."  + date.getDate() + "." + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()
         // INSERT_Comment : 프로젝트의 댓글들에 댓글 추가.
         FirebaseService.INSERT_Comment(Json, this.projectData, this.project_id);
 
@@ -395,6 +404,7 @@ export default {
         like : [],
         unlike : [],
         state:0,
+        date: (date.getFullYear()-2000) + "." + (date.getMonth()+1) + "."  + date.getDate() + "." + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()
         };
         this.comments.push(newcommnet)
       } else {
@@ -505,7 +515,8 @@ export default {
     async unlike_comment(com, index) {
       if (this.user) {
         // com 은 내용 , index 는 순서
-        var result = await FirebaseService.unlike_comment(this.user, this.pcode, this.comments, com.like, index)
+
+        var result = await FirebaseService.unlike_comment(this.user, this.project_id, this.comments, com.like, index)
         var heart3 = document.querySelector(`#commentunlike_${index}`)
         if (result[index].unlike.includes(this.user)) {
           // 댓글 남긴 사람들 중에서 내가 있다는 뜻.

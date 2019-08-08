@@ -14,7 +14,8 @@
       </v-flex>
 
       <v-flex xs12>
-       <div v-if="skillToggle" class="caption">
+        <!-- 저장된  : {{this.selectList}} -->
+       <div v-if="!this.selectList.length" class="caption">
          <p> 등록된 기술이 없습니다. </p>
        </div>
 
@@ -172,6 +173,7 @@ export default {
       showRmImgBtn : false,
       showUpImgBtn : false,
       reload : false,
+      selectList : [],
     }
   },
   props: {
@@ -204,6 +206,9 @@ export default {
     async SELECT_Userdata() {
       this.toStory(true);
       this.userdata = await FirebaseService.SELECT_Userdata(this.$route.params.id);
+
+      this.selectList = this.userdata[0].showSkillList
+
       if ( this.userdata[0].userIntro == "" ) {
         this.userdata[0].userIntro = "소개말이 없습니다."
       }
@@ -235,6 +240,9 @@ export default {
       FirebaseService.UPDATE_userSkill(selectList,this.$route.params.id);
       this.userdata[0].showSkillList = selectList;
       this.userdata[0].userSkills = unselectList;
+      this.selectList = selectList
+      // console.log(selectList, 1)
+      // console.log(unselectList, 2)
       this.$swal('수정 완료!','내 스킬정보 수정이 완료되었습니다.','success')
     },
     async receiveEdu(edu) {
@@ -375,11 +383,9 @@ export default {
 </script>
 
 <style>
-  .skillselected{
-
-  }
-
-  .skillunselected{
-
+  .inputmodal{
+    background:white;
+    border-top:8px solid #3498DB;
+    border-bottom:8px solid #3498DB;
   }
 </style>

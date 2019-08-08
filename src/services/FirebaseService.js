@@ -238,6 +238,7 @@ export default {
         userImage: image
       });
   },
+
   UPDATE_userImageBanner(image, userId) {
     return firestore
       .collection("users")
@@ -246,6 +247,16 @@ export default {
         storyBanner: image
       });
   },
+
+  DELETE_userImageBanner(userId) {
+    return firestore
+      .collection("users")
+      .doc(userId)
+      .update({
+        storyBanner: ""
+      });
+  },
+
   // Function :: 유저의 자기소개 정보를 업데이트합니다.
   UPDATE_userIntro(intro, userId) {
     return firestore
@@ -377,15 +388,6 @@ export default {
       });
   },
 
-  DELETE_userImageBanner(userId) {
-    firestore
-      .collection("users")
-      .doc(userId)
-      .update({
-        storyBanner: ""
-      });
-  },
-
   async SELECT_userAddon(userId) {
     return firestore
       .collection("user_addon")
@@ -405,6 +407,17 @@ export default {
       .then(docSnapshots => {
         return docSnapshots.docs.map(doc => {
           return doc.data();
+        });
+      });
+  },
+
+  async SELECT_UserIdData() {
+    return firestore
+      .collection("users")
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+          return {data : doc.data(), id :doc.id};
         });
       });
   },
@@ -704,19 +717,7 @@ export default {
       });
   },
 
-  async SELECT_RecruitInfoById(id) {
-    return firestore
-      .collection("recruitInfo")
-      .where("companyId", "==", id)
-      .orderBy("contract")
-      .orderBy("createDay", 'desc')
-      .get()
-      .then(docSnapshots => {
-        return docSnapshots.docs.map(doc => {
-          return { data: doc.data(), id: doc.id };
-        });
-      });
-  },
+
   async SELECT_RecruitInfoByRecruitId(id) {
     return firestore
       .collection("recruitInfo")
@@ -737,7 +738,19 @@ export default {
         });
       });
   },
-
+  async SELECT_RecruitInfoById(id) {
+    return firestore
+      .collection("recruitInfo")
+      .where("companyId", "==", id)
+      .orderBy("contract")
+      .orderBy("createDay", 'desc')
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+          return { data: doc.data(), id: doc.id };
+        });
+      });
+  },
   async SELECT_RecruitByCompany(id) {
     return firestore
       .collection("recruit")
@@ -859,80 +872,47 @@ export default {
       });
   },
 
-  async SignupUser(
-    id,
-    password,
-    first_name,
-    last_name,
-    phonenumber,
-    userSkills,
-    userImage,
-    userName,
-    userIntro,
-    userCareers,
-    userEducations,
-    nickname
-  ) {
-    return firestore
-      .collection("users")
-      .doc(nickname)
-      .get()
-      .then(docSnapshot => {
-        if (docSnapshot.exists) {
-          alert(`${nickname}이 이미 존재합니다. 수정해주세요`);
-          return false;
-        } else {
-          var pattern_spc = /[~!@#$%^&*()_+|<>?:{}]/; //특수문자 체크
-          if (pattern_spc.test(nickname)) {
-            alert(
-              "nickname에 특수문자는 제외해주세요. ex : ~!@#$%^&*()_+|<>?:{}"
-            );
-            return false;
-          } else {
-            return firebase
-              .auth()
-              .createUserWithEmailAndPassword(id, password)
-              .then(function () {
-                firestore
-                  .collection("users")
-                  .doc(nickname)
-                  .set({
-                    email: id,
-                    first_name: first_name,
-                    last_name: last_name,
-                    phonenumber: phonenumber,
-                    userSkills: userSkills,
-                    userImage: userImage,
-                    userName: first_name + last_name,
-                    userIntro: userIntro,
-                    userCareers: userCareers,
-                    userEducations: userEducations,
-                    followerlist: [],
-                    followinglist: [],
-                    likeitProject: [],
-                    nickname: nickname,
-                    level: 2,
-                    showSkillList: [],
-                    dibs: [],
-                    alertlist: [],
-                    proceedList: [],
-                    storyBanner: "",
-                  });
-                firestore
-                  .collection("user_addon")
-                  .doc(nickname)
-                  .set({
-                    toggleView: false
-                  });
-                return true;
-              })
-              .catch(function (error) {
-                alert(error);
-                return false;
-              });
-          }
-        }
-      });
+  async SignupUser(id,password,phonenumber,userSkills,userImage,userName,
+    userIntro,userCareers,userEducations,nickname) {
+      return firebase
+      .auth()
+      .createUserWithEmailAndPassword(id, password)
+      .then(function() {
+        firestore
+        .collection("users")
+        .doc(nickname)
+        .set({
+          email: id,
+          phonenumber: phonenumber,
+          userSkills: userSkills,
+          userImage: userImage,
+          userName: userName,
+          userIntro: userIntro,
+          userCareers: userCareers,
+          userEducations: userEducations,
+          followerlist: [],
+          followinglist: [],
+          likeitProject: [],
+          nickname: nickname,
+          level: 2,
+          showSkillList: [],
+          dibs: [],
+          alertlist: [],
+          proceedList: [],
+          storyBanner:"",
+        });
+        firestore
+        .collection("user_addon")
+        .doc(nickname)
+        .set({
+          toggleView: false
+        });
+        return true;
+      })
+      .catch(function(error) {
+        // alert(error);
+        return false;
+      })
   },
 
   async SignupCompany(company_name, id, password, interests) {
@@ -967,7 +947,8 @@ export default {
                   represent: "",
                   homepage: "",
                   address: "",
-                  descript: ""
+                  descript: "",
+                  annualsales : "",
                 });
               // alert(`${id}님, 회원가입이 완료되었습니다.`);
               return true;
@@ -1428,26 +1409,27 @@ export default {
 
   //-------------------------------------companyInfo--------------------------------------------//
   //--------------------------------------------------------------------------------------------//
-  async UPDATE_Companys(comapnyInfo, company_name) {
+  async UPDATE_Companys(companyInfo, company_name) {
     return firestore
       .collection("companys")
       .doc(company_name)
       .update({
-        company_name: comapnyInfo.company_name,
-        id: comapnyInfo.id,
-        interests: comapnyInfo.interests,
-        followerlist: comapnyInfo.followerlist,
-        followinglist: comapnyInfo.followinglist,
-        level: comapnyInfo.level,
-        address: comapnyInfo.address,
-        company_logo: comapnyInfo.company_logo,
-        comsize: comapnyInfo.comsize,
-        descript: comapnyInfo.descript,
-        establishedDate: comapnyInfo.establishedDate,
-        homepage: comapnyInfo.homepage,
-        industry: comapnyInfo.industry,
-        mount: comapnyInfo.mount,
-        represent: comapnyInfo.represent
+        company_name: companyInfo.company_name,
+        id: companyInfo.id,
+        interests: companyInfo.interests,
+        followerlist: companyInfo.followerlist,
+        followinglist: companyInfo.followinglist,
+        level: companyInfo.level,
+        address: companyInfo.address,
+        company_logo: companyInfo.company_logo,
+        comsize: companyInfo.comsize,
+        descript: companyInfo.descript,
+        establishedDate: companyInfo.establishedDate,
+        homepage: companyInfo.homepage,
+        industry: companyInfo.industry,
+        mount: companyInfo.mount,
+        represent: companyInfo.represent,
+        annualsales: companyInfo.annualsales,
       });
   },
 

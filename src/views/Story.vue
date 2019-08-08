@@ -11,12 +11,7 @@
       </v-flex>
     </v-layout>
 
-    <div v-if="loading" style="position:relative; background:white; height:1000px; z-index:11">
-      <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-          <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-          <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-          <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-    </div>
+    <div v-if="loading" style="position:relative; background:white; height:1000px; z-index:11"/>
 
     <!-- Banner -->
     <div>
@@ -25,27 +20,17 @@
       <v-layout row wrap style="margin:0px 10px;">
         <v-layout row wrap v-bind:style="{ 'backgroundImage': 'url(' + storyBanner   + ')' }" style="background-size:100%; margin-bottom: 95px;"  @mouseover="showUpImgBanner=true" @mouseleave="showUpImgBanner=false">
 
-            <div v-show="showUpImgBanner && this.$route.params.id==this.$store.getters.getSession" style="position: absolute; border:1px solid;"
-            @click="setBanner()">
-              <p style="background: #ffffff91; cursor:pointer; margin:0px;">배경화면 수정하기</p>
-              <input
-                type="file"
-                id="Banner"
-                style="width:100%; display:none"
-                @change="onFileChangeBanner"
-              />
+            <div v-show="showUpImgBanner && this.$route.params.id==this.$store.getters.getSession"
+              style="position: absolute; margin:0;"
+              @click="setBanner()">
+              <p style="background: #ffffff91;border-radius:0 20px 20px 0; cursor:pointer; margin:0px; padding: 5px 45px 5px 20px;">
+                배경화면 수정하기
+              </p>
+              <input type="file" id="Banner" style="width:100%; display:none" @change="onFileChangeBanner" />
             </div>
 
-            <div
-              @click="removeImageBanner()"
-              v-show="showUpImgBanner && this.$route.params.id==this.$store.getters.getSession && storyBanner"
-              style="z-index:2; right:0; position: absolute;"
-            >
-              <img
-                src="../assets/icon_set/delete.png"
-                alt="delimg"
-                style="cursor:pointer;width:25px;height:25px;"
-              />
+            <div @click="removeImageBanner()" v-show="showUpImgBanner && this.$route.params.id==this.$store.getters.getSession && storyBanner" style="z-index:2; right:0; position: absolute;" >
+              <p style="background: #ff000039; cursor:pointer; margin:0px; padding: 5px 20px 5px 45px; border-radius: 20px 0 0 20px;">배경화면 삭제</p>
             </div>
 
           <v-flex xs12 style="height:220px;">
@@ -115,7 +100,8 @@
 
         <!-- 유저 한줄소개 인트로 -->
         <span class="subheading grey--text text-center" style="width:100%">
-          {{user.userIntro}}
+          <span v-if="user.userIntro != ''">{{user.userIntro}}</span>
+          <span v-else class="caption">한 줄 소개를 등록해주세요!</span>
           <IntroEditor v-on:sendIntro="receiveIntro" :introinput="user.userIntro" v-if="this.$route.params.id==this.$store.getters.getSession" />
         </span>
       </v-layout>
@@ -139,13 +125,7 @@
           <v-layout v-if="!this.viewFollower && !this.viewFollowing" row wrap>
             <!-- leftSide -->
             <v-flex xs12 sm4 md3>
-              <LeftSide
-                xs12
-                sm4
-                md3
-                v-on:toStory="fromLeftSide"
-                v-on:toStoryFilter="toFilterFunction"
-              />
+              <LeftSide xs12 sm4 md3 v-on:toStory="fromLeftSide" v-on:toStoryFilter="toFilterFunction" />
             </v-flex>
 
             <v-flex xs12 sm8 md9>
@@ -192,6 +172,7 @@
               </v-container>
 
               <!-- List Option -->
+
               <v-layout wrap>
                 <ProjectList
                   v-if="!stateAdd && !statedetail && !stateupdate"
@@ -371,10 +352,12 @@ export default {
       var userImg = await FirebaseService.SELECT_UserImage(
         this.$route.params.id
       );
-      console.log("유저의 이미지!", userImg);
+      // console.log("유저의 이미지!", userImg);
       //디비에서 받아온 유저의 배너이미지와, 프로필 사진 이미지를 붙인다
       if (userImg.banner) {
         this.storyBanner = userImg.banner;
+      } else {
+        this.storyBanner = "https://i.imgur.com/KnVfJVQ.png"
       }
       this.image = userImg.profileImg;
     },
@@ -450,8 +433,8 @@ export default {
           })
           .catch();
       } else {
-        var image_file = document.querySelector("#inputfile");
-        image_file.value = "";
+        // var image_file = document.querySelector("#inputfile");
+        // image_file.value = "";
         this.$swal("이미지 오류!", "이미지 파일만 올려주세요.", "error");
       }
     },
@@ -482,8 +465,6 @@ export default {
           })
           .catch();
       } else {
-        var image_file = document.querySelector("#inputfile");
-        image_file.value = "";
         this.$swal("이미지 오류!", "이미지 파일만 올려주세요.", "error");
       }
     },
@@ -646,6 +627,7 @@ export default {
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 60px; /* Place content 60px from the top */
     transition: 0.5s; /*0.5 second transition effect to slide in the sidenav*/
+    -ms-overflow-style: none;
   }
 
   .bm-overlay {

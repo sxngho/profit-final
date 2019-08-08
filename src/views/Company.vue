@@ -86,118 +86,136 @@
       <v-layout row wrap>
         <v-flex xs12 sm10 offset-sm1>
           <v-card style="width:100%" outlined>
-            <v-card-title>기업정보 <v-spacer/> <span v-if="this.$route.params.id==this.$store.getters.getSession"><p style="font-size:0.5em">*데이터를 클릭하여 수정가능합니다.</p></span> </v-card-title>
+            <v-card-title>기업정보 <v-spacer/>
+              <div v-if="this.$route.params.id==this.$store.getters.getSession">
+              <v-btn v-if="!updatestate" @click="change_updatestate()">수정하기</v-btn>
+              <v-btn v-if="updatestate" @click="submit(
+                company.industry, company.mount, company.comsize, company.homepage
+                , company.address, company.establishedDate,  company.represent, company.annualsales
+                )">저장</v-btn>
+              <v-btn v-if="updatestate" @click="cancel_updatestate()">취소</v-btn>
+              </div>
+            </v-card-title>
             <v-card-text id="company_detail">
               <v-simple-table>
                 <tbody class="text-center">
                   <tr>
                     <th>산업</th>
                     <td v-if="this.$route.params.id!==this.$store.getters.getSession">{{company.industry}}</td>
-                    <td v-if="!toggleIndustry && this.$route.params.id==this.$store.getters.getSession" @click="Function_Industry()">{{company.industry}}</td>
+                    <td v-if="!updatestate && this.$route.params.id==this.$store.getters.getSession">{{company.industry}}</td>
                     <td>
                       <input
                         type="text"
                         v-model="company.industry"
-                        v-if="toggleIndustry && this.$route.params.id==this.$store.getters.getSession"
-                        style="text-align:center"
-                        ref="IndustryRef"
-                        @keyup.enter="Submit_Industry()"
+                        v-if="updatestate && this.$route.params.id==this.$store.getters.getSession"
+                        style="text-align:center; border:1px solid;"
                       />
                     </td>
                   </tr>
                   <tr>
-                    <th>사원수</th>
+                    <th>사원수 ( 명 )</th>
                     <td v-if="this.$route.params.id!==this.$store.getters.getSession">{{company.mount}}</td>
-                    <td v-if="!toggleMount && this.$route.params.id==this.$store.getters.getSession" @click="Function_Mount()">{{company.mount}}</td>
+                    <td v-if="!updatestate && this.$route.params.id==this.$store.getters.getSession">{{company.mount}}</td>
                     <td>
                       <input
                         type="text"
                         v-model="company.mount"
-                        v-if="toggleMount && this.$route.params.id==this.$store.getters.getSession"
-                        style="text-align:center"
-                        ref="MountRef"
-                        @keyup.enter="Submit_Mount()"
+                        v-if="updatestate && this.$route.params.id==this.$store.getters.getSession"
+                        style="text-align:center; border:1px solid;"
                       />
                     </td>
                   </tr>
                   <tr>
                     <th>기업구분</th>
                     <td v-if="this.$route.params.id!==this.$store.getters.getSession">{{company.comsize}}</td>
-                    <td v-if="!toggleComsize && this.$route.params.id==this.$store.getters.getSession" @click="Function_Comsize()">{{company.comsize}}</td>
-                    <td>
-                      <input
-                        type="text"
-                        v-model="company.comsize"
-                        v-if="toggleComsize && this.$route.params.id==this.$store.getters.getSession"
-                        style="text-align:center"
-                        ref="ComsizeRef"
-                        @keyup.enter="Submit_Comsize()"
-                      />
+                    <td v-if="!updatestate && this.$route.params.id==this.$store.getters.getSession">{{company.comsize}}</td>
+                    <td v-if="updatestate && this.$route.params.id==this.$store.getters.getSession">
+                      <form>
+                        <select v-model="company.comsize" style="border:1px solid;">
+                          <option v-for="com in select_comsize" v-bind:value="com">
+                            <span>{{com}}</span>
+                          </option>
+                        </select>
+                      </form>
+
                     </td>
                   </tr>
                   <tr>
                     <th>홈페이지</th>
                     <td v-if="this.$route.params.id!==this.$store.getters.getSession">{{company.homepage}}</td>
-                    <td v-if="!toggleHomepage && this.$route.params.id==this.$store.getters.getSession" @click="Function_Homepage()">{{company.homepage}}</td>
+                    <td v-if="!updatestate && this.$route.params.id==this.$store.getters.getSession">{{company.homepage}}</td>
                     <td>
                       <input
                         type="text"
                         v-model="company.homepage"
-                        v-if="toggleHomepage && this.$route.params.id==this.$store.getters.getSession"
-                        style="text-align:center"
-                        ref="HomepageRef"
-                        @keyup.enter="Submit_Homepage()"
+                        v-if="updatestate && this.$route.params.id==this.$store.getters.getSession"
+                        style="text-align:center; border:1px solid;"
                       />
                     </td>
                   </tr>
                   <tr>
                     <th>주소</th>
                     <td v-if="this.$route.params.id!==this.$store.getters.getSession">{{company.address}}</td>
-                    <td v-if="!toggleAddress && this.$route.params.id==this.$store.getters.getSession" @click="Function_Address()">{{company.address}}</td>
+                    <td v-if="!updatestate && this.$route.params.id==this.$store.getters.getSession">{{company.address}}</td>
                     <td>
                       <input
                         type="text"
                         v-model="company.address"
-                        v-if="toggleAddress && this.$route.params.id==this.$store.getters.getSession"
-                        style="text-align:center"
-                        ref="AddressRef"
-                        @keyup.enter="Submit_Address()"
+                        v-if="updatestate && this.$route.params.id==this.$store.getters.getSession"
+                        style="text-align:center; border:1px solid;"
                       />
                     </td>
                   </tr>
                   <tr>
                     <th>설립일</th>
                     <td v-if="this.$route.params.id!==this.$store.getters.getSession">{{company.establishedDate}}</td>
-                    <td v-if="!toggleEstablishedDate && this.$route.params.id==this.$store.getters.getSession" @click="Function_EstablishedDate()">{{company.establishedDate}}</td>
+                    <td v-if="!updatestate && this.$route.params.id==this.$store.getters.getSession">{{company.establishedDate}}</td>
+                    <td>
                       <input
                         type="text"
                         v-model="company.establishedDate"
-                        v-if="toggleEstablishedDate && this.$route.params.id==this.$store.getters.getSession"
-                        style="text-align:center"
-                        ref="EstablishedDateRef"
-                        @keyup.enter="Submit_EstablishedDate()"
+                        v-if="updatestate && this.$route.params.id==this.$store.getters.getSession"
+                        style="text-align:center; border:1px solid;"
                       />
                     </td>
                   </tr>
                   <tr>
                     <th>대표자</th>
                     <td v-if="this.$route.params.id!==this.$store.getters.getSession">{{company.represent}}</td>
-                    <td v-if="!toggleRepresent && this.$route.params.id==this.$store.getters.getSession" @click="Function_Represent()">{{company.represent}}</td>
+                    <td v-if="!updatestate && this.$route.params.id==this.$store.getters.getSession">{{company.represent}}</td>
                     <td>
                       <input
                         type="text"
                         v-model="company.represent"
-                        v-if="toggleRepresent && this.$route.params.id==this.$store.getters.getSession"
-                        style="text-align:center"
-                        ref="RepresentRef"
-                        @keyup.enter="Submit_Represent()"
+                        v-if="updatestate && this.$route.params.id==this.$store.getters.getSession"
+                        style="text-align:center; border:1px solid;"
+                      />
+                      <!-- <v-btn v-if="toggleRepresent && this.$route.params.id==this.$store.getters.getSession" style>취소</v-btn> -->
+                    </td>
+                  </tr>
+                  <!-- <tr>
+                    <th></th>
+                    <td></td>
+                  </tr> -->
+                  <tr>
+                    <th>연매출 ( 천 단위 )</th>
+                    <td v-if="this.$route.params.id!==this.$store.getters.getSession">{{company.annualsales}}</td>
+                    <td v-if="!updatestate && this.$route.params.id==this.$store.getters.getSession">{{company.annualsales}}</td>
+                    <td>
+
+                      <input
+                        type="text"
+                        v-model="company.annualsales"
+                        v-if="updatestate && this.$route.params.id==this.$store.getters.getSession"
+                        style="text-align:center; border:1px solid;"
                       />
                     </td>
                   </tr>
-                  <tr>
+                  <!-- <tr>
                     <th></th>
                     <td></td>
-                  </tr>
+                  </tr> -->
+
                 </tbody>
               </v-simple-table>
             </v-card-text>
@@ -211,15 +229,22 @@
       <v-layout row wrap>
         <v-flex xs12 sm10 offset-sm1>
           <v-card style="width:100%" outlined>
-            <v-card-title>회사소개</v-card-title>
+            <v-card-title>회사소개 <v-spacer/>
+              <div v-if="this.$route.params.id==this.$store.getters.getSession">
+              <v-btn v-if="!updatestate2" @click="change_updatestate2()">수정하기</v-btn>
+              <v-btn v-if="updatestate2" @click="submit2(company.descript)">저장</v-btn>
+              <v-btn v-if="updatestate2" @click="cancel_updatestate2()">취소</v-btn>
+              </div>
+
+            </v-card-title>
+
             <v-card-text v-if="this.$route.params.id!==this.$store.getters.getSession">{{company.descript}}</v-card-text>
-            <v-card-text v-if="!toggleDescript && this.$route.params.id==this.$store.getters.getSession" @click="Function_Descript()">{{company.descript}}</v-card-text>
-            <v-card-text v-if="toggleDescript && this.$route.params.id==this.$store.getters.getSession">
+            <v-card-text v-if="!updatestate2 && this.$route.params.id==this.$store.getters.getSession">{{company.descript}}</v-card-text>
+            <v-card-text v-if="updatestate2 && this.$route.params.id==this.$store.getters.getSession">
               <textarea
                 v-model="company.descript"
-                ref="DescriptRef"
-                @keyup.enter="Submit_Descript()"
                 style="width:100%; height:150px"
+                v-on:keyup.enter="br_check()"
               />
             </v-card-text>
           </v-card>
@@ -496,209 +521,6 @@ export default {
         });
       }
     },
-    Function_Industry() {
-      this.toggleIndustry = true;
-      this.toggleMount = false;
-      this.toggleComsize = false;
-      this.toggleEstablishedDate = false;
-      this.toggleRepresent = false;
-      this.toggleHomepage = false;
-      this.toggleAddress = false;
-      this.toggleDescript = false;
-      this.$nextTick(() => this.$refs.IndustryRef.focus());
-    },
-    Function_Mount() {
-      this.toggleIndustry = false;
-      this.toggleMount = true;
-      this.toggleComsize = false;
-      this.toggleEstablishedDate = false;
-      this.toggleRepresent = false;
-      this.toggleHomepage = false;
-      this.toggleAddress = false;
-      this.toggleDescript = false;
-
-      this.$nextTick(() => this.$refs.MountRef.focus());
-    },
-    Function_Comsize() {
-      this.toggleIndustry = false;
-      this.toggleMount = false;
-      this.toggleComsize = true;
-      this.toggleEstablishedDate = false;
-      this.toggleRepresent = false;
-      this.toggleHomepage = false;
-      this.toggleAddress = false;
-      this.toggleDescript = false;
-
-      this.$nextTick(() => this.$refs.ComsizeRef.focus());
-    },
-    Function_Homepage() {
-      this.toggleIndustry = false;
-      this.toggleMount = false;
-      this.toggleComsize = false;
-      this.toggleEstablishedDate = false;
-      this.toggleRepresent = false;
-      this.toggleHomepage = true;
-      this.toggleAddress = false;
-      this.toggleDescript = false;
-
-      this.$nextTick(() => this.$refs.HomepageRef.focus());
-    },
-    Function_Address() {
-      this.toggleIndustry = false;
-      this.toggleMount = false;
-      this.toggleComsize = false;
-      this.toggleEstablishedDate = false;
-      this.toggleRepresent = false;
-      this.toggleHomepage = false;
-      this.toggleAddress = true;
-      this.toggleDescript = false;
-
-      this.$nextTick(() => this.$refs.AddressRef.focus());
-    },
-    Function_EstablishedDate() {
-      this.toggleIndustry = false;
-      this.toggleMount = false;
-      this.toggleComsize = false;
-      this.toggleEstablishedDate = true;
-      this.toggleRepresent = false;
-      this.toggleHomepage = false;
-      this.toggleAddress = false;
-      this.toggleDescript = false;
-
-      this.$nextTick(() => this.$refs.EstablishedDateRef.focus());
-    },
-
-    Function_Represent() {
-      this.toggleIndustry = false;
-      this.toggleMount = false;
-      this.toggleComsize = false;
-      this.toggleEstablishedDate = false;
-      this.toggleRepresent = true;
-      this.toggleHomepage = false;
-      this.toggleAddress = false;
-      this.toggleDescript = false;
-
-      this.$nextTick(() => this.$refs.RepresentRef.focus());
-    },
-
-    Function_Descript() {
-      this.toggleIndustry = false;
-      this.toggleMount = false;
-      this.toggleComsize = false;
-      this.toggleEstablishedDate = false;
-      this.toggleRepresent = false;
-      this.toggleHomepage = false;
-      this.toggleAddress = false;
-      this.toggleDescript = true;
-
-      this.$nextTick(() => this.$refs.DescriptRef.focus());
-    },
-
-    async Submit_Industry() {
-      if (this.$route.params.id==this.$store.getters.getSession)
-      this.toggleIndustry = !this.toggleIndustry;
-      await FirebaseService.UPDATE_Companys(
-        this.company,
-        this.company.company_name
-      );
-      this.showNotification(
-        "foo-css",
-        "success",
-        "",
-        `내용이 성공적으로 수정되었습니다.!`
-      );
-    },
-    async Submit_Mount() {
-      this.toggleMount = !this.toggleMount;
-      await FirebaseService.UPDATE_Companys(
-        this.company,
-        this.company.company_name
-      );
-      this.showNotification(
-        "foo-css",
-        "success",
-        "",
-        `내용이 성공적으로 수정되었습니다.!`
-      );
-    },
-    async Submit_Comsize() {
-      this.toggleComsize = !this.toggleComsize;
-      await FirebaseService.UPDATE_Companys(
-        this.company,
-        this.company.company_name
-      );
-      this.showNotification(
-        "foo-css",
-        "success",
-        "",
-        `내용이 성공적으로 수정되었습니다.!`
-      );
-    },
-    async Submit_Homepage() {
-      this.toggleHomepage = !this.toggleHomepage;
-      await FirebaseService.UPDATE_Companys(
-        this.company,
-        this.company.company_name
-      );
-      this.showNotification(
-        "foo-css",
-        "success",
-        "",
-        `내용이 성공적으로 수정되었습니다.!`
-      );
-    },
-    async Submit_Address() {
-      this.toggleAddress = !this.toggleAddress;
-      await FirebaseService.UPDATE_Companys(
-        this.company,
-        this.company.company_name
-      );
-      this.showNotification(
-        "foo-css",
-        "success",
-        "",
-        `내용이 성공적으로 수정되었습니다.!`
-      );
-    },
-    async Submit_EstablishedDate() {
-      this.toggleEstablishedDate = !this.toggleEstablishedDate;
-      await FirebaseService.UPDATE_Companys(
-        this.company,
-        this.company.company_name
-      );
-      this.showNotification(
-        "foo-css",
-        "success",
-        "",
-        `내용이 성공적으로 수정되었습니다.!`
-      );
-    },
-    async Submit_Represent() {
-      this.toggleRepresent = !this.toggleRepresent;
-      await FirebaseService.UPDATE_Companys(
-        this.company,
-        this.company.company_name
-      );
-      this.showNotification(
-        "foo-css",
-        "success",
-        "",
-        `내용이 성공적으로 수정되었습니다.!`
-      );
-    },
-    async Submit_Descript() {
-      this.toggleDescript = !this.toggleDescript;
-      await FirebaseService.UPDATE_Companys(
-        this.company,
-        this.company.company_name
-      );
-      this.showNotification(
-        "foo-css",
-        "success",
-        "",
-        `내용이 성공적으로 수정되었습니다.!`
-      );
-    },
     async fetchData() {
       //this.company = await FirebaseService.SELECT_CompanyById(this.$route.params.id);
       this.$loading(true);
@@ -748,7 +570,7 @@ export default {
       // console.log(this.dibsUsers, "찜유저리스트");
 
       const comInfo = await FirebaseService.SELECT_CompanyInfo(this.$route.params.id);
-
+      this.comInfo = comInfo[0]
       this.company.id = comInfo[0].id;
       this.company.level = comInfo[0].level;
       this.company.company_logo = comInfo[0].company_logo;
@@ -760,7 +582,9 @@ export default {
       this.company.represent = comInfo[0].represent;
       this.company.homepage = comInfo[0].homepage;
       this.company.address = comInfo[0].address;
+      this.company.annualsales = comInfo[0].annualsales;
       this.company.descript = comInfo[0].descript;
+      this.tmp_descript = comInfo[0].descript;
 
       this.$loading(false);
     },
@@ -807,27 +631,50 @@ export default {
         "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=1000,height=600"
       );
     },
-    async submit() {
-      if (this.toggleIndustry) this.toggleIndustry = !this.toggleIndustry;
-      this.toggleMount = !this.toggleMount;
-      this.toggleComsize = !this.toggleComsize;
-      this.toggleEstablishedDate = !this.toggleEstablishedDate;
-      this.toggleRepresent = !this.toggleRepresent;
-      this.toggleHomepage = !this.toggleHomepage;
-      this.toggleAddress = !this.toggleAddress;
-      this.toggleDescript = !this.toggleDescript;
-      this.toggleCompany_logo = !this.toggleCompany_logo;
-      const companyInfo = this.company;
-      let result = await FirebaseService.UPDATE_Companys(
-        companyInfo,
-        companyInfo.company_name
-      );
-      this.showNotification(
-        "foo-css",
-        "success",
-        "",
-        `내용이 성공적으로 수정되었습니다.!`
-      );
+    async submit(industry, mount, comsize, homepage, address, establishedDate, represent, annualsales) {
+
+      var check_mount = await isNaN(mount)
+      var check_annualsales = await isNaN(annualsales)
+
+      if (!(check_mount || check_annualsales)) {
+        // 둘 다 숫자로 잘 한 경우
+        this.$swal({
+           title: '정말 수정하시겠습니까?',
+           text: "수정된 기업정보는 복구가 불가능합니다.",
+           type: 'warning',
+           showCancelButton: true,
+           confirmButtonColor: '#3085d6',
+           cancelButtonColor: '#d33',
+           confirmButtonText: '수정',
+           cancelButtonText: '취소',
+          }).then((result) => {
+           if (result.value) {
+             this.$swal('Updated!','기업정보가 수정되었습니다.','success')
+             this.updatestate = !this.updatestate
+             const companyInfo = this.company;
+             FirebaseService.UPDATE_Companys(companyInfo, companyInfo.company_name);
+           }
+         })
+      } else {
+        // 둘 중 하나는 숫자로 안한 경우
+        if (!check_mount) {
+          this.$swal.fire({
+              type: 'error',
+              title: 'Oops...',
+              text: '연매출액은 숫자로 표기해주세요.'
+            })
+        } else {
+          this.$swal.fire({
+              type: 'error',
+              title: 'Oops...',
+              text: '사원수는 숫자로 표기해주세요.'
+            })
+        }
+      }
+
+    },
+    async submit2(descript) {
+      console.log(descript)
     },
     setFile() {
       var file = document.querySelector("#file");
@@ -882,6 +729,31 @@ export default {
          }
        })
     },
+    change_updatestate() {
+      this.updatestate = !this.updatestate
+    },
+    change_updatestate2() {
+      this.updatestate2 = !this.updatestate2
+    },
+    cancel_updatestate() {
+
+      this.updatestate = !this.updatestate
+
+      this.company.industry = this.comInfo.industry
+      this.company.address = this.comInfo.address
+      this.company.mount = this.comInfo.mount
+      this.company.establishedDate = this.comInfo.establishedDate
+      this.company.comsize = this.comInfo.comsize
+      this.company.represent = this.comInfo.represent
+      this.company.homepage = this.comInfo.homepage
+      this.company.annualsales = this.comInfo.annualsales
+    },
+    cancel_updatestate2() {
+      this.updatestate2 = !this.updatestate2
+    },
+    br_check() {
+      console.log('일단 엔터 감지했다.')
+    }
   },
   data() {
     return {
@@ -900,26 +772,23 @@ export default {
         represent: "",
         homepage: "",
         address : "",
+        annualsales: "",
         descript : "",
       },
+      comInfo : {},
       loading : false,
       recruitlist: [],
       MyRecruits: [],
       workingUser: "",
       dibsUsers: "",
       nowLevel: "",
-      toggleIndustry: false,
-      toggleMount: false,
-      toggleComsize: false,
-      toggleEstablishedDate: false,
-      toggleRepresent: false,
-      toggleHomepage: false,
-      toggleAddress: false,
-      toggleDescript: false,
-      toggleCompany_logo: false,
+      updatestate:false,
+      updatestate2:false,
       showUpImgBtn: false,
       showRmImgBtn: false,
       user: "",
+      select_comsize:['대기업','중견기업','강소기업','외국계기업','벤처기업','공공기관/공기업','비영리단체/협회재단','외국기관/단체'],
+      tmp_descript:"",
     };
   }
 };

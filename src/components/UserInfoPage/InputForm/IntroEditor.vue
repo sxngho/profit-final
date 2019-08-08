@@ -4,14 +4,14 @@
         <img src="../../../assets/icon_set/pencil.png" alt="edit" style="cursor:pointer;" v-on="on">
       </template>
 
-      <v-card>
-        <v-toolbar>
+      <v-container class="inputmodal">
+        <v-layout row wrap style="padding:10px 20px;">
+          <v-spacer/>
           <span class="font-weight-regular headline">자기소개 수정</span>
           <v-spacer/>
           <div @click="clearIntro"><i class="fa fa-close"/></div>
-        </v-toolbar>
+        </v-layout>
 
-        <v-card-text>
           <v-layout row wrap justify-center>
             <v-flex xs10>
               <span class="subheading font-weight-bold">설명</span>
@@ -24,13 +24,12 @@
             </v-textarea>
             </v-flex>
           </v-layout>
-        </v-card-text>
 
         <v-layout row wrap justify-center>
           <v-btn v-on:click="sendIntro(intro)"  text outlined> 등록 </v-btn>
         </v-layout>
 
-      </v-card>
+      </v-container>
     </v-dialog>
 </template>
 
