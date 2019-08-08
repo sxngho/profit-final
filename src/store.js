@@ -20,18 +20,9 @@ export default new Vuex.Store({
     allPortfolioList: [],
     showPortfolioList: [],
     techList: [
-      "vue",
-      "javascript",
-      "jquery",
-      "java",
-      "c",
-      "c++",
-      "react",
-      "python",
-      "spring",
-      "django",
-      "node.js",
-      "express"
+      "vue", "javascript", "jquery", "java", "c", "c++", "react", "python", "spring", "django", "node.js", "express",
+      "c#", "php", "html", "ios", "css", "mysql", "mongoDB", ".net", "objective-c", "angular.js",
+      "json", "r", "ajax", "ruby", "scala", "typescript", "swift", "linux", "nosql"
     ],
     showTechList: [],
     requiredSkills: [],

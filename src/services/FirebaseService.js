@@ -22,7 +22,7 @@ var provider = new auth.FacebookAuthProvider();
 var login_user; // 로그인 하면 email, 아니면 ''  처리
 var url = document.location.href;
 
-auth().onAuthStateChanged(function(user) {
+auth().onAuthStateChanged(function (user) {
   if (user) {
     login_user = user.email;
     // console.log(login_user)
@@ -238,14 +238,7 @@ export default {
         userImage: image
       });
   },
-  UPDATE_userImageBanner(image, userId) {
-    return firestore
-      .collection("users")
-      .doc(userId)
-      .update({
-        storyBanner: image
-      });
-  },
+
   // Function :: 유저의 자기소개 정보를 업데이트합니다.
   UPDATE_userIntro(intro, userId) {
     return firestore
@@ -377,15 +370,6 @@ export default {
       });
   },
 
-  DELETE_userImageBanner(userId) {
-    firestore
-      .collection("users")
-      .doc(userId)
-      .update({
-        storyBanner: ""
-      });
-  },
-
   async SELECT_userAddon(userId) {
     return firestore
       .collection("user_addon")
@@ -405,6 +389,17 @@ export default {
       .then(docSnapshots => {
         return docSnapshots.docs.map(doc => {
           return doc.data();
+        });
+      });
+  },
+
+  async SELECT_UserIdData() {
+    return firestore
+      .collection("users")
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+          return {data : doc.data(), id :doc.id};
         });
       });
   },
@@ -509,14 +504,16 @@ export default {
       });
   },
 
-  async SELECT_UserImage(nickname){
+  async SELECT_UserImage(nickname) {
     return firestore
       .collection("users")
       .doc(nickname)
       .get()
       .then(docSnapshots => {
-        return { profileImg : docSnapshots.data().userImage,
-                    banner:docSnapshots.data().storyBanner};
+        return {
+          profileImg: docSnapshots.data().userImage,
+          banner: docSnapshots.data().storyBanner
+        };
       });
   },
 
@@ -702,19 +699,7 @@ export default {
       });
   },
 
-  async SELECT_RecruitInfoById(id) {
-    return firestore
-      .collection("recruitInfo")
-      .where("companyId", "==", id)
-      .orderBy("contract")
-      .orderBy("createDay", 'desc')
-      .get()
-      .then(docSnapshots => {
-        return docSnapshots.docs.map(doc => {
-          return { data: doc.data(), id: doc.id };
-        });
-      });
-  },
+
   async SELECT_RecruitInfoByRecruitId(id) {
     return firestore
       .collection("recruitInfo")
@@ -735,7 +720,19 @@ export default {
         });
       });
   },
-
+  async SELECT_RecruitInfoById(id) {
+    return firestore
+      .collection("recruitInfo")
+      .where("companyId", "==", id)
+      .orderBy("contract")
+      .orderBy("createDay", 'desc')
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+          return { data: doc.data(), id: doc.id };
+        });
+      });
+  },
   async SELECT_RecruitByCompany(id) {
     return firestore
       .collection("recruit")
@@ -813,10 +810,10 @@ export default {
     return firebase
       .auth()
       .signInWithEmailAndPassword(id, password)
-      .then(function() {
+      .then(function () {
         return true;
       })
-      .catch(function(error) {
+      .catch(function (error) {
         var errorCode = error.code;
         var errorMessage = error.message;
         alert(`${errorCode}\n${errorMessage}`);
@@ -828,13 +825,13 @@ export default {
     return firebase
       .auth()
       .signInWithPopup(provider)
-      .then(function(result) {
+      .then(function (result) {
         var user = result.user.email;
         var time = String(Date.now()); // nickname을 임시로 넣기 위한 숫자변수 역할
         var answer = { user: user, result: true };
         return answer;
       })
-      .catch(function(error) {
+      .catch(function (error) {
         var errorCode = error.code;
         var errorMessage = error.message;
         var email = error.email;
@@ -848,89 +845,56 @@ export default {
     return firebase
       .auth()
       .signOut()
-      .then(function() {
+      .then(function () {
         return false;
       })
-      .catch(function(error) {
+      .catch(function (error) {
         alert(error);
         return true;
       });
   },
 
-  async SignupUser(
-    id,
-    password,
-    first_name,
-    last_name,
-    phonenumber,
-    userSkills,
-    userImage,
-    userName,
-    userIntro,
-    userCareers,
-    userEducations,
-    nickname
-  ) {
-    return firestore
-      .collection("users")
-      .doc(nickname)
-      .get()
-      .then(docSnapshot => {
-        if (docSnapshot.exists) {
-          alert(`${nickname}이 이미 존재합니다. 수정해주세요`);
-          return false;
-        } else {
-          var pattern_spc = /[~!@#$%^&*()_+|<>?:{}]/; //특수문자 체크
-          if (pattern_spc.test(nickname)) {
-            alert(
-              "nickname에 특수문자는 제외해주세요. ex : ~!@#$%^&*()_+|<>?:{}"
-            );
-            return false;
-          } else {
-            return firebase
-              .auth()
-              .createUserWithEmailAndPassword(id, password)
-              .then(function() {
-                firestore
-                  .collection("users")
-                  .doc(nickname)
-                  .set({
-                    email: id,
-                    first_name: first_name,
-                    last_name: last_name,
-                    phonenumber: phonenumber,
-                    userSkills: userSkills,
-                    userImage: userImage,
-                    userName: first_name + last_name,
-                    userIntro: userIntro,
-                    userCareers: userCareers,
-                    userEducations: userEducations,
-                    followerlist: [],
-                    followinglist: [],
-                    likeitProject: [],
-                    nickname: nickname,
-                    level: 2,
-                    showSkillList: [],
-                    dibs: [],
-                    alertlist: [],
-                    proceedList: [],
-                    storyBanner:"",
-                  });
-                firestore
-                  .collection("user_addon")
-                  .doc(nickname)
-                  .set({
-                    toggleView: false
-                  });
-                return true;
-              })
-              .catch(function(error) {
-                alert(error);
-                return false;
-              });
-          }
-        }
-      });
+  async SignupUser(id,password,phonenumber,userSkills,userImage,userName,
+    userIntro,userCareers,userEducations,nickname) {
+      return firebase
+      .auth()
+      .createUserWithEmailAndPassword(id, password)
+      .then(function() {
+        firestore
+        .collection("users")
+        .doc(nickname)
+        .set({
+          email: id,
+          phonenumber: phonenumber,
+          userSkills: userSkills,
+          userImage: userImage,
+          userName: userName,
+          userIntro: userIntro,
+          userCareers: userCareers,
+          userEducations: userEducations,
+          followerlist: [],
+          followinglist: [],
+          likeitProject: [],
+          nickname: nickname,
+          level: 2,
+          showSkillList: [],
+          dibs: [],
+          alertlist: [],
+          proceedList: [],
+          storyBanner:"",
+        });
+        firestore
+        .collection("user_addon")
+        .doc(nickname)
+        .set({
+          toggleView: false
+        });
+        return true;
+      })
+      .catch(function(error) {
+        // alert(error);
+        return false;
+      })
   },
 
   async SignupCompany(company_name, id, password, interests) {
@@ -946,7 +910,7 @@ export default {
           return firebase
             .auth()
             .createUserWithEmailAndPassword(id, password)
-            .then(function() {
+            .then(function () {
               firestore
                 .collection("companys")
                 .doc(company_name)
@@ -971,7 +935,7 @@ export default {
               // alert(`${id}님, 회원가입이 완료되었습니다.`);
               return true;
             })
-            .catch(function(error) {
+            .catch(function (error) {
               alert(error);
               return false;
             });
@@ -1046,10 +1010,10 @@ export default {
           });
       });
   },
-  INSERT_alert_Chat(alert,userId) {
+  INSERT_alert_Chat(alert, userId) {
     firestore.collection("users").doc(userId).update({
-        alertlist: alert
-      });
+      alertlist: alert
+    });
   },
 
   // --------------------------------------------------------------------FOLLOW
@@ -1324,35 +1288,35 @@ export default {
       projectSummary: recruitInfo.projectSummary,
       projectContent: recruitInfo.projectContent,
       requiredSkills: recruitInfo.requiredSkills,
-      closingDate: recruitInfo.closingDate,
       companyId: recruitInfo.session_id,
-      contract : false,
-      UserComplete : false,
-      CompanyComplete : false,
-      responsibility : "",
-
+      contract: false,
+      UserComplete: false,
+      CompanyComplete: false,
+      responsibility: "",
+      chief: recruitInfo.chief,
+      penalty: recruitInfo.penalty
     });
   },
 
-  UPDATE_RecruitCompleteByUser(recruitPK,state) {
-    if ( state === "success") {
+  UPDATE_RecruitCompleteByUser(recruitPK, state) {
+    if (state === "success") {
       firestore.collection("recruitInfo").doc(recruitPK).update({
-          UserComplete : 2,
+        UserComplete: 2,
       })
     } else {
       firestore.collection("recruitInfo").doc(recruitPK).update({
-          UserComplete : 1,
+        UserComplete: 1,
       })
     }
   },
-  UPDATE_RecruitCompleteByCompany(recruitPK,state) {
-    if ( state === "success") {
+  UPDATE_RecruitCompleteByCompany(recruitPK, state) {
+    if (state === "success") {
       firestore.collection("recruitInfo").doc(recruitPK).update({
-          CompanyComplete : 2,
+        CompanyComplete: 2,
       })
     } else {
       firestore.collection("recruitInfo").doc(recruitPK).update({
-          CompanyComplete : 1,
+        CompanyComplete: 1,
       })
     }
   },

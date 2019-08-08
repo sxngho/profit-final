@@ -383,11 +383,9 @@ export default {
 </script>
 
 <style>
-  .skillselected{
-
-  }
-
-  .skillunselected{
-
+  .inputmodal{
+    background:white;
+    border-top:8px solid #3498DB;
+    border-bottom:8px solid #3498DB;
   }
 </style>
