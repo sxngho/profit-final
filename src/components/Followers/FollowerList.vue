@@ -38,10 +38,6 @@ export default {
   },
   methods: {
     async SELECT_Userdata() {
-      console.log("현재 story 주인공");
-      // console.log("값 >>" + this.$route.toPath());
-      console.log(this.$route.params.id);
-
       if (this.level !== "") {
         // 로그인한 경우
         if (this.level == 3) {
@@ -60,8 +56,6 @@ export default {
           this.followings = this.userdata[0].followinglist;
         }
       }
-      // this.$store.state.followerView = false;
-      // this.$store.state.followingView = false;
     }
   },
   mounted() {
