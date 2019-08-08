@@ -229,13 +229,22 @@
       <v-layout row wrap>
         <v-flex xs12 sm10 offset-sm1>
           <v-card style="width:100%" outlined>
-            <v-card-title>회사소개</v-card-title>
+            <v-card-title>회사소개 <v-spacer/>
+              <div v-if="this.$route.params.id==this.$store.getters.getSession">
+              <v-btn v-if="!updatestate2" @click="change_updatestate2()">수정하기</v-btn>
+              <v-btn v-if="updatestate2" @click="submit2(company.descript)">저장</v-btn>
+              <v-btn v-if="updatestate2" @click="cancel_updatestate2()">취소</v-btn>
+              </div>
+
+            </v-card-title>
+
             <v-card-text v-if="this.$route.params.id!==this.$store.getters.getSession">{{company.descript}}</v-card-text>
-            <v-card-text v-if="!updatestate && this.$route.params.id==this.$store.getters.getSession">{{company.descript}}</v-card-text>
-            <v-card-text v-if="updatestate && this.$route.params.id==this.$store.getters.getSession">
+            <v-card-text v-if="!updatestate2 && this.$route.params.id==this.$store.getters.getSession">{{company.descript}}</v-card-text>
+            <v-card-text v-if="updatestate2 && this.$route.params.id==this.$store.getters.getSession">
               <textarea
                 v-model="company.descript"
                 style="width:100%; height:150px"
+                v-on:keyup.enter="br_check()"
               />
             </v-card-text>
           </v-card>
@@ -575,6 +584,7 @@ export default {
       this.company.address = comInfo[0].address;
       this.company.annualsales = comInfo[0].annualsales;
       this.company.descript = comInfo[0].descript;
+      this.tmp_descript = comInfo[0].descript;
 
       this.$loading(false);
     },
@@ -663,6 +673,9 @@ export default {
       }
 
     },
+    async submit2(descript) {
+      console.log(descript)
+    },
     setFile() {
       var file = document.querySelector("#file");
       file.click();
@@ -719,6 +732,9 @@ export default {
     change_updatestate() {
       this.updatestate = !this.updatestate
     },
+    change_updatestate2() {
+      this.updatestate2 = !this.updatestate2
+    },
     cancel_updatestate() {
 
       this.updatestate = !this.updatestate
@@ -731,8 +747,13 @@ export default {
       this.company.represent = this.comInfo.represent
       this.company.homepage = this.comInfo.homepage
       this.company.annualsales = this.comInfo.annualsales
-
     },
+    cancel_updatestate2() {
+      this.updatestate2 = !this.updatestate2
+    },
+    br_check() {
+      console.log('일단 엔터 감지했다.')
+    }
   },
   data() {
     return {
@@ -762,10 +783,12 @@ export default {
       dibsUsers: "",
       nowLevel: "",
       updatestate:false,
+      updatestate2:false,
       showUpImgBtn: false,
       showRmImgBtn: false,
       user: "",
-      select_comsize:['대기업','중견기업','강소기업','외국계기업','벤처기업','공공기관/공기업','비영리단체/협회재단','외국기관/단체']
+      select_comsize:['대기업','중견기업','강소기업','외국계기업','벤처기업','공공기관/공기업','비영리단체/협회재단','외국기관/단체'],
+      tmp_descript:"",
     };
   }
 };
