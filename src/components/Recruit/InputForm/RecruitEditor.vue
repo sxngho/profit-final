@@ -26,9 +26,21 @@
       <v-date-picker v-model="endDay" color="purple lighten-1"></v-date-picker>
 
       <div class="budget__content contentBox">
+        <div class="budget__title titleBox">책임자</div>
+        <div class="budget__input inputBox">
+          <input type="text" v-model="chief" placeholder="홍길동" />
+        </div>
+      </div>
+      <div class="budget__content contentBox">
         <div class="budget__title titleBox">지출 가능 예산</div>
         <div class="budget__input inputBox">
           <input type="text" v-model="budget" placeholder="0" />원
+        </div>
+      </div>
+      <div class="budget__content contentBox">
+        <div class="budget__title titleBox">위약금</div>
+        <div class="budget__input inputBox">
+          <input type="text" v-model="penalty" placeholder="0" />원
         </div>
       </div>
       <div class="projectSummary__content contentBox">
@@ -104,7 +116,9 @@ export default {
       techName: "",
       showTechList: [],
       user: "",
-      recruitImage: ""
+      recruitImage: "",
+      chief: "",
+      penalty: ""
     };
   },
   components: {
@@ -138,6 +152,12 @@ export default {
         .replace(/\D/g, "")
         .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       this.$nextTick(() => (this.budget = result));
+    },
+    penalty: function(newValue) {
+      const result = newValue
+        .replace(/\D/g, "")
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      this.$nextTick(() => (this.penalty = result));
     }
   },
   methods: {
@@ -160,7 +180,9 @@ export default {
         projectContent: this.projectContent,
         requiredSkills: this.$store.state.requiredSkills,
         closingDate: this.closingDate,
-        session_id: this.user
+        session_id: this.user,
+        chief: this.chief,
+        penalty: this.penalty
       };
       console.log("infotest");
       console.log(recruitInfo);

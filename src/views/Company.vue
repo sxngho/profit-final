@@ -296,6 +296,10 @@
                                   <td>{{item.recruit.data.budget}}</td>
                                 </tr>
                                 <tr>
+                                  <th>위약금</th>
+                                  <td>{{item.recruit.data.penalty}}</td>
+                                </tr>
+                                <tr>
                                   <th>업로드일</th>
                                   <td>{{item.recruit.data.createDay}}</td>
                                 </tr>
@@ -348,6 +352,10 @@
                                 <tr>
                                   <th>예산</th>
                                   <td>{{item.recruit.data.budget}}</td>
+                                </tr>
+                                <tr>
+                                  <th>위약금</th>
+                                  <td>{{item.recruit.data.penalty}}</td>
                                 </tr>
                                 <tr>
                                   <th>업로드일</th>
