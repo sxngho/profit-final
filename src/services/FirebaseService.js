@@ -22,7 +22,7 @@ var provider = new auth.FacebookAuthProvider();
 var login_user; // 로그인 하면 email, 아니면 ''  처리
 var url = document.location.href;
 
-auth().onAuthStateChanged(function(user) {
+auth().onAuthStateChanged(function (user) {
   if (user) {
     login_user = user.email;
     // console.log(login_user)
@@ -509,14 +509,16 @@ export default {
       });
   },
 
-  async SELECT_UserImage(nickname){
+  async SELECT_UserImage(nickname) {
     return firestore
       .collection("users")
       .doc(nickname)
       .get()
       .then(docSnapshots => {
-        return { profileImg : docSnapshots.data().userImage,
-                    banner:docSnapshots.data().storyBanner};
+        return {
+          profileImg: docSnapshots.data().userImage,
+          banner: docSnapshots.data().storyBanner
+        };
       });
   },
 
@@ -813,10 +815,10 @@ export default {
     return firebase
       .auth()
       .signInWithEmailAndPassword(id, password)
-      .then(function() {
+      .then(function () {
         return true;
       })
-      .catch(function(error) {
+      .catch(function (error) {
         var errorCode = error.code;
         var errorMessage = error.message;
         alert(`${errorCode}\n${errorMessage}`);
@@ -828,13 +830,13 @@ export default {
     return firebase
       .auth()
       .signInWithPopup(provider)
-      .then(function(result) {
+      .then(function (result) {
         var user = result.user.email;
         var time = String(Date.now()); // nickname을 임시로 넣기 위한 숫자변수 역할
         var answer = { user: user, result: true };
         return answer;
       })
-      .catch(function(error) {
+      .catch(function (error) {
         var errorCode = error.code;
         var errorMessage = error.message;
         var email = error.email;
@@ -848,10 +850,10 @@ export default {
     return firebase
       .auth()
       .signOut()
-      .then(function() {
+      .then(function () {
         return false;
       })
-      .catch(function(error) {
+      .catch(function (error) {
         alert(error);
         return true;
       });
@@ -890,7 +892,7 @@ export default {
             return firebase
               .auth()
               .createUserWithEmailAndPassword(id, password)
-              .then(function() {
+              .then(function () {
                 firestore
                   .collection("users")
                   .doc(nickname)
@@ -914,7 +916,7 @@ export default {
                     dibs: [],
                     alertlist: [],
                     proceedList: [],
-                    storyBanner:"",
+                    storyBanner: "",
                   });
                 firestore
                   .collection("user_addon")
@@ -924,7 +926,7 @@ export default {
                   });
                 return true;
               })
-              .catch(function(error) {
+              .catch(function (error) {
                 alert(error);
                 return false;
               });
@@ -946,7 +948,7 @@ export default {
           return firebase
             .auth()
             .createUserWithEmailAndPassword(id, password)
-            .then(function() {
+            .then(function () {
               firestore
                 .collection("companys")
                 .doc(company_name)
@@ -970,7 +972,7 @@ export default {
               // alert(`${id}님, 회원가입이 완료되었습니다.`);
               return true;
             })
-            .catch(function(error) {
+            .catch(function (error) {
               alert(error);
               return false;
             });
@@ -1045,10 +1047,10 @@ export default {
           });
       });
   },
-  INSERT_alert_Chat(alert,userId) {
+  INSERT_alert_Chat(alert, userId) {
     firestore.collection("users").doc(userId).update({
-        alertlist: alert
-      });
+      alertlist: alert
+    });
   },
 
   // --------------------------------------------------------------------FOLLOW
@@ -1325,33 +1327,34 @@ export default {
       requiredSkills: recruitInfo.requiredSkills,
       closingDate: recruitInfo.closingDate,
       companyId: recruitInfo.session_id,
-      contract : false,
-      UserComplete : false,
-      CompanyComplete : false,
-      responsibility : "",
-
+      contract: false,
+      UserComplete: false,
+      CompanyComplete: false,
+      responsibility: "",
+      chief: recruitInfo.chief,
+      penalty: recruitInfo.penalty
     });
   },
 
-  UPDATE_RecruitCompleteByUser(recruitPK,state) {
-    if ( state === "success") {
+  UPDATE_RecruitCompleteByUser(recruitPK, state) {
+    if (state === "success") {
       firestore.collection("recruitInfo").doc(recruitPK).update({
-          UserComplete : 2,
+        UserComplete: 2,
       })
     } else {
       firestore.collection("recruitInfo").doc(recruitPK).update({
-          UserComplete : 1,
+        UserComplete: 1,
       })
     }
   },
-  UPDATE_RecruitCompleteByCompany(recruitPK,state) {
-    if ( state === "success") {
+  UPDATE_RecruitCompleteByCompany(recruitPK, state) {
+    if (state === "success") {
       firestore.collection("recruitInfo").doc(recruitPK).update({
-          CompanyComplete : 2,
+        CompanyComplete: 2,
       })
     } else {
       firestore.collection("recruitInfo").doc(recruitPK).update({
-          CompanyComplete : 1,
+        CompanyComplete: 1,
       })
     }
   },
