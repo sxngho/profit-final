@@ -941,6 +941,12 @@ export default {
            descript: "",
            annualsales : "",
          });
+         firestore
+         .collection("user_addon")
+         .doc(nickname)
+         .set({
+           toggleView: false
+         });
          return true;
        })
        .catch(function(error) {
