@@ -86,7 +86,7 @@
       <v-layout row wrap>
         <v-flex xs12 sm10 offset-sm1>
           <v-card style="width:100%" outlined>
-            <v-card-title>기업정보 <span v-if="this.$route.params.id==this.$store.getters.getSession">(수정가능 (이멘트 나중에 수정해주셈))</span> </v-card-title>
+            <v-card-title>기업정보 <v-spacer/> <span v-if="this.$route.params.id==this.$store.getters.getSession"><p style="font-size:0.5em">*데이터를 클릭하여 수정가능합니다.</p></span> </v-card-title>
             <v-card-text id="company_detail">
               <v-simple-table>
                 <tbody class="text-center">
@@ -247,19 +247,17 @@
             <v-card-text>
               <v-container>
                 <v-expansion-panels>
-                  <v-expansion-panel v-for="recruit in recruitlist">
-                    <v-expansion-panel-header>
+                  <v-expansion-panel v-for="(item, index) in MyRecruits">
+                    <v-expansion-panel-header style="display:flex">
                       <div>
-                        <v-chip
-                          color="green"
-                          text-color="white"
-                          v-if="recruit.data.contract"
-                          style
-                        >작업중</v-chip>
-                        <v-chip color="primary" v-if="!recruit.data.contract">모집중</v-chip>
+                        <v-chip color="green" text-color="white" v-if="item.recruit.data.contract">작업중</v-chip>
+                        <v-chip color="primary" v-if="!item.recruit.data.contract">모집중</v-chip>
+                        &nbsp;&nbsp;
+                        <span>{{item.recruit.data.projectTitle}}</span>
+                        <v-badge color="red" v-if="item.length !== 0">
+                          <template slot="badge" style="margin-bottom:1px "> N </template>
+                        </v-badge>
                       </div>
-                      {{recruit.data.projectTitle}}
-                      <v-spacer />
                     </v-expansion-panel-header>
                     <v-expansion-panel-content>
                       <v-container>
@@ -269,12 +267,12 @@
                             <!-- 제목과 기술스택 -->
                             <v-layout row wrap>
                               <div>
-                                <v-chip label outlined color="deep-purple">{{recruit.data.category}}</v-chip>
+                                <v-chip label outlined color="deep-purple">{{item.recruit.data.category}}</v-chip>
                               </div>
                               <v-spacer />
                               <div>
                                 <v-chip
-                                  v-for="skill in recruit.data.requiredSkills"
+                                  v-for="skill in item.recruit.data.requiredSkills"
                                   small
                                   color="#7c5eb2c7"
                                 >{{skill}}</v-chip>
@@ -284,30 +282,30 @@
                             <!-- 요약 -->
                             <p
                               style="margin:20px 0px; border-bottom:1px solid black"
-                            >{{recruit.data.projectSummary}}</p>
+                            >{{item.recruit.data.projectSummary}}</p>
 
                             <!-- 나머지 디테일 -->
                             <v-simple-table>
                               <tbody>
                                 <tr>
                                   <th>제목</th>
-                                  <td>{{recruit.data.projectTitle}}</td>
+                                  <td>{{item.recruit.data.projectTitle}}</td>
                                 </tr>
                                 <tr>
                                   <th>예산</th>
-                                  <td>{{recruit.data.budget}}</td>
+                                  <td>{{item.recruit.data.budget}}</td>
                                 </tr>
                                 <tr>
                                   <th>업로드일</th>
-                                  <td>{{recruit.data.createDay}}</td>
+                                  <td>{{item.recruit.data.createDay}}</td>
                                 </tr>
                                 <tr>
                                   <th>모집종료</th>
-                                  <td>{{recruit.data.closingDate}}</td>
+                                  <td>{{item.recruit.data.closingDate}}</td>
                                 </tr>
                                 <tr>
                                   <th>프로젝트 마감일</th>
-                                  <td>{{recruit.data.endDay}}</td>
+                                  <td>{{item.recruit.data.endDay}}</td>
                                 </tr>
                               </tbody>
                             </v-simple-table>
@@ -323,12 +321,12 @@
                             <!-- 제목과 기술스택 -->
                             <v-layout row wrap>
                               <div>
-                                <v-chip label outlined color="deep-purple">{{recruit.data.category}}</v-chip>
+                                <v-chip label outlined color="deep-purple">{{item.recruit.data.category}}</v-chip>
                               </div>
                               <v-spacer />
                               <div>
                                 <v-chip
-                                  v-for="skill in recruit.data.requiredSkills"
+                                  v-for="skill in item.recruit.data.requiredSkills"
                                   small
                                   color="#7c5eb2c7"
                                 >{{skill}}</v-chip>
@@ -338,30 +336,30 @@
                             <!-- 요약 -->
                             <p
                               style="margin:20px 0px; border-bottom:1px solid black"
-                            >{{recruit.data.projectSummary}}</p>
+                            >{{item.recruit.data.projectSummary}}</p>
 
                             <!-- 나머지 디테일 -->
                             <v-simple-table>
                               <tbody>
                                 <tr>
                                   <th>제목</th>
-                                  <td>{{recruit.data.projectTitle}}</td>
+                                  <td>{{item.recruit.data.projectTitle}}</td>
                                 </tr>
                                 <tr>
                                   <th>예산</th>
-                                  <td>{{recruit.data.budget}}</td>
+                                  <td>{{item.recruit.data.budget}}</td>
                                 </tr>
                                 <tr>
                                   <th>업로드일</th>
-                                  <td>{{recruit.data.createDay}}</td>
+                                  <td>{{item.recruit.data.createDay}}</td>
                                 </tr>
                                 <tr>
                                   <th>모집종료</th>
-                                  <td>{{recruit.data.closingDate}}</td>
+                                  <td>{{item.recruit.data.closingDate}}</td>
                                 </tr>
                                 <tr>
                                   <th>프로젝트 마감일</th>
-                                  <td>{{recruit.data.endDay}}</td>
+                                  <td>{{item.recruit.data.endDay}}</td>
                                 </tr>
                               </tbody>
                             </v-simple-table>
@@ -369,14 +367,14 @@
 
                           <!-- 채팅방 목록들 ==> 즉, 찜한 유저 리스트-->
                           <!-- 아직 계약이 되지 않았을때 -->
-                          <v-flex xs12 sm5 v-if="$route.params.id==$store.getters.getSession && !recruit.data.contract ">
+                          <v-flex xs12 sm5 v-if="$route.params.id==$store.getters.getSession && !item.recruit.data.contract ">
                             <h3>찜한 유저들</h3>
                             <v-layout row wrap>
                               <v-flex
                                 xs11
                                 offset-xs1
                                 v-for="user in dibsUsers"
-                                v-if="user.recruit==recruit.id"
+                                v-if="user.recruit==item.recruit.id"
                               >
                                 <!-- 여기서 user는 chatting 입니다 혼동하기 쉬울거같아서 남겨놓습니다.-->
                                 <v-btn
@@ -389,39 +387,51 @@
                           </v-flex>
 
                           <!-- 계약이 된 상태라면 -->
-                          <v-flex xs12 sm5 v-if="$route.params.id==$store.getters.getSession && recruit.data.contract">
+                          <v-flex xs12 sm5 v-if="$route.params.id==$store.getters.getSession && item.recruit.data.contract">
                             <h3>작업중인 유저</h3>
-                            <v-layout row wrap>
+                            <!-- <v-layout row wrap>
                               <v-flex xs11 offset-xs1>
 
                               </v-flex>
-                            </v-layout>
+                            </v-layout> -->
                           </v-flex>
                         </v-layout>
                         <v-layout justify-center v-if="$route.params.id==$store.getters.getSession">
-                          <div v-if="!recruit.data.contract">
-                            <v-btn flex outlined color="red">삭제</v-btn>
+                          <div v-if="!item.recruit.data.contract">
+                            <v-btn flex outlined color="red" @click="deleteRecruit(item.recruit.id,index)">삭제</v-btn>
                           </div>
                           <div v-else>
-                            <div v-if="recruit.data.UserComplete == 0 && recruit.data.CompanyComplete == 0">
-                              <v-btn flex outlined color="blue" @click="complete(recruit.id)">계약완료</v-btn>
-                              <v-btn flex outlined color="orange" @click="openContract(recruit.id,recruit.data.responsibility)">계약서</v-btn>
-                              <v-btn text outlined @click="openWorkChat(recruit.data.responsibility,recruit.id)">{{recruit.data.responsibility}}</v-btn>
-                              <v-btn flex outlined color="red" @click="cancel(recruit.id)">계약파기</v-btn>
+                            <div v-if="item.recruit.data.UserComplete == 0 && item.recruit.data.CompanyComplete == 0">
+                              <v-btn flex outlined color="blue" @click="complete(item.recruit.id)">계약완료</v-btn>
+                              <v-btn flex outlined color="orange" @click="openContract(item.recruit.id,item.recruit.data.responsibility)">계약서</v-btn>
+                              <v-btn flex outlined color="red" @click="cancel(item.recruit.id)">계약파기</v-btn>
+                              <v-badge color="red" overlap v-if="item.length !== 0">
+                                <template slot="badge"> {{item.length}} </template>
+                                <v-btn text outlined @click="openWorkChat(item.recruit.data.responsibility,item.recruit.id)">채팅방</v-btn>
+                              </v-badge>
+                              <v-btn text outlined  v-if="item.length == 0" @click="openWorkChat(item.recruit.data.responsibility,item.recruit.id)">채팅방</v-btn>
                             </div>
-                            <div v-if="recruit.data.UserComplete == 0 && recruit.data.CompanyComplete == 2">
+                            <div v-if="item.recruit.data.UserComplete == 0 && item.recruit.data.CompanyComplete == 2">
                               <p> 완료 처리됨 // 상대방의 처리를 기다리는중</p>
                               <v-btn flex outlined color="orange" @click="openContract(recruit.id,recruit.data.responsibility)">계약서</v-btn>
-                              <v-btn text outlined @click="openWorkChat(recruit.data.responsibility,recruit.id)">{{recruit.data.responsibility}}</v-btn>
+                              <v-btn text outlined  v-if="item.length == 0" @click="openWorkChat(item.recruit.data.responsibility,item.recruit.id)">채팅방</v-btn>
+                              <v-badge color="red" overlap v-if="item.length !== 0">
+                                <template slot="badge"> {{item.length}} </template>
+                                <v-btn text outlined @click="openWorkChat(item.recruit.data.responsibility,item.recruit.id)">채팅방</v-btn>
+                              </v-badge>
                             </div>
-                            <div v-if="recruit.data.UserComplete == 2 && recruit.data.CompanyComplete == 0">
+                            <div v-if="item.recruit.data.UserComplete == 2 && item.recruit.data.CompanyComplete == 0">
                               <p> 상대방이 완료를 누른 상태입니다. 계약이 정상적으로 종료되었다면 완료를 눌러주세요.</p>
-                              <v-btn flex outlined color="blue" @click="complete(recruit.id)">계약완료</v-btn>
-                              <v-btn flex outlined color="orange" @click="openContract(recruit.id,recruit.data.responsibility)">계약서</v-btn>
-                              <v-btn text outlined @click="openWorkChat(recruit.data.responsibility,recruit.id)">{{recruit.data.responsibility}}</v-btn>
-                              <v-btn flex outlined color="red" @click="cancel(recruit.id)">계약파기</v-btn>
+                              <v-btn flex outlined color="blue" @click="complete(item.recruit.id)">계약완료</v-btn>
+                              <v-btn flex outlined color="orange" @click="openContract(item.recruit.id,item.recruit.data.responsibility)">계약서</v-btn>
+                              <v-btn flex outlined color="red" @click="cancel(item.recruit.id)">계약파기</v-btn>
+                              <v-badge color="red" overlap v-if="item.length !== 0">
+                                <template slot="badge"> {{item.length}} </template>
+                                <v-btn text outlined @click="openWorkChat(item.recruit.data.responsibility,item.recruit.id)">채팅방</v-btn>
+                              </v-badge>
+                              <v-btn text outlined  v-if="item.length == 0" @click="openWorkChat(item.recruit.data.responsibility,item.recruit.id)">채팅방</v-btn>
                             </div>
-                            <div v-if="recruit.data.UserComplete == 1 || recruit.data.CompanyComplete == 1">
+                            <div v-if="item.recruit.data.UserComplete == 1 || item.recruit.data.CompanyComplete == 1">
                               <p> 이미 파기된 계약입니다. 이거 처리해주세용</p>
                             </div>
                           </div>
@@ -692,41 +702,52 @@ export default {
     async fetchData() {
       //this.company = await FirebaseService.SELECT_CompanyById(this.$route.params.id);
       this.$loading(true);
-      this.recruitlist = await FirebaseService.SELECT_RecruitInfoById(
-        this.$route.params.id);
-      console.log(this.recruitlist)
+      // this.recruitlist = await FirebaseService.SELECT_RecruitInfoById(this.$route.params.id);
+      // console.log(this.recruitlist)
       this.dibsUsers = [];
-      var recruitsbyCompany = await FirebaseService.SELECT_RecruitInfoByCompany(
-        this.$route.params.id
-      );
+      var recruitsbyCompany = await FirebaseService.SELECT_RecruitInfoById(this.$route.params.id);
       var chatRooms = "";
       var ChatRef = firebase.database().ref("/chat/");
-      ChatRef.once(
-        "value",
-        snapshot => {
-          chatRooms = snapshot.val();
-          // console.log(chatRooms, "챗룸");
+      ChatRef.once("value",snapshot => {chatRooms = snapshot.val();
           for (var ii in recruitsbyCompany) {
+            var flag = 0;
             for (var i in chatRooms) {
               if (chatRooms[i].recruitPK == recruitsbyCompany[ii].id) {
                 this.dibsUsers.push({
                   recruit: recruitsbyCompany[ii].id,
                   chat: chatRooms[i]
                 });
+                var unreadChat = chatRooms[i].chatting;
+                var unreadLength = 0;
+                console.log("랭스를 읽고있따 ",unreadChat.length)
+                for(var j=unreadChat.length-1; j>=0; j--) {
+                    if(unreadChat[j].isReadCompany) {
+                      console.log( j , " 브레이크야임마")
+                      break;
+                    } else {
+                      console.log("안읽은채팅창갯수를 세고있따",unreadLength)
+                      unreadLength++;
+                    }
+                }
+                this.MyRecruits.push({ recruit : recruitsbyCompany[ii], length : unreadLength})
+                flag = 1;
+                break;
               }
             }
+            if ( flag == 0 ) {
+              this.MyRecruits.push({ recruit : recruitsbyCompany[ii], length : 0 })
+            }
           }
+
         },
         function(error) {
           // console.error(error, "유저리스트 불러오기 에러");
         }
       );
-
+      console.log(this.MyRecruits,"asdasdasdadasdsasa")
       // console.log(this.dibsUsers, "찜유저리스트");
 
-      const comInfo = await FirebaseService.SELECT_CompanyInfo(
-        this.$route.params.id
-      );
+      const comInfo = await FirebaseService.SELECT_CompanyInfo(this.$route.params.id);
 
       this.company.id = comInfo[0].id;
       this.company.level = comInfo[0].level;
@@ -842,8 +863,25 @@ export default {
     removeImage() {
       this.company.company_logo = "";
       this.submit();
-    }
-
+    },
+    deleteRecruit(recruitId,index) {
+      this.$swal({
+         title: '정말 삭제하시겠습니까?',
+         text: "삭제된 공고는 복구가 불가능합니다.",
+         type: 'warning',
+         showCancelButton: true,
+         confirmButtonColor: '#3085d6',
+         cancelButtonColor: '#d33',
+         confirmButtonText: '삭제',
+         cancelButtonText: '취소',
+        }).then((result) => {
+         if (result.value) {
+           this.$swal('Deleted!','공고가 삭제되었습니다.','success')
+           FirebaseService.DELETE_RecruitById(recruitId);
+           this.MyRecruits.splice(index,1);
+         }
+       })
+    },
   },
   data() {
     return {
@@ -866,6 +904,7 @@ export default {
       },
       loading : false,
       recruitlist: [],
+      MyRecruits: [],
       workingUser: "",
       dibsUsers: "",
       nowLevel: "",
