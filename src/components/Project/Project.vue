@@ -141,7 +141,7 @@
 
 
                 <!-- comment sort -->
-                <v-layout row ma-2>
+                <!-- <v-layout row ma-2>
                   <v-spacer/>
                   <div>
                     <span>sort</span>&nbsp&nbsp&nbsp
@@ -151,7 +151,7 @@
                       <v-btn text small>liked</v-btn>
                     </v-btn-toggle>
                   </div>
-                </v-layout>
+                </v-layout> -->
 
                 <!-- comment list -->
                 <v-layout row wrap justify-center>
@@ -160,7 +160,7 @@
                       <div v-bind:class="[`before_${index}`]">
                         <span v-if="com.state==3" style="color:red;" @click="seecomment(index)">이 댓글은 신고 누적으로 블라인드 처리</span>
                         <span class="overline grey--text"> {{com.User}} </span>
-                        <span class="overline grey--text"> | 작성시간도 있으면 좋겠다 </span> <br/>
+                        <span class="overline grey--text"> | {{com.date}} </span> <br/>
                         <span v-if="com.state < 3" class="subtitle-1"> {{com.Comment}} </span>
                         <span v-bind:class="[`blind_${index}`]" class="subtitle-1" style="display:none;"> {{com.Comment}} </span>
 
@@ -383,6 +383,8 @@ export default {
         Json.unlike = [];
         Json.reportUserList = [];
         Json.state = 0;
+        var date = new Date();
+        Json.date = (date.getFullYear()-2000) + "." + (date.getMonth()+1) + "."  + date.getDate() + "." + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()
         // INSERT_Comment : 프로젝트의 댓글들에 댓글 추가.
         FirebaseService.INSERT_Comment(Json, this.projectData, this.project_id);
 
@@ -401,6 +403,7 @@ export default {
         like : [],
         unlike : [],
         state:0,
+        date: (date.getFullYear()-2000) + "." + (date.getMonth()+1) + "."  + date.getDate() + "." + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()
         };
         this.comments.push(newcommnet)
       } else {
