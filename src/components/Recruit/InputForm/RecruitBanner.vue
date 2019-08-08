@@ -17,7 +17,11 @@ export default {};
   align-items: center;
   width: 100%;
   height: 100px;
+  margin-left: 150px;
+  margin-right: 150px;
   background-color: white;
-  border: 1px solid #2c2c2c;
+}
+.recruitBanner__container {
+  margin-bottom: 20px;
 }
 </style>
