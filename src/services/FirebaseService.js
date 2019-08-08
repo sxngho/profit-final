@@ -926,7 +926,6 @@ export default {
          .set({
            company_name: company_name,
            id: id,
-           interests: [],
            followerlist: [],
            followinglist: [],
            level: 3,
@@ -943,7 +942,7 @@ export default {
          });
          firestore
          .collection("user_addon")
-         .doc(nickname)
+         .doc(company_name)
          .set({
            toggleView: false
          });

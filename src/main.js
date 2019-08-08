@@ -8,7 +8,7 @@ import ToggleButton from 'vue-js-toggle-button'
 import Notifications from 'vue-notification'
 import VueLoading from 'vuejs-loading-plugin'
 import VueHtml2Canvas from 'vue-html2canvas';
-
+import VueChatScroll from 'vue-chat-scroll'
 import axios from 'axios'
 import store from './store'
 import router from './router'
@@ -25,7 +25,7 @@ const saoptions = {
  cancelButtonColor: '#ff7674'
 }
 Vue.use(VueSweetalert2, saoptions)
-
+Vue.use(VueChatScroll)
 Vue.use(VueHtml2Canvas);
 Vue.use(VueLoading)
 Vue.use(Notifications)

@@ -37,9 +37,31 @@ export default {
   background: blueviolet;
   color: white;
   margin-right: 10px;
-  width: 110px;
+  width: 130px;
   height: 30px;
   border: 1px solid blueviolet;
   border-radius: 5%;
+}
+@media screen and (min-width: 500px) {
+  .selectTechList__content {
+    display: flex;
+    list-style: none;
+  }
+}
+@media screen and (min-width: 850px) {
+  .selectTechList__content {
+    display: flex;
+    list-style: none;
+  }
+  .selectTechBox {
+    text-align: center;
+    background: blueviolet;
+    color: white;
+    margin-right: 10px;
+    width: 110px;
+    height: 30px;
+    border: 1px solid blueviolet;
+    border-radius: 5%;
+  }
 }
 </style>

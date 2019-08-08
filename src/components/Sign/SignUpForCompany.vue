@@ -48,7 +48,10 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="signupforcompanymodal = false"> 닫기 </v-btn>
-          <v-btn color="blue darken-1" text @click="SignupCompany(company_name, signup_id, signup_password)"> 회원가입 </v-btn>
+          <v-btn color="blue darken-1" text
+          v-if="signup_id_Validation && signup_password_Validation"
+          @click="SignupCompany(company_name, signup_id, signup_password)"> 회원가입 </v-btn>
+          <v-btn color="blue darken-1" text v-else disabled>회원가입</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
