@@ -16,12 +16,16 @@
                 v-for="message in messages"
                 v-if='message.chatId !== "" && message.chatMsg !== "" '
                 class="messageBox">
+                <v-layout style="justify-content: center;" v-if='message.chatId == "!SYSTEM"'>
+                  <div v-html="message.chatMsg" style="background:lightgrey;" class="speech_bubble caption text-center"></div>
+                </v-layout>
+
                   <v-layout justify-end v-if='message.chatId == user'>
                     <div v-if="nowLevel =='2' && !message.isReadCompany">1</div>
                     <div v-if="nowLevel =='3' && !message.isReadUser">1</div>
                     <div style="background:#ffffab;" class="speech_bubble">{{message.chatMsg}}</div>
                   </v-layout>
-                  <v-layout v-else>
+                  <v-layout v-if='message.chatId !== user && message.chatId !=="!SYSTEM" '>
                     <div v-if="nowLevel =='2' && !message.isReadCompany">1</div>
                     <div v-if="nowLevel =='3' && !message.isReadUser">1</div>
                     <div style="background:#d6ddff;" class="speech_bubble">
@@ -63,56 +67,50 @@
               <td>{{nowChatRoom.userId}}</td>
             </tr>
 
-            <tr @click="changeProjectTitle()" v-if="toggleProjectTitle">
+            <tr v-if="toggleProjectTitle">
               <td>프로젝트 이름</td>
               <td>{{nowChatRoom.projectTitle}}</td>
             </tr>
 
-            <tr @click="changeProjectTerm()" v-if="toggleProjectTerm">
+            <tr @click="changeProjectTerm(nowChatRoom.projectTerm)" v-if="toggleProjectTerm">
               <td>프로젝트 기간</td>
               <td>{{nowChatRoom.projectTerm}}</td>
             </tr>
             <tr v-if="!toggleProjectTerm">
               <td>프로젝트 기간</td>
               <td>
-                <v-text-field single-line outlined required v-model="inputProjectTerm" ref="ProjectTermRef" v-on:keyup.esc="cancelProjectTerm()" v-on:keyup.enter="completeProjectTerm(inputProjectTerm)" > </v-text-field>
+                <v-text-field single-line outlined type="date" required v-model="inputProjectTerm" ref="ProjectTermRef" v-on:keyup.esc="cancelProjectTerm()" v-on:keyup.enter="completeProjectTerm(inputProjectTerm)" > </v-text-field>
               </td>
             </tr>
 
-            <tr @click="changePay()" v-if="togglePay">
+            <tr @click="changePay(nowChatRoom.pay,nowChatRoom.downPayment)" v-if="togglePay">
               <td> 급여 </td>
               <td> {{nowChatRoom.pay}} </td>
             </tr>
             <tr v-if="!togglePay">
               <td> 급여 </td>
               <td>
-                <v-text-field single-line outlined required v-model="inputPay" v-on:keyup.esc="cancelPay()" ref="PayRef"  v-on:keyup.enter="completePay(inputPay)" > </v-text-field>
+                <v-text-field single-line outlined type="number" required v-model="inputPay" v-on:keyup.esc="cancelPay()" ref="PayRef"  v-on:keyup.enter="completePay(inputPay)" > </v-text-field>
               </td>
             </tr>
 
-            <tr @click="changeDownPayment()" v-if="toggleDownPayment">
+            <tr @click="changeDownPayment(nowChatRoom.downPayment,nowChatRoom.pay)" v-if="toggleDownPayment">
               <td> 계약금 </td>
               <td> {{nowChatRoom.downPayment}} </td>
             </tr>
             <tr v-if="!toggleDownPayment">
               <td> 계약금 </td>
               <td>
-                <v-text-field single-line outlined required v-model="inputDownPayment" v-on:keyup.esc="cancelDownPayment()" ref="DownPaymentRef" v-on:keyup.enter="completeDownPayment(inputDownPayment)" > </v-text-field>
+                <v-text-field single-line outlined type="number" required v-model="inputDownPayment" v-on:keyup.esc="cancelDownPayment()" ref="DownPaymentRef" v-on:keyup.enter="completeDownPayment(inputDownPayment)" > </v-text-field>
               </td>
             </tr>
 
-            <tr @click="changeBalance()" v-if="toggleBalance">
+            <tr v-if="toggleBalance">
               <td>잔금 </td>
               <td>{{nowChatRoom.balance}} </td>
             </tr>
-            <tr v-if="!toggleBalance">
-              <td>잔금</td>
-              <td v-if="!toggleBalance">
-                <v-text-field single-line outlined required v-model="inputBalance" v-on:keyup.esc="cancelBalance()" ref="BalanceRef" v-on:keyup.enter="completeBalance(inputBalance)" > </v-text-field>
-              </td>
-            </tr>
 
-            <tr @click="changePenalty()" v-if="togglePenalty">
+            <tr @click="changePenalty(nowChatRoom.penalty)" v-if="togglePenalty">
               <td> 위약금 </td>
               <td> {{nowChatRoom.penalty}} </td>
             </tr>
@@ -123,7 +121,7 @@
               </td>
             </tr>
 
-            <tr @click="changeContractDate()" v-if="toggleContractDate">
+            <tr @click="changeContractDate(nowChatRoom.contractDate)" v-if="toggleContractDate">
               <td> 계약일 </td>
               <td> {{nowChatRoom.contractDate}} </td>
             </tr>
@@ -134,19 +132,19 @@
               </td>
             </tr>
 
-            <tr @click="changeCompanyId()" v-if="toggleCompanyId">
+            <tr @click="changeCompanyId(nowChatRoom.companyId)" v-if="toggleCompanyId">
               <td> 기업명 </td>
               <td> {{nowChatRoom.companyId}} </td>
             </tr>
 
 
-            <tr @click="changeCompanyAddr()" v-if="toggleCompanyAddr">
+            <tr @click="changeCompanyAddr(nowChatRoom.companyAddr)" v-if="toggleCompanyAddr">
               <td>기업주소</td>
               <td>{{nowChatRoom.companyAddr}}</td>
             </tr>
 
 
-            <tr @click="changeCompany()" v-if="toggleCompany">
+            <tr @click="changeCompany(nowChatRoom.company)" v-if="toggleCompany">
               <td> 책임자 </td>
               <td> {{nowChatRoom.company}} </td>
             </tr>
@@ -157,29 +155,18 @@
               </td>
             </tr>
 
-            <tr @click="changeAddr()" v-if="toggleAddr" >
-              <td> 유저주소 </td>
-              <td> {{nowChatRoom.addr}} </td>
+            <tr @click="changePhonenumber(nowChatRoom.phonenumber)" v-if="togglePhonenumber" >
+              <td> 핸드폰번호 </td>
+              <td> {{nowChatRoom.phonenumber}} </td>
             </tr>
-            <tr v-if="!toggleAddr">
-              <td> 유저주소 </td>
+            <tr v-if="!togglePhonenumber">
+              <td> 핸드폰번호 </td>
               <td>
-                <v-text-field single-line outlined required v-model="inputAddr" ref="AddrRef" v-on:keyup.esc="cancelAddr()" v-on:keyup.enter="completeAddr(inputAddr)" > </v-text-field>
+                <v-text-field single-line outlined required v-model="inputPhonenumber" ref="PhonenumberRef" v-on:keyup.esc="cancelPhonenumber()" v-on:keyup.enter="completePhonenumber(inputPhonenumber)" > </v-text-field>
               </td>
             </tr>
 
-            <tr @click="changeRrn()" v-if="toggleRrn">
-              <td> 유저주민번호 </td>
-              <td> {{nowChatRoom.rrn}} </td>
-            </tr>
-            <tr v-if="!toggleRrn" >
-              <td> 유저주민번호 </td>
-              <td>
-                <v-text-field single-line outlined required v-model="inputRrn" ref="RrnRef" v-on:keyup.esc="cancelRrn()" v-on:keyup.enter="completeRrn(inputRrn)" > </v-text-field>
-              </td>
-            </tr>
-
-            <tr @click="changeUserId()" v-if="toggleUserId">
+            <tr @click="changeUserId(nowChatRoom.userId)" v-if="toggleUserId">
               <td> 유저이름 </td>
               <td> {{nowChatRoom.userId}} </td>
             </tr>
@@ -234,13 +221,10 @@
                 <td class="text-center">{{nowChatRoom.userId}}</td>
               </tr>
               <tr>
-                <th class="text-center">주민번호</th>
-                <td class="text-center">{{nowChatRoom.rrn}}</td>
+                <th class="text-center">핸드폰번호</th>
+                <td class="text-center">{{nowChatRoom.phonenumber}}</td>
               </tr>
-              <tr>
-                <th class="text-center">주소</th>
-                <td class="text-center">{{nowChatRoom.addr}}</td>
-              </tr>
+
               <tr>
                 <th class="text-center" rowspan="7">프로젝트</th>
               </tr>
@@ -359,8 +343,7 @@ export default {
       inputCompanyId : "",
       inputCompanyAddr : "",
       inputCompany : "",
-      inputAddr : "",
-      inputRrn : "",
+      inputPhonenumber : "",
       inputUserId : "",
 
       // Toggles
@@ -377,8 +360,11 @@ export default {
       toggleAddr : true,
       toggleRrn : true,
       toggleUserId : true,
-
+      togglePhonenumber : true,
       isWork : false,
+
+      tmpData : "",
+      tmpDataForBalance : "",
     };
   },
 
@@ -463,7 +449,9 @@ export default {
       this.myMessage = "";
     },
 
-    changeProjectTerm() {
+    changeProjectTerm(data) {
+      this.clearInput();
+      this.tmpData = data;
       if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification)) {
       this.toggleProjectTerm = !this.toggleProjectTerm;
       this.$nextTick(() => this.$refs.ProjectTermRef.focus());
@@ -474,14 +462,24 @@ export default {
       this.inputProjectTerm = this.mainData.projectTerm;
     },
     completeProjectTerm() {
+      var tmp = this.nowChatRoom.chatting;
+        if ( this.tmpData !== this.inputProjectTerm ) {
+        tmp.push({ chatMsg : this.$session.get('session_id')+"님이 프로젝트 기간을 ["+this.tmpData+"]에서 ["+this.inputProjectTerm+"]로 변경하였습니다.",
+        chatId : "!SYSTEM", isReadCompany : false, isReadUser : false });
+      }
       this.toggleProjectTerm = !this.toggleProjectTerm;
       var dataRef = firebase.database().ref('/'+this.nowChatRoom.link);
       dataRef.update({
         projectTerm : this.inputProjectTerm,
+        chatting : tmp,
       });
     },
 
-    changePay() {
+
+    changePay(data,downPayment) {
+      this.clearInput();
+      this.tmpData = data;
+      this.tmpDataForBalance = downPayment;
       if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification)) {
         this.togglePay = !this.togglePay;
         this.$nextTick(() => this.$refs.PayRef.focus());
@@ -492,14 +490,27 @@ export default {
       this.inputPay = this.mainData.pay;
     },
     completePay() {
+      var tmp = this.nowChatRoom.chatting;
+      if ( this.tmpData !== this.inputPay ) {
+      tmp.push({ chatMsg : this.$session.get('session_id')+"님이 급여를 ["+this.tmpData+"]에서 ["+this.inputPay+"]로 변경하였습니다.",
+           chatId : "!SYSTEM", isReadCompany : false, isReadUser : false });
+      }
       this.togglePay = !this.togglePay;
+      var balance = Number(this.inputPay) - Number(this.tmpDataForBalance);
+      console.log( Number(this.inputPay) , "aa " , Number(this.tmpDataForBalance))
+      console.log(balance , " asd " , typeof(balance))
       var dataRef = firebase.database().ref('/'+this.nowChatRoom.link);
       dataRef.update({
         pay : this.inputPay,
+        chatting : tmp,
+        balance : Number(balance),
       });
     },
 
-    changeDownPayment() {
+    changeDownPayment(data,Pay) {
+      this.clearInput();
+      this.tmpData = data;
+      this.tmpDataForBalance = Pay;
       if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification)) {
         this.toggleDownPayment = !this.toggleDownPayment;
         this.$nextTick(() => this.$refs.DownPaymentRef.focus());
@@ -510,32 +521,24 @@ export default {
       this.inputDownPayment = this.mainData.DownPayment;
     },
     completeDownPayment() {
+      var tmp = this.nowChatRoom.chatting;
+      if ( this.tmpData !== this.inputDownPayment ) {
+        tmp.push({ chatMsg : this.$session.get('session_id')+"님이 계약금을 ["+this.tmpData+"]에서 ["+this.inputDownPayment+"]로 변경하였습니다.",
+        chatId : "!SYSTEM", isReadCompany : false, isReadUser : false });
+      }
       this.toggleDownPayment = !this.toggleDownPayment;
+      var balance = Number(this.tmpDataForBalance) - Number(this.inputDownPayment);
       var dataRef = firebase.database().ref('/'+this.nowChatRoom.link);
       dataRef.update({
         downPayment : this.inputDownPayment,
+        chatting : tmp,
+        balance : Number(balance),
       });
     },
 
-    changeBalance() {
-      if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification)) {
-        this.toggleBalance = !this.toggleBalance;
-        this.$nextTick(() => this.$refs.BalanceRef.focus());
-      }
-    },
-    cancelBalance() {
-      this.toggleBalance = !this.toggleBalance;
-      this.inputBalance = this.mainData.Balance;
-    },
-    completeBalance() {
-      this.toggleBalance = !this.toggleBalance;
-      var dataRef = firebase.database().ref('/'+this.nowChatRoom.link);
-      dataRef.update({
-        balance : this.inputBalance,
-      });
-    },
-
-    changePenalty() {
+    changePenalty(data) {
+      this.clearInput();
+      this.tmpData = data;
       if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification)) {
         this.togglePenalty = !this.togglePenalty;
         this.$nextTick(() => this.$refs.PenaltyRef.focus());
@@ -546,14 +549,22 @@ export default {
       this.inputPenalty = this.mainData.Penalty;
     },
     completePenalty() {
+      var tmp = this.nowChatRoom.chatting;
+      if ( this.tmpData !== this.inputPenalty ) {
+        tmp.push({ chatMsg : this.$session.get('session_id')+"님이 위약금을 ["+this.tmpData+"]에서 ["+this.inputPenalty+"]로 변경하였습니다.",
+        chatId : "!SYSTEM", isReadCompany : false, isReadUser : false });
+      }
       this.togglePenalty = !this.togglePenalty;
       var dataRef = firebase.database().ref('/'+this.nowChatRoom.link);
       dataRef.update({
         penalty : this.inputPenalty,
+        chatting : tmp,
       });
     },
 
-    changeContractDate() {
+    changeContractDate(data) {
+      this.clearInput();
+      this.tmpData = data;
       if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification)) {
         this.toggleContractDate = !this.toggleContractDate;
         this.$nextTick(() => this.$refs.ContractDateRef.focus());
@@ -564,14 +575,22 @@ export default {
       this.inputContractDate = this.mainData.ContractDate;
     },
     completeContractDate() {
+      var tmp = this.nowChatRoom.chatting;
+      if ( this.tmpData !== this.inputContractDate ) {
+        tmp.push({ chatMsg : this.$session.get('session_id')+"님이 계약일을 ["+this.tmpData+"]에서 ["+this.inputContractDate+"]로 변경하였습니다.",
+        chatId : "!SYSTEM", isReadCompany : false, isReadUser : false });
+      }
       this.toggleContractDate = !this.toggleContractDate;
       var dataRef = firebase.database().ref('/'+this.nowChatRoom.link);
       dataRef.update({
         contractDate : this.inputContractDate,
+        chatting : tmp,
       });
     },
 
-    changeCompany() {
+    changeCompany(data) {
+      this.clearInput();
+      this.tmpData = data;
       if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification)) {
         this.toggleCompany = !this.toggleCompany;
         this.$nextTick(() => this.$refs.CompanyRef.focus());
@@ -582,51 +601,50 @@ export default {
       this.inputCompany = this.mainData.Company;
     },
     completeCompany() {
+      var tmp = this.nowChatRoom.chatting;
+      if ( this.tmpData !== this.inputCompany ) {
+        tmp.push({ chatMsg : this.$session.get('session_id')+"님이 책임자 명을 ["+this.tmpData+"]에서 ["+this.inputCompany+"]로 변경하였습니다.",
+        chatId : "!SYSTEM", isReadCompany : false, isReadUser : false });
+      }
       this.toggleCompany = !this.toggleCompany;
       var dataRef = firebase.database().ref('/'+this.nowChatRoom.link);
       dataRef.update({
         company : this.inputCompany,
+        chatting : tmp,
       });
     },
 
-    changeRrn() {
+    changePhonenumber(data) {
+      this.clearInput();
+      this.tmpData = data;
       if( this.nowLevel == "2") {
         if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification)) {
-          this.toggleRrn = !this.toggleRrn;
-          this.$nextTick(() => this.$refs.RrnRef.focus());
+          this.togglePhonenumber = !this.togglePhonenumber;
+          this.$nextTick(() => this.$refs.PhonenumberRef.focus());
         }
       }
     },
-    cancelRrn() {
-      this.toggleRrn = !this.toggleRrn;
-      this.inputRrn = this.mainData.Rrn;
+    cancelPhonenumber() {
+      this.togglePhonenumber = !this.togglePhonenumber;
+      this.inputPhonenumber = this.mainData.phonenumber;
     },
-    completeRrn() {
-      this.toggleRrn = !this.toggleRrn;
-      var dataRef = firebase.database().ref('/'+this.nowChatRoom.link);
-      dataRef.update({
-        rrn : this.inputRrn,
-      });
-    },
-
-    changeAddr() {
-      if(!(this.nowChatRoom.userVerification || this.nowChatRoom.companyVerification)) {
-        this.toggleAddr = !this.toggleAddr;
-        this.$nextTick(() => this.$refs.AddrRef.focus());
+    completePhonenumber() {
+      var tmp = this.nowChatRoom.chatting;
+      if ( this.tmpData !== this.inputPhonenumber ) {
+        tmp.push({ chatMsg : this.$session.get('session_id')+"님이 주민등록 번호를 ["+this.tmpData+"]에서 ["+this.inputPhonenumber+"]로 변경하였습니다.",
+        chatId : "!SYSTEM", isReadCompany : false, isReadUser : false });
       }
-    },
-    cancelAddr() {
-      this.toggleAddr = !this.toggleAddr;
-      this.inputAddr = this.mainData.Addr;
-    },
-    completeAddr() {
-      this.toggleAddr = !this.toggleAddr;
+      this.togglePhonenumber = !this.togglePhonenumber;
       var dataRef = firebase.database().ref('/'+this.nowChatRoom.link);
       dataRef.update({
-        addr : this.inputAddr,
+        rrn : this.inputPhonenumber,
+        chatting : tmp,
       });
     },
-
+    clearInput() {
+      this.toggleProjectTerm = true; this.togglePay = true;this.toggleDownPayment = true;this.toggleBalance = true;this.togglePenalty = true;
+      this.toggleContractDate = true;this.toggleCompany = true;this.toggleAddr = true; this.toggleRrn = true;
+    },
     validContract(){
       var dataRef = firebase.database().ref('/'+this.nowChatRoom.link);
 

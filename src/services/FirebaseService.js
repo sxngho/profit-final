@@ -760,6 +760,9 @@ export default {
       });
   },
 
+  DELETE_RecruitById(id) {
+    firestore.collection("recruitInfo").doc(id).delete();
+  },
   SELECT_AllCharRoom() {
     return firestore
       .collection("chat")

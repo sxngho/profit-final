@@ -161,12 +161,14 @@ export default {
         firebase.database().ref('chat/'+recruit.id+nickname).set({
           link : 'chat/'+recruit.id+nickname,
           recruitPK : recruit.id,
-          chatting : [{chatMsg:"",chatId:""}],
+          chatting : [{chatMsg:"<< SYSTEM >><br/>외주 공고 협의 채팅창입니다. <br/> 간이 계약서 패드를 활용하여 계약내용을 <br/> 조율하고 계약을 진행해보세요!",chatId:"!SYSTEM", isReadCompany : false, isReadUser : false},
+        ],
+
           projectTitle : recruit.data.projectTitle,
           projectTerm : "",
-          pay : "",
-          downPayment : "",
-          balance : "",
+          pay : 0,
+          downPayment : 0,
+          balance : 0,
           penalty : "",
           contractDate : "",
 
@@ -176,8 +178,7 @@ export default {
           company : "", //책임자
 
           //user
-          addr : "",
-          rrn : "",
+          phonenumber : "",
           userId : nickname,
           companyVerification : false,
           userVerification: false,

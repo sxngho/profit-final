@@ -74,11 +74,23 @@ export default {
         this.$emit('UPDATE_Project',pcode);
       },
       DELETE_Project(project_id, index) {
-        if (confirm("알림 : 삭제된 프로젝트는 복구가 불가능합니다. 삭제하시겠습니까?")) {
-          this.$emit('delete', project_id, index)
-          FirebaseService.DELETE_project(project_id)
-          this.reload_userskill(this.login)
-        }
+        this.$swal({
+           title: '정말 삭제하시겠습니까?',
+           text: "삭제된 프로젝트는 복구가 불가능합니다.",
+           type: 'warning',
+           showCancelButton: true,
+           confirmButtonColor: '#3085d6',
+           cancelButtonColor: '#d33',
+           confirmButtonText: '삭제',
+           cancelButtonText: '취소',
+          }).then((result) => {
+           if (result.value) {
+             this.$swal('Deleted!','프로젝트 삭제가 완료되었습니다.','success')
+             this.$emit('delete', project_id, index)
+             FirebaseService.DELETE_project(project_id)
+             this.reload_userskill(this.login)
+           }
+         })
       },
       async reload_userskill(session_id) {
       var projects =  await FirebaseService.SELECT_Projects(session_id);
