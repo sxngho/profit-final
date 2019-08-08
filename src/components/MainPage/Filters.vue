@@ -86,7 +86,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .filter__Container {
   display: flex;
   justify-content: center;

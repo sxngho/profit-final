@@ -73,10 +73,12 @@
       </div>
       <ShowTechList />
       <SelectTechList />
-      <button
-        style="margin-left:350px; margin-top:50px; background:blueviolet; color:white; width:50px; height:30px"
-        @click="submit"
-      >등록</button>
+      <div class="recruitBtn">
+        <button
+          style=" background:blueviolet; color:white; width:50px; height:30px"
+          @click="submit"
+        >등록</button>
+      </div>
     </div>
   </div>
 </template>
@@ -201,29 +203,66 @@ export default {
 } */
 .recruitEditor__container {
   background-color: white;
-  width: 1080px;
-  height: 1800px;
-  margin-left: 150px;
-  margin-right: 150px;
+  width: 100%;
+  height: 2100px;
 }
 .titleBox {
   display: flex;
   align-items: center;
   height: 50px;
-  width: 180px;
-  background-color: blueviolet;
-  border: 1px solid #2c2c2c;
-  color: white;
+  width: 100%;
+  color: black;
 }
 .inputBox {
   display: flex;
   align-items: center;
   height: 50px;
   width: 550px;
-  background-color: white;
-  border: 1px solid #2c2c2c;
+  border: 0.2px solid lightgray;
+  background-color: #f9f9f9;
 }
 .contentBox {
+  display: block;
+  margin-bottom: 30px;
+}
+.recruitBtn {
+  width: 100%;
   display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+}
+@media screen and (min-width: 500px) {
+  .contentBox {
+    display: block;
+  }
+}
+@media screen and (min-width: 850px) {
+  .contentBox {
+    display: flex;
+  }
+  .recruitEditor__container {
+    background-color: white;
+    width: 1080px;
+    height: 1950px;
+    margin-left: 150px;
+    margin-right: 150px;
+  }
+  .titleBox {
+    display: flex;
+    align-items: center;
+    height: 50px;
+    width: 180px;
+    color: black;
+  }
+  .inputBox {
+    display: flex;
+    align-items: center;
+    height: 50px;
+    width: 100%;
+    background-color: white;
+    border: 0.2px solid lightgray;
+    background-color: #f9f9f9;
+  }
 }
 </style>

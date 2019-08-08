@@ -239,6 +239,24 @@ export default {
       });
   },
 
+  UPDATE_userImageBanner(image, userId) {
+    return firestore
+      .collection("users")
+      .doc(userId)
+      .update({
+        storyBanner: image
+      });
+  },
+
+  DELETE_userImageBanner(userId) {
+    return firestore
+      .collection("users")
+      .doc(userId)
+      .update({
+        storyBanner: ""
+      });
+  },
+
   // Function :: 유저의 자기소개 정보를 업데이트합니다.
   UPDATE_userIntro(intro, userId) {
     return firestore
