@@ -9,7 +9,7 @@
         Skills
         <SkillEditor
         v-on:sendSkill="receiveSkill"
-        v-if="isMine"
+        v-if="this.$route.params.id==this.$store.getters.getSession"
       />
       </v-flex>
 
@@ -47,7 +47,7 @@
     <v-layout wrap style="margin-top:2vw;">
       <v-flex xs12 class="text-center title">
         Career
-        <CareerEditor v-on:sendCar="receiveCar" v-if="isMine"/>
+        <CareerEditor v-on:sendCar="receiveCar" v-if="this.$route.params.id==this.$store.getters.getSession"/>
       </v-flex>
       <v-flex xs12>
         <!-- v-for Career-->
@@ -55,61 +55,98 @@
           <p> 등록된 경력이 없습니다. </p>
         </div>
 
-        <div
-        v-else
-        v-for="(c, index) in userdata[0].userCareers"
-        class="caption grey--text"
-        @mouseover="showRmCarBtn(index)" @mouseleave="hideRmCarBtn(index)"
-        style="position:relative; padding:15px 6px; border-bottom:1px #cecece solid;">
-          <v-flex
-            v-on:click="rmCareer(userdata[0].userCareers,c,userdata[0].nickname,reload,index)"
-            v-show:false
-            class ="carbtn"  v-if="isMine"
-            style="z-index:2; right:0; top:35%; position: absolute; display: none;">
-            <img
-              src="../../assets/icon_set/delete.png"
-              alt="delcar"
-              style="cursor:pointer; width:25px; height:25px;"/>
-          </v-flex>
-          <span class="subheading black--text">{{c.Company}}<br/></span>
-          <span class="body-2">{{c.Position}}<br/></span>
-          <span class="gray--text">{{c.Description}}</span>
-          <span class="gray--text" v-if="c.Startday !=''"><br/>{{c.Startday}} ~ {{c.Endday}}</span>
+        <div v-if="!careerToggle">
+
+          <!-- 내가 여기 주인입니까? -->
+          <div v-if="this.$route.params.id==this.$store.getters.getSession">
+            <div
+            v-for="(c, index) in userdata[0].userCareers"
+            class="caption grey--text"
+            @mouseover="showRmCarBtn(index)" @mouseleave="hideRmCarBtn(index)"
+            style="position:relative; padding:15px 6px; border-bottom:1px #cecece solid;">
+              <v-flex
+                v-on:click="rmCareer(userdata[0].userCareers,c,userdata[0].nickname,reload,index)"
+                v-show:false
+                class ="carbtn"
+                style="z-index:2; right:0; top:35%; position: absolute; display: none;">
+                <img
+                  src="../../assets/icon_set/delete.png"
+                  alt="delcar"
+                  style="cursor:pointer; width:25px; height:25px;"/>
+              </v-flex>
+              <span class="subheading black--text">{{c.Company}}<br/></span>
+              <span class="body-2">{{c.Position}}<br/></span>
+              <span class="gray--text">{{c.Description}}</span>
+              <span class="gray--text" v-if="c.Startday !=''"><br/>{{c.Startday}} ~ {{c.Endday}}</span>
+            </div>
+          </div>
+
+          <!-- 내가 여기 주인이 아닙니까? -->
+          <div v-if="this.$route.params.id!=this.$store.getters.getSession">
+            <div
+            v-for="(c, index) in userdata[0].userCareers"
+            class="caption grey--text"
+            style="position:relative; padding:15px 6px; border-bottom:1px #cecece solid;">
+              <span class="subheading black--text">{{c.Company}}<br/></span>
+              <span class="body-2">{{c.Position}}<br/></span>
+              <span class="gray--text">{{c.Description}}</span>
+              <span class="gray--text" v-if="c.Startday !=''"><br/>{{c.Startday}} ~ {{c.Endday}}</span>
+            </div>
+          </div>
         </div>
       </v-flex>
     </v-layout>
 
     <!--USER Education-->
     <v-layout wrap style="margin-top:2vw;">
-      <v-flex xs12 class="text-center title"> Education <EducationEditor v-on:sendEdu="receiveEdu" v-if="isMine"/></v-flex>
+      <v-flex xs12 class="text-center title"> Education <EducationEditor v-on:sendEdu="receiveEdu" v-if="this.$route.params.id==this.$store.getters.getSession"/></v-flex>
       <v-flex xs12>
         <!-- v-for Education -->
         <div v-if="educationToggle" class="caption">
           <p> 등록된 교육이력이 없습니다. </p>
         </div>
 
-        <div
-          v-else
-          v-for="(e, index) in userdata[0].userEducations"
-          class="grey--text caption"
-          @mouseover="showRmEduBtn(index)" @mouseleave="hideRmEduBtn(index)"
-          style="position:relative; padding:15px 6px; border-bottom:1px #cecece solid;"
-          >
-          <v-flex
-            v-on:click="rmEducation(userdata[0].userEducations,e,userdata[0].nickname,reload,index)"
-            v-show:false
-            text outlined small absolute fab
-            class ="edubtn"  v-if="isMine"
-            style="z-index:2; right:0; top:35%; position: absolute; display: none;">
-            <img
-              src="../../assets/icon_set/delete.png"
-              alt="deledu"
-              style="cursor:pointer; width:25px;height:25px;"/>
-          </v-flex>
-          <span class="subheading black--text">{{e.Agency}}<br/></span>
-          <span class="body-2">{{e.Degree}}<br/></span>
-          <span class="">{{e.Startday}} ~ {{e.Endday}}<br/></span>
+        <div v-if="!educationToggle">
+
+          <!-- 내가 여기 주인입니까? -->
+          <div v-if="this.$route.params.id==this.$store.getters.getSession">
+            <div
+              v-for="(e, index) in userdata[0].userEducations"
+              class="grey--text caption"
+              @mouseover="showRmEduBtn(index)" @mouseleave="hideRmEduBtn(index)"
+              style="position:relative; padding:15px 6px; border-bottom:1px #cecece solid;">
+              <v-flex
+                v-on:click="rmEducation(userdata[0].userEducations,e,userdata[0].nickname,reload,index)"
+                v-show:false
+                text outlined small absolute fab
+                class ="edubtn"
+                style="z-index:2; right:0; top:35%; position: absolute; display: none;">
+                <img
+                  src="../../assets/icon_set/delete.png"
+                  alt="deledu"
+                  style="cursor:pointer; width:25px;height:25px;"/>
+              </v-flex>
+              <span class="subheading black--text">{{e.Agency}}<br/></span>
+              <span class="body-2">{{e.Degree}}<br/></span>
+              <span class="">{{e.Startday}} ~ {{e.Endday}}<br/></span>
+            </div>
+          </div>
+
+          <!-- 내가 여기 주인이 아닙니까? -->
+          <div v-if="this.$route.params.id!=this.$store.getters.getSession">
+            <div
+              v-for="(e, index) in userdata[0].userEducations"
+              class="grey--text caption"
+              style="position:relative; padding:15px 6px; border-bottom:1px #cecece solid;">
+              <span class="subheading black--text">{{e.Agency}}<br/></span>
+              <span class="body-2">{{e.Degree}}<br/></span>
+              <span class="">{{e.Startday}} ~ {{e.Endday}}<br/></span>
+            </div>
+          </div>
+
+
         </div>
+        <!-- {{this.$store.getters.getSession}} -->
       </v-flex>
     </v-layout>
 
@@ -145,7 +182,6 @@ export default {
     }
   },
   props: {
-    isMine : {type:Boolean ,default:false},
   },
   components:{
     CareerEditor,
@@ -155,8 +191,10 @@ export default {
   },
   mounted() {
     this.SELECT_Userdata();
-    this.isMineCheck();
     this.isFollowCheck();
+    this.$store.commit('setSession', this.$session.get('session_id'))
+    // console.log(this.$route.params.id, 1)
+    // console.log(this.$store.getters.getSession, 2)
   },
   methods: {
     toStoryFilter(tech) {
@@ -219,13 +257,6 @@ export default {
       // 새로운 데이터 값을 가지는 유저데이터를 가져옴
       this.SELECT_Userdata();
       this.$swal('수정 완료!','내 경력정보 등록이 완료되었습니다.','success')
-    },
-    isMineCheck() {
-      if ( this.$route.params.id == this.$session.get('session_id') ) {
-        this.isMine = true;
-      } else {
-        this.isMine = false;
-      }
     },
     async follow(){
       var follower = await FirebaseService.SELECT_Userdata(this.$route.params.id);

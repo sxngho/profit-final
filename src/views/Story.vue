@@ -100,6 +100,7 @@
               @click="removeImage()"
               v-show="showRmImgBtn"
               style="z-index:2; right:0; position: absolute;"
+              v-if="this.$route.params.id==this.$store.getters.getSession"
             >
               <img
                 src="../assets/icon_set/delete.png"
@@ -118,7 +119,7 @@
       <v-layout row wrap align-center justify-space-around>
         <span class="text-center title" style="width:100%">
           {{user.userName}}
-          <v-flex fab text outlined small v-if="!isMine && !isFollow" @click="follow()">
+          <v-flex fab text outlined small v-if="this.$store.getters.getSession && this.$route.params.id!=this.$store.getters.getSession && !isFollow" @click="follow()">
             <img
               src="../assets/icon_set/add-user.png"
               alt="follow"
@@ -126,7 +127,7 @@
             />
           </v-flex>
 
-          <v-flex fab text outlined small v-if="!isMine && isFollow" @click="unfollow()">
+          <v-flex fab text outlined small v-if="this.$store.getters.getSession && this.$route.params.id!=this.$store.getters.getSession && isFollow" @click="unfollow()">
             <img
               src="../assets/icon_set/followers2.png"
               alt="unfollow"
@@ -136,7 +137,7 @@
         </span>
         <span class="subheading grey--text text-center" style="width:100%">
           {{user.userIntro}}
-          <IntroEditor v-on:sendIntro="receiveIntro" :introinput="user.userIntro" v-if="isMine" />
+          <IntroEditor v-on:sendIntro="receiveIntro" :introinput="user.userIntro" v-if="this.$route.params.id==this.$store.getters.getSession" />
         </span>
       </v-layout>
 
@@ -161,7 +162,6 @@
                 xs12
                 sm4
                 md3
-                :isMine="isMine"
                 v-on:toStory="fromLeftSide"
                 v-on:toStoryFilter="toFilterFunction"
               />
@@ -274,7 +274,6 @@ export default {
       showUpImgBtn:false,
       showRmImgBtn:false,
       showUpImgBanner:false, // 슬기가 잠시 만듦
-      isMine: false,
       stateAdd: false,
       userurl: "",
       toggleView: false,
@@ -305,9 +304,9 @@ export default {
   created() {
     // 컴포넌트 생성시 데이터를 패치한다
     this.fetchData();
-    this.isMineCheck();
     this.setStoryBanner();
     this.isFollowCheck();
+    this.$store.commit('setSession', this.$session.get('session_id'))
   },
   methods: {
     showNotification(group, type, title, text) {
@@ -317,13 +316,6 @@ export default {
         text,
         type
       });
-    },
-    isMineCheck() {
-      if (this.$route.params.id == this.$session.get("session_id")) {
-        this.isMine = true;
-      } else {
-        this.isMine = false;
-      }
     },
     async fetchData() {
       this.userid = this.$session.get('session_id')
