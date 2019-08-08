@@ -260,17 +260,15 @@ export default {
       });
     },
     async fetchData() {
-      this.userid = this.$session.get('session_id')
+      this.userid = this.$route.params.id
       this.$store.commit('setSession', this.$session.get("session_id"))
       if (this.$session.get("session_id") !== "") {
         this.toggleView = await FirebaseService.SELECT_userAddon(
           this.$session.get("session_id")
         );
       }
-      // var userdata = await FirebaseService.SELECT_Userdata(this.$route.params.id).userIntro;
-      // this.userIntro = userdata.userIntro;
-      this.user = await FirebaseService.SELECT_Userdata(this.$route.params.id);
-      this.user = this.user[0];
+      var result = await FirebaseService.SELECT_Userdata(this.$route.params.id);
+      this.user = result[0];
     },
     updateToggle() {
       if (this.$session.get("session_id") !== "") {
