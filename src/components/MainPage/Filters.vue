@@ -77,9 +77,6 @@ export default {
     },
     left() {
       this.index -= 120;
-      //move
-      // this.leftMove = false;
-      // console.log(this.leftMove);
     },
     right() {
       //한칸 움직일 때마다 120으로 설정했음.

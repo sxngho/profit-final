@@ -22,9 +22,7 @@ export default {
     Banner,
     // PortfolioList,
   },
-  created() {
-  },
-  methods: {
-  },
+  created() {},
+  methods: {}
 };
 </script>

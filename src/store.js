@@ -39,40 +39,43 @@ export default new Vuex.Store({
     companyList: [],
     showCompanyList: [],
     showCompanyListBottomBar: [],
-    level:"",
-    alertList:{alert:[], unread:[]}
+    level: "",
+    alertList: { alert: [], unread: [] },
+    start: 0,
+    end: 13,
+    pageLength: ""
   },
   // Getter : get 함수 정의
   // 정의 -> return state.변수명
   // 호출 -> this.$store.getters.함수명;
   getters: {
-    getSession: function(state) {
+    getSession: function (state) {
       return state.session_id;
     },
-    getPVT: function(state) {
+    getPVT: function (state) {
       return state.projectViewToggle;
     },
-    getReload: function(state) {
+    getReload: function (state) {
       return state.reload;
     },
-    getLevel: function(state) {
+    getLevel: function (state) {
       return state.level;
     },
-    getalertList: function(state) {
-      return state.alertList
+    getalertList: function (state) {
+      return state.alertList;
     }
   },
 
   // Mutations : 값변경 / 동기
   // 호출 -> this.$store.commit('함수명');
   mutations: {
-    onReload: function(state, payload) {
+    onReload: function (state, payload) {
       return (state.reload = !state.reload);
     },
-    setSession: function(state, payload) {
+    setSession: function (state, payload) {
       return (state.session_id = payload);
     },
-    convertPVT: function(state, payload) {
+    convertPVT: function (state, payload) {
       return (state.projectViewToggle = payload);
     },
     setFollowerView: (state, val) => {
@@ -81,11 +84,12 @@ export default new Vuex.Store({
     setFollowingView: (state, val) => {
       state.followingView = val;
     },
-    addFilterTech: function(state, payload) {
+    addFilterTech: function (state, payload) {
       state.techFilterList.push(payload);
       state.showPortfolioList = state.allPortfolioList;
       const all = state.allPortfolioList;
       const bottle = [];
+
       for (let i = 0; i < all.length; i++) {
         const isPush = false;
         for (let j = 0; j < state.techFilterList.length; j++) {
@@ -103,7 +107,7 @@ export default new Vuex.Store({
       }
       state.showPortfolioList = bottle;
     },
-    deleteFilterTech: function(state, payload) {
+    deleteFilterTech: function (state, payload) {
       const index = state.techFilterList.indexOf(payload);
       state.techFilterList.splice(index, 1);
       state.showPortfolioList = state.allPortfolioList;
@@ -128,36 +132,53 @@ export default new Vuex.Store({
         state.showPortfolioList = bottle;
       }
     },
-    selectAllPortfolioList: function(state, payload) {
-      state.allPortfolioList = payload;
-      state.showPortfolioList = payload;
+    moreBtnClick: function (state, payload) {
+      state.pageLength = payload;
+      console.log(state.pageLength);
+      if (state.end < state.pageLength) {
+        state.end += 12;
+        state.start += 12;
+        if (state.end > state.pageLength) {
+          state.end = state.pageLength;
+        }
+        this.commit('pushPortfolio');
+      }
     },
-    showingSameTechList: function(state, payload) {
+    pushPortfolio: function (state) {
+      for (let i = state.start; i < state.end; i++) {
+        state.showPortfolioList.push(state.allPortfolioList[i]);
+      }
+    },
+    selectAllPortfolioList: function (state, payload) {
+      state.allPortfolioList = payload;
+      this.commit('pushPortfolio');
+    },
+    showingSameTechList: function (state, payload) {
       state.showTechList = payload;
     },
-    addTechList: function(state, payload) {
+    addTechList: function (state, payload) {
       state.requiredSkills.push(payload);
     },
-    deleteTechList: function(state, payload) {
+    deleteTechList: function (state, payload) {
       state.requiredSkills.splice(payload, 1);
     },
-    filterCompany: function(state, payload) {
+    filterCompany: function (state, payload) {
       for (let i = 0; i < state.companyList.length; i++) {
         if (state.companyList[i].indexOf(payload) !== -1) {
           state.showCompanyList.push(state.companyList[i]);
         }
       }
     },
-    clearShowCompanyList: function(state, payload) {
+    clearShowCompanyList: function (state, payload) {
       state.showCompanyList = [];
     },
-    showAllCompany: function(state, payload) {
+    showAllCompany: function (state, payload) {
       state.showCompanyList = [];
       for (let i = 0; i < state.companyList.length; i++) {
         state.showCompanyList.push(state.companyList[i]);
       }
     },
-    filterCompanyBottomBar: function(state, payload) {
+    filterCompanyBottomBar: function (state, payload) {
       state.showCompanyListBottomBar = [];
       for (let i = 0; i < state.companyList.length; i++) {
         if (state.companyList[i].indexOf(payload) !== -1) {
@@ -165,13 +186,13 @@ export default new Vuex.Store({
         }
       }
     },
-    clearBottomBar: function(state, payload) {
+    clearBottomBar: function (state, payload) {
       state.showCompanyListBottomBar = [];
     },
-    changeLevel: function(state, payload) {
+    changeLevel: function (state, payload) {
       state.level = payload;
     },
-    changealertList: function(state, payload) {
+    changealertList: function (state, payload) {
       state.alertList = payload;
     }
   },

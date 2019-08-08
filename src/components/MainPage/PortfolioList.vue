@@ -2,7 +2,7 @@
   <div class="PortfolioList__container">
     <div class="PortfolioList__container__content">
       <div
-        v-for="item in this.$store.state.showPortfolioList"
+        v-for="item in this.bottolePortfolio"
         class="content__portfolioList"
         v-if="item.data.state < 3"
       >
@@ -18,6 +18,7 @@
 <script>
 import FirebaseService from "@/services/FirebaseService";
 import Portfolio from "../MainPage/Portfolio";
+import { mapState } from "vuex";
 export default {
   components: {
     Portfolio
@@ -26,36 +27,32 @@ export default {
     return {
       allPortfolio: [],
       bottolePortfolio: [],
-      end: 6,
-      start: 0,
-      PageLength: "",
-      PortfolioList: []
+      pageLength: ""
     };
   },
   created() {
     this.SELECT_ALLProjects();
   },
+  computed: mapState(["showPortfolioList"]), // 뷰엑스 값을 여기서 참조하겠다.
+  watch: {
+    //값이 변할때마다 할 일들? new / old
+    showPortfolioList() {
+      this.bottolePortfolio = this.$store.state.showPortfolioList;
+    }
+  },
   methods: {
     async SELECT_ALLProjects() {
       this.allPortfolio = await FirebaseService.SELECT_ALLProjects();
-      for (let i = this.start; i < this.end; i++) {
-        this.bottolePortfolio.push(this.allPortfolio[i]);
-      }
+      this.pageLength = this.allPortfolio.length;
       this.$store.commit("selectAllPortfolioList", this.allPortfolio);
     },
     morePortfolio() {
-      if (this.end < this.PageLength) {
-        this.end += 6;
-        this.start += 6;
-        if (this.end > this.PageLength) {
-          this.end = this.PageLength;
-        }
-        this.SELECT_ALLProjects();
-      }
+      this.$store.commit("moreBtnClick", this.pageLength);
     }
   }
 };
 </script>
+
 
 <style scoped>
 .PortfolioList__container__content {
