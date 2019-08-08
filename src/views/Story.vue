@@ -192,6 +192,7 @@
               </v-container>
 
               <!-- List Option -->
+
               <v-layout wrap>
                 <ProjectList
                   v-if="!stateAdd && !statedetail && !stateupdate"
