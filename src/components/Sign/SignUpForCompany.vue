@@ -3,15 +3,20 @@
     <v-dialog v-model="signupforcompanymodal" max-width="600px" xs6>
 
       <template v-slot:activator="{ on }" >
-        <v-btn text outlined color="indigo" v-on="on" style="padding: 100px 80px;">회사용</v-btn>
+        <v-layout v-on="on" justify-center style=" cursor:pointer; background:#ECF0F199; margin:0 10px; height:200px; color:#2980B9">
+          <div style="display:inline; margin:auto;" class="text-center">
+            <i class="far fa-building fa-5x"/><br/><br/>회사용
+          </div>
+        </v-layout>
       </template>
 
 
-      <v-card>
-        <!-- title -->
-        <v-card-title>
-          <span class="headline">기업 회원가입</span>
-        </v-card-title>
+      <v-container class="signmodal">
+        <v-layout row wrap style="padding:10px 20px;">
+          <v-spacer/>
+          <span class="font-weight-regular headline">기업 회원가입</span>
+          <v-spacer/>
+        </v-layout>
 
 
         <v-card-text>
@@ -53,7 +58,7 @@
           @click="SignupCompany(company_name, signup_id, signup_password)"> 회원가입 </v-btn>
           <v-btn color="blue darken-1" text v-else disabled>회원가입</v-btn>
         </v-card-actions>
-      </v-card>
+      </v-container>
     </v-dialog>
 </template>
 

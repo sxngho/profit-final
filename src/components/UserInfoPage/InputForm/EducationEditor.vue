@@ -5,62 +5,44 @@
         <img src="../../../assets/icon_set/pencil.png" alt="edit" style="cursor:pointer;" v-on="on"/>
       </template>
 
+      <v-container class="inputmodal">
 
-      <v-card>
-        <v-toolbar>
+        <v-layout row wrap style="padding:10px 20px;">
+          <v-spacer/>
           <span class="font-weight-regular headline">교육 추가</span>
           <v-spacer/>
           <div @click="clearEdu"><i class="fa fa-close"/></div>
-        </v-toolbar>
+        </v-layout>
 
-        <v-card-text>
-            <v-layout row justify-center wrap>
-              <v-flex xs10 sm5>
-                <span class="subheading font-weight-bold">*기관명</span>
-                <v-text-field
-                  single-line
-                  outlined
-                  required
-                  v-model="eduagency"
-                  ></v-text-field>
-              </v-flex>
-              <v-flex hidden-only-xs sm1/>
-              <v-flex xs10 sm5>
-                <span class="subheading font-weight-bold">학위</span>
-                <v-text-field
-                  single-line
-                  outlined
-                  v-model="edudegree"
-                  ></v-text-field>
-              </v-flex>
-            </v-layout>
+        <v-layout row justify-center wrap>
+          <v-flex xs10 sm5>
+            <p class="subheading font-weight-bold text-center">*기관명</p>
+            <v-text-field single-line v-model="eduagency" />
+          </v-flex>
+          <v-flex xs10 sm5 offset-sm1>
+            <p class="subheading font-weight-bold text-center">학위</p>
+            <v-text-field single-line v-model="edudegree" />
+          </v-flex>
+        </v-layout>
 
-            <v-layout row justify-center wrap>
-              <v-flex xs10 sm5>
-                <span class="subheading font-weight-bold">시작일</span>
-                <div><input type="date"
-                  single-line
-                  outlined
-                  v-model="edustartday"
-                  ></input></div>
-              </v-flex>
-              <v-flex hidden-xs-only sm1/>
-              <v-flex xs10 sm5>
-                <span class="subheading font-weight-bold">종료일</span>
-                <div><input type="date"
-                  single-line
-                  outlined
-                  v-model="eduendday"
-                  ></input></div>
-              </v-flex>
-            </v-layout>
+        <v-layout row  wrap justify-center>
+          <v-flex xs5>
+            <span class="subheading font-weight-bold">시작일</span>
+            &nbsp;&nbsp;&nbsp;
+            <input type="date" v-model="edustartday"/>
+          </v-flex>
+          <v-flex xs5 offset-sm1>
+            <span class="subheading font-weight-bold">종료일</span>
+            &nbsp;&nbsp;&nbsp;
+            <input type="date" v-model="eduendday"/>
+          </v-flex>
+        </v-layout>
 
-          <v-layout row wrap justify-center>
-            <v-btn v-on:click="sendEdu(eduagency,edudegree,edustartday,eduendday)"  text outlined>등록</v-btn>
-          </v-layout>
-        </v-card-text>
+        <v-layout row wrap justify-center style="margin-top:60px;">
+          <v-btn v-on:click="sendEdu(eduagency,edudegree,edustartday,eduendday)"  text outlined>등록</v-btn>
+        </v-layout>
 
-      </v-card>
+      </v-container>
     </v-dialog>
 </template>
 

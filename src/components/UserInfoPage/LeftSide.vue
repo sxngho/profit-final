@@ -388,4 +388,9 @@ export default {
     border-top:8px solid #3498DB;
     border-bottom:8px solid #3498DB;
   }
+  .signmodal{
+    background:white;
+    border-top:8px solid #2980B9 ;
+    border-bottom:8px solid #2980B9 ;
+  }
 </style>

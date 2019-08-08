@@ -1,14 +1,20 @@
 <template>
   <div class="display:inline">
+    <!-- 로그인 버튼 -->
     <v-dialog v-model="dialog" max-width="600px" v-if=" user== '' || user == undefined ">
       <template v-slot:activator="{ on }">
         <v-btn text v-on="on" style="height:100%;">로그인</v-btn>
       </template>
 
-      <v-card>
-        <v-card-title>
-          <span class="headline">로그인</span>
-        </v-card-title>
+
+      <v-container class="signmodal">
+
+        <v-layout row wrap style="padding:10px 20px;">
+          <v-spacer/>
+          <span class="font-weight-regular headline">로그인</span>
+          <v-spacer/>
+        </v-layout>
+
 
         <v-card-text>
           <v-container grid-list-md>
@@ -38,26 +44,35 @@
           <v-btn color="blue darken-1" text @click="dialog = false, Signin(LoginId, LoginPassword)">로그인</v-btn>
           <v-btn color="blue darken-1" text @click="dialog = false">닫기</v-btn>
         </v-card-actions>
-      </v-card>
+      </v-container>
     </v-dialog>
 
+    <!-- 회원가입 버튼 -->
     <v-dialog v-model="signupmodal" max-width="500px" v-if=" user== '' || user == undefined ">
       <template v-slot:activator="{ on: { click } }">
         <v-btn text v-on:click="click" style="height:100%;">회원가입</v-btn>
       </template>
-      <v-card>
-        <v-card-title>회원가입</v-card-title>
-        <v-card-text>
+
+      <v-container class="signmodal">
+        <v-layout row wrap style="padding:10px 20px;">
+          <v-spacer/>
+          <span class="font-weight-regular headline">회원가입</span>
+          <v-spacer/>
+        </v-layout>
+
+        <v-layout row wrap style="padding:20px 20px;" justify-center>
           <SignupforUserModal v-on:signup="signupsuccess" />
           <SignupforCompanyModal v-on:signup="signupsuccess" />
-        </v-card-text>
+        </v-layout>
+
         <v-card-actions>
-          <v-spacer></v-spacer>
+          <v-spacer/>
           <v-btn color="primary" text @click="signupmodal=false">닫기</v-btn>
         </v-card-actions>
-      </v-card>
+      </v-container>
     </v-dialog>
 
+    <!-- 로그인 이후, 사용자 이름과 로그아웃 버튼 -->
     <div style="display:inline-block; height:100%" v-if="user !=='' && user !==undefined">
       <v-btn
         text
