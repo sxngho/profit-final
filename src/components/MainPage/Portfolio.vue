@@ -44,7 +44,11 @@ export default {
       this.protfolioImg = this.portfolioInfo.projectimage;
     },
     popdetail(pcode) {
-      window.open("../project/" + pcode);
+      window.open(
+        "../project/" + pcode,
+        pcode,
+        "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=700,height=600,replace=true"
+      );
     }
   }
 };

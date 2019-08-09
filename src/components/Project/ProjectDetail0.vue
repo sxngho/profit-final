@@ -73,8 +73,8 @@ export default {
       if (toggle) {
         window.open(
           "../project/" + pcode,
-          "name(이름지정)",
-          "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=700,height=600"
+          pcode,
+          "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=700,height=600,replace=true"
         );
       } else {
         // console.log(pcode, '첫단계 옴??')

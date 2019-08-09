@@ -32,7 +32,7 @@
           </div>
           <br/>
           <div class="studio_title titleBox">
-            <span class="fontStyle">스토리</span>
+            <span class="fontStyle">회사</span>
           </div>
         </div>
       </router-link> -->

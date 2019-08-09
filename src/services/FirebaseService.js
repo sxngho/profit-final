@@ -422,6 +422,17 @@ export default {
       });
   },
 
+  async SELECT_CompanyIdData() {
+    return firestore
+      .collection("companys")
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+          return {data : doc.data(), id :doc.id};
+        });
+      });
+  },
+
   async SELECT_UserdataEmail(id) {
     return firestore
       .collection("users")
@@ -850,11 +861,8 @@ export default {
         return true;
       })
       .catch(function (error) {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        alert(`${errorCode}\n${errorMessage}`);
+        return false;
       });
-    return false;
   },
 
   async SigninFacebook() {
@@ -1319,8 +1327,8 @@ export default {
       requiredSkills: recruitInfo.requiredSkills,
       companyId: recruitInfo.session_id,
       contract: false,
-      UserComplete: false,
-      CompanyComplete: false,
+      UserComplete: 0,
+      CompanyComplete: 0,
       responsibility: "",
       chief: recruitInfo.chief,
       penalty: recruitInfo.penalty
