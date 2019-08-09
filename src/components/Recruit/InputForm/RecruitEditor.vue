@@ -164,6 +164,8 @@ export default {
       });
     },
     async submit() {
+      this.$swal('Created!','공고가 등록되었습니다.','success')
+
       const recruitInfo = {
         category: this.category,
         projectTitle: this.projectTitle,
@@ -177,8 +179,8 @@ export default {
         chief: this.chief,
         penalty: this.penalty
       };
-      console.log("infotest");
-      console.log(recruitInfo);
+      // console.log("infotest");
+      // console.log(recruitInfo);
       if (this.$session.get("session_id")) {
         var result = await FirebaseService.INSERT_recruitInfo(recruitInfo);
         this.showNotification(
@@ -186,8 +188,9 @@ export default {
           "success",
           `${this.$session.get("session_id")}님`,
           `recruitInfo 내용이 올라갔습니다.!`,
-          console.log(recruitInfo)
+          // console.log(recruitInfo)
         );
+        this.$router.push(`/company/${this.$session.get('session_id')}`)
       } else {
         alert("권한이 없습니다.");
       }

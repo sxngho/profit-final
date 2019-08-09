@@ -384,7 +384,7 @@ export default {
       .collection("users")
       .doc(userId)
       .update({
-        userImage: ""
+        userImage: "https://i.imgur.com/aTI4OeZ.png?1"
       });
   },
 
@@ -903,7 +903,8 @@ export default {
           email: id,
           phonenumber: phonenumber,
           userSkills: userSkills,
-          userImage: userImage,
+          userImage: "https://i.imgur.com/aTI4OeZ.png?1",
+          storyBanner:"https://i.imgur.com/KnVfJVQ.png",
           userName: userName,
           userIntro: userIntro,
           userCareers: userCareers,
@@ -917,7 +918,6 @@ export default {
           dibs: [],
           alertlist: [],
           proceedList: [],
-          storyBanner:"",
         });
         firestore
         .collection("user_addon")
@@ -947,7 +947,8 @@ export default {
            followerlist: [],
            followinglist: [],
            level: 3,
-           company_logo: '',
+           company_logo: 'https://i.imgur.com/WmUIKlP.png',
+           company_banner : "https://i.imgur.com/KnVfJVQ.png",
            industry: "",
            mount: "",
            comsize: "",

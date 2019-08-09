@@ -7,7 +7,7 @@
         <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
       </div>
     <!-- 회사배너 -->
-    <v-layout wrap id="companyBanner" v-bind:style="{ 'backgroundImage': 'url(' + (company.company_banner || 'http://design-ec.com/d/e_others_50/l_e_others_500.png' )  + ')' }" @mouseover="showUpImgBanner=true" @mouseleave="showUpImgBanner=false">
+    <v-layout wrap id="companyBanner" v-bind:style="{ 'backgroundImage': 'url(' + company.company_banner + ')' }" @mouseover="showUpImgBanner=true" @mouseleave="showUpImgBanner=false">
 
     <!-- <div v-show="showUpImgBanner && this.$route.params.id==this.$store.getters.getSession && !showUpImgBtn" style="z-index:3; right:0; position: absolute;">
     123123123123
@@ -35,7 +35,7 @@
               <v-img :src="company.company_logo" />
             </v-avatar>-->
             <div
-              v-if="!company.company_logo"
+              v-if="!company.company_logo || (company.company_logo=='https://i.imgur.com/WmUIKlP.png')"
               class="text-center"
               justify-center
               style="position:relative"
@@ -58,7 +58,7 @@
                 @click="setFile()"
                 style="cursor:pointer;"
               >
-                <img src="https://i.imgur.com/aTI4OeZ.png?1" />
+                <img src="https://i.imgur.com/WmUIKlP.png" />
               </v-avatar>
               <input
                 type="file"
@@ -80,9 +80,14 @@
                 v-show="showRmImgBtn"
                 style="z-index:2; right:0; position: absolute;"
               >
-                <button alt="delimg" style="cursor:pointer;width:25px;height:25px; color:white">
+              <img
+                src="../assets/icon_set/delete.png"
+                alt="delimg"
+                style="cursor:pointer;width:25px;height:25px;"
+              />
+                <!-- <button alt="delimg" style="cursor:pointer;width:25px;height:25px; color:white">
                   <i class="far fa-trash-alt"></i>
-                </button>
+                </button> -->
               </div>
               <v-avatar size="150" class="grey lighten-2">
                 <img :src="company.company_logo" />
@@ -553,10 +558,7 @@ export default {
       }
     },
     async fetchData() {
-      //this.company = await FirebaseService.SELECT_CompanyById(this.$route.params.id);
       this.$loading(true);
-      // this.recruitlist = await FirebaseService.SELECT_RecruitInfoById(this.$route.params.id);
-      // console.log(this.recruitlist)
       this.dibsUsers = [];
       var recruitsbyCompany = await FirebaseService.SELECT_RecruitInfoById(this.$route.params.id);
       this.recruitsbyCompany = recruitsbyCompany;
@@ -798,8 +800,8 @@ export default {
             "프로필 이미지 삭제가 완료되었습니다.",
             "success"
           );
-          FirebaseService.UPDATE_companyImage("", this.$route.params.id);
-          this.company.company_logo = "";
+          FirebaseService.UPDATE_companyImage("https://i.imgur.com/WmUIKlP.png", this.$route.params.id);
+          this.company.company_logo = "https://i.imgur.com/WmUIKlP.png";
         }
       });
     },
