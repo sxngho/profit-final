@@ -37,7 +37,6 @@
               <v-textarea
               outlined
               name="input-7-4"
-              label="프로젝트 설명"
               v-model="projectdescription"
               ></v-textarea>
             </div>

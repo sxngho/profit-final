@@ -19,10 +19,10 @@
       <!-- User Banner Img -->
       <v-layout row wrap style="margin:0px 10px;">
 
-        <v-layout row wrap v-bind:style="{ 'backgroundImage': 'url(' + storyBanner  + ')' }" style="background-size:100%; margin-bottom: 95px;"  @mouseover="showUpImgBanner=true" @mouseleave="showUpImgBanner=false">
+        <v-layout row wrap v-bind:style="{ 'backgroundImage': 'url(' + storyBanner  + ')' }" style="background-size:100%; margin-bottom: 95px; position:relative;"  @mouseover="showUpImgBanner=true" @mouseleave="showUpImgBanner=false">
 
             <div v-show="showUpImgBanner && this.$route.params.id==this.$store.getters.getSession"
-              style="position: absolute; margin:0;"
+              style="position: absolute; margin:0; bottom:0;"
               @click="setBanner()">
               <p style="background: #ffffff91;border-radius:0 20px 20px 0; cursor:pointer; margin:0px; padding: 5px 45px 5px 20px;">
                 배경화면 수정하기
@@ -30,18 +30,18 @@
               <input type="file" id="Banner" style="width:100%; display:none" @change="onFileChangeBanner" />
             </div>
 
-            <div @click="removeImageBanner()" v-show="showUpImgBanner && this.$route.params.id==this.$store.getters.getSession && this.storyBanner" style="z-index:2; right:0; position: absolute;" >
+            <div @click="removeImageBanner()" v-show="showUpImgBanner && this.$route.params.id==this.$store.getters.getSession && this.storyBanner" style="z-index:2; right:0; position: absolute; bottom:0;" >
               <p style="background: #ff000039; cursor:pointer; margin:0px; padding: 5px 20px 5px 45px; border-radius: 20px 0 0 20px;">배경화면 삭제</p>
             </div>
 
-          <v-flex xs12 style="height:220px;">
+          <v-flex xs12 style="height:300px;">
           </v-flex>
         </v-layout>
       </v-layout>
 
       <!-- ProfileImg -->
       <v-layout row wrap>
-        <v-layout wrap align-center justify-space-around style="position:absolute; top: 148px; right: 50%; left: 50%; z-index:10">
+        <v-layout wrap align-center justify-space-around style="position:absolute; top: 230px; right: 50%; left: 50%; z-index:10">
           <div v-if="!image || (image=='https://i.imgur.com/aTI4OeZ.png?1')" class="text-center" justify-center style="position:relative" @mouseover="showUpImgBtn=true" @mouseleave="showUpImgBtn=false" >
             <div @click="setFile()" v-show="showUpImgBtn" style="position: absolute; top: 54px; z-index: 2" >
               <p class="text-center" style="background: #ffffff91;padding: 10px 5px; cursor:pointer;" >사진을 등록하세요!</p>

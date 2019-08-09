@@ -1,8 +1,49 @@
 <template>
-  <v-container wrap>
-    <!-- 개발자라면 아래 레이아웃 출력 -->
+  <v-layout row wrap>
+    <v-flex xs12 style="height:100px;"/>
+
+    <v-container wrap>
+
+      <!-- 개발자라면 아래 레이아웃 출력 -->
       <!-- 모집중공고 리스트 -->
       <div v-if="this.$store.getters.getLevel == 2">
+          <v-layout wrap row text-center justify-center>
+            <p >
+              <span class="display-1" style="margin-bottom:10px;">지원할 수 있는 공고 리스트</span><br/>
+               총 {{recruits.length}}개의 공고 중에 {{myRecruits.length}}개의 공고 지원가능합니다.
+            </p>
+          </v-layout>
+
+          <v-layout wrap row>
+            <v-flex xs12 sm6 md4 v-for="recruit in myRecruits" style="padding:10px;" v-if="!isEmpty">
+              <v-card outlined class="text-center" style="padding:25px 10px 5px 10px;">
+                  <p class="display-1" style="font-size: 24px; font-weight: bold;">{{ recruit.data.projectTitle }}</p>
+                <div>
+                  <div>
+                    <v-chip v-for="skill in recruit.data.requiredSkills" outlined small class="pa-2" color="indigo">{{skill}}</v-chip>
+                  </div>
+                  <span class="indigo--text headline">{{recruit.data.closingDate}}</span>
+                  <p class="grey--text">{{recruit.data.projectSummary}}</p>
+                  <span class="caption">
+                    {{recruit.data.companyId}}
+                    {{recruit.data.endDay}}</span>
+                </div>
+                <v-card-actions justify-center>
+                  <v-spacer/>
+                  <v-btn @click="popRecruitDetail(recruit.id)" text outlined>자세히보기</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-flex>
+            <v-flex v-if="isEmpty">
+              <p> 지원 할 수 있는 공고가 존재하지 않습니다. </p>
+              <v-btn :to="{ name: 'story', params: { id: user }}" style="height:100%;"> 프로젝트 작성하러가기 </v-btn>
+            </v-flex>
+          </v-layout>
+
+        </div>
+
+      <!-- 회사라면 아래 레이아웃 출력 -->
+      <div v-if="this.$store.getters.getLevel ===0 || this.$store.getters.getLevel ===1 || this.$store.getters.getLevel ===3">
         <v-layout wrap row>
           <h1>지원할 수 있는 공고 리스트</h1>
           <p> 총 {{recruits.length}}개의 공고 중에 {{myRecruits.length}}개의 공고 지원가능합니다.</p>
@@ -52,24 +93,25 @@
       </v-layout>
     </div>
 
-    <!-- 비 로그인 유저라면 아래 레이아웃 출력 -->
-    <div v-if="typeof(this.$store.getters.getLevel) =='string'">
-      <v-layout wrap row>
-        <router-link to="/" class="bannerBox" style="text-decoration:none">
-          <div class="studio contentBox">
-            <div class="iconBox">
-              <i class="fas fa-home fa-7x" style="color:blueviolet"></i>
+      <!-- 비 로그인 유저라면 아래 레이아웃 출력 -->
+      <div v-if="typeof(this.$store.getters.getLevel) =='string'">
+        <v-layout wrap row>
+          <router-link to="/" class="bannerBox" style="text-decoration:none">
+            <div class="studio contentBox">
+              <div class="iconBox">
+                <i class="fas fa-home fa-7x" style="color:blueviolet"></i>
+              </div>
+              <br />
+              <div class="studio_title titleBox">
+                <h1><span class="fontStyle">홈페이지로 돌아가기</span></h1>
+              </div>
             </div>
-            <br />
-            <div class="studio_title titleBox">
-              <h1><span class="fontStyle">홈페이지로 돌아가기</span></h1>
-            </div>
-          </div>
-        </router-link>
-      </v-layout>
-    </div>
+          </router-link>
+        </v-layout>
+      </div>
 
-  </v-container>
+    </v-container>
+</v-layout>
 </template>
 
 
