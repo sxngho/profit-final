@@ -22,15 +22,21 @@
             <!-- User name -->
             <!-- email -->
             <v-flex xs12>
-              <v-text-field @blur="idCheck" label="* 아이디 " placeholder="  user@gmail.com" required v-model="signup_id"></v-text-field>
-              <small style="color:red" v-if="!signup_id_Validation && signup_id_Msg!=='' && signup_id !== ''"> {{signup_id_Msg}} </small>
-              <small style="color:green" v-if="signup_id_Validation && signup_id_Msg!=='' && signup_id !== ''"> {{signup_id_Msg}} </small>
+              <v-text-field @blur="idCheck" label="* 아이디 " placeholder="  user@gmail.com" required v-model="signup_id"  :rules="[idRules.required, idRules.emailMatch]">
+                <template v-slot:append-outer>
+                  <small style="color:red;white-space: nowrap;" v-if="!signup_id_Validation && signup_id_Msg!=='' && signup_id !== ''"> {{signup_id_Msg}} </small>
+                  <small style="color:green;white-space: nowrap;" v-if="signup_id_Validation && signup_id_Msg!=='' && signup_id !== ''"> {{signup_id_Msg}} </small>
+                </template>
+              </v-text-field>
             </v-flex>
 
             <v-flex xs12>
-              <v-text-field @blur="nicknameCheck" label="* 닉네임" required v-model="nickname"></v-text-field>
-              <small style="color:red" v-if="!nicknameValidation && nicknameMsg!=='' && nickname !== ''"> {{nicknameMsg}} </small>
-              <small style="color:green" v-if="nicknameValidation && nicknameMsg!=='' && nickname !== ''"> {{nicknameMsg}} </small>
+              <v-text-field @blur="nicknameCheck" label="* 닉네임" required v-model="nickname" :rules="[nicknameRules.required]">
+                <template v-slot:append-outer>
+                  <small style="color:red;white-space: nowrap;" v-if="!nicknameValidation && nicknameMsg!=='' && nickname !== ''"> {{nicknameMsg}} </small>
+                  <small style="color:green;white-space: nowrap;" v-if="nicknameValidation && nicknameMsg!=='' && nickname !== ''"> {{nicknameMsg}} </small>
+                </template>
+              </v-text-field>
             </v-flex>
 
             <v-flex xs12>
@@ -41,19 +47,25 @@
 
             <!-- Password -->
             <v-flex xs12>
-              <v-text-field class="pwfield" @blur="passwordCheck" label="* 비밀번호" type="password" required v-model="signup_password"></v-text-field>
-              <v-text-field class="pwfield" @blur="passwordCheck" label="* 비밀번호 확인 " type="password" required v-model="signup_password_check"></v-text-field>
-              <small style="color:red" v-if="!signup_password_Validation &&
-               signup_password_check !== '' && signup_password !== '' && signup_password_Msg !== '' "> {{signup_password_Msg}} </small>
-               <small style="color:green" v-if="signup_password_Validation &&
-                signup_password_check !== '' && signup_password !== '' && signup_password_Msg !== '' "> {{signup_password_Msg}} </small>
+              <v-text-field class="pwfield" @blur="passwordCheck" label="* 비밀번호" type="password" required v-model="signup_password" :rules="[pwdRules.required]"></v-text-field>
+              <v-text-field class="pwfield" @blur="passwordCheck" label="* 비밀번호 확인 " type="password" required v-model="signup_password_check" :rules="[pwdRules.repeat]">
+                <template v-slot:append-outer>
+                  <small style="color:red;white-space: nowrap;" v-if="!signup_password_Validation &&
+                  signup_password_check !== '' && signup_password !== '' && signup_password_Msg !== '' "> {{signup_password_Msg}} </small>
+                  <small style="color:green;white-space: nowrap;" v-if="signup_password_Validation &&
+                  signup_password_check !== '' && signup_password !== '' && signup_password_Msg !== '' "> {{signup_password_Msg}} </small>
+                </template>
+              </v-text-field>
             </v-flex>
 
             <!-- PhoneNumber -->
             <v-flex xs12>
-              <v-text-field @blur="phoneCheck" label="* 핸드폰 번호" required v-model="phonenumber"></v-text-field>
-              <small style="color:red" v-if="!phonenumberValidation &&
-               phonenumber !== '' && phonenumberMsg !== '' "> {{phonenumberMsg}} </small>
+              <v-text-field @blur="phoneCheck" label="* 핸드폰 번호" required v-model="phonenumber" :rules="[phonenumberRules.required, phonenumberRules.check]">
+                <template v-slot:append-outer>
+                  <small style="color:red;white-space: nowrap;" v-if="!phonenumberValidation &&
+                  phonenumber !== '' && phonenumberMsg !== '' "> {{phonenumberMsg}} </small>
+                </template>
+              </v-text-field>
             </v-flex>
 
             <small> *은 필수입력 항목입니다. </small>
@@ -114,6 +126,28 @@ export default {
     nickname : '',
     nicknameValidation : false,
     nicknameMsg : "",
+
+    idRules:{
+      required: value => !!value || '필수입력입니다',
+      emailMatch: value => {
+          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+          return pattern.test(value) || '이메일 형식이여야 합니다!'
+        },
+    },
+    nicknameRules:{
+      required: value => !!value || '필수입력입니다',
+    },
+    pwdRules:{
+      required: value => !!value || '필수입력입니다',
+      repeat : value => !!value || '비밀번호를 재입력해주세요!',
+    },
+    phonenumberRules:{
+      required: value=> !!value || '필수입력입니다',
+      check : value =>{
+        const pattern = /^\(?([0-9]{3})\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$/;
+        return pattern.test(value) || '폰 번호 형식이여야 합니다!'
+      }
+    }
   }),
   mounted() {
     this.fetchData();
