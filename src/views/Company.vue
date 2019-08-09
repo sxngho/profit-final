@@ -250,14 +250,21 @@
         <v-flex xs12 sm10 offset-sm1>
           <v-card style="width:100%" outlined>
             <v-card-title>회사소개 <v-spacer/>
+
+
+
               <div v-if="this.$route.params.id==this.$store.getters.getSession">
               <v-btn v-if="!updatestate2" @click="change_updatestate2()">수정하기</v-btn>
               <v-btn v-if="updatestate2" @click="submit2()">저장</v-btn>
               <v-btn v-if="updatestate2" @click="cancel_updatestate2()">취소</v-btn>
               </div>
-
             </v-card-title>
 
+            <v-card-text v-if="!company.descript" style="margin-left:12px;">
+              <br>현재 등록된 회사소개가 없습니다.
+            </v-card-text>
+
+            <div v-if="this.$route.params.id==this.$store.getters.getSession" style="margin-left:12px;">
             <v-card-text v-if="this.$route.params.id!==this.$store.getters.getSession"><p v-html="company.descript"></p></v-card-text>
             <v-card-text v-if="!updatestate2 && this.$route.params.id==this.$store.getters.getSession"><p v-html="company.descript"></p></v-card-text>
             <v-card-text v-if="updatestate2 && this.$route.params.id==this.$store.getters.getSession">
@@ -267,6 +274,8 @@
                 style="width:100%; height:150px"
               />
             </v-card-text>
+            </div>
+
           </v-card>
         </v-flex>
       </v-layout>
@@ -291,6 +300,11 @@
             </v-card-title>
             <v-card-text>
               <v-container>
+                <div v-if="!recruitsbyCompany.length">
+                  현재 등록된 공고가 없습니다.
+                </div>
+                <!-- {{recruitsbyCompany}} -->
+
                 <v-expansion-panels>
                   <v-expansion-panel v-for="(item, index) in MyRecruits">
                     <v-expansion-panel-header style="display:flex">
@@ -547,6 +561,7 @@ export default {
       // console.log(this.recruitlist)
       this.dibsUsers = [];
       var recruitsbyCompany = await FirebaseService.SELECT_RecruitInfoById(this.$route.params.id);
+      this.recruitsbyCompany = recruitsbyCompany;
       var chatRooms = "";
       var ChatRef = firebase.database().ref("/chat/");
       ChatRef.once("value",snapshot => {chatRooms = snapshot.val();
@@ -895,6 +910,7 @@ export default {
       user: "",
       select_comsize:['대기업','중견기업','강소기업','외국계기업','벤처기업','공공기관/공기업','비영리단체/협회재단','외국기관/단체'],
       tmp_descript:"",
+      recruitsbyCompany:"",
     };
   }
 };
