@@ -7,7 +7,9 @@
         <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
       </div>
     <!-- 회사배너 -->
-    <v-layout wrap id="companyBanner">
+    {{company.company_banner}}
+    <v-layout wrap id="companyBanner" v-bind:style="{ 'backgroundImage': 'url(' + (company.company_banner || 'http://design-ec.com/d/e_others_50/l_e_others_500.png' )  + ')' }"
+    >
       <v-flex xs12 sm10 offset-sm1>
         <v-layout style="margin:5vw 0px;">
           <div>
@@ -540,13 +542,13 @@ export default {
                 });
                 var unreadChat = chatRooms[i].chatting;
                 var unreadLength = 0;
-                console.log("랭스를 읽고있따 ",unreadChat.length)
+                // console.log("랭스를 읽고있따 ",unreadChat.length)
                 for(var j=unreadChat.length-1; j>=0; j--) {
                     if(unreadChat[j].isReadCompany) {
-                      console.log( j , " 브레이크야임마")
+                      // console.log( j , " 브레이크야임마")
                       break;
                     } else {
-                      console.log("안읽은채팅창갯수를 세고있따",unreadLength)
+                      // console.log("안읽은채팅창갯수를 세고있따",unreadLength)
                       unreadLength++;
                     }
                 }
@@ -565,7 +567,7 @@ export default {
           // console.error(error, "유저리스트 불러오기 에러");
         }
       );
-      console.log(this.MyRecruits,"asdasdasdadasdsasa")
+      // console.log(this.MyRecruits,"asdasdasdadasdsasa")
       // console.log(this.dibsUsers, "찜유저리스트");
 
       const comInfo = await FirebaseService.SELECT_CompanyInfo(this.$route.params.id);
@@ -604,8 +606,8 @@ export default {
     openWorkChat(user, id) {
       // user -> 이 프로젝트를 하기로한 유저아이디
       for (var i in this.dibsUsers) {
-        console.log(this.dibsUsers[i], "리쿠르트아이디가나와야함..");
-        console.log(id, "아이디");
+        // console.log(this.dibsUsers[i], "리쿠르트아이디가나와야함..");
+        // console.log(id, "아이디");
         if (
           this.dibsUsers[i].chat.userId == user &&
           this.dibsUsers[i].recruit == id
@@ -614,7 +616,7 @@ export default {
           break;
         }
       }
-      console.log(this.workingUser);
+      // console.log(this.workingUser);
       var link = this.workingUser.link;
       window.open(
         "../" + link,
@@ -803,7 +805,6 @@ export default {
 
 <style>
 #companyBanner {
-  background-image: url("../assets/coding.jpg");
   background-size: 100%;
 }
 #company_detail {
