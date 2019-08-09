@@ -314,7 +314,7 @@
                       <div>
                         <v-chip color="#4a77de" text-color="white" v-if="item.recruit.data.contract && item.recruit.data.UserComplete == 2 && item.recruit.data.CompanyComplete == 2">완료</v-chip>
                         <v-chip color="#692721" text-color="white" v-if="item.recruit.data.contract && (item.recruit.data.CompanyComplete ==1 || item.recruit.data.UserComplete ==1)" >파기</v-chip>
-                        <v-chip color="#0e568a" text-color="white" v-if="item.recruit.data.contract && item.recruit.data.UserComplete !== 1 && item.recruit.data.CompanyComplete !== 1">작업중</v-chip>
+                        <v-chip color="#0e568a" text-color="white" v-if="item.recruit.data.contract && item.recruit.data.UserComplete !== 1 && item.recruit.data.CompanyComplete !== 1 && (item.recruit.data.UserComplete !== 2 || item.recruit.data.CompanyComplete !== 2)">작업중</v-chip>
                         <v-chip color="rgb(118, 199, 122)" text-color="white" v-if="!item.recruit.data.contract">모집중</v-chip>
                         &nbsp;&nbsp;
                         <span>{{item.recruit.data.projectTitle}}</span>
@@ -538,7 +538,7 @@
                           </div>
                           <div v-else>
                             <div v-if="item.recruit.data.UserComplete == 0 && item.recruit.data.CompanyComplete == 0">
-                              <v-btn flex outlined color="blue" @click="complete(item.recruit.id)">계약완료</v-btn>
+                              <v-btn flex outlined color="blue" @click="complete(item.recruit.id,item.recruit.data)">계약완료</v-btn>
                               <v-btn flex outlined color="orange" @click="openContract(item.recruit.id,item.recruit.data.responsibility)">계약서</v-btn>
                               <v-btn flex outlined color="red" @click="cancel(item.recruit.id,item.recruit.data)">계약파기</v-btn>
                               <v-badge color="red" overlap v-if="item.length !== 0">
@@ -558,7 +558,7 @@
                             </div>
                             <div v-if="item.recruit.data.UserComplete == 2 && item.recruit.data.CompanyComplete == 0">
                               <p> 상대방이 완료를 누른 상태입니다. 계약이 정상적으로 종료되었다면 완료를 눌러주세요.</p>
-                              <v-btn flex outlined color="blue" @click="complete(item.recruit.id)">계약완료</v-btn>
+                              <v-btn flex outlined color="blue" @click="complete(item.recruit.id,item.recruit.data)">계약완료</v-btn>
                               <v-btn flex outlined color="orange" @click="openContract(item.recruit.id,item.recruit.data.responsibility)">계약서</v-btn>
                               <v-btn flex outlined color="red" @click="cancel(item.recruit.id,item.recruit.data)">계약파기</v-btn>
                               <v-badge color="red" overlap v-if="item.length !== 0">
@@ -616,19 +616,21 @@ export default {
     this.loading = false;
   },
   methods: {
-    complete(recruit) {
+    complete(recruitId,recruitData) {
+      console.log(recruitData," asdjiasdjiadjaidja " );
       if (confirm("알림 : 한번 완료 처리한 계약은 수정이 불가능합니다. 정말 완료 처리하시겠습니까?")) {
-        FirebaseService.UPDATE_RecruitCompleteByCompany(recruit.recruitPK,"success")
-        var dataRef = firebase.database().ref('/'+recruit.link);
+        FirebaseService.UPDATE_RecruitCompleteByCompany(recruitId,"success")
+        var dataRef = firebase.database().ref('/chat/'+recruitId+''+recruitData.responsibility);
         dataRef.update({
           CompanyComplete : 2,
         });
+        console.log("실행되었읍니다..")
       }
     },
     cancel(recruitId,recruitData) {
       if (confirm("알림 : 한번 파기 처리한 계약은 수정이 불가능합니다. 정말 계약을 파기하시겠습니까?")) {
         FirebaseService.UPDATE_RecruitCompleteByCompany(recruitId,"fail")
-        var dataRef = firebase.database().ref('/'+recruitId+''+recruitData.userId);
+        var dataRef = firebase.database().ref('/chat/'+recruitId+''+recruitData.responsibility);
         dataRef.update({
           CompanyComplete : 1,
         });
