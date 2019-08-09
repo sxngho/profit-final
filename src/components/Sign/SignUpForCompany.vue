@@ -3,24 +3,32 @@
     <v-dialog v-model="signupforcompanymodal" max-width="600px" xs6>
 
       <template v-slot:activator="{ on }" >
-        <v-btn text outlined color="indigo" v-on="on" style="padding: 100px 80px;">회사용</v-btn>
+        <v-layout v-on="on" justify-center style=" cursor:pointer; background:#ECF0F199; margin:0 10px; height:200px; color:#2980B9">
+          <div style="display:inline; margin:auto;" class="text-center">
+            <i class="far fa-building fa-5x"/><br/><br/>회사용
+          </div>
+        </v-layout>
       </template>
 
 
-      <v-card>
-        <!-- title -->
-        <v-card-title>
-          <span class="headline">기업 회원가입</span>
-        </v-card-title>
+      <v-container class="signmodal">
+        <v-layout row wrap style="padding:10px 20px;">
+          <v-spacer/>
+          <span class="font-weight-regular headline">기업 회원가입</span>
+          <v-spacer/>
+        </v-layout>
 
 
         <v-card-text>
           <v-container grid-list-md>
             <v-layout wrap>
               <v-flex xs12>
-                <v-text-field @blur="idCheck" label="* 아이디 " placeholder=" company@gmail.com"   required v-model="signup_id"></v-text-field>
-                <small style="color:red" v-if="!signup_id_Validation && signup_id_Msg!=='' && signup_id !== ''"> {{signup_id_Msg}} </small>
-                <small style="color:green" v-if="signup_id_Validation && signup_id_Msg!=='' && signup_id !== ''"> {{signup_id_Msg}} </small>
+                <v-text-field @blur="idCheck" label="* 아이디 " placeholder="company@gmail.com" required v-model="signup_id" :rules="[idRules.required, idRules.emailMatch]">
+                  <template v-slot:append-outer>
+                    <!-- <small style="color:red" v-if="!signup_id_Validation && signup_id_Msg!=='' && signup_id !== ''"> {{signup_id_Msg}} </small> -->
+                    <small style="color:green;white-space: nowrap;" v-if="signup_id_Validation && signup_id_Msg!=='' && signup_id !== ''"> {{signup_id_Msg}} </small>
+                  </template>
+                </v-text-field>
               </v-flex>
 
               <!-- Company Name -->
@@ -30,12 +38,18 @@
 
               <!-- Password -->
               <v-flex xs12>
-                <v-text-field class="pwfield" @blur="passwordCheck" label="* 비밀번호" type="password" required v-model="signup_password"></v-text-field>
-                <v-text-field class="pwfield" @blur="passwordCheck" label="* 비밀번호 확인 " type="password" required v-model="signup_password_check"></v-text-field>
-                <small style="color:red" v-if="!signup_password_Validation &&
-                 signup_password_check !== '' && signup_password !== '' && signup_password_Msg !== '' "> {{signup_password_Msg}} </small>
-                 <small style="color:green" v-if="signup_password_Validation &&
+                <v-text-field class="pwfield" @blur="passwordCheck" label="* 비밀번호" type="password" required v-model="signup_password"
+                :rules="[pwdRules.required]">
+                </v-text-field>
+                <v-text-field class="pwfield" @blur="passwordCheck" label="* 비밀번호 확인 " type="password" required v-model="signup_password_check"
+                :rules="[pwdRules.repeat]">
+                <template v-slot:append-outer>
+                  <small style="color:red; white-space: nowrap;" v-if="!signup_password_Validation &&
                   signup_password_check !== '' && signup_password !== '' && signup_password_Msg !== '' "> {{signup_password_Msg}} </small>
+                  <small style="color:green; white-space: nowrap;" v-if="signup_password_Validation &&
+                  signup_password_check !== '' && signup_password !== '' && signup_password_Msg !== '' "> {{signup_password_Msg}} </small>
+                </template>
+                </v-text-field>
               </v-flex>
 
             </v-layout>
@@ -53,7 +67,7 @@
           @click="SignupCompany(company_name, signup_id, signup_password)"> 회원가입 </v-btn>
           <v-btn color="blue darken-1" text v-else disabled>회원가입</v-btn>
         </v-card-actions>
-      </v-card>
+      </v-container>
     </v-dialog>
 </template>
 
@@ -76,6 +90,18 @@ import FirebaseService from "@/services/FirebaseService";
       signup_password_check : "",
       signup_password_Validation : false,
       signup_password_Msg : "",
+
+      idRules:{
+        required: value => !!value || '필수입력입니다',
+        emailMatch: value => {
+            const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            return pattern.test(value) || '이메일 형식이여야 합니다!'
+          },
+      },
+      pwdRules:{
+        required: value => !!value || '필수입력입니다',
+        repeat : value => !!value || '비밀번호를 재입력해주세요!',
+      },
 
     }),
     mounted() {

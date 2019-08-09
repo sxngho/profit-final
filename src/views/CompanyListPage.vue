@@ -29,7 +29,7 @@
           <button class="company__container">
             <div class="company__content">
               <div class="companyImage">
-                <img :src="company.company_logo" style="width:150px; height:90px" />
+                  <img :src="company.company_logo || 'http://design-ec.com/d/e_others_50/l_e_others_500.png'" style="width:150px; height:90px" />
               </div>
               <div class="companyName">{{company.company_name}}</div>
             </div>

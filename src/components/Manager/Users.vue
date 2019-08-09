@@ -17,7 +17,7 @@
             <v-expansion-panel-header>
               <div>
                 <v-avatar>
-                  <img :src="user.userImage" />
+                  <img :src="user.userImage || 'http://design-ec.com/d/e_others_50/l_e_others_500.png'" />
                 </v-avatar>
                 {{user.nickname}} , level : {{user.level}}
               </div>
