@@ -198,7 +198,7 @@ export default {
     goProject(projectId) {
       window.open(
         "../project/" + projectId,
-        "name(이름지정)",
+        "projectId",
         "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=700,height=600"
       );
     },
