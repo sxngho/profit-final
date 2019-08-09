@@ -23,6 +23,17 @@
           </div>
           <!-- 비로그인 유저에겐 국물도 없다 -->
         </v-flex>
+
+        <v-flex xs12 text-center>
+          <router-link :to="{ name: 'recruits' }" class="bannerBtn">
+            <div class="bannerBtn sm-link sm-link_padding-all sm-link1">
+                <div class="sm-link__label">
+                <i class="far fa-handshake fa-7x"/><br/>
+                <span>공고페이지</span>
+              </div>
+            </div>
+          </router-link>
+        </v-flex>
       </v-layout>
     </v-container>
   </div>

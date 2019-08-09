@@ -1,7 +1,8 @@
 <template>
-  <div>
+  <v-container>
+    <v-layout row wrap>
     <!-- TODO 여백 -->
-    <v-layout><v-flex style="margin:30px;" /></v-layout>
+    <!-- <v-layout><v-flex style="margin:30px;" /></v-layout> -->
 
     <div class="sidetoolbar white--text">
       <!-- <div href="m.naver.com" ><img src="../assets/icon_set/customer-support.svg" fill="yellow" /></div> -->
@@ -12,15 +13,15 @@
       <div class="sidetooltxt" @click="compo=5">siren</div><br/>
     </div>
 
-    <v-container style="margin-left:65px;">
+    <v-container style="margin-left:80px;">
       <Main v-if="compo==1"/>
       <WebLog v-if="compo==2"/>
       <Users v-if="compo==3"/>
       <Company v-if="compo==4"/>
       <Report v-if="compo==5"/>
     </v-container>
-
-  </div>
+    </v-layout>
+  </v-container>
 </template>
 
 
@@ -75,14 +76,14 @@ export default {
 <style>
 .sidetoolbar{
   height: 100%;
-  width: 65px;
+  width: 80px;
   position: fixed;
   z-index: 0;
   top: 0;
   left: 0;
   background-color: #111;
   overflow-x: hidden;
-  margin-top:64px;
+  padding-top:64px;
 }
 
 .sidetooltxt{
