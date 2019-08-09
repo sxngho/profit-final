@@ -630,6 +630,7 @@ export default {
       this.toggleContractDate = true;this.toggleCompany = true;this.toggleAddr = true; this.toggleRrn = true;
     },
     validContract(){
+      this.$swal('회원가입에 성공하였습니다.','기업 페이지에서 정보를 입력해주세요!','success')
       var dataRef = firebase.database().ref('/'+this.nowChatRoom.link);
 
       if(this.$session.get("session_id") == this.nowChatRoom.userId){

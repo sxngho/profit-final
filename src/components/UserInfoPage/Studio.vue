@@ -96,7 +96,7 @@
             <v-card outlined style="width:100%; padding:12px;">
               <div class="subtitle-1">
                 <span class="headline font-weight-bold">{{recruit.data.projectTitle}}</span>
-                <span class="caption grey--text">&nbsp{{recruit.data.companyId}}</span>
+                <span class="caption grey--text">&nbsp;{{recruit.data.companyId}}</span>
                 <!-- <h2>{{recruit.data.projectTitle}} </h2>
                 {{recruit.data.companyId}} -->
                 <div>
@@ -123,6 +123,82 @@
         </v-layout>
       </div>
     </v-layout>
+
+
+      <!-- 완료 리스트 -->
+      <div style="width:100%" v-if="completeList.length>0">
+        <div>
+          <p style="width:100%; text-align: center;" class="display-1 font-weight-bold">작업중인 리스트</p>
+        </div>
+        <v-layout row wrap style="margin:20px 0;" v-for="recruit in completeList">
+          <v-card outlined style="width:100%; padding:12px;">
+            <div class="subtitle-1" v-if="!((recruit.UserComplete == 2 && recruit.CompanyComplete == 0)|| (recruit.UserComplete == 0 && recruit.CompanyComplete == 2) || (recruit.UserComplete == 1 || recruit.CompanyComplete == 1))">
+              <span class="headline font-weight-bold">{{recruit.projectTitle}}</span>
+              <span class="caption grey--text">&nbsp;{{recruit.companyId}}</span>
+              <br/>
+              <div style="display:block;">
+                <p style="width:100%;" class="text-center display-1 purple--text">
+                  D-{{recruit.projectTerm}}
+                </p>
+                <p style="width:100%;" class="text-center title">
+                  {{recruit.pay}}
+                </p>
+              </div>
+            </div>
+
+            <div v-else>
+              <span class="headline font-weight-bold">{{recruit.projectTitle}}</span>
+              <span class="caption grey--text">&nbsp;{{recruit.companyId}}</span>
+              <br/>
+              <div style="display:block;">
+                <p style="width:100%;" class="text-center title grey--text">
+                  D-{{recruit.projectTerm}}3<br/>
+                  {{recruit.pay}}
+                </p>
+              </div>
+            </div>
+
+          </v-card>
+        </v-layout>
+      </div>
+
+      <!-- 파기 리스트 -->
+      <div style="width:100%" v-if="delList.length>0">
+        <div>
+          <p style="width:100%; text-align: center;" class="display-1 font-weight-bold">작업중인 리스트</p>
+        </div>
+        <v-layout row wrap style="margin:20px 0;" v-for="recruit in delList">
+          <v-card outlined style="width:100%; padding:12px;">
+            <div class="subtitle-1" v-if="!((recruit.UserComplete == 2 && recruit.CompanyComplete == 0)|| (recruit.UserComplete == 0 && recruit.CompanyComplete == 2) || (recruit.UserComplete == 1 || recruit.CompanyComplete == 1))">
+              <span class="headline font-weight-bold">{{recruit.projectTitle}}</span>
+              <span class="caption grey--text">&nbsp;{{recruit.companyId}}</span>
+              <br/>
+              <div style="display:block;">
+                <p style="width:100%;" class="text-center display-1 purple--text">
+                  D-{{recruit.projectTerm}}
+                </p>
+                <p style="width:100%;" class="text-center title">
+                  {{recruit.pay}}
+                </p>
+              </div>
+            </div>
+
+            <div v-else>
+              <span class="headline font-weight-bold">{{recruit.projectTitle}}</span>
+              <span class="caption grey--text">&nbsp;{{recruit.companyId}}</span>
+              <br/>
+              <div style="display:block;">
+                <p style="width:100%;" class="text-center title grey--text">
+                  D-{{recruit.projectTerm}}3<br/>
+                  {{recruit.pay}}
+                </p>
+              </div>
+            </div>
+
+          </v-card>
+        </v-layout>
+      </div>
+
   </div>
 </template>
 
@@ -147,6 +223,8 @@ export default {
       recruits : "",
       Dibs : [],
       proceedList:[],
+      completeList : [],
+      delList : [],
     };
   },
   mounted() {
@@ -161,7 +239,7 @@ export default {
       this.recruits = await FirebaseService.SELECT_RecruitInfo();
       var userProceedList = await FirebaseService.SELECT_UserProceedList(this.$session.get('session_id'));
       this.myDibs = this.userdata[0].dibs;
-      for(var i in this.recruits){
+      for(var i in this.recruits) {
         if(this.myDibs.includes(this.recruits[i].id)){
           this.Dibs.push(this.recruits[i]);
         }
@@ -169,13 +247,51 @@ export default {
       var allChatRoom="";
       firebase.database().ref('/chat/').once('value').then( snapshot => {
         allChatRoom = snapshot.val();
+        this.completeList = [];
+        this.delList = [];
+        this.proceedList = [];
+        for(var i in allChatRoom) {
+          if ( allChatRoom[i].userId == this.$session.get('session_id') && allChatRoom[i].UserComplete == 2 && allChatRoom[i].CompanyComplete == 2) {
+            this.completeList.push(allChatRoom[i]);
+          } else if (allChatRoom[i].userId == this.$session.get('session_id') && (allChatRoom[i].UserComplete == 1 || allChatRoom[i].CompanyComplete == 1)) {
+            this.delList.push(allChatRoom[i]);
+          }
+        }
         for(var j in userProceedList)
           for(var i in allChatRoom) {
-            if ( allChatRoom[i].recruitPK == userProceedList[j] && allChatRoom[i].userId == this.$session.get('session_id')) {
+            if ( allChatRoom[i].recruitPK == userProceedList[j] && allChatRoom[i].userId == this.$session.get('session_id') &&  allChatRoom[i].UserComplete !== 1 && allChatRoom[i].CompanyComplete !== 1) {
               this.proceedList.push(allChatRoom[i]);
               break;
           }
         }
+      });
+      firebase.database().ref('/chat/').on('value', snapshot => {
+        allChatRoom = snapshot.val();
+        this.completeList = [];
+        this.delList = [];
+        this.proceedList = [];
+        for(var i in this.myDibs) {
+          if ( this.myDibs[i].contract ) {
+            this.myDibs.splice(i,1);
+          }
+        }
+        for(var i in allChatRoom) {
+          if ( allChatRoom[i].userId == this.$session.get('session_id') && allChatRoom[i].UserComplete == 2 && allChatRoom[i].CompanyComplete == 2) {
+            this.completeList.push(allChatRoom[i]);
+          } else if (allChatRoom[i].userId == this.$session.get('session_id') && (allChatRoom[i].UserComplete == 1 || allChatRoom[i].CompanyComplete == 1)) {
+            this.delList.push(allChatRoom[i]);
+          }
+        }
+        for(var j in userProceedList)
+          for(var i in allChatRoom) {
+            if ( allChatRoom[i].recruitPK == userProceedList[j] && allChatRoom[i].userId == this.$session.get('session_id') &&  allChatRoom[i].UserComplete !== 1 && allChatRoom[i].CompanyComplete !== 1 ) {
+              this.proceedList.push(allChatRoom[i]);
+              break;
+          }
+        }
+        console.log(this.proceedList);
+        console.log(this.delList);
+        console.log(this.completeList);
       });
     },
     complete(recruit) {
@@ -257,8 +373,8 @@ export default {
 
           companyVerification : false,
           userVerification: false,
-          UserComplete : false,
-          CompanyComplete : false,
+          UserComplete : 0,
+          CompanyComplete : 0,
 
           isChangeProjectTerm : false,
           isChangePay : false,

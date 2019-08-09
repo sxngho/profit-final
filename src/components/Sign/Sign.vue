@@ -84,15 +84,32 @@
       <v-menu offset-y v-if="nowLevel == '2' && user !=='' && user !== undefined ">
         <template v-slot:activator="scope">
           <v-btn icon v-on="scope.on">
-            <v-badge color="red" overlap>
+            <v-badge color="red" overlap v-if= " $store.getters.getalertList.unread.length > 0">
               <template slot="badge"> {{$store.getters.getalertList.unread.length}} </template>
               <v-icon color="black"> notifications </v-icon>
             </v-badge>
+              <v-icon color="black" v-else> notifications </v-icon>
           </v-btn>
         </template>
-        <v-card>
-          <v-list dense>
-            <v-list-item v-for="(alert, index) in this.$store.getters.getalertList.alert.slice().reverse()">
+        <v-card v-if="this.$store.getters.getalertList.alert.length == 0">
+          <v-list dense >
+              <v-list-item >
+                <v-list-item-content>
+                  <v-list-item-title>알람이 없습니다.</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </v-card>
+          <v-card v-else>
+            <v-list>
+            <v-list-item v-for="(alert, index) in this.$store.getters.getalertList.alert.slice().reverse()" v-if="!alert.check">
+              <v-list-item-content>
+                <v-btn text style="padding:1px 0">
+                  <v-list-item-title :style="{color:colorcheck(alert.check)}" v-html="alert.message" @click="move(alert.check, alert.url, index,alert.user)"></v-list-item-title>
+                </v-btn>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item v-for="(alert, index) in this.$store.getters.getalertList.alert.slice().reverse()" v-if="alert.check" >
               <v-list-item-content>
                 <v-btn text style="padding:1px 0">
                   <v-list-item-title :style="{color:colorcheck(alert.check)}" v-html="alert.message" @click="move(alert.check, alert.url, index,alert.user)"></v-list-item-title>
@@ -152,6 +169,9 @@ export default {
         type
       });
     },
+    fetchAlert() {
+        this.fetchData(this.$session.get("session_id"));
+    },
     async fetchData(id) {
      this.unread_alertlist = [];
      firebase.database().ref('/chat/').once('value').then(snapshot => {
@@ -200,7 +220,6 @@ export default {
         window.open(document.location.origin + url)
         var result = await FirebaseService.alertcheck(this.alertlist, this.alertlist.length-alertindex-1, this.$session.get("session_id"))
       }
-
     },
     colorcheck(check) {
       if (check) {
@@ -260,6 +279,10 @@ export default {
         this.$store.commit('changeLevel', this.$session.get('level'))
         this.$store.commit('setSession', this.$session.get('session_id'))
         this.$emit('login_success')
+      } else {
+        this.$swal("로그인 실패!", "아이디나 비밀번호를 확인해주세요", "error");  
+        this.LoginId = "";
+        this.LoginPassword = "";
       }
     },
 

@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <notifications group="foo-css" position="top right" :speed="500" />
-    <Header v-if="!$store.state.no_header"/>
+    <Header v-if="!$store.state.no_header" ref="header"/>
     <hr/>
     <v-content>
       <router-view :key="$route.fullPath"></router-view>
@@ -20,9 +20,16 @@ export default {
     Header,
     Footer
   },
+  data() {
+    return {
+      fetch : false,
+    };
+  },
   created() {
     if (this.$session.get("session_id")===undefined) {
       this.$session.set('session_id', "")
+    } else {
+      this.fetch = true;
     }
     if (this.$session.get("level")===undefined) {
       this.$session.set('level', "")
@@ -30,7 +37,18 @@ export default {
     if (this.$session.get("alertList")===undefined) {
       this.$session.set('alertList', {alert : [], unread : []})
     }
-  }
+  },
+  mounted() {
+    this.fetchData();
+  },
+  methods: {
+    fetchData() {
+      if( this.fetch ) {
+        this.$refs.header.fetchAlert();
+        this.fetch = false;
+      }
+    },
+  },
 };
 </script>
 

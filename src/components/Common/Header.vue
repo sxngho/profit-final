@@ -11,7 +11,7 @@
     <v-spacer />
     <!-- <div id="google_translate_element"></div> -->
     <v-toolbar-items>
-      <Sign v-on:login_success="login_success" v-on:logout_success="logout_success"/>
+      <Sign v-on:login_success="login_success" v-on:logout_success="logout_success" ref="sign"/>
 
       <v-btn text class="font-bold-light" to="/Manager" v-if="this.$store.getters.getLevel===0 || this.$store.getters.getLevel===1">Manager</v-btn>
     </v-toolbar-items>
@@ -40,6 +40,11 @@ export default {
     this.$store.commit('changeLevel', this.$session.get("level"))
   },
   methods : {
+    fetchAlert() {
+      this.$refs.sign.fetchAlert();
+      console.log("헤더")
+    },
+
     async get_userdata(id) {
      this.unread_alertlist = [];
      if ( this.$store.getters.getLevel === 2 ) {
