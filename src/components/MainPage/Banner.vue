@@ -2,8 +2,7 @@
   <div class="banner__container">
     <div class="banner__content">
       <!-- 1-1 스토리 : User가 일반 유저인 경우에는 아래의 router-link 가 노출됩니다. -->
-      <router-link
-        :to="{ name: 'story', params: { id: this.$session.get('session_id') }}"
+      <router-link :to="{ name: 'story', params: { id: this.$session.get('session_id') }}"
         class="bannerBox"
         style="text-decoration:none"
         v-if="this.$store.getters.getLevel==2"
