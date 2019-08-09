@@ -604,6 +604,24 @@ export default {
       });
   },
 
+  UPDATE_companyImageBanner(image, companyId) {
+    return firestore
+      .collection("companys")
+      .doc(companyId)
+      .update({
+        company_banner: image
+      });
+  },
+
+  UPDATE_companyImage(image, companyId) {
+    return firestore
+      .collection("companys")
+      .doc(companyId)
+      .update({
+        company_logo: image
+      });
+  },
+
   // --------------------------------------------------------------------COMPANY
   // ---------------------------------------------------------------------------------------------------------------------------------
 
@@ -929,7 +947,7 @@ export default {
            followerlist: [],
            followinglist: [],
            level: 3,
-           company_logo: "",
+           company_logo: '',
            industry: "",
            mount: "",
            comsize: "",
@@ -1402,6 +1420,7 @@ export default {
   //-------------------------------------companyInfo--------------------------------------------//
   //--------------------------------------------------------------------------------------------//
   async UPDATE_Companys(companyInfo, company_name) {
+    // console.log(companyInfo.descript, '이걸로 들어갈겁니다.')
     return firestore
       .collection("companys")
       .doc(company_name)

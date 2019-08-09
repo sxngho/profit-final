@@ -11,7 +11,7 @@
             @click=""
           >
             <v-list-item-avatar>
-              <v-img :src="company.logo"></v-img>
+              <v-img :src="company.logo || 'http://design-ec.com/d/e_others_50/l_e_others_500.png'"></v-img>
             </v-list-item-avatar>
 
             <v-list-item-content>

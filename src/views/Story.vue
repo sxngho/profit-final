@@ -18,7 +18,7 @@
 
       <!-- User Banner Img -->
       <v-layout row wrap style="margin:0px 10px;">
-        <v-layout row wrap v-bind:style="{ 'backgroundImage': 'url(' + storyBanner   + ')' }" style="background-size:100%; margin-bottom: 95px;"  @mouseover="showUpImgBanner=true" @mouseleave="showUpImgBanner=false">
+        <v-layout row wrap v-bind:style="{ 'backgroundImage': 'url(' + ( storyBanner  || 'https://i.imgur.com/KnVfJVQ.png' )  + ')' }" style="background-size:100%; margin-bottom: 95px;"  @mouseover="showUpImgBanner=true" @mouseleave="showUpImgBanner=false">
 
             <div v-show="showUpImgBanner && this.$route.params.id==this.$store.getters.getSession"
               style="position: absolute; margin:0;"
@@ -246,7 +246,7 @@ export default {
   created() {
     // 컴포넌트 생성시 데이터를 패치한다
     this.fetchData();
-    this.setStoryBanner();
+    // this.setStoryBanner();
     this.isFollowCheck();
     this.$store.commit('setSession', this.$session.get('session_id'))
   },
@@ -344,21 +344,21 @@ export default {
     },
 
     //its hyoyas time!
-    async setStoryBanner() {
-      // this.storyBanner = url;
-      // TODO 이거 지금 라우터에서 자기 프사랑 배너 받아오는데, 동적라우터에서 아이디 추출해서 해야함 이따하자
-      var userImg = await FirebaseService.SELECT_UserImage(
-        this.$route.params.id
-      );
-      // console.log("유저의 이미지!", userImg);
-      //디비에서 받아온 유저의 배너이미지와, 프로필 사진 이미지를 붙인다
-      if (userImg.banner) {
-        this.storyBanner = userImg.banner;
-      } else {
-        this.storyBanner = "https://i.imgur.com/KnVfJVQ.png"
-      }
-      this.image = userImg.profileImg;
-    },
+    // async setStoryBanner() {
+    //   // this.storyBanner = url;
+    //   // TODO 이거 지금 라우터에서 자기 프사랑 배너 받아오는데, 동적라우터에서 아이디 추출해서 해야함 이따하자
+    //   var userImg = await FirebaseService.SELECT_UserImage(
+    //     this.$route.params.id
+    //   );
+    //   // console.log("유저의 이미지!", userImg);
+    //   //디비에서 받아온 유저의 배너이미지와, 프로필 사진 이미지를 붙인다
+    //   if (userImg.banner) {
+    //     this.storyBanner = userImg.banner;
+    //   } else {
+    //     this.storyBanner = "https://i.imgur.com/KnVfJVQ.png"
+    //   }
+    //   this.image = userImg.profileImg;
+    // },
 
     removeImage() {
       this.$swal({
@@ -396,7 +396,7 @@ export default {
         if (result.value) {
           this.$swal(
             "Deleted!",
-            "프로필 이미지 삭제가 완료되었습니다.",
+            "배경 이미지 삭제가 완료되었습니다.",
             "success"
           );
           FirebaseService.DELETE_userImageBanner(this.$route.params.id);
