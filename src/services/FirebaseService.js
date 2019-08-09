@@ -613,6 +613,14 @@ export default {
       });
   },
 
+  UPDATE_companyImage(image, companyId) {
+    return firestore
+      .collection("companys")
+      .doc(companyId)
+      .update({
+        company_logo: image
+      });
+  },
 
   // --------------------------------------------------------------------COMPANY
   // ---------------------------------------------------------------------------------------------------------------------------------
