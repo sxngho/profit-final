@@ -5,18 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.9.0/css/all.css"
-    />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
     <!-- 한영 번역 -->
     <script type="text/javascript">
       function googleTranslateElementInit() {
-        new google.translate.TranslateElement(
-          {
+        new google.translate.TranslateElement({
             pageLanguage: "ko",
             includedLanguages: "en,ja,ko",
             layout: google.translate.TranslateElement.InlineLayout.SIMPLE
@@ -25,15 +21,13 @@
         );
       }
     </script>
-    <script
-      type="text/javascript"
+    <script type="text/javascript"
       src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
     ></script>
 
     <link
       rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
 
     <!-- GIt REPOSITORY GRAPH -->
     <script src="https://cdn.jsdelivr.net/npm/@gitgraph/js"></script>
@@ -46,15 +40,25 @@
 
     <!-- JSPDF -->
     <script src="https://unpkg.com/jspdf@latest/dist/jspdf.min.js"></script>
-    
+
+    <!-- FullPage.js for Main Page -->
+    <!-- <link rel="stylesheet" type="text/css" href="fullpage.css" />
+    <script type="text/javascript" src="fullpage.js"></script> -->
+    <link rel="stylesheet" href="https://unpkg.com/fullpage.js/dist/fullpage.min.css">
+    <script src="https://unpkg.com/vue-fullpage.js/dist/vue-fullpage.min.js"></script>
+
+    <!-- Custom Css -->
+    <link rel="stylesheet" href="./CustomCss.css">
+
     <title>Sharefolio</title>
   </head>
   <body>
     <noscript>
-      <strong
-        >We're sorry but Bobsleh doesn't work properly without JavaScript
-        enabled. Please enable it to continue.</strong
-      >
+      <strong>
+        We're sorry but Bobsleh doesn't work properly without JavaScript
+        enabled. Please enable it to continue.
+        If you take this page, please mail for us : hyoyas@naver.com
+      </strong>
     </noscript>
     <div id="app"></div>
     <!-- built files will be auto injected -->
