@@ -381,11 +381,3 @@ export default {
 
 };
 </script>
-
-<style>
-  .inputmodal{
-    background:white;
-    border-top:8px solid #3498DB;
-    border-bottom:8px solid #3498DB;
-  }
-</style>

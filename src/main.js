@@ -14,6 +14,7 @@ import store from './store'
 import router from './router'
 import './registerServiceWorker'
 import 'vuetify/dist/vuetify.min.css'
+import VueFullPage from 'vue-fullpage.js'
 
 Vue.prototype.$http = axios
 Vue.config.productionTip = false
@@ -44,6 +45,7 @@ Vue.use(Vuetify, {
 Vue.use(Vuetify, {
   iconfont: 'mdi', // 'md' || 'mdi' || 'fa' || 'fa4'
 })
+Vue.use(VueFullPage)
 new Vue({
   router,
   store,

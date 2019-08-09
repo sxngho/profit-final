@@ -1,21 +1,26 @@
 <template>
-  <v-toolbar flat color="#fff" style="flex:0">
+  <!-- <v-toolbar flat color="#fff00" style="flex:0">
     <v-toolbar-title>
-      <v-btn
-        text
-        class="font-bold-light title"
-        to="/"
-        style="height:100%; color:blueviolet"
-      >Sharefolio</v-btn>
+      <v-btn text class="font-bold-light title" to="/" style="height:100%; color:blueviolet" >Sharefolio</v-btn>
     </v-toolbar-title>
     <v-spacer />
-    <!-- <div id="google_translate_element"></div> -->
     <v-toolbar-items>
       <Sign v-on:login_success="login_success" v-on:logout_success="logout_success"/>
 
       <v-btn text class="font-bold-light" to="/Manager" v-if="this.$store.getters.getLevel===0 || this.$store.getters.getLevel===1">Manager</v-btn>
     </v-toolbar-items>
-  </v-toolbar>
+  </v-toolbar> -->
+
+  <v-layout  style="flex:0; padding:0 10px; z-index:4; position:absolute; width:100%;">
+    <v-layout row wrap>
+      <v-btn text class="font-bold-light title" to="/" style="height:100%; color:blueviolet">Sharefolio</v-btn>
+      <v-spacer />
+      <div>
+        <Sign v-on:login_success="login_success" v-on:logout_success="logout_success"/>
+        <v-btn text class="font-bold-light" to="/Manager" v-if="this.$store.getters.getLevel===0 || this.$store.getters.getLevel===1">Manager</v-btn>
+      </div>
+    </v-layout>
+  </v-layout>
 </template>
 
 <script>

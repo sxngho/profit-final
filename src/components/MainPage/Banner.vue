@@ -1,15 +1,14 @@
 <template>
-  <div class="banner__container">
-    <div class="banner__content">
+  <!-- <div class="banner__container">
+    <div class="banner__content"> -->
       <!-- 1-1 스토리 : User가 일반 유저인 경우에는 아래의 router-link 가 노출됩니다. -->
-      <router-link
-        :to="{ name: 'story', params: { id: this.$session.get('session_id') }}"
+      <!-- <router-link :to="{ name: 'story', params: { id: this.$session.get('session_id') }}"
         class="bannerBox"
         style="text-decoration:none"
         v-if="this.$store.getters.getLevel==2"
-      >
+      > -->
         <!-- <router-link to="/studio" class="bannerBox" style="text-decoration:none" v-if="isUserCheck()"> -->
-        <div class="studio contentBox">
+        <!-- <div class="studio contentBox">
           <div class="iconBox">
             <i class="far fa-keyboard fa-7x" style="color:blueviolet"></i>
           </div>
@@ -18,10 +17,10 @@
             <span class="fontStyle">스토리</span>
           </div>
         </div>
-      </router-link>
+      </router-link> -->
 
       <!-- 1-2 스토리 : User가 회사 유저인 경우에는 아래의 router-link 가 노출됩니다. -->
-      <router-link
+      <!-- <router-link
         :to="{ name: 'company', params: { id: this.$session.get('session_id') }}"
         class="bannerBox"
         style="text-decoration:none"
@@ -36,10 +35,10 @@
             <span class="fontStyle">스토리</span>
           </div>
         </div>
-      </router-link>
+      </router-link> -->
 
       <!-- 1-3 스토리 : User가 로그인하지 않은 경우, studio로 가는 활동을 막기 위해 fake로 아래 div를 노출합니다. -->
-      <div
+      <!-- <div
         class="bannerBox"
         style="text-decoration:none; cursor:pointer;"
         v-if="typeof(this.$store.getters.getLevel)!=='number' || this.$store.getters.getLevel===0 || this.$store.getters.getLevel===1"
@@ -54,10 +53,10 @@
             <span class="fontStyle">스토리</span>
           </div>
         </div>
-      </div>
+      </div> -->
 
       <!-- 2-1 외주 공고 리스트 : User가 일반 유저인 경우에는 아래의 router-link 가 노출됩니다. -->
-      <router-link
+      <!-- <router-link
         to="/recruits"
         class="bannerBox"
         style="text-decoration:none"
@@ -72,10 +71,10 @@
             <span class="fontStyle">외주 공고 리스트</span>
           </div>
         </div>
-      </router-link>
+      </router-link> -->
 
       <!-- 2-2 외주 공고 리스트 : User가 일반 유저가 아닌 경우, studio로 가는 활동을 막기 위해 fake로 아래 div를 노출합니다. -->
-      <div class="bannerBox" style="text-decoration:none; cursor:pointer;" v-if="typeof(this.$store.getters.getLevel)=='string'" @click="alert_message_user()">
+      <!-- <div class="bannerBox" style="text-decoration:none; cursor:pointer;" v-if="typeof(this.$store.getters.getLevel)=='string'" @click="alert_message_user()">
         <div class="studio contentBox">
           <div class="iconBox">
             <i class="far fa-handshake fa-7x" style="color:blueviolet"></i>
@@ -85,10 +84,10 @@
             <span class="fontStyle">외주 공고 리스트</span>
           </div>
         </div>
-      </div>
+      </div> -->
 
       <!-- 3 기업 리스트 -->
-      <router-link to="/companyListPage" class="bannerBox" style="text-decoration:none">
+      <!-- <router-link to="/companyListPage" class="bannerBox" style="text-decoration:none">
         <div class="companyList contentBox">
           <div class="iconBox">
             <i class="far fa-building fa-7x" style="color:blueviolet"></i>
@@ -98,10 +97,10 @@
             <span class="fontStyle">기업 리스트</span>
           </div>
         </div>
-      </router-link>
+      </router-link> -->
 
       <!-- 4 유저 랜덤 리스트 -->
-      <router-link
+      <!-- <router-link
         :to="{ name: 'story', params: { id: randId }}"
         class="bannerBox"
         style="text-decoration:none"
@@ -119,7 +118,7 @@
         </button>
       </router-link>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script>
