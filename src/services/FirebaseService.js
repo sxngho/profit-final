@@ -604,6 +604,16 @@ export default {
       });
   },
 
+  UPDATE_companyImageBanner(image, companyId) {
+    return firestore
+      .collection("companys")
+      .doc(companyId)
+      .update({
+        company_banner: image
+      });
+  },
+
+
   // --------------------------------------------------------------------COMPANY
   // ---------------------------------------------------------------------------------------------------------------------------------
 

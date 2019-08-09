@@ -7,9 +7,27 @@
         <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
       </div>
     <!-- 회사배너 -->
-    {{company.company_banner}}
-    <v-layout wrap id="companyBanner" v-bind:style="{ 'backgroundImage': 'url(' + (company.company_banner || 'http://design-ec.com/d/e_others_50/l_e_others_500.png' )  + ')' }"
-    >
+    <v-layout wrap id="companyBanner" v-bind:style="{ 'backgroundImage': 'url(' + (company.company_banner || 'http://design-ec.com/d/e_others_50/l_e_others_500.png' )  + ')' }" @mouseover="showUpImgBanner=true" @mouseleave="showUpImgBanner=false">
+
+    <!-- <div v-show="showUpImgBanner && this.$route.params.id==this.$store.getters.getSession && !showUpImgBtn" style="z-index:3; right:0; position: absolute;">
+    123123123123
+    </div> -->
+
+    <div v-show="showUpImgBanner && this.$route.params.id==this.$store.getters.getSession && !showUpImgBtn"
+      style="position: absolute; margin:0;"
+      @click="setBanner()">
+      <p style="background: #ffffff91;border-radius:0 20px 20px 0; cursor:pointer; margin:0px; padding: 5px 45px 5px 20px;">
+        배경화면 수정하기
+      </p>
+      <input type="file" id="Banner" style="width:100%; display:none" @change="onFileChangeBanner" />
+    </div>
+
+
+    <div @click="removeImageBanner()" v-show="showUpImgBanner && this.$route.params.id==this.$store.getters.getSession && !showUpImgBtn" style="z-index:2; right:0; position: absolute;" >
+      <p style="background: #ff000039; cursor:pointer; margin:0px; padding: 5px 20px 5px 45px; border-radius: 20px 0 0 20px;">배경화면 삭제</p>
+    </div>
+
+
       <v-flex xs12 sm10 offset-sm1>
         <v-layout style="margin:5vw 0px;">
           <div>
@@ -574,6 +592,7 @@ export default {
       this.comInfo = comInfo[0]
       this.company.id = comInfo[0].id;
       this.company.level = comInfo[0].level;
+      this.company.company_banner = comInfo[0].company_banner;
       this.company.company_logo = comInfo[0].company_logo;
       this.company.company_name = comInfo[0].company_name;
       this.company.industry = comInfo[0].industry;
@@ -685,6 +704,10 @@ export default {
       var file = document.querySelector("#file");
       file.click();
     },
+    setBanner() {
+      var Banner = document.querySelector("#Banner");
+      Banner.click();
+    },
     onFileChange(e) {
       // file 세팅
       let files = e.target.files || e.dataTransfer.files;
@@ -712,9 +735,61 @@ export default {
         })
         .catch();
     },
+    onFileChangeBanner(e) {
+      // file 세팅
+      if (e.target.files[0].type.substr(0, 5) == "image") {
+        let files = e.target.files || e.dataTransfer.files;
+        if (!files.length) {
+          return;
+        }
+        const apiUrl = "https://api.imgur.com/3/image";
+        let data = new FormData();
+        let content = {
+          method: "POST",
+          headers: {
+            Authorization: "Client-ID f96b8964f338658",
+            Accept: "application/json"
+          },
+          body: data,
+          mimeType: "multipart/form-data"
+        };
+        data.append("image", files[0]);
+        fetch(apiUrl, content)
+          .then(response => response.json())
+          .then(success => {
+            FirebaseService.UPDATE_companyImageBanner(success.data.link, this.$route.params.id)
+            this.company.company_banner = success.data.link;
+          })
+          .catch();
+      } else {
+        this.$swal("이미지 오류!", "이미지 파일만 올려주세요.", "error");
+      }
+    },
     removeImage() {
       this.company.company_logo = "";
       this.submit();
+    },
+    removeImageBanner() {
+      this.$swal({
+        title: "정말 삭제하시겠습니까?",
+        text: "삭제한 이미지는 되돌릴 수 없습니다!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "삭제",
+        cancelButtonText: "취소"
+      }).then(result => {
+        if (result.value) {
+          this.$swal(
+            "Deleted!",
+            "배경 이미지 삭제가 완료되었습니다.",
+            "success"
+          );
+          FirebaseService.UPDATE_companyImageBanner("", this.$route.params.id);
+          this.company.company_banner = "";
+        }
+      });
     },
     deleteRecruit(recruitId,index) {
       this.$swal({
@@ -793,6 +868,7 @@ export default {
       nowLevel: "",
       updatestate:false,
       updatestate2:false,
+      showUpImgBanner:false,
       showUpImgBtn: false,
       showRmImgBtn: false,
       user: "",
