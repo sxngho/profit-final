@@ -21,7 +21,7 @@
       </div>
       <div class="duration__content contentBox">
         <div class="duration__title titleBox">예상 기간</div>
-        <div class="duration__input inputBox">{{this.createDay}}&nbsp~&nbsp{{this.endDay}}</div>
+        <div class="duration__input inputBox">{{this.createDay}}&nbsp;~&nbsp;{{this.endDay}}</div>
       </div>
       <v-date-picker v-model="endDay" color="purple lighten-1"></v-date-picker>
 
