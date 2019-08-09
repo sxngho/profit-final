@@ -128,7 +128,7 @@
                         type="text"
                         v-model="company.industry"
                         v-if="updatestate && this.$route.params.id==this.$store.getters.getSession"
-                        style="text-align:center; border:1px solid;"
+                        style="text-align:center; border:1px solid; border-radius: 30px; outline:none;"
                       />
                     </td>
                   </tr>
@@ -141,7 +141,7 @@
                         type="text"
                         v-model="company.mount"
                         v-if="updatestate && this.$route.params.id==this.$store.getters.getSession"
-                        style="text-align:center; border:1px solid;"
+                        style="text-align:center; border:1px solid; border-radius: 30px; outline:none;"
                       />
                     </td>
                   </tr>
@@ -151,7 +151,7 @@
                     <td v-if="!updatestate && this.$route.params.id==this.$store.getters.getSession">{{company.comsize}}</td>
                     <td v-if="updatestate && this.$route.params.id==this.$store.getters.getSession">
                       <form>
-                        <select v-model="company.comsize" style="border:1px solid;">
+                        <select v-model="company.comsize" style="border:1px solid; border-radius: 30px; width:185.2px; text-align-last:center; outline:none;">
                           <option v-for="com in select_comsize" v-bind:value="com">
                             <span>{{com}}</span>
                           </option>
@@ -169,7 +169,7 @@
                         type="text"
                         v-model="company.homepage"
                         v-if="updatestate && this.$route.params.id==this.$store.getters.getSession"
-                        style="text-align:center; border:1px solid;"
+                        style="text-align:center; border:1px solid; border-radius: 30px; outline:none;"
                       />
                     </td>
                   </tr>
@@ -182,7 +182,7 @@
                         type="text"
                         v-model="company.address"
                         v-if="updatestate && this.$route.params.id==this.$store.getters.getSession"
-                        style="text-align:center; border:1px solid;"
+                        style="text-align:center; border:1px solid; border-radius: 30px; outline:none;"
                       />
                     </td>
                   </tr>
@@ -195,7 +195,7 @@
                         type="text"
                         v-model="company.establishedDate"
                         v-if="updatestate && this.$route.params.id==this.$store.getters.getSession"
-                        style="text-align:center; border:1px solid;"
+                        style="text-align:center; border:1px solid; border-radius: 30px; outline:none;"
                       />
                     </td>
                   </tr>
@@ -208,7 +208,7 @@
                         type="text"
                         v-model="company.represent"
                         v-if="updatestate && this.$route.params.id==this.$store.getters.getSession"
-                        style="text-align:center; border:1px solid;"
+                        style="text-align:center; border:1px solid; border-radius: 30px; outline:none;"
                       />
                       <!-- <v-btn v-if="toggleRepresent && this.$route.params.id==this.$store.getters.getSession" style>취소</v-btn> -->
                     </td>
@@ -227,7 +227,7 @@
                         type="text"
                         v-model="company.annualsales"
                         v-if="updatestate && this.$route.params.id==this.$store.getters.getSession"
-                        style="text-align:center; border:1px solid;"
+                        style="text-align:center; border:1px solid; border-radius: 30px; outline:none;"
                       />
                     </td>
                   </tr>
@@ -250,8 +250,6 @@
         <v-flex xs12 sm10 offset-sm1>
           <v-card style="width:100%" outlined>
             <v-card-title>회사소개 <v-spacer/>
-
-
 
               <div v-if="this.$route.params.id==this.$store.getters.getSession">
               <v-btn v-if="!updatestate2" @click="change_updatestate2()">수정하기</v-btn>
