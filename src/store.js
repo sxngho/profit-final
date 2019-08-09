@@ -14,8 +14,10 @@ export default new Vuex.Store({
     check_true: true,
     projectViewToggle: false,
     no_header: false,
-    followerView: false,
-    followingView: false,
+    // followerView: false,
+    // followingView: false,
+    followerList:[],
+    followingList:[],
     techFilterList: [],
     allPortfolioList: [],
     showPortfolioList: [],
@@ -54,7 +56,13 @@ export default new Vuex.Store({
     },
     getalertList: function (state) {
       return state.alertList;
-    }
+    },
+    getfollowerList: function (state) {
+      return state.followerList
+    },
+    getfollowingList: function (state) {
+      return state.followingList
+    },
   },
 
   // Mutations : 값변경 / 동기
@@ -69,11 +77,17 @@ export default new Vuex.Store({
     convertPVT: function (state, payload) {
       return (state.projectViewToggle = payload);
     },
-    setFollowerView: (state, val) => {
-      state.followerView = val;
+    // setFollowerView: (state, val) => {
+    //   state.followerView = val;
+    // },
+    // setFollowingView: (state, val) => {
+    //   state.followingView = val;
+    // },
+    setfollowerList: function (state, payload) {
+      return state.followerList = payload;
     },
-    setFollowingView: (state, val) => {
-      state.followingView = val;
+    setfollowingList: function (state, payload) {
+      return state.followingList = payload;
     },
     addFilterTech: function (state, payload) {
       state.techFilterList.push(payload);

@@ -25,8 +25,8 @@
 import FirebaseService from "@/services/FirebaseService";
 import MPortfolio from "../Followers/MPortfolio";
 export default {
-  name: "Follower",
-  props: ["follower"],
+  name: "Following",
+  props: ["following"],
   data() {
     return {
       user: "",

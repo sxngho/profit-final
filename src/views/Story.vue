@@ -110,9 +110,13 @@
       <!-- follower 명시 -->
       <v-layout row wrap align-center justify-space-around style="margin:20px 0;">
         <div style="display:inline-block;">
-          <button @click="followerTest">Follower : {{user.followerlist.length}}</button>
+          <button v-if="!this.viewFollower " @click="followerTest">Follower : {{this.$store.getters.getfollowerList.length}}</button>
+          <button v-if="this.viewFollower && !this.viewFollowing" @click="back_followTest">돌아가기</button>
           <span>&nbsp;&nbsp;&nbsp;</span>
-          <button @click="followingTest">Following : {{user.followinglist.length}}</button>
+          <button v-if="!this.viewFollowing" @click="followingTest">Following : {{this.$store.getters.getfollowingList.length}}</button>
+          <button v-if="!this.viewFollower && this.viewFollowing" @click="back_followTest">돌아가기</button>
+
+
         </div>
       </v-layout>
     </div>
@@ -121,7 +125,11 @@
     <v-container>
       <v-layout>
         <v-flex xs12 style="border-top:1px #cecece solid;">
-          <FollowerList v-show="this.viewFollower || this.viewFollowing"></FollowerList>
+          <FollowerList v-show="this.viewFollower || this.viewFollowing"
+            :view1="this.viewFollower"
+            :view2="this.viewFollowing"
+
+          ></FollowerList>
 
           <v-layout v-if="!this.viewFollower && !this.viewFollowing" row wrap>
             <!-- leftSide -->
@@ -272,6 +280,8 @@ export default {
       this.user = result[0];
       this.image = result[0].userImage
       this.storyBanner = result[0].storyBanner
+      this.$store.commit('setfollowerList', result[0].followerlist)
+      this.$store.commit('setfollowingList', result[0].followinglist)
     },
     updateToggle() {
       if (this.$session.get("session_id") !== "") {
@@ -483,6 +493,7 @@ export default {
       this.$swal("수정 완료!", "자기소개 수정이 완료되었습니다.", "success");
     },
     async follow() {
+      var array = this.$store.getters.getfollowerList
       var follower = await FirebaseService.SELECT_Userdata(
         this.$route.params.id
       );
@@ -495,15 +506,16 @@ export default {
         follower[0].followerlist,
         following[0].followinglist
       );
-      this.isFollowCheck();
+      if (!array.includes(following[0].nickname)) {
+        array.push(following[0].nickname)
+      }
+      this.$store.commit('setfollowerList', array)
 
+      this.isFollowCheck();
       var Json = new Object();
       Json.session_id = this.$session.get("session_id");
       Json.url = "/story/" + this.$session.get("session_id");
       Json.user = this.$session.get("session_id");
-      // console.log(this.$route.params.id) // 내가 하고자 하는 사람
-      // console.log(follower) // 그 사람의 정보.
-
       FirebaseService.INSERT_alert_Follow(
         this.$route.params.id,
         Json,
@@ -511,12 +523,19 @@ export default {
       );
     },
     async unfollow() {
+      var array = this.$store.getters.getfollowerList
       var follower = await FirebaseService.SELECT_Userdata(
         this.$route.params.id
       );
+      // console.log(follower) // 이게 그 사이트 주인
       var following = await FirebaseService.SELECT_Userdata(
         this.$session.get("session_id")
       );
+      var index = array.indexOf(following[0].nickname, '삭제할 인덱스')
+      array.splice(index, 1)
+      this.$store.commit('setfollowerList', array)
+      // console.log(following, 2) // 이게 로그인한 나!!
+
       await FirebaseService.unfollow(
         this.$route.params.id,
         this.$session.get("session_id"),
@@ -535,19 +554,30 @@ export default {
       this.isFollow = tmp;
     },
     followingTest() {
-      this.$store.commit("setFollowingView", true);
-      if (this.$store.state.followingView === this.$store.state.followerView) {
-        this.$store.commit("setFollowerView", !this.$store.state.followerView);
-      }
+      this.viewFollowing = true;
+      this.viewFollower = false;
+
+      // this.$store.commit("setFollowingView", true);
+      // if (this.$store.state.followingView === this.$store.state.followerView) {
+      //   this.$store.commit("setFollowerView", !this.$store.state.followerView);
+      // }
+
     },
     followerTest() {
-      this.$store.commit("setFollowerView", true);
-      if (this.$store.state.followingView === this.$store.state.followerView) {
-        this.$store.commit(
-          "setFollowingView",
-          !this.$store.state.followingView
-        );
-      }
+      this.viewFollower = true;
+      this.viewFollowing = false;
+      // this.$store.commit("setFollowerView", true);
+      // if (this.$store.state.followingView === this.$store.state.followerView) {
+      //   this.$store.commit(
+      //     "setFollowingView",
+      //     !this.$store.state.followingView
+      //   );
+      // }
+
+    },
+    back_followTest() {
+      this.viewFollower = false;
+      this.viewFollowing = false;
     }
   },
   components: {
@@ -568,12 +598,12 @@ export default {
     toggleView: "updateToggle",
 
     //값이 변할때마다 할 일들? new / old
-    followerView(to, from) {
-      this.viewFollower = this.$store.state.followerView;
-    },
-    followingView(to, from) {
-      this.viewFollowing = this.$store.state.followingView;
-    }
+    // followerView(to, from) {
+    //   this.viewFollower = this.$store.state.followerView;
+    // },
+    // followingView(to, from) {
+    //   this.viewFollowing = this.$store.state.followingView;
+    // }
   }
 };
 </script>
