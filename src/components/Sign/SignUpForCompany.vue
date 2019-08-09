@@ -62,6 +62,9 @@ import FirebaseService from "@/services/FirebaseService";
 
   export default {
     data: () => ({
+      userIdData : [],
+      companyIdData : [],
+
       signupforcompanymodal: false,
       company_name : '',
 
@@ -75,6 +78,9 @@ import FirebaseService from "@/services/FirebaseService";
       signup_password_Msg : "",
 
     }),
+    mounted() {
+      this.fetchData();
+    },
     watch: {
       signup_id: function() {
         if ( this.signup_id.length == 0 ) {
@@ -103,6 +109,10 @@ import FirebaseService from "@/services/FirebaseService";
       },
     },
     methods : {
+      async fetchData() {
+        this.userIdData = await FirebaseService.SELECT_UserIdData();
+        this.companyIdData = await FirebaseService.SELECT_CompanyIdData();
+      },
       async SignupCompany(company_name, id, password) {
       var result = await FirebaseService.SignupCompany(company_name, id, password)
         if (result == true) {
@@ -119,6 +129,13 @@ import FirebaseService from "@/services/FirebaseService";
       idCheck() {
         for(var i in this.userIdData) {
           if ( this.userIdData[i].data.email == this.signup_id ) {
+            this.signup_id_Validation = false;
+            this.signup_id_Msg = "이미 존재하는 아이디입니다.";
+            return ;
+          }
+        }
+        for(var j in this.companyIdData) {
+          if ( this.companyIdData[j].data.id == this.signup_id ) {
             this.signup_id_Validation = false;
             this.signup_id_Msg = "이미 존재하는 아이디입니다.";
             return ;

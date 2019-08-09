@@ -422,6 +422,17 @@ export default {
       });
   },
 
+  async SELECT_CompanyIdData() {
+    return firestore
+      .collection("companys")
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+          return {data : doc.data(), id :doc.id};
+        });
+      });
+  },
+
   async SELECT_UserdataEmail(id) {
     return firestore
       .collection("users")

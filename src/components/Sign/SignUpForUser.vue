@@ -83,6 +83,8 @@ import FirebaseService from "@/services/FirebaseService";
 export default {
   data: () => ({
     userIdData : [],
+    companyIdData : [],
+
     idLabel : "* 아이디",
     signupforusermodal: false,
     careers: [],
@@ -171,6 +173,13 @@ export default {
           return ;
         }
       }
+      for(var j in this.companyIdData) {
+        if ( this.companyIdData[j].id == this.nickname ) {
+          this.nicknameValidation = false;
+          this.nicknameMsg = "이미 존재하는 닉네임입니다.";
+          return ;
+        }
+      }
       var pattern_spc = /[~!@#$%^&*()_+|<>?:{}]/; //특수문자 체크
       if (pattern_spc.test(this.nickname)) {
         this.nicknameValidation = false;
@@ -188,6 +197,14 @@ export default {
           return ;
         }
       }
+      for(var j in this.companyIdData) {
+        console.log(this.companyIdData[j].data.id)
+        if ( this.companyIdData[j].data.id == this.signup_id ) {
+          this.signup_id_Validation = false;
+          this.signup_id_Msg = "이미 존재하는 아이디입니다.";
+          return ;
+        }
+      }
       var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
       if(this.signup_id.match(mailformat)) {
         this.signup_id_Validation = true;
@@ -200,6 +217,10 @@ export default {
     passwordCheck() {
       if ( this.signup_password_check !== '' && this.signup_password  !== '' ) {
         if ( this.signup_password_check == this.signup_password ) {
+          if( this.signup_password.length < 6 ) {
+            this.signup_password_Validation = false;
+            this.signup_password_Msg = "비밀번호는 최소 6자리이상이어야합니다.";
+          }
           this.signup_password_Validation = true;
           this.signup_password_Msg = "비밀번호가 일치합니다.";
         } else {
@@ -210,6 +231,7 @@ export default {
     },
     async fetchData() {
       this.userIdData = await FirebaseService.SELECT_UserIdData();
+      this.companyIdData = await FirebaseService.SELECT_CompanyIdData();
     },
     addNewCareer() {
       this.careers.push(this.career);
