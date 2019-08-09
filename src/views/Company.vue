@@ -7,7 +7,27 @@
         <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
       </div>
     <!-- 회사배너 -->
-    <v-layout wrap id="companyBanner">
+    <v-layout wrap id="companyBanner" v-bind:style="{ 'backgroundImage': 'url(' + company.company_banner + ')' }" @mouseover="showUpImgBanner=true" @mouseleave="showUpImgBanner=false">
+
+    <!-- <div v-show="showUpImgBanner && this.$route.params.id==this.$store.getters.getSession && !showUpImgBtn" style="z-index:3; right:0; position: absolute;">
+    123123123123
+    </div> -->
+
+    <div v-show="showUpImgBanner && this.$route.params.id==this.$store.getters.getSession && !showUpImgBtn"
+      style="position: absolute; margin:0; z-index:2;"
+      @click="setBanner()">
+      <p style="background: #ffffff91;border-radius:0 20px 20px 0; cursor:pointer; margin:0px; padding: 5px 45px 5px 20px;">
+        배경화면 수정하기
+      </p>
+      <input type="file" id="Banner" style="width:100%; display:none" @change="onFileChangeBanner" />
+    </div>
+
+
+    <div @click="removeImageBanner()" v-show="showUpImgBanner && this.$route.params.id==this.$store.getters.getSession && !showUpImgBtn && company.company_banner" style="z-index:2; right:0; position: absolute;" >
+      <p style="background: #ff000039; cursor:pointer; margin:0px; padding: 5px 20px 5px 45px; border-radius: 20px 0 0 20px;">배경화면 삭제</p>
+    </div>
+
+
       <v-flex xs12 sm10 offset-sm1>
         <v-layout style="margin:5vw 0px;">
           <div>
@@ -15,7 +35,7 @@
               <v-img :src="company.company_logo" />
             </v-avatar>-->
             <div
-              v-if="!company.company_logo"
+              v-if="!company.company_logo || (company.company_logo=='https://i.imgur.com/WmUIKlP.png')"
               class="text-center"
               justify-center
               style="position:relative"
@@ -38,7 +58,7 @@
                 @click="setFile()"
                 style="cursor:pointer;"
               >
-                <img src="https://i.imgur.com/aTI4OeZ.png?1" />
+                <img src="https://i.imgur.com/WmUIKlP.png" />
               </v-avatar>
               <input
                 type="file"
@@ -60,9 +80,14 @@
                 v-show="showRmImgBtn"
                 style="z-index:2; right:0; position: absolute;"
               >
-                <button alt="delimg" style="cursor:pointer;width:25px;height:25px; color:white">
+              <img
+                src="../assets/icon_set/delete.png"
+                alt="delimg"
+                style="cursor:pointer;width:25px;height:25px;"
+              />
+                <!-- <button alt="delimg" style="cursor:pointer;width:25px;height:25px; color:white">
                   <i class="far fa-trash-alt"></i>
-                </button>
+                </button> -->
               </div>
               <v-avatar size="150" class="grey lighten-2">
                 <img :src="company.company_logo" />
@@ -108,7 +133,7 @@
                         type="text"
                         v-model="company.industry"
                         v-if="updatestate && this.$route.params.id==this.$store.getters.getSession"
-                        style="text-align:center; border:1px solid;"
+                        style="text-align:center; border:1px solid; border-radius: 30px; outline:none;"
                       />
                     </td>
                   </tr>
@@ -121,7 +146,7 @@
                         type="text"
                         v-model="company.mount"
                         v-if="updatestate && this.$route.params.id==this.$store.getters.getSession"
-                        style="text-align:center; border:1px solid;"
+                        style="text-align:center; border:1px solid; border-radius: 30px; outline:none;"
                       />
                     </td>
                   </tr>
@@ -131,7 +156,7 @@
                     <td v-if="!updatestate && this.$route.params.id==this.$store.getters.getSession">{{company.comsize}}</td>
                     <td v-if="updatestate && this.$route.params.id==this.$store.getters.getSession">
                       <form>
-                        <select v-model="company.comsize" style="border:1px solid;">
+                        <select v-model="company.comsize" style="border:1px solid; border-radius: 30px; width:185.2px; text-align-last:center; outline:none;">
                           <option v-for="com in select_comsize" v-bind:value="com">
                             <span>{{com}}</span>
                           </option>
@@ -149,7 +174,7 @@
                         type="text"
                         v-model="company.homepage"
                         v-if="updatestate && this.$route.params.id==this.$store.getters.getSession"
-                        style="text-align:center; border:1px solid;"
+                        style="text-align:center; border:1px solid; border-radius: 30px; outline:none;"
                       />
                     </td>
                   </tr>
@@ -162,7 +187,7 @@
                         type="text"
                         v-model="company.address"
                         v-if="updatestate && this.$route.params.id==this.$store.getters.getSession"
-                        style="text-align:center; border:1px solid;"
+                        style="text-align:center; border:1px solid; border-radius: 30px; outline:none;"
                       />
                     </td>
                   </tr>
@@ -175,7 +200,7 @@
                         type="text"
                         v-model="company.establishedDate"
                         v-if="updatestate && this.$route.params.id==this.$store.getters.getSession"
-                        style="text-align:center; border:1px solid;"
+                        style="text-align:center; border:1px solid; border-radius: 30px; outline:none;"
                       />
                     </td>
                   </tr>
@@ -188,7 +213,7 @@
                         type="text"
                         v-model="company.represent"
                         v-if="updatestate && this.$route.params.id==this.$store.getters.getSession"
-                        style="text-align:center; border:1px solid;"
+                        style="text-align:center; border:1px solid; border-radius: 30px; outline:none;"
                       />
                       <!-- <v-btn v-if="toggleRepresent && this.$route.params.id==this.$store.getters.getSession" style>취소</v-btn> -->
                     </td>
@@ -198,7 +223,7 @@
                     <td></td>
                   </tr> -->
                   <tr>
-                    <th>연매출 ( 천 단위 )</th>
+                    <th>연매출 ( 단위 : 만원 )</th>
                     <td v-if="this.$route.params.id!==this.$store.getters.getSession">{{company.annualsales}}</td>
                     <td v-if="!updatestate && this.$route.params.id==this.$store.getters.getSession">{{company.annualsales}}</td>
                     <td>
@@ -207,7 +232,7 @@
                         type="text"
                         v-model="company.annualsales"
                         v-if="updatestate && this.$route.params.id==this.$store.getters.getSession"
-                        style="text-align:center; border:1px solid;"
+                        style="text-align:center; border:1px solid; border-radius: 30px; outline:none;"
                       />
                     </td>
                   </tr>
@@ -230,23 +255,30 @@
         <v-flex xs12 sm10 offset-sm1>
           <v-card style="width:100%" outlined>
             <v-card-title>회사소개 <v-spacer/>
+
               <div v-if="this.$route.params.id==this.$store.getters.getSession">
               <v-btn v-if="!updatestate2" @click="change_updatestate2()">수정하기</v-btn>
-              <v-btn v-if="updatestate2" @click="submit2(company.descript)">저장</v-btn>
+              <v-btn v-if="updatestate2" @click="submit2()">저장</v-btn>
               <v-btn v-if="updatestate2" @click="cancel_updatestate2()">취소</v-btn>
               </div>
-
             </v-card-title>
 
-            <v-card-text v-if="this.$route.params.id!==this.$store.getters.getSession">{{company.descript}}</v-card-text>
-            <v-card-text v-if="!updatestate2 && this.$route.params.id==this.$store.getters.getSession">{{company.descript}}</v-card-text>
+            <v-card-text v-if="!company.descript" style="margin-left:12px;">
+              <br>현재 등록된 회사소개가 없습니다.
+            </v-card-text>
+
+            <div v-if="this.$route.params.id==this.$store.getters.getSession" style="margin-left:12px;">
+            <v-card-text v-if="this.$route.params.id!==this.$store.getters.getSession"><p v-html="company.descript"></p></v-card-text>
+            <v-card-text v-if="!updatestate2 && this.$route.params.id==this.$store.getters.getSession"><p v-html="company.descript"></p></v-card-text>
             <v-card-text v-if="updatestate2 && this.$route.params.id==this.$store.getters.getSession">
               <textarea
-                v-model="company.descript"
+                id="company_descript"
+                v-html="company.descript"
                 style="width:100%; height:150px"
-                v-on:keyup.enter="br_check()"
               />
             </v-card-text>
+            </div>
+
           </v-card>
         </v-flex>
       </v-layout>
@@ -271,6 +303,11 @@
             </v-card-title>
             <v-card-text>
               <v-container>
+                <div v-if="!recruitsbyCompany.length">
+                  현재 등록된 공고가 없습니다.
+                </div>
+                <!-- {{recruitsbyCompany}} -->
+
                 <v-expansion-panels>
                   <v-expansion-panel v-for="(item, index) in MyRecruits">
                     <v-expansion-panel-header style="display:flex">
@@ -500,7 +537,6 @@ export default {
     this.user = this.$session.get("session_id")
     this.$store.commit('setSession', this.user)
     this.loading = false;
-
   },
   methods: {
     complete(recruit) {
@@ -522,12 +558,10 @@ export default {
       }
     },
     async fetchData() {
-      //this.company = await FirebaseService.SELECT_CompanyById(this.$route.params.id);
       this.$loading(true);
-      // this.recruitlist = await FirebaseService.SELECT_RecruitInfoById(this.$route.params.id);
-      // console.log(this.recruitlist)
       this.dibsUsers = [];
       var recruitsbyCompany = await FirebaseService.SELECT_RecruitInfoById(this.$route.params.id);
+      this.recruitsbyCompany = recruitsbyCompany;
       var chatRooms = "";
       var ChatRef = firebase.database().ref("/chat/");
       ChatRef.once("value",snapshot => {chatRooms = snapshot.val();
@@ -541,13 +575,13 @@ export default {
                 });
                 var unreadChat = chatRooms[i].chatting;
                 var unreadLength = 0;
-                console.log("랭스를 읽고있따 ",unreadChat.length)
+                // console.log("랭스를 읽고있따 ",unreadChat.length)
                 for(var j=unreadChat.length-1; j>=0; j--) {
                     if(unreadChat[j].isReadCompany) {
-                      console.log( j , " 브레이크야임마")
+                      // console.log( j , " 브레이크야임마")
                       break;
                     } else {
-                      console.log("안읽은채팅창갯수를 세고있따",unreadLength)
+                      // console.log("안읽은채팅창갯수를 세고있따",unreadLength)
                       unreadLength++;
                     }
                 }
@@ -566,13 +600,14 @@ export default {
           // console.error(error, "유저리스트 불러오기 에러");
         }
       );
-      console.log(this.MyRecruits,"asdasdasdadasdsasa")
+      // console.log(this.MyRecruits,"asdasdasdadasdsasa")
       // console.log(this.dibsUsers, "찜유저리스트");
 
       const comInfo = await FirebaseService.SELECT_CompanyInfo(this.$route.params.id);
       this.comInfo = comInfo[0]
       this.company.id = comInfo[0].id;
       this.company.level = comInfo[0].level;
+      this.company.company_banner = comInfo[0].company_banner;
       this.company.company_logo = comInfo[0].company_logo;
       this.company.company_name = comInfo[0].company_name;
       this.company.industry = comInfo[0].industry;
@@ -584,7 +619,6 @@ export default {
       this.company.address = comInfo[0].address;
       this.company.annualsales = comInfo[0].annualsales;
       this.company.descript = comInfo[0].descript;
-      this.tmp_descript = comInfo[0].descript;
 
       this.$loading(false);
     },
@@ -606,8 +640,8 @@ export default {
     openWorkChat(user, id) {
       // user -> 이 프로젝트를 하기로한 유저아이디
       for (var i in this.dibsUsers) {
-        console.log(this.dibsUsers[i], "리쿠르트아이디가나와야함..");
-        console.log(id, "아이디");
+        // console.log(this.dibsUsers[i], "리쿠르트아이디가나와야함..");
+        // console.log(id, "아이디");
         if (
           this.dibsUsers[i].chat.userId == user &&
           this.dibsUsers[i].recruit == id
@@ -616,7 +650,7 @@ export default {
           break;
         }
       }
-      console.log(this.workingUser);
+      // console.log(this.workingUser);
       var link = this.workingUser.link;
       window.open(
         "../" + link,
@@ -673,43 +707,125 @@ export default {
       }
 
     },
-    async submit2(descript) {
-      console.log(descript)
+    async submit2() {
+      this.updatestate2 = !this.updatestate2
+      var str = document.querySelector('#company_descript').value;
+      str = str.replace(/(?:\r\n|\r|\n)/g, '<br/>');
+      this.company.descript = str
+      const companyInfo = this.company;
+      FirebaseService.UPDATE_Companys(companyInfo, companyInfo.company_name)
     },
     setFile() {
       var file = document.querySelector("#file");
       file.click();
     },
+    setBanner() {
+      var Banner = document.querySelector("#Banner");
+      Banner.click();
+    },
     onFileChange(e) {
       // file 세팅
-      let files = e.target.files || e.dataTransfer.files;
-      if (!files.length) {
-        return;
+      if (e.target.files[0].type.substr(0, 5) == "image") {
+        let files = e.target.files || e.dataTransfer.files;
+        if (!files.length) {
+          return;
+        }
+        const apiUrl = "https://api.imgur.com/3/image";
+        let data = new FormData();
+        let content = {
+          method: "POST",
+          headers: {
+            Authorization: "Client-ID f96b8964f338658",
+            Accept: "application/json"
+          },
+          body: data,
+          mimeType: "multipart/form-data"
+        };
+        data.append("image", files[0]);
+        fetch(apiUrl, content)
+          .then(response => response.json())
+          .then(success => {
+            FirebaseService.UPDATE_companyImage(success.data.link, this.$route.params.id)
+            this.company.company_logo = success.data.link;
+          })
+          .catch();
+        } else {
+          this.$swal("이미지 오류!", "이미지 파일만 올려주세요.", "error");
+        }
+    },
+    onFileChangeBanner(e) {
+      // file 세팅
+      if (e.target.files[0].type.substr(0, 5) == "image") {
+        let files = e.target.files || e.dataTransfer.files;
+        if (!files.length) {
+          return;
+        }
+        const apiUrl = "https://api.imgur.com/3/image";
+        let data = new FormData();
+        let content = {
+          method: "POST",
+          headers: {
+            Authorization: "Client-ID f96b8964f338658",
+            Accept: "application/json"
+          },
+          body: data,
+          mimeType: "multipart/form-data"
+        };
+        data.append("image", files[0]);
+        fetch(apiUrl, content)
+          .then(response => response.json())
+          .then(success => {
+            FirebaseService.UPDATE_companyImageBanner(success.data.link, this.$route.params.id)
+            this.company.company_banner = success.data.link;
+          })
+          .catch();
+      } else {
+        this.$swal("이미지 오류!", "이미지 파일만 올려주세요.", "error");
       }
-      const apiUrl = "https://api.imgur.com/3/image";
-      let data = new FormData();
-      let content = {
-        method: "POST",
-        headers: {
-          Authorization: "Client-ID f96b8964f338658",
-          Accept: "application/json"
-        },
-        body: data,
-        mimeType: "multipart/form-data"
-      };
-      data.append("image", files[0]);
-      fetch(apiUrl, content)
-        .then(response => response.json())
-        .then(success => {
-          this.image = success.data.link;
-          this.company.company_logo = this.image;
-          this.submit();
-        })
-        .catch();
     },
     removeImage() {
-      this.company.company_logo = "";
-      this.submit();
+      this.$swal({
+        title: "정말 삭제하시겠습니까?",
+        text: "삭제한 이미지는 되돌릴 수 없습니다!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "삭제",
+        cancelButtonText: "취소"
+      }).then(result => {
+        if (result.value) {
+          this.$swal(
+            "Deleted!",
+            "프로필 이미지 삭제가 완료되었습니다.",
+            "success"
+          );
+          FirebaseService.UPDATE_companyImage("https://i.imgur.com/WmUIKlP.png", this.$route.params.id);
+          this.company.company_logo = "https://i.imgur.com/WmUIKlP.png";
+        }
+      });
+    },
+    removeImageBanner() {
+      this.$swal({
+        title: "정말 삭제하시겠습니까?",
+        text: "삭제한 이미지는 되돌릴 수 없습니다!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "삭제",
+        cancelButtonText: "취소"
+      }).then(result => {
+        if (result.value) {
+          this.$swal(
+            "Deleted!",
+            "배경 이미지 삭제가 완료되었습니다.",
+            "success"
+          );
+          FirebaseService.UPDATE_companyImageBanner("", this.$route.params.id);
+          this.company.company_banner = "";
+        }
+      });
     },
     deleteRecruit(recruitId,index) {
       this.$swal({
@@ -734,6 +850,9 @@ export default {
     },
     change_updatestate2() {
       this.updatestate2 = !this.updatestate2
+      var str = this.company.descript
+      str = str.replace(/(<br>|<br\/>|<br \/>)/g, '\r\n');
+      this.company.descript = str
     },
     cancel_updatestate() {
 
@@ -750,10 +869,10 @@ export default {
     },
     cancel_updatestate2() {
       this.updatestate2 = !this.updatestate2
+      var str = document.querySelector('#company_descript').value;
+      str = str.replace(/(?:\r\n|\r|\n)/g, '<br/>');
+      this.company.descript = str
     },
-    br_check() {
-      console.log('일단 엔터 감지했다.')
-    }
   },
   data() {
     return {
@@ -763,6 +882,7 @@ export default {
         followerlist: "",
         followinglist: "",
         level: "",
+        company_banner:"",
         company_name: "",
         company_logo: "",
         industry: "",
@@ -784,11 +904,13 @@ export default {
       nowLevel: "",
       updatestate:false,
       updatestate2:false,
+      showUpImgBanner:false,
       showUpImgBtn: false,
       showRmImgBtn: false,
       user: "",
       select_comsize:['대기업','중견기업','강소기업','외국계기업','벤처기업','공공기관/공기업','비영리단체/협회재단','외국기관/단체'],
       tmp_descript:"",
+      recruitsbyCompany:"",
     };
   }
 };
@@ -796,7 +918,6 @@ export default {
 
 <style>
 #companyBanner {
-  background-image: url("../assets/coding.jpg");
   background-size: 100%;
 }
 #company_detail {

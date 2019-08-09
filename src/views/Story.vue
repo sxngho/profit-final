@@ -18,7 +18,8 @@
 
       <!-- User Banner Img -->
       <v-layout row wrap style="margin:0px 10px;">
-        <v-layout row wrap v-bind:style="{ 'backgroundImage': 'url(' + storyBanner   + ')' }" style="background-size:100%; margin-bottom: 95px;"  @mouseover="showUpImgBanner=true" @mouseleave="showUpImgBanner=false">
+
+        <v-layout row wrap v-bind:style="{ 'backgroundImage': 'url(' + storyBanner  + ')' }" style="background-size:100%; margin-bottom: 95px;"  @mouseover="showUpImgBanner=true" @mouseleave="showUpImgBanner=false">
 
             <div v-show="showUpImgBanner && this.$route.params.id==this.$store.getters.getSession"
               style="position: absolute; margin:0;"
@@ -29,7 +30,7 @@
               <input type="file" id="Banner" style="width:100%; display:none" @change="onFileChangeBanner" />
             </div>
 
-            <div @click="removeImageBanner()" v-show="showUpImgBanner && this.$route.params.id==this.$store.getters.getSession && storyBanner" style="z-index:2; right:0; position: absolute;" >
+            <div @click="removeImageBanner()" v-show="showUpImgBanner && this.$route.params.id==this.$store.getters.getSession && this.storyBanner" style="z-index:2; right:0; position: absolute;" >
               <p style="background: #ff000039; cursor:pointer; margin:0px; padding: 5px 20px 5px 45px; border-radius: 20px 0 0 20px;">배경화면 삭제</p>
             </div>
 
@@ -41,7 +42,7 @@
       <!-- ProfileImg -->
       <v-layout row wrap>
         <v-layout wrap align-center justify-space-around style="position:absolute; top: 148px; right: 50%; left: 50%; z-index:10">
-          <div v-if="!image" class="text-center" justify-center style="position:relative" @mouseover="showUpImgBtn=true" @mouseleave="showUpImgBtn=false" >
+          <div v-if="!image || (image=='https://i.imgur.com/aTI4OeZ.png?1')" class="text-center" justify-center style="position:relative" @mouseover="showUpImgBtn=true" @mouseleave="showUpImgBtn=false" >
             <div @click="setFile()" v-show="showUpImgBtn" style="position: absolute; top: 54px; z-index: 2" >
               <p class="text-center" style="background: #ffffff91;padding: 10px 5px; cursor:pointer;" >사진을 등록하세요!</p>
             </div>
@@ -246,7 +247,7 @@ export default {
   created() {
     // 컴포넌트 생성시 데이터를 패치한다
     this.fetchData();
-    this.setStoryBanner();
+    // this.setStoryBanner();
     this.isFollowCheck();
     this.$store.commit('setSession', this.$session.get('session_id'))
   },
@@ -269,6 +270,8 @@ export default {
       }
       var result = await FirebaseService.SELECT_Userdata(this.$route.params.id);
       this.user = result[0];
+      this.image = result[0].userImage
+      this.storyBanner = result[0].storyBanner
     },
     updateToggle() {
       if (this.$session.get("session_id") !== "") {
@@ -344,21 +347,21 @@ export default {
     },
 
     //its hyoyas time!
-    async setStoryBanner() {
-      // this.storyBanner = url;
-      // TODO 이거 지금 라우터에서 자기 프사랑 배너 받아오는데, 동적라우터에서 아이디 추출해서 해야함 이따하자
-      var userImg = await FirebaseService.SELECT_UserImage(
-        this.$route.params.id
-      );
-      // console.log("유저의 이미지!", userImg);
-      //디비에서 받아온 유저의 배너이미지와, 프로필 사진 이미지를 붙인다
-      if (userImg.banner) {
-        this.storyBanner = userImg.banner;
-      } else {
-        this.storyBanner = "https://i.imgur.com/KnVfJVQ.png"
-      }
-      this.image = userImg.profileImg;
-    },
+    // async setStoryBanner() {
+    //   // this.storyBanner = url;
+    //   // TODO 이거 지금 라우터에서 자기 프사랑 배너 받아오는데, 동적라우터에서 아이디 추출해서 해야함 이따하자
+    //   var userImg = await FirebaseService.SELECT_UserImage(
+    //     this.$route.params.id
+    //   );
+    //   // console.log("유저의 이미지!", userImg);
+    //   //디비에서 받아온 유저의 배너이미지와, 프로필 사진 이미지를 붙인다
+    //   if (userImg.banner) {
+    //     this.storyBanner = userImg.banner;
+    //   } else {
+    //     this.storyBanner = "https://i.imgur.com/KnVfJVQ.png"
+    //   }
+    //   this.image = userImg.profileImg;
+    // },
 
     removeImage() {
       this.$swal({
@@ -396,7 +399,7 @@ export default {
         if (result.value) {
           this.$swal(
             "Deleted!",
-            "프로필 이미지 삭제가 완료되었습니다.",
+            "배경 이미지 삭제가 완료되었습니다.",
             "success"
           );
           FirebaseService.DELETE_userImageBanner(this.$route.params.id);

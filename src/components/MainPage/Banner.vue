@@ -42,7 +42,7 @@
       <div
         class="bannerBox"
         style="text-decoration:none; cursor:pointer;"
-        v-if="typeof(this.$store.getters.getLevel)!=='number'"
+        v-if="typeof(this.$store.getters.getLevel)!=='number' || this.$store.getters.getLevel===0 || this.$store.getters.getLevel===1"
         @click="alert_message_user()"
       >
         <div class="studio contentBox">

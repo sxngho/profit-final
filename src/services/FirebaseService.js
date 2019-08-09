@@ -384,7 +384,7 @@ export default {
       .collection("users")
       .doc(userId)
       .update({
-        userImage: ""
+        userImage: "https://i.imgur.com/aTI4OeZ.png?1"
       });
   },
 
@@ -601,6 +601,24 @@ export default {
           let data = doc.data();
           return data;
         });
+      });
+  },
+
+  UPDATE_companyImageBanner(image, companyId) {
+    return firestore
+      .collection("companys")
+      .doc(companyId)
+      .update({
+        company_banner: image
+      });
+  },
+
+  UPDATE_companyImage(image, companyId) {
+    return firestore
+      .collection("companys")
+      .doc(companyId)
+      .update({
+        company_logo: image
       });
   },
 
@@ -885,7 +903,8 @@ export default {
           email: id,
           phonenumber: phonenumber,
           userSkills: userSkills,
-          userImage: userImage,
+          userImage: "https://i.imgur.com/aTI4OeZ.png?1",
+          storyBanner:"https://i.imgur.com/KnVfJVQ.png",
           userName: userName,
           userIntro: userIntro,
           userCareers: userCareers,
@@ -899,7 +918,6 @@ export default {
           dibs: [],
           alertlist: [],
           proceedList: [],
-          storyBanner:"",
         });
         firestore
         .collection("user_addon")
@@ -929,7 +947,8 @@ export default {
            followerlist: [],
            followinglist: [],
            level: 3,
-           company_logo: "",
+           company_logo: 'https://i.imgur.com/WmUIKlP.png',
+           company_banner : "https://i.imgur.com/KnVfJVQ.png",
            industry: "",
            mount: "",
            comsize: "",
@@ -1402,6 +1421,7 @@ export default {
   //-------------------------------------companyInfo--------------------------------------------//
   //--------------------------------------------------------------------------------------------//
   async UPDATE_Companys(companyInfo, company_name) {
+    // console.log(companyInfo.descript, '이걸로 들어갈겁니다.')
     return firestore
       .collection("companys")
       .doc(company_name)
