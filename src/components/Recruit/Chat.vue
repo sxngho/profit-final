@@ -363,6 +363,9 @@ export default {
       PenaltyColor : "#000000",
       CompanyColor : "#000000",
       PhonenumberColor : "#000000",
+
+      OlduserVerification : false,
+      OldcompanyVerification : false,
     };
   },
 
@@ -374,6 +377,8 @@ export default {
       firebase.database().ref('/chat/').once('value').then( snapshot => {
         this.mainData = snapshot.val();
         allChatRoom = snapshot.val();
+        this.OlduserVerification = snapshot.val().userVerification;
+        this.OldcompanyVerification = snapshot.val().companyVerification;
         var index = "";
         for(var i in allChatRoom) {
           if ( allChatRoom[i].link == 'chat/'+this.$route.params.ccode ) {
@@ -404,6 +409,9 @@ export default {
       firebase.database().ref(this.nowChatRoom.link).on('value', snapshot => {
 
         this.mainData = snapshot.val();
+
+        this.OlduserVerification = snapshot.val().userVerification;
+        this.OldcompanyVerification = snapshot.val().companyVerification;
 
         if ( this.mainData.isChangeProjectTerm ) this.ProjectTermColor="#E74C3C"
         if ( this.mainData.isChangePay ) this.PayColor="#E74C3C"
@@ -630,14 +638,45 @@ export default {
       this.toggleContractDate = true;this.toggleCompany = true;this.toggleAddr = true; this.toggleRrn = true;
     },
     validContract(){
-      this.$swal('회원가입에 성공하였습니다.','기업 페이지에서 정보를 입력해주세요!','success')
+      this.$swal('계약 도장!','성공적인 프로젝트를 기원합니다.','success')
       var dataRef = firebase.database().ref('/'+this.nowChatRoom.link);
-
       if(this.$session.get("session_id") == this.nowChatRoom.userId){
+        // if ( this.OldcompanyVerification ) { // 이미 상대측에서 도장을 찍은 상황이니 채팅창을 닫아주어야함...
+          // this.$swal({
+          //    title: '계약 도장을 찍으셨습니다!',
+          //    html: "상대방이 이미 계약 완료를 누른 상태이므로 <br/> 계약페이지를 종료합니다.",
+          //    type: 'success',
+          //    showCancelButton: false,
+          //    confirmButtonColor: '#3085d6',
+          //    confirmButtonText: '삭제',
+          //   }).then((result) => {
+          //    if (result.value) {
+          //      self.close()
+          //    }
+          //  })
+        // } else {
+          this.$swal('계약 도장을 찍으셨습니다!','상대방이 계약을 누를때까지 기다려주세요.','success')
+        // }
         dataRef.update({
           userVerification : true,
         });
-      }else{
+      }else {
+        // if ( this.OlduserVerification ) {
+        //   this.$swal({
+        //      title: '계약 도장을 찍으셨습니다!',
+        //      html: "상대방이 이미 계약 완료를 누른 상태이므로 <br/> 계약페이지를 종료합니다.",
+        //      type: 'warning',
+        //      showCancelButton: false,
+        //      confirmButtonColor: '#3085d6',
+        //      confirmButtonText: '삭제',
+        //     }).then((result) => {
+        //      if (result.value) {
+        //        self.close()
+        //      }
+        //    })
+        // } else {
+          this.$swal('계약 도장!','상대방이 계약을 누를때까지 기다려주세요.','success')
+        // }
         dataRef.update({
           companyVerification : true,
         });
@@ -652,6 +691,7 @@ export default {
         if(snapshot.val().userVerification && snapshot.val().companyVerification && (snapshot.val().contractDate==undefined||snapshot.val().contractDate=="")){
           //리크루트 컬렉션의 상태를 '계약완료된 상태'로 만든다
           FirebaseService.UPDATE_RecruitContract(this.nowChatRoom.recruitPK , contractUser);
+          opener.location.reload();
 
           //계약당사자의 users Collection에서 proceedList를 업데이트 해야한다!
           this.addProceedList(contractUser, this.nowChatRoom.recruitPK );
@@ -668,6 +708,18 @@ export default {
               }
             }
           });
+          this.$swal({
+             title: '계약 완료!',
+             html: "계약이 완료되었으므로 간이 계약페이지를 종료합니다. <br/> 계약페이지를 이용해주세요.",
+             type: 'success',
+             showCancelButton: false,
+             confirmButtonColor: '#3085d6',
+             confirmButtonText: '닫기',
+            }).then((result) => {
+             if (result.value) {
+               self.close()
+             }
+           })
         }
         this.changeAllow = (!(snapshot.val().userVerification || snapshot.val().companyVerification));
       })

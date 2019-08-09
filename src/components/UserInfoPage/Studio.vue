@@ -11,7 +11,7 @@
     <!-- 작업중인 리스트 -->
     <div style="width:100%" v-if="proceedList.length>0">
       <div>
-        <p style="width:100%; text-align: center;" class="display-1 font-weight-bold">작업중인 리스트</p>
+        <p style="width:100%; text-align: center;" class="display-1 font-weight-bold">진행중인 프로젝트</p>
       </div>
       <v-layout row wrap style="margin:20px 0;" v-for="recruit in proceedList">
         <v-card outlined style="width:100%; padding:12px;">
@@ -44,14 +44,17 @@
           <div>
             <p style="width:100%;" class="text-center headline">
               <span  v-if="recruit.UserComplete == 2 && recruit.CompanyComplete == 0">
-                완료 처리되었습니다.<br/> 상대방의 처리를 기다리는중
+                완료 처리되었습니다.<br/> 상대방의 처리를 기다리는중입니다.
               </span>
               <span v-if="recruit.UserComplete == 0 && recruit.CompanyComplete == 2">
                 상대방이 완료를 누른 상태입니다. 계약이 정상적으로 종료되었다면 완료를 눌러주세요.
               </span>
-              <span v-if="recruit.UserComplete == 1 || recruit.CompanyComplete == 1">
-                이미 파기된 계약입니다. 이거 처리해주세용
-              </span>
+              <div v-if="recruit.UserComplete == 1">
+                <p> 유저 측의 사유로 파기된 계약입니다. </p>
+              </div>
+              <div v-if="recruit.CompanyComplete == 1">
+                <p> 기업 측의 사유로 파기된 계약입니다. </p>
+              </div>
             </p>
           </div>
 
@@ -128,7 +131,7 @@
       <!-- 완료 리스트 -->
       <div style="width:100%" v-if="completeList.length>0">
         <div>
-          <p style="width:100%; text-align: center;" class="display-1 font-weight-bold">작업중인 리스트</p>
+          <p style="width:100%; text-align: center;" class="display-1 font-weight-bold">완수한 프로젝트</p>
         </div>
         <v-layout row wrap style="margin:20px 0;" v-for="recruit in completeList">
           <v-card outlined style="width:100%; padding:12px;">
@@ -165,7 +168,7 @@
       <!-- 파기 리스트 -->
       <div style="width:100%" v-if="delList.length>0">
         <div>
-          <p style="width:100%; text-align: center;" class="display-1 font-weight-bold">작업중인 리스트</p>
+          <p style="width:100%; text-align: center;" class="display-1 font-weight-bold">파기된 공고</p>
         </div>
         <v-layout row wrap style="margin:20px 0;" v-for="recruit in delList">
           <v-card outlined style="width:100%; padding:12px;">
@@ -295,22 +298,48 @@ export default {
       });
     },
     complete(recruit) {
-      if (confirm("알림 : 한번 완료 처리한 계약은 수정이 불가능합니다. 정말 완료 처리하시겠습니까?")) {
-        FirebaseService.UPDATE_RecruitCompleteByUser(recruit.recruitPK,"success")
-        var dataRef = firebase.database().ref('/'+recruit.link);
-        dataRef.update({
-          UserComplete : 2,
-        });
-      }
+      this.$swal({
+         title: '정말 계약을 완료하시겠습니까?',
+         text: "한번 완료한 계약은 수정이 불가능합니다.",
+         type: 'warning',
+         showCancelButton: true,
+         confirmButtonColor: '#3085d6',
+         cancelButtonColor: '#d33',
+         confirmButtonText: '완료',
+         cancelButtonText: '취소',
+        }).then((result) => {
+         if (result.value) {
+           this.$swal('프로젝트 완료!','성공적인 프로젝트이셨나요?','success')
+           FirebaseService.UPDATE_RecruitCompleteByUser(recruit.recruitPK,"success")
+           var dataRef = firebase.database().ref('/'+recruit.link);
+           dataRef.update({
+             UserComplete : 2,
+           });
+           window.reload();
+         }
+       })
     },
     cancel(recruit) {
-      if (confirm("알림 : 한번 파기 처리한 계약은 수정이 불가능합니다. 정말 계약을 파기하시겠습니까?")) {
-        FirebaseService.UPDATE_RecruitCompleteByUser(recruit.recruitPK,"fail")
-        var dataRef = firebase.database().ref('/'+recruit.link);
-        dataRef.update({
-          UserComplete : 1,
-        });
-      }
+      this.$swal({
+         title: '정말 계약을 파기하시겠습니까?',
+         text: "한번 파기한 계약은 수정이 불가능합니다.",
+         type: 'warning',
+         showCancelButton: true,
+         confirmButtonColor: '#3085d6',
+         cancelButtonColor: '#d33',
+         confirmButtonText: '파기',
+         cancelButtonText: '취소',
+        }).then((result) => {
+         if (result.value) {
+           this.$swal('프로젝트 실패','프로젝트 계약이 파기되었습니다.','error')
+           FirebaseService.UPDATE_RecruitCompleteByUser(recruit.recruitPK,"fail")
+           var dataRef = firebase.database().ref('/'+recruit.link);
+           dataRef.update({
+             UserComplete : 1,
+           });
+           window.reload();
+         }
+       })
     },
     popChat(ccode){
       this.createChatRoom(ccode);

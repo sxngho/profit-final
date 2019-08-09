@@ -203,41 +203,6 @@ export default {
       }
     },
 
-    dib(recruit_id) {
-      if ( !this.mySkills[0].dibs.includes(recruit_id) ) {
-        this.mySkills[0].dibs.push(recruit_id);
-        FirebaseService.UPDATE_userDibs(this.mySkills[0].dibs, this.$session.get('session_id'));
-        this.$swal.fire({
-          title: '찜목록에 추가되었습니다.',
-          text: "작업실에서 확인이 가능하며 <br/> 채팅방에 들어가시면 지원이 완료됩니다!",
-          type: 'success',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: '확인하러 가기',
-          cancelButtonText: '취소',
-        }).then((result) => {
-          if (result.value) {
-            //   this.$swal.fire(
-            //   'Deleted!',
-            //   'Your file has been deleted.',
-            //   'success'
-            // )
-            this.$router.push({name: 'story', params: {id : this.$session.get('session_id')}});
-          }
-        })
-      } else {
-        this.mySkills[0].dibs.splice(this.mySkills[0].dibs.indexOf(recruit_id),1);
-        FirebaseService.UPDATE_userDibs(this.mySkills[0].dibs, this.$session.get('session_id'));
-        this.$swal(
-           '삭제!',
-           '해당 공고가 찜목록에서 삭제되었습니다.',
-           'success'
-         )
-      }
-      // this.alreadyDibs = !this.alreadyDibs;
-    },
-
   },
 
 
