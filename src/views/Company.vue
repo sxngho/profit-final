@@ -1,39 +1,32 @@
 <template>
   <div>
-      <div v-if="loading">
+    <div v-if="loading">
         <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
         <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
         <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
         <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
       </div>
+
     <!-- 회사배너 -->
-    <v-layout wrap id="companyBanner" v-bind:style="{ 'backgroundImage': 'url(' + company.company_banner + ')' }" @mouseover="showUpImgBanner=true" @mouseleave="showUpImgBanner=false">
+    <v-layout wrap id="companyBanner" v-bind:style="{ 'backgroundImage': 'url(' + company.company_banner + ')' }" @mouseover="showUpImgBanner=true" @mouseleave="showUpImgBanner=false" style="position:relative; height:300px;">
 
-    <!-- <div v-show="showUpImgBanner && this.$route.params.id==this.$store.getters.getSession && !showUpImgBtn" style="z-index:3; right:0; position: absolute;">
-    123123123123
-    </div> -->
+      <div v-show="showUpImgBanner && this.$route.params.id==this.$store.getters.getSession && !showUpImgBtn"
+        style="position: absolute; margin:0; z-index:2; bottom:0;"
+        @click="setBanner()">
+        <p style="background: #ffffff91;border-radius:0 20px 20px 0; cursor:pointer; margin:0px; padding: 5px 45px 5px 20px;">
+          배경화면 수정하기
+        </p>
+        <input type="file" id="Banner" style="width:100%; display:none" @change="onFileChangeBanner" />
+      </div>
 
-    <div v-show="showUpImgBanner && this.$route.params.id==this.$store.getters.getSession && !showUpImgBtn"
-      style="position: absolute; margin:0; z-index:2;"
-      @click="setBanner()">
-      <p style="background: #ffffff91;border-radius:0 20px 20px 0; cursor:pointer; margin:0px; padding: 5px 45px 5px 20px;">
-        배경화면 수정하기
-      </p>
-      <input type="file" id="Banner" style="width:100%; display:none" @change="onFileChangeBanner" />
-    </div>
-
-
-    <div @click="removeImageBanner()" v-show="showUpImgBanner && this.$route.params.id==this.$store.getters.getSession && !showUpImgBtn && company.company_banner" style="z-index:2; right:0; position: absolute;" >
+      <div @click="removeImageBanner()" v-show="showUpImgBanner && this.$route.params.id==this.$store.getters.getSession && !showUpImgBtn && company.company_banner" style="z-index:2; right:0; position: absolute; bottom:0;" >
       <p style="background: #ff000039; cursor:pointer; margin:0px; padding: 5px 20px 5px 45px; border-radius: 20px 0 0 20px;">배경화면 삭제</p>
     </div>
 
 
       <v-flex xs12 sm10 offset-sm1>
-        <v-layout style="margin:5vw 0px;">
+        <v-layout style="margin-top:95px; margin-left:20px;">
           <div>
-            <!-- <v-avatar size="128">
-              <v-img :src="company.company_logo" />
-            </v-avatar>-->
             <div
               v-if="!company.company_logo || (company.company_logo=='https://i.imgur.com/WmUIKlP.png')"
               class="text-center"
@@ -42,49 +35,20 @@
               @mouseover="showUpImgBtn=true"
               @mouseleave="showUpImgBtn=false"
             >
-              <div
-                @click="setFile()"
-                v-show="showUpImgBtn"
-                style="position: absolute; top: 54px; z-index: 2"
-              >
-                <p
-                  class="text-center"
-                  style="background: #ffffff91;padding: 10px 5px; cursor:pointer;"
-                >사진을 등록하세요!</p>
+              <div @click="setFile()" v-show="showUpImgBtn" style="position: absolute; top: 54px; z-index: 2" >
+                <p class="text-center" style="background: #ffffff91;padding: 10px 5px; cursor:pointer;" >
+                  사진을 등록하세요!
+                </p>
               </div>
-              <v-avatar
-                size="150"
-                class="grey lighten-2"
-                @click="setFile()"
-                style="cursor:pointer;"
-              >
+              <v-avatar size="150" class="grey lighten-2" @click="setFile()" style="cursor:pointer;" >
                 <img src="https://i.imgur.com/WmUIKlP.png" />
               </v-avatar>
-              <input
-                type="file"
-                name="file"
-                id="file"
-                style="width:100%; display:none"
-                @change="onFileChange"
-              />
+              <input type="file" name="file" id="file" style="width:100%; display:none" @change="onFileChange" />
             </div>
 
-            <div
-              v-else
-              style="position:relative;"
-              @mouseover="showRmImgBtn=true"
-              @mouseleave="showRmImgBtn=false"
-            >
-              <div
-                @click="removeImage()"
-                v-show="showRmImgBtn"
-                style="z-index:2; right:0; position: absolute;"
-              >
-              <img
-                src="../assets/icon_set/delete.png"
-                alt="delimg"
-                style="cursor:pointer;width:25px;height:25px;"
-              />
+            <div v-else style="position:relative;" @mouseover="showRmImgBtn=true" @mouseleave="showRmImgBtn=false" >
+              <div @click="removeImage()" v-show="showRmImgBtn" style="z-index:2; right:0; position: absolute;" >
+              <img src="../assets/icon_set/delete.png" alt="delimg" style="cursor:pointer;width:25px;height:25px;" />
                 <!-- <button alt="delimg" style="cursor:pointer;width:25px;height:25px; color:white">
                   <i class="far fa-trash-alt"></i>
                 </button> -->

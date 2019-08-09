@@ -3,7 +3,7 @@
     <!-- 로그인 버튼 -->
     <v-dialog v-model="dialog" max-width="600px" v-if=" user== '' || user == undefined ">
       <template v-slot:activator="{ on }">
-        <v-btn text v-on="on" style="height:100%;">로그인</v-btn>
+        <v-btn text v-on="on" style="height:56px;">로그인</v-btn>
       </template>
 
 
@@ -50,7 +50,7 @@
     <!-- 회원가입 버튼 -->
     <v-dialog v-model="signupmodal" max-width="500px" v-if=" user== '' || user == undefined ">
       <template v-slot:activator="{ on: { click } }">
-        <v-btn text v-on:click="click" style="height:100%;">회원가입</v-btn>
+        <v-btn text v-on:click="click" style="height:56px;">회원가입</v-btn>
       </template>
 
       <v-container class="signmodal">
@@ -74,27 +74,25 @@
 
     <!-- 로그인 이후, 사용자 이름과 로그아웃 버튼 -->
     <div style="display:inline-block; height:100%" v-if="user !=='' && user !==undefined">
-      <v-btn
-        text
-        v-if="(nowLevel == '0' || nowLevel =='1') && user !=='' && user !== undefined "
-        style="height:100%;"
-      >{{user}}</v-btn>
 
-      <v-btn
-        text
-        v-if="nowLevel == '2' && user !=='' && user !== undefined "
-        :to="{ name: 'story', params: { id: user }}"
-        style="height:100%;"
-      >{{user}}</v-btn>
+      <v-btn text v-if="(nowLevel == '0' || nowLevel =='1') && user !=='' && user !== undefined "
+        style="height:56px;">
+        {{user}}
+      </v-btn>
 
-      <v-btn
-        text
-        v-if="nowLevel == '3' && user !=='' && user !== undefined"
-        :to="{ name: 'company', params: { id: user }}"
-        style="height:100%;"
-      >{{user}}</v-btn>
+      <v-btn text v-if="nowLevel == '2' && user !=='' && user !== undefined " :to="{ name: 'story', params: { id: user }}"
+        style="height:56px;" >
+        {{user}}
+      </v-btn>
 
-      <v-btn text @click="Logout()" v-if="user!=='' && user!==undefined" style="height:100%;">Log Out</v-btn>
+      <v-btn text v-if="nowLevel == '3' && user !=='' && user !== undefined" :to="{ name: 'company', params: { id: user }}"
+        style="height:56px;">
+        {{user}}
+      </v-btn>
+
+      <v-btn text @click="Logout()" v-if="user!=='' && user!==undefined" style="height:56px;">
+        Log Out
+      </v-btn>
 
       <v-menu offset-y v-if="nowLevel == '2' && user !=='' && user !== undefined ">
         <template v-slot:activator="scope">
