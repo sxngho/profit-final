@@ -314,7 +314,7 @@
                       <div>
                         <v-chip color="#4a77de" text-color="white" v-if="item.recruit.data.contract && item.recruit.data.UserComplete == 2 && item.recruit.data.CompanyComplete == 2">완료</v-chip>
                         <v-chip color="#692721" text-color="white" v-if="item.recruit.data.contract && (item.recruit.data.CompanyComplete ==1 || item.recruit.data.UserComplete ==1)" >파기</v-chip>
-                        <v-chip color="#0e568a" text-color="white" v-if="item.recruit.data.contract && item.recruit.data.UserComplete !== 1 && item.recruit.data.CompanyComplete !== 1 && (item.recruit.data.UserComplete !== 2 || item.recruit.data.CompanyComplete !== 2)">작업중</v-chip>
+                        <v-chip color="#0e568a" text-color="white" v-if="item.recruit.data.contract && item.recruit.data.UserComplete !== 1 && item.recruit.data.CompanyComplete !== 1 && (item.recruit.data.UserComplete !== 2 || item.recruit.data.CompanyComplete !== 2)">진행</v-chip>
                         <v-chip color="rgb(118, 199, 122)" text-color="white" v-if="!item.recruit.data.contract">모집중</v-chip>
                         &nbsp;&nbsp;
                         <span>{{item.recruit.data.projectTitle}}</span>
@@ -492,7 +492,7 @@
                                     </v-flex>
                                     <v-flex xs8 style="margin:auto">
                                     <td style="margin:auto padding:0px 0px !important; ">
-                                      <router-link :to="{ name: 'story', params: { id: user.userData.id }}" >
+                                      <router-link :to="{ name: 'story', params: { id: user.userData.id }}" style="text-decoration:none" >
                                         <v-btn text outlined style="text-decoration:none"> 스토리 </v-btn>
                                       </router-link>
                                       <v-badge color="red" overlap v-if="user.length !== 0" >
@@ -511,13 +511,35 @@
                           </v-flex>
 
                           <!-- 계약이 된 상태라면 -->
-                          <v-flex xs12 sm5 v-if="$route.params.id==$store.getters.getSession && item.recruit.data.contract && item.recruit.data.UserComplete !== 1 && item.recruit.data.CompanyComplete !== 1">
-                            <h3> 작업 중인 유저</h3>
-                            <!-- <v-layout row wrap>
-                              <v-flex xs11 offset-xs1>
-
-                              </v-flex>
-                            </v-layout> -->
+                          <v-flex xs12 sm5 v-if="$route.params.id==$store.getters.getSession && item.recruit.data.contract && (item.recruit.data.UserComplete == 0 || item.recruit.data.CompanyComplete == 0)">
+                            <h3 style="text-align:center;"> 프로젝트 담당 유저</h3>
+                            <br/>
+                            <v-layout row wrap>
+                                <v-flex xs12 v-for="user in userData" v-if="user.id==item.recruit.data.responsibility" style="overflow:hidden !important">
+                                <!-- 여기서 user는 chatting 입니다 혼동하기 쉬울거같아서 남겨놓습니다.-->
+                                    <v-layout row wrap>
+                                    <v-flex xs10 offset-xs1 style="text-align:center">
+                                        <v-avatar size="200">
+                                          <img :src="user.data.userImage" />
+                                        </v-avatar>
+                                        </br>
+                                        <h2 style="margin-top:5px">{{ user.id }}</h2>
+                                    </v-flex>
+                                    <v-spacer/>
+                                    <br/><br/>
+                                    <v-flex xs10 offset-xs1 style="margin:auto; text-align:center; margin-top:15px">
+                                      <router-link :to="{ name: 'story', params: { id: user.id }}" style="text-decoration:none" >
+                                        <v-btn text outlined style="margin-right:2px;"> 스토리 </v-btn>
+                                      </router-link>
+                                      <v-badge color="red" overlap v-if="item.length !== 0">
+                                        <template slot="badge"> {{item.length}} </template>
+                                        <v-btn text outlined @click="openWorkChat(item.recruit.data.responsibility,item.recruit.id)">채팅방</v-btn>
+                                      </v-badge>
+                                      <v-btn text outlined  v-if="item.length == 0" @click="openWorkChat(item.recruit.data.responsibility,item.recruit.id)">채팅방</v-btn>
+                                    </v-flex>
+                                    </v-layout>
+                                  </v-flex>
+                            </v-layout>
                           </v-flex>
 
                           <!-- 작업 완료 -->
@@ -541,31 +563,16 @@
                               <v-btn flex outlined color="blue" @click="complete(item.recruit.id,item.recruit.data)">계약완료</v-btn>
                               <v-btn flex outlined color="orange" @click="openContract(item.recruit.id,item.recruit.data.responsibility)">계약서</v-btn>
                               <v-btn flex outlined color="red" @click="cancel(item.recruit.id,item.recruit.data)">계약파기</v-btn>
-                              <v-badge color="red" overlap v-if="item.length !== 0">
-                                <template slot="badge"> {{item.length}} </template>
-                                <v-btn text outlined @click="openWorkChat(item.recruit.data.responsibility,item.recruit.id)">채팅방</v-btn>
-                              </v-badge>
-                              <v-btn text outlined  v-if="item.length == 0" @click="openWorkChat(item.recruit.data.responsibility,item.recruit.id)">채팅방</v-btn>
                             </div>
                             <div v-if="item.recruit.data.UserComplete == 0 && item.recruit.data.CompanyComplete == 2">
                               <p> 완료 처리됨 // 상대방의 처리를 기다리는중</p>
                               <v-btn flex outlined color="orange" @click="openContract(recruit.id,recruit.data.responsibility)">계약서</v-btn>
-                              <v-btn text outlined  v-if="item.length == 0" @click="openWorkChat(item.recruit.data.responsibility,item.recruit.id)">채팅방</v-btn>
-                              <v-badge color="red" overlap v-if="item.length !== 0">
-                                <template slot="badge"> {{item.length}} </template>
-                                <v-btn text outlined @click="openWorkChat(item.recruit.data.responsibility,item.recruit.id)">채팅방</v-btn>
-                              </v-badge>
                             </div>
                             <div v-if="item.recruit.data.UserComplete == 2 && item.recruit.data.CompanyComplete == 0">
                               <p> 상대방이 완료를 누른 상태입니다. 계약이 정상적으로 종료되었다면 완료를 눌러주세요.</p>
                               <v-btn flex outlined color="blue" @click="complete(item.recruit.id,item.recruit.data)">계약완료</v-btn>
                               <v-btn flex outlined color="orange" @click="openContract(item.recruit.id,item.recruit.data.responsibility)">계약서</v-btn>
                               <v-btn flex outlined color="red" @click="cancel(item.recruit.id,item.recruit.data)">계약파기</v-btn>
-                              <v-badge color="red" overlap v-if="item.length !== 0">
-                                <template slot="badge"> {{item.length}} </template>
-                                <v-btn text outlined @click="openWorkChat(item.recruit.data.responsibility,item.recruit.id)">채팅방</v-btn>
-                              </v-badge>
-                              <v-btn text outlined  v-if="item.length == 0" @click="openWorkChat(item.recruit.data.responsibility,item.recruit.id)">채팅방</v-btn>
                             </div>
                             <div v-if="item.recruit.data.UserComplete == 1">
                               <p> 유저 측의 사유로 파기된 계약입니다. </p>
@@ -617,24 +624,46 @@ export default {
   },
   methods: {
     complete(recruitId,recruitData) {
-      console.log(recruitData," asdjiasdjiadjaidja " );
-      if (confirm("알림 : 한번 완료 처리한 계약은 수정이 불가능합니다. 정말 완료 처리하시겠습니까?")) {
-        FirebaseService.UPDATE_RecruitCompleteByCompany(recruitId,"success")
-        var dataRef = firebase.database().ref('/chat/'+recruitId+''+recruitData.responsibility);
-        dataRef.update({
-          CompanyComplete : 2,
-        });
-        console.log("실행되었읍니다..")
-      }
+      this.$swal({
+         title: '정말 계약을 완료하시겠습니까?',
+         text: "한번 완료한 계약은 수정이 불가능합니다.",
+         type: 'warning',
+         showCancelButton: true,
+         confirmButtonColor: '#3085d6',
+         cancelButtonColor: '#d33',
+         confirmButtonText: '완료',
+         cancelButtonText: '취소',
+        }).then((result) => {
+         if (result.value) {
+           this.$swal('프로젝트 완료!','성공적인 프로젝트이셨나요?','success')
+           FirebaseService.UPDATE_RecruitCompleteByCompany(recruitId,"success")
+           var dataRef = firebase.database().ref('/chat/'+recruitId+''+recruitData.responsibility);
+           dataRef.update({
+             CompanyComplete : 2,
+           });
+         }
+       })
     },
     cancel(recruitId,recruitData) {
-      if (confirm("알림 : 한번 파기 처리한 계약은 수정이 불가능합니다. 정말 계약을 파기하시겠습니까?")) {
-        FirebaseService.UPDATE_RecruitCompleteByCompany(recruitId,"fail")
-        var dataRef = firebase.database().ref('/chat/'+recruitId+''+recruitData.responsibility);
-        dataRef.update({
-          CompanyComplete : 1,
-        });
-      }
+      this.$swal({
+         title: '정말 계약을 파기하시겠습니까?',
+         text: "한번 파기한 계약은 수정이 불가능합니다.",
+         type: 'warning',
+         showCancelButton: true,
+         confirmButtonColor: '#3085d6',
+         cancelButtonColor: '#d33',
+         confirmButtonText: '파기',
+         cancelButtonText: '취소',
+        }).then((result) => {
+         if (result.value) {
+           this.$swal('프로젝트 실패','프로젝트 계약이 파기되었습니다.','error')
+           FirebaseService.UPDATE_RecruitCompleteByCompany(recruitId,"fail")
+           var dataRef = firebase.database().ref('/chat/'+recruitId+''+recruitData.responsibility);
+           dataRef.update({
+             CompanyComplete : 1,
+           });
+         }
+       })
     },
     async fetchData() {
       this.$loading(true);
