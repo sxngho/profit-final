@@ -3,7 +3,7 @@
     <div class="banner__content">
       <!-- 1-1 스토리 : User가 일반 유저인 경우에는 아래의 router-link 가 노출됩니다. -->
       <router-link
-        :to="{ name: 'story', params: { id: this.$session.get('session_id') }}"
+        :to="{ name: 'story', params: { id: this.$session.get('session_id') }}" 
         class="bannerBox"
         style="text-decoration:none"
         v-if="this.$store.getters.getLevel==2"
@@ -33,7 +33,7 @@
           </div>
           <br/>
           <div class="studio_title titleBox">
-            <span class="fontStyle">스토리</span>
+            <span class="fontStyle">회사</span>
           </div>
         </div>
       </router-link>

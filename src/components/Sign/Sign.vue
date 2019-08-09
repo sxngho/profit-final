@@ -252,8 +252,8 @@ export default {
         this.showNotification(
           "foo-css",
           "success",
-          ``,
-          `${this.user}님  로그인 완료!`
+          `${this.user}님`,
+          ` 로그인 완료! `
         );
         this.LoginId = "";
         this.LoginPassword = "";

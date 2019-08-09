@@ -201,7 +201,7 @@ export default {
       var curl = ccode.link
       window.open(
         "../" + curl,
-        "name(이름지정)",
+        curl,
         "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=1000,height=600"
       );
     },
@@ -211,7 +211,7 @@ export default {
       var curl = ccode.id+ this.$session.get('session_id');
       window.open(
         "../chat/" + curl,
-        "name(이름지정)",
+        curl,
         "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=1000,height=600"
       );
     },
@@ -294,14 +294,14 @@ export default {
     popConsult(ccode){
       window.open(
         "../consult/" + ccode,
-        "name(이름지정)",
+        ccode,
         "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=700,height=600"
       );
     },
     popContract(ccode){
       window.open(
         "../contract/" + ccode,
-        "name(이름지정)",
+        ccode,
         "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=700,height=600"
       );
     },

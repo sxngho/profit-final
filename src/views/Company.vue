@@ -400,11 +400,15 @@
                                 v-if="user.recruit==item.recruit.id"
                               >
                                 <!-- 여기서 user는 chatting 입니다 혼동하기 쉬울거같아서 남겨놓습니다.-->
-                                <v-badge color="red" overlap v-if="user.length !== 0">
+                                <v-badge color="red" overlap >
                                   <template slot="badge"> {{user.length}} </template>
                                   <v-btn text outlined @click="openChat(user.chat)">{{user.chat.userId}}</v-btn>
                                 </v-badge>
-                                <v-btn text outlined @click="openChat(user.chat)" v-if="user.length == 0">{{user.chat.userId}}</v-btn>
+                                <v-badge color="blue" overlap>
+                                  <template slot="badge"> {{user.length}} </template>
+                                  <v-btn text outlined @click="$router.open({name: 'chat', params: { ccode : (user.chat.recruitPK+''+user.chat.userId)}})">{{user.chat.userId}}</v-btn>
+                                </v-badge>
+                                <!-- <v-btn text outlined @click="openChat(user.chat)" v-if="user.length == 0">{{user.chat.userId}}</v-btn> -->
                               </v-flex>
                             </v-layout>
                           </v-flex>
@@ -615,7 +619,7 @@ export default {
     openChat(user) {
       window.open(
         "../" + user.link,
-        "name(이름지정)",
+        user.link,
         "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=1000,height=600"
       );
     },
@@ -636,14 +640,14 @@ export default {
       var link = this.workingUser.link;
       window.open(
         "../" + link,
-        "name(이름지정)",
+        link,
         "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=1000,height=600"
       );
     },
     openContract(id, responsibility) {
       window.open(
         "../contract/" + id + responsibility,
-        "name(이름지정)",
+        id + '' +responsibility,
         "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=1000,height=600"
       );
     },

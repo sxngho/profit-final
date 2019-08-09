@@ -152,7 +152,7 @@ export default {
     popRecruitDetail(rdcode) {
       window.open(
         "../recruit/" + rdcode,
-        "name(이름지정)",
+        rdcode,
         "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=700,height=600"
       );
     }
