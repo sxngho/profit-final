@@ -947,7 +947,7 @@ export default {
            followerlist: [],
            followinglist: [],
            level: 3,
-           company_logo: 'http://design-ec.com/d/e_others_50/l_e_others_500.png',
+           company_logo: '',
            industry: "",
            mount: "",
            comsize: "",
