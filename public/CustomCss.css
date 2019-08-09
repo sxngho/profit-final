@@ -19,6 +19,27 @@
   color:white!important;
 }
 
+.bannerBtnBlack{
+  width: 200px;
+  height: 200px;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  text-decoration:none;
+  color:black!important;
+}
+
+@font-face{
+  font-family: 'binggraeregular';
+  src:url('assets/font/Binggrae/binggrae-webfont.woff')  format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+*{
+  font-family: 'binggraeregular';
+}
+
 
 
 /* cursor event */
