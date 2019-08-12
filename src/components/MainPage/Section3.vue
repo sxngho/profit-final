@@ -17,11 +17,13 @@
                   <!-- <v-layout row wrap justify-center>
                     <v-btn @click="gogo(hotprojects[i][0])" text outlined>완1성하기</v-btn>
                   </v-layout> -->
-
-
+                  <div style="padding:5px; position:absolute; top:3%; right:5%; border:2px solid; border-radius:30px;">
+                    <span>LIKE : {{hotprojects[i][1].likeit.length}}</span>
+                  </div>
                   <div class="mainProjectTitle" style="display:inline-block;">
                     <h2 style="display:inline">{{hotprojects[i][1].projecttitle}}</h2>
                     {{hotprojects[i][1].session_id}}
+
 
                   </div>
 
