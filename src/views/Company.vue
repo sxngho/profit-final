@@ -619,11 +619,11 @@ export default {
     this.user = this.$session.get("session_id")
     this.$store.commit('setSession', this.user)
     this.loading = false;
-    console.log(this.MyRecruits, 12123)
+    // console.log(this.MyRecruits, 12123)
   },
   methods: {
     isHaveSkills(requiredSkills) {
-      console.log("실행이되나요??~????~?~?")
+      // console.log("실행이되나요??~????~?~?")
       if ( requiredSkills.length == 0 ) {
         return true;
       }

@@ -329,68 +329,114 @@
                projectimage,
                projectrank,
              session_id) {
-               if(this.project_id == '' || this.project_id == null || this.project_id == undefined){
-                 FirebaseService.INSERT_Projects(
-                   this.projecttitle,
-                   this.projectdescription,
-                   this.projectterm,
-                   this.projectcontent,
-                   this.projecttech,
-                   this.projectimage,
-                   this.projectrank,
-                   this.session_id).then(function(result) {
-                     var project_id = result.id
-                     // console.log(result.id, '넘어왔으려나..')
-                     // console.log(session_id, '넘어왔으려나2..')
-                     // 여기에서 팔로우들에게 프로젝트를 생성했다고 알림을 보낼 것입니다.
-                     var userdata = FirebaseService.SELECT_Userdata(session_id).then(function(result) {
-                       var userdata_dic = result[0]
-                       var user_followerlist = result[0].followerlist
-                       // check, comment, project_id, url
-                       // console.log(user_followerlist, 'alert 보내야 할 리스트 떳냐')
-                       for (var i in user_followerlist) {
+               if (!(projecttitle && projectdescription && projectterm && projectcontent && projecttech.length && projectimage && projectrank && session_id)) {
+                 // 수정 및 생성이 불가능한 경우 ( 어떤 요소를 채우지 않은 경우 )
+                 var reject_reason = ""
+                 var reject_count = 0
+                 if (!projecttitle) {
+                   reject_reason += '프로젝트 제목 <br/>'
+                   reject_count += 1
+                 }
+                 if (!projectdescription) {
+                   reject_reason += '프로젝트 설명 <br/>'
+                   reject_count += 1
+                 }
+                 if (!projectimage) {
+                   reject_reason += '대표 이미지 <br/>'
+                   reject_count += 1
+                 }
+                 if (!projectterm) {
+                   reject_reason += '프로젝트 기간 <br/>'
+                   reject_count += 1
+                 }
+                 if (!projecttech.length) {
+                   reject_reason += '기술 스택 <br/>'
+                   reject_count += 1
+                 }
+                 if (!projectrank) {
+                   reject_reason += '등급 <br/>'
+                   reject_count += 1
+                 }
+                 if (!projectcontent) {
+                   reject_reason += '상세설명 <br/>'
+                   reject_count += 1
+                 }
+                 if (!session_id) {
+                   reject_reason += '로그인 <br/>'
+                   reject_count += 1
+                 }
+                 if(this.project_id == '' || this.project_id == null || this.project_id == undefined) {
+                   this.$swal("프로젝트 생성 실패!", `필수 정보들을 채워주세요 : ${reject_count}개` + `<br/>` + `${reject_reason}`, "error");
+                 } else {
+                   this.$swal("프로젝트 수정 실패!", `필수 정보들을 채워주세요 : ${reject_count}개` + `<br/>` + `${reject_reason}`, "error");
+                 }
+               } else {
+                 // 수정 및 삭제가 가능한 경우
+                 if(this.project_id == '' || this.project_id == null || this.project_id == undefined){
+                   FirebaseService.INSERT_Projects(
+                     this.projecttitle,
+                     this.projectdescription,
+                     this.projectterm,
+                     this.projectcontent,
+                     this.projecttech,
+                     this.projectimage,
+                     this.projectrank,
+                     this.session_id).then(function(result) {
+                       var project_id = result.id
+                       // console.log(result.id, '넘어왔으려나..')
+                       // console.log(session_id, '넘어왔으려나2..')
+                       // 여기에서 팔로우들에게 프로젝트를 생성했다고 알림을 보낼 것입니다.
+                       var userdata = FirebaseService.SELECT_Userdata(session_id).then(function(result) {
+                         var userdata_dic = result[0]
+                         var user_followerlist = result[0].followerlist
+                         // check, comment, project_id, url
+                         // console.log(user_followerlist, 'alert 보내야 할 리스트 떳냐')
+                         for (var i in user_followerlist) {
 
-                         // console.log(userdata_dic, 'userdata 왓음..??')
-                         var Json = new Object();
-                         // /project/Cx8TiNE5JNzaMUb9loMu
-                         Json.url = '/project/' + result.id
-                         Json.project_title = result.projecttitle
-                         Json.project_id = project_id
-                         Json.session_id = session_id
-                         // console.log(user_followerlist[i], '한명 떳냐')
-                         FirebaseService.INSERT_alert_Project(user_followerlist[i], Json, userdata_dic)
-                         console.log("에디터1")
-                       }
+                           // console.log(userdata_dic, 'userdata 왓음..??')
+                           var Json = new Object();
+                           // /project/Cx8TiNE5JNzaMUb9loMu
+                           Json.url = '/project/' + result.id
+                           Json.project_title = result.projecttitle
+                           Json.project_id = project_id
+                           Json.session_id = session_id
+                           // console.log(user_followerlist[i], '한명 떳냐')
+                           FirebaseService.INSERT_alert_Project(user_followerlist[i], Json, userdata_dic)
+                           console.log("에디터1")
+                         }
+                       })
                      })
-                   })
 
-                 this.reload_userskill(this.session_id);
-                 this.$swal(
-                    '프로젝트 업로드 성공!',
-                    '프로젝트가 정상적으로 업로드 되었습니다.',
-                    'success'
-                  )
-                 this.$emit('insert_success')
-               }else{
-                 var data = {'projecttitle':projecttitle,
-                 'projectdescription':projectdescription,
-                 'projectterm':projectterm,
-                 'projectcontent':projectcontent,
-                 'projecttech':projecttech,
-                 'projectimage':projectimage,
-                 'projectrank':projectrank }
-                 // console.log(this.project_id, '이게 나와야 한다')
-                 FirebaseService.UPDATE_Project(
-                   data, this.project, this.project_id);
-                  this.reload_userskill(this.session_id)
-                  this.$swal(
-                     '프로젝트 수정 성공!',
-                     '프로젝트가 정상적으로 수정되었습니다.',
-                     'success'
-                   )
-                // 여기여기
-                this.$emit('update_success')
+                   this.reload_userskill(this.session_id);
+                   this.$swal(
+                      '프로젝트 업로드 성공!',
+                      '프로젝트가 정상적으로 업로드 되었습니다.',
+                      'success'
+                    )
+                   this.$emit('insert_success')
+                 }else{
+                   var data = {'projecttitle':projecttitle,
+                   'projectdescription':projectdescription,
+                   'projectterm':projectterm,
+                   'projectcontent':projectcontent,
+                   'projecttech':projecttech,
+                   'projectimage':projectimage,
+                   'projectrank':projectrank }
+                   // console.log(this.project_id, '이게 나와야 한다')
+                   FirebaseService.UPDATE_Project(
+                     data, this.project, this.project_id);
+                    this.reload_userskill(this.session_id)
+                    this.$swal(
+                       '프로젝트 수정 성공!',
+                       '프로젝트가 정상적으로 수정되었습니다.',
+                       'success'
+                     )
+                  // 여기여기
+                  this.$emit('update_success')
+                 }
+                 
                }
+
         },
         async reload_userskill(session_id) {
         var projects =  await FirebaseService.SELECT_Projects(session_id);

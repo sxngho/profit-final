@@ -296,9 +296,9 @@ export default {
               break;
           }
         }
-        console.log(this.proceedList);
-        console.log(this.delList);
-        console.log(this.completeList);
+        // console.log(this.proceedList);
+        // console.log(this.delList);
+        // console.log(this.completeList);
       });
     },
     complete(recruit,companyState) {

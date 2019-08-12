@@ -88,10 +88,14 @@
                 <v-flex xs12>
                   <span class="title"  style="margin-right:5px;">{{project.projecttitle}}</span>
                   <v-chip outlined label small color="purple dark" style="margin-right:5px;">
+
                     {{ project.projectterm }}
+
                   </v-chip>
                   <v-chip outlined label small color="purple dark" style="margin-right:5px;">
+
                     {{ project.projectrank }}
+
                   </v-chip>
                   <div style="padding:5px 0;">
                     <v-chip v-for="tech in project.projecttech" outlined small color="grey dark" style="margin-right:5px;">

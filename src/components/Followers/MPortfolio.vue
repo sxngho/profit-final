@@ -30,11 +30,9 @@ export default {
       this.projectId = this.project;
     },
     popdetail(pcode) {
-      window.open(
-        "../project/" + pcode,
-        pcode,
-        "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=700,height=600"
-      );
+      // console.log(user)
+      // window.open(`${document.location.origin}+`)
+      window.open("../project/" + pcode, pcode,"titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=700,height=600");
     }
   }
 };

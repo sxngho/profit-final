@@ -561,3 +561,9 @@ export default {
   }
 }
 </script>
+<style>
+.coment_content {
+  display: flex;
+  justify-content: center;
+}
+</style>
