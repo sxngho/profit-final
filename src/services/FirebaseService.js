@@ -62,7 +62,7 @@ export default {
   async SELECT_HOTProjects() {
     return firestore
       .collection("projects")
-      .orderBy("likeit", 'desc')
+      .orderBy("likeitcount", 'desc')
       .limit(5)
       .get()
       .then(docSnapshots => {
@@ -1084,7 +1084,7 @@ export default {
   // LIKE--------------------------------------------------------------------
 
   // Function :: 프로젝트를 좋아요 는 else문 취소는 if문 , like_users : 프로젝트를 좋아하는 사람들
-  async like_project(user, project_id, like_users) {
+  async like_project(user, project_id, like_users, likeitcount) {
     // 각 상황별로.
     // 1. 프로젝트의 좋아요 들 안에 user를 넣는다.
     // 2. user의 likeitProject에 project_id를 넣는다.
@@ -1111,7 +1111,8 @@ export default {
             .collection("projects")
             .doc(project_id)
             .update({
-              likeit: like_users
+              likeit: like_users,
+              likeitcount : likeitcount -=1
             });
         });
     } else {
@@ -1133,7 +1134,8 @@ export default {
             .collection("projects")
             .doc(project_id)
             .update({
-              likeit: like_users
+              likeit: like_users,
+              likeitcount: likeitcount +=1
             });
         });
     }
