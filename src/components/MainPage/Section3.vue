@@ -18,7 +18,7 @@
                     <v-btn @click="gogo(hotprojects[i][0])" text outlined>완1성하기</v-btn>
                   </v-layout> -->
                   <div style="padding:5px; position:absolute; top:3%; right:5%; border:2px solid red; border-radius:30px;" >
-                    <span>LIKE : {{hotprojects[i][1].likeit.length}}</span>
+                    <span>LIKE : {{hotprojects[i][1].likeitcount}}</span>
                   </div>
                   <div class="mainProjectTitle" style="display:inline-block;">
                     <h2 style="display:inline">{{hotprojects[i][1].projecttitle}}</h2>
@@ -100,6 +100,7 @@ export default {
       for (var item in result) {
         this.hotprojects.push([result[item].id, result[item].data()])
       }
+      console.log(this.hotprojects, 'final')
     },
     gogo(project_id) {
             // path: "/project/:pcode",
