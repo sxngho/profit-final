@@ -42,9 +42,9 @@
               </v-flex>
             </v-layout>
           </v-container>
-          <v-btn rounded color="#4267b2" dark @click="SigninFacebook()" style="width:100%;">
+          <!-- <v-btn rounded color="#4267b2" dark @click="SigninFacebook()" style="width:100%;">
             <v-icon size="25" class="mr-2">fa-facebook</v-icon>Facebook으로 로그인하기
-          </v-btn>
+          </v-btn> -->
         </v-card-text>
 
         <v-card-actions>

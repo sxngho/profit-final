@@ -3,7 +3,7 @@
     <div class="mportfolio__container__content">
       <div class="portfolio__box">
         <button style="height:100%; width:100%;" @click="popdetail(projectId)">
-          <img :src="projectInfo" style="height:140px; width:200px;" />
+          <img :src="projectInfo|| 'http://design-ec.com/d/e_others_50/l_e_others_500.png'" style="height:140px; width:200px;" />
         </button>
       </div>
     </div>
