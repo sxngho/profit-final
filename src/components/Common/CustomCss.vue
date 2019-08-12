@@ -47,6 +47,11 @@
     text-decoration:none;
     color:black!important;
   }
+
+  .headerBtn{
+    text-shadow: -1px 0 #fff, 0 1px #fff, 1px 0 #fff, 0 -1px #fff;
+    font-weight: bold!important;
+  }
 </style>
 
 <!-- Custom Font -->
