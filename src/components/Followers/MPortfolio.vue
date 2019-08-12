@@ -2,7 +2,8 @@
   <div class="mportfolio__container">
     <div class="mportfolio__container__content">
       <div class="portfolio__box">
-        <button style="height:100%; width:100%;" @click="popdetail(projectId)">
+        <button style="height:100%; width:100%;" @click="popdetail(projectId, nickname)">
+          {{this.user}}
           <img :src="projectInfo|| 'http://design-ec.com/d/e_others_50/l_e_others_500.png'" style="height:140px; width:200px;" />
         </button>
       </div>
@@ -16,7 +17,7 @@ export default {
   created() {
     this.SELECT_Project();
   },
-  props: ["project"],
+  props: ["project", "nickname"],
   data() {
     return {
       projectInfo: "",
@@ -29,10 +30,12 @@ export default {
       this.projectInfo = info.projectimage;
       this.projectId = this.project;
     },
-    popdetail(pcode) {
-      // console.log(user)
-      // window.open(`${document.location.origin}+`)
-      window.open("../project/" + pcode, pcode,"titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=700,height=600");
+    popdetail(pcode, nickname) {
+      // console.log(this.project)
+      // console.log(nickname)
+      // console.log(`${document.location.origin}/project/${pcode}`)
+      window.open(`${document.location.origin}/project/${pcode}`)
+      // window.open("../project/" + pcode, pcode,"titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=700,height=600");
     }
   }
 };
