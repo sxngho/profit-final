@@ -1,26 +1,38 @@
 <template>
   <div class="section">
-      <v-layout row wrap justify-center style="width:100%; height:80%">
-        <v-flex xs10 offset-xs1 text-center class="display-2">
-          <span class="sm-link sm-link_padding-bottom sm-link3">
-            <span class="sm-link__label">기업공고</span>
+    <v-layout row wrap justify-center style="height:55%">
+      <v-flex xs6 v-show="!showUpRecruit">
+        <v-flex xs12 text-center v-show="!showUpRecruit">
+          <span class="sm-link sm-link_padding-bottom sm-link3" style="height:7%" @mouseover="showUpCompanyList=true" @mouseleave="showUpCompanyList=false">
+            <span class="sm-link__label"><h2> 기업 정보 </h2> </span>
           </span>
-        <img src="../../assets/companyListImg.png" style="position:absolute; left:25%; bottom:0%;"/>
-
-        <!-- <v-flex xs12 text-center>
-            <div v-if="this.$store.getters.getLevel==2">
-              유저에겐 어떻게하면 공고가 보이는지 알려주자
+        </v-flex>
+        <v-flex xs12 text-center v-show="!showUpRecruit">
+          <router-link :to="{ name: 'companyListPage' }" class="bannerBtn">
+            <div class="bannerBtn sm-link sm-link_padding-all sm-link1">
+              <div class="sm-link__label" @mouseover="showUpCompanyList=true" @mouseleave="showUpCompanyList=false">
+                <i class="far fa-building fa-7x"/><br/>
+                <span>기업리스트</span>
+              </div>
             </div>
-          <div v-else-if="this.$store.getters.getLevel==3">
-            기업에겐 공고를 어디서 작성하는지 알려주자
-          </div>
-          비로그인 유저에겐 국물도 없다
-        </v-flex> -->
-
+          </router-link>
+        </v-flex>
+      </v-flex>
+      <v-flex xs6 v-show="showUpRecruit">
         <v-flex xs12 text-center>
+        아휴
+        </v-flex>
+      </v-flex>
+      <v-flex xs6 v-show="!showUpCompanyList">
+        <v-flex xs12 text-center v-show="!showUpCompanyList">
+          <span class="sm-link sm-link_padding-bottom sm-link3" style="height:7%" @mouseover="showUpRecruit=true" @mouseleave="showUpRecruit=false">
+            <span class="sm-link__label"><h2> 외주 공고 </h2> </span>
+          </span>
+        </v-flex>
+        <v-flex xs12 text-center v-show="!showUpCompanyList">
           <router-link :to="{ name: 'recruits' }" class="bannerBtn">
             <div class="bannerBtn sm-link sm-link_padding-all sm-link1">
-                <div class="sm-link__label">
+              <div class="sm-link__label"  @mouseover="showUpRecruit=true" @mouseleave="showUpRecruit=false">
                 <i class="far fa-handshake fa-7x"/><br/>
                 <span>공고페이지</span>
               </div>
@@ -28,9 +40,18 @@
           </router-link>
         </v-flex>
       </v-flex>
-      </v-layout>
+      <v-flex xs6 v-show="showUpCompanyList">
+        <v-flex xs12 text-center>
+        어휴
+        </v-flex>
+      </v-flex>
+    </v-layout>
+    <v-layout row justify-center>
+      <img src="../../assets/companyListImg.png" style="position:absolute;bottom:0%"/>
+    </v-layout>
   </div>
 </template>
+
 
 
 <script>
@@ -43,6 +64,8 @@ export default {
   },
   data() {
     return {
+      showUpCompanyList:false,
+      showUpRecruit:false,
     }
   },
   created() {},
