@@ -485,7 +485,7 @@
                           </v-flex>
 
                           <!-- 계약이 된 상태라면 -->
-                          <v-flex xs12 sm5 v-if="$route.params.id==$store.getters.getSession && item.recruit.data.contract && (item.recruit.data.UserComplete == 0 || item.recruit.data.CompanyComplete == 0)">
+                          <v-flex xs12 sm5 v-if="$route.params.id==$store.getters.getSession && item.recruit.data.contract && item.recruit.data.UserComplete !== 1 && item.recruit.data.CompanyComplete !== 1 && (item.recruit.data.UserComplete !== 2 || item.recruit.data.CompanyComplete !== 2)">
                             <h3 style="text-align:center;"> 프로젝트 담당 유저</h3>
                             <br/>
                             <v-layout row wrap>
@@ -518,12 +518,34 @@
 
                           <!-- 작업 완료 -->
                           <v-flex xs12 sm5 v-if="$route.params.id==$store.getters.getSession && item.recruit.data.contract && item.recruit.data.UserComplete == 2 && item.recruit.data.CompanyComplete == 2">
-                            <h3> 성공적으로 계약을 마쳤습니다. 짝짞짞</h3>
-                            <!-- <v-layout row wrap>
-                              <v-flex xs11 offset-xs1>
-
-                              </v-flex>
-                            </v-layout> -->
+                            <h3 style="text-align:center;"> 프로젝트 담당 유저</h3>
+                            <v-layout row wrap>
+                                <v-flex xs12 v-for="user in userData" v-if="user.id==item.recruit.data.responsibility" style="overflow:hidden !important">
+                                <!-- 여기서 user는 chatting 입니다 혼동하기 쉬울거같아서 남겨놓습니다.-->
+                                    <v-layout row wrap>
+                                    <v-flex xs10 offset-xs1 style="text-align:center">
+                                        <v-avatar size="200">
+                                          <img :src="user.data.userImage" />
+                                        </v-avatar>
+                                        </br>
+                                        <h2 style="margin-top:5px">{{ user.id }}</h2>
+                                    </v-flex>
+                                    <v-spacer/>
+                                    <br/><br/>
+                                    <v-flex xs10 offset-xs1 style="margin:auto; text-align:center; margin-top:15px">
+                                      <router-link :to="{ name: 'story', params: { id: user.id }}" style="text-decoration:none" >
+                                        <v-btn text outlined style="margin-right:2px;"> 스토리 </v-btn>
+                                      </router-link>
+                                      <v-badge color="red" overlap v-if="item.length !== 0">
+                                        <template slot="badge"> {{item.length}} </template>
+                                        <v-btn text outlined @click="openWorkChat(item.recruit.data.responsibility,item.recruit.id)">채팅방</v-btn>
+                                      </v-badge>
+                                      <v-btn text outlined  v-if="item.length == 0" @click="openWorkChat(item.recruit.data.responsibility,item.recruit.id)">채팅방</v-btn>
+                                      <br/>
+                                    </v-flex>
+                                    </v-layout>
+                                  </v-flex>
+                            </v-layout>
                           </v-flex>
 
 

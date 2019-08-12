@@ -1373,6 +1373,7 @@ export default {
     } else {
       firestore.collection("recruitInfo").doc(recruitPK).update({
         UserComplete: 1,
+        touchLevel : 3,
       })
     }
   },
@@ -1389,6 +1390,7 @@ export default {
     } else {
       firestore.collection("recruitInfo").doc(recruitPK).update({
         CompanyComplete: 1,
+        touchLevel : 3,
       })
     }
   },

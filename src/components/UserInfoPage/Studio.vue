@@ -68,12 +68,12 @@
                 <v-btn @click="cancel(recruit)" style="margin-right:3px;" outlined color="red">계약파기</v-btn>
               </div>
               <div v-if="recruit.UserComplete == 2 && recruit.CompanyComplete == 0">
-                <p> 완료 처리됨 : 상대방의 처리를 기다리는중</p>
+                <!-- <p> 완료 처리됨 : 상대방의 처리를 기다리는중</p> -->
                 <v-btn @click="popContract('test')" style="margin-right:3px;" outlined color="orange">계약서</v-btn>
                 <v-btn @click="popChat(recruit)" style="margin-right:3px;" outlined color="orange">채팅창</v-btn>
               </div>
               <div v-if="recruit.UserComplete == 0 && recruit.CompanyComplete == 2">
-                <p> 상대방이 완료를 누른 상태입니다. 계약이 정상적으로 종료되었다면 완료를 눌러주세요.</p>
+                <!-- <p> 상대방이 완료를 누른 상태입니다. 계약이 정상적으로 종료되었다면 완료를 눌러주세요.</p> -->
                 <v-btn @click="complete(recruit,recruit.CompanyComplete)" style="margin-right:3px;" outlined color="blue">완료</v-btn>
                 <v-btn @click="popContract('test')" style="margin-right:3px;" outlined color="orange">계약서</v-btn>
                 <v-btn @click="popChat(recruit)" style="margin-right:3px;" outlined color="orange">채팅창</v-btn>
