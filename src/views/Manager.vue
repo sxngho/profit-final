@@ -7,17 +7,17 @@
     <div class="sidetoolbar white--text">
       <!-- <div href="m.naver.com" ><img src="../assets/icon_set/customer-support.svg" fill="yellow" /></div> -->
       <div class="sidetooltxt" @click="compo=1">home</div><br/>
-      <div class="sidetooltxt" @click="compo=2">weblog</div><br/>
+      <!-- <div class="sidetooltxt" @click="compo=2">weblog</div><br/> -->
       <div class="sidetooltxt" @click="compo=3">users</div><br/>
-      <div class="sidetooltxt" @click="compo=4">companys</div><br/>
+      <!-- <div class="sidetooltxt" @click="compo=4">companys</div><br/> -->
       <div class="sidetooltxt" @click="compo=5">siren</div><br/>
     </div>
 
     <v-container style="margin-left:80px;">
       <Main v-if="compo==1"/>
-      <WebLog v-if="compo==2"/>
+      <!-- <WebLog v-if="compo==2"/> -->
       <Users v-if="compo==3"/>
-      <Company v-if="compo==4"/>
+      <!-- <Company v-if="compo==4"/> -->
       <Report v-if="compo==5"/>
     </v-container>
     </v-layout>
