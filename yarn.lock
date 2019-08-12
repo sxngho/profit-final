@@ -4267,6 +4267,11 @@ fstream@^1.0.0, fstream@^1.0.12:
     mkdirp ">=0.5 0"
     rimraf "2"
 
+fullpage.js@^3.0.7:
+  version "3.0.7"
+  resolved "https://registry.npm.taobao.org/fullpage.js/download/fullpage.js-3.0.7.tgz#27d4815f39ad26019bf96dbc7644ac7ec6226f39"
+  integrity sha1-J9SBXzmtJgGb+W28dkSsfsYibzk=
+
 function-bind@^1.0.2, function-bind@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/function-bind/-/function-bind-1.1.1.tgz#a56899d3ea3c9bab874bb9773b7c5ede92f4895d"
@@ -8511,6 +8516,11 @@ svgo@^1.0.0:
     unquote "~1.1.1"
     util.promisify "~1.0.0"
 
+sweetalert2@8.x:
+  version "8.15.3"
+  resolved "https://registry.npm.taobao.org/sweetalert2/download/sweetalert2-8.15.3.tgz#cb9a619f768f62cd388d0cce71c4726c7309792b"
+  integrity sha1-y5phn3aPYs04jQzOccRybHMJeSs=
+
 "symbol-tree@>= 3.1.0 < 4.0.0":
   version "3.2.4"
   resolved "https://registry.yarnpkg.com/symbol-tree/-/symbol-tree-3.2.4.tgz#430637d248ba77e078883951fb9aa0eed7c63fa2"
@@ -9052,6 +9062,11 @@ vue-chartkick@^0.5.2:
     deep-equal "^1.0.1"
     deepmerge "^2.1.1"
 
+vue-chat-scroll@^1.3.5:
+  version "1.3.5"
+  resolved "https://registry.npm.taobao.org/vue-chat-scroll/download/vue-chat-scroll-1.3.5.tgz#a5ee5bae5058f614818a96eac5ee3be4394a2f68"
+  integrity sha1-pe5brlBY9hSBipbqxe475DlKL2g=
+
 vue-class-component@^6.2.0, vue-class-component@^6.3.2:
   version "6.3.2"
   resolved "https://registry.yarnpkg.com/vue-class-component/-/vue-class-component-6.3.2.tgz#e6037e84d1df2af3bde4f455e50ca1b9eec02be6"
@@ -9088,6 +9103,18 @@ vue-eslint-parser@^5.0.0:
     espree "^4.1.0"
     esquery "^1.0.1"
     lodash "^4.17.11"
+
+vue-fullpage.js@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.npm.taobao.org/vue-fullpage.js/download/vue-fullpage.js-0.1.4.tgz#344946053d6d0b1f88826d1762e9cbe3cd5dd8b6"
+  integrity sha1-NElGBT1tCx+Igm0XYunL481d2LY=
+  dependencies:
+    fullpage.js "^3.0.7"
+
+vue-fullpage@^2.0.5:
+  version "2.0.5"
+  resolved "https://registry.npm.taobao.org/vue-fullpage/download/vue-fullpage-2.0.5.tgz#fc1a75f032cd6e8a8e18686640506a84d9249184"
+  integrity sha1-/Bp18DLNboqOGGhmQFBqhNkkkYQ=
 
 vue-hot-reload-api@^2.3.0:
   version "2.3.3"
@@ -9161,11 +9188,6 @@ vue-simplemde@^0.5.2:
     marked "*"
     simplemde "*"
 
-vue-star@0.0.4:
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/vue-star/-/vue-star-0.0.4.tgz#8471e22eac46cb96b5e49d2cdcd0951b3472a8ab"
-  integrity sha1-hHHiLqxGy5a15J0s3NCVGzRyqKs=
-
 vue-style-loader@^4.1.0:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/vue-style-loader/-/vue-style-loader-4.1.2.tgz#dedf349806f25ceb4e64f3ad7c0a44fba735fcf8"
@@ -9173,6 +9195,13 @@ vue-style-loader@^4.1.0:
   dependencies:
     hash-sum "^1.0.2"
     loader-utils "^1.0.2"
+
+vue-sweetalert2@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.npm.taobao.org/vue-sweetalert2/download/vue-sweetalert2-2.1.1.tgz#feb76593db61ed293fc0bbd9b92176806c1de76e"
+  integrity sha1-/rdlk9th7Sk/wLvZuSF2gGwd524=
+  dependencies:
+    sweetalert2 "8.x"
 
 vue-template-compiler@^2.6.10:
   version "2.6.10"
