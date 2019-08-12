@@ -597,6 +597,7 @@ export default {
     this.user = this.$session.get("session_id")
     this.$store.commit('setSession', this.user)
     this.loading = false;
+    console.log(this.MyRecruits, 12123)
   },
   methods: {
     isHaveSkills(requiredSkills) {
@@ -677,7 +678,7 @@ export default {
           var flag = 0;
           for (var i in chatRooms) {
             if (chatRooms[i].recruitPK == recruitsbyCompany[ii].id && recruitsbyCompany[ii].data.contract && recruitsbyCompany[ii].data.responsibility == chatRooms[i].userId) {
-              console.log("이미 계약된 공고는 단하나!",recruitsbyCompany[ii])
+              // console.log("이미 계약된 공고는 단하나!",recruitsbyCompany[ii])
               var unreadChat = chatRooms[i].chatting;
               var unreadLength = 0;
               for(var j=unreadChat.length-1; j>=0; j--) {

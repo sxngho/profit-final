@@ -772,6 +772,7 @@ export default {
       .collection("recruitInfo")
       .where("companyId", "==", id)
       .orderBy("contract")
+      .orderBy("touchLevel")
       .orderBy("createDay", 'desc')
       .get()
       .then(docSnapshots => {
