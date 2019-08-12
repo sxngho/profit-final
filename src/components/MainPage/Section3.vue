@@ -102,10 +102,7 @@ export default {
       }
     },
     gogo(project_id) {
-            // path: "/project/:pcode",
-      window.open(document.location.origin + '/project/' + project_id)
-      // var url = document.location.href
-      // console.log(project_id, '땃냐')
+      window.open("../project/" + project_id, project_id,"titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=700,height=600");
     }
   }
 };

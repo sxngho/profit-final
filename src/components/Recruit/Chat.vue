@@ -643,7 +643,7 @@ export default {
     },
     clearInput() {
       this.toggleProjectTerm = true; this.togglePay = true;this.toggleDownPayment = true;this.toggleBalance = true;this.togglePenalty = true;
-      this.toggleContractDate = true;this.toggleCompany = true;this.toggleAddr = true; this.toggleRrn = true;
+      this.toggleContractDate = true;this.toggleCompany = true;this.toggleAddr = true; this.toggleRrn = true; this.togglePhonenumber = true;
     },
     validContract(){
       this.$swal('계약 도장!','성공적인 프로젝트를 기원합니다.','success')
