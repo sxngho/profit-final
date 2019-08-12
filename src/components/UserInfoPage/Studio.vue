@@ -351,7 +351,7 @@ export default {
       window.open(
         "../" + curl,
         curl,
-        "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=1000,height=600"
+        "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=800,height=650"
       );
     },
 
@@ -361,7 +361,7 @@ export default {
       window.open(
         "../chat/" + curl,
         curl,
-        "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=1000,height=600"
+        "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=800,height=650"
       );
     },
     async createChatRoom(recruit) {
@@ -370,17 +370,26 @@ export default {
 
       var ar1 = recruit.data.createDay.split('-');
       var ar2 = recruit.data.endDay.split('-');
-      var da1 = new Date(ar1[0], ar1[1], ar1[  2]);
+      var da1 = new Date(ar1[0], ar1[1], ar1[2]);
       var da2 = new Date(ar2[0], ar2[1], ar2[2]);
       var dif = da2 - da1;
       var cDay = 24 * 60 * 60 * 1000;// 시 * 분 * 초 * 밀리세컨
       var user = await FirebaseService.SELECT_Userdata(nickname);
       var company = await FirebaseService.SELECT_CompanyInfo(recruit.data.companyId);
+
+       var bud =  recruit.data.budget.split(',');
+       var budget = "";
+       for(var i in bud) {
+         budget += bud[i];
+       }
+       budget = Number(budget);
+      console.log(budget,"에산이에오!!!");
       console.log( user[0].phonenumber , " 유저핸드폰번호 저장될거" )
       console.log(company[0].address , "주소")
       console.log(recruit.data.chief , " 책임자")
       if ( !exist.res ) {
         // INIT CHATROOM
+
         firebase.database().ref('chat/'+recruit.id+nickname).set({
           link : 'chat/'+recruit.id+nickname,
           recruitPK : recruit.id,
@@ -388,10 +397,10 @@ export default {
         ],
 
           projectTitle : recruit.data.projectTitle,
-          projectTerm : cDay,
-          pay : recruit.data.budget,
-          downPayment : Number(recruit.data.budget) * 0.2,
-          balance : Number(recruit.data.budget) - Number(recruit.data.budget) * 0.2,
+          projectTerm : dif/cDay,
+          pay : budget,
+          downPayment : budget * 0.2,
+          balance : budget - (budget * 0.2),
           penalty : recruit.data.penalty,
           contractDate : "",
 
