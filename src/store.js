@@ -34,7 +34,8 @@ export default new Vuex.Store({
     alertList: { alert: [], unread: [] },
     start: 0,
     end: 13,
-    pageLength: ""
+    pageLength: "",
+    isFetch: false,
   },
   // Getter : get 함수 정의
   // 정의 -> return state.변수명
@@ -54,7 +55,10 @@ export default new Vuex.Store({
     },
     getalertList: function (state) {
       return state.alertList;
-    }
+    },
+    getIsFetch : function(state) {
+      return state.isFetch;
+    },
   },
 
   // Mutations : 값변경 / 동기
@@ -65,6 +69,9 @@ export default new Vuex.Store({
     },
     setSession: function (state, payload) {
       return (state.session_id = payload);
+    },
+    SetFetch: function (state, payload) {
+      return (state.isFetch = payload);
     },
     convertPVT: function (state, payload) {
       return (state.projectViewToggle = payload);
