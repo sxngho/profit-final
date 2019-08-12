@@ -1,6 +1,12 @@
 <template>
   <div>
-    <template>
+
+    <v-layout>
+      현재 비활성화된 상태입니다.
+    </v-layout>
+
+    <!-- <template>
+
       <v-layout row wrap>
         <v-flex xs12 sm10 offset-sm1>
           <h1>가입 대기중인 기업</h1>
@@ -30,6 +36,7 @@
 
         </v-flex>
       </v-layout>
+
     </template>
 
     <template>
@@ -66,8 +73,9 @@
           </v-expansion-panels>
         </v-flex>
       </v-layout>
-    </template>
-</div>
+    </template> -->
+
+  </div>
 </template>
 
 <script>

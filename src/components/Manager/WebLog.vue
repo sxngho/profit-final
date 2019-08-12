@@ -2,7 +2,11 @@
 <!-- 정말 많은 도움이 된 사이트: http://bitly.kr/e2faEb -->
 <template>
   <div>
-    <v-layout row wrap>
+    <v-layout>
+      현재 비활성화된 상태입니다.
+    </v-layout>
+
+    <!-- <v-layout row wrap>
       <v-flex xs12 sm8>
         <Linechart/>
       </v-flex>
@@ -20,14 +24,14 @@
         <h1>게시판별 방문자 추이</h1>
         해야하는것 : 일간, 주간(완료), 월간, 연간
       </v-flex>
-    </v-layout>
+    </v-layout> -->
 
   </div>
 </template>
 
 <script>
-import Linechart from "./Chart/LineChart";
-import Barchart from "./Chart/BarChart"
+// import Linechart from "./Chart/LineChart";
+// import Barchart from "./Chart/BarChart"
 
 export default {
   data() {
@@ -35,8 +39,8 @@ export default {
     };
   },
   components:{
-    Linechart,
-    Barchart,
+    // Linechart,
+    // Barchart,
   },
 
 };

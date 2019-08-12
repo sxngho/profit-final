@@ -46,6 +46,7 @@ export default {
   async SELECT_ALLProjects() {
     return firestore
       .collection("projects")
+      .orderBy('date')
       .get()
       .then(docSnapshots => {
         return docSnapshots.docs.map(doc => {
