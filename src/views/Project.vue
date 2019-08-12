@@ -155,11 +155,12 @@
                     <!-- 수정 전에 보여주는 댓글리스트 -->
                     <v-list-item-content v-bind:class="[`before_${index}`]" style="width:70%;" >
                       <span v-if="com.state==3" style="color:red;" @click="seecomment(index)">이 댓글은 신고 누적으로 블라인드 처리</span>
-                      <span class="overline grey--text"> {{com.User}} </span>
-                      <span class="overline grey--text"> | {{com.date}} </span> <br/>
-                      <v-list-item-title v-if="com.state < 3" v-html="com.Comment"></v-list-item-title>
-                      <v-list-item-title v-html="com.Comment" v-bind:class="[`blind_${index}`]" style="display:none;"></v-list-item-title>
-
+                      <div class="coment_content">
+                        <span class="overline grey--text"> {{com.User}} </span>
+                        <span class="overline grey--text" style="width:300px"> | {{com.date}} </span> <br/>
+                        <v-list-item-title v-if="com.state < 3" v-html="com.Comment"></v-list-item-title>
+                        <v-list-item-title v-html="com.Comment" v-bind:class="[`blind_${index}`]" style="display:none;"></v-list-item-title>
+                      </div>
 
                     </v-list-item-content>
                     <!--  -->
@@ -173,7 +174,7 @@
                     <!--  -->
                     <v-spacer/>
                     <v-list-item-action>
-                      <div style='display:flex;'>
+                      <div style='display:flex; align-items:center'>
                         <i v-bind:id="[`commentlike_${index}`]" class="far fa-heart" style="color:red; cursor:pointer;" @click="like_comment(com, index)"/>
                         <span class="caption">{{com.like.length}}</span>
 
@@ -573,3 +574,9 @@ export default {
   }
 }
 </script>
+<style>
+.coment_content {
+  display: flex;
+  justify-content: center;
+}
+</style>
