@@ -2,12 +2,12 @@
   <div class="followList__container">
     <!-- followerlist :  {{view1}}, {{view2}}, {{this.$store.getters.getfollowerList}}, {{followings}} -->
     <div  class="followrList__container__content" v-if="view1">
-      <div v-for="human in this.$store.getters.getfollowerList" class="content__follower" @click="gogo(human)" style="cursor:pointer;">
+      <div v-for="human in this.$store.getters.getfollowerList" class="content__follower">
         <Follower :follower="human" />
       </div>
     </div>
     <div class="followrList__container__content" v-if="view2">
-      <div v-for="human2 in followings" class="content__follower" @click="gogo(human2)" style="cursor:pointer;">
+      <div v-for="human2 in followings" class="content__follower">
         <Following :following="human2" />
       </div>
     </div>
@@ -72,10 +72,10 @@ export default {
       // }
 
     },
-    gogo(human) {
-      this.$router.push(`/story/${human}`)
-      // console.log(11)
-    }
+    // gogo(human) {
+    //   this.$router.push(`/story/${human}`)
+    //   // console.log(11)
+    // }
   },
   mounted() {
     // this.view1 = this.$store.state.followerView;

@@ -2,8 +2,8 @@
   <div class="follower__container">
     <hr />
     <div class="container__content box">
-      <div class="content__followerImg">
-        <img :src="userImg" style="height:95px; width:95px; border-radius:50px" />
+      <div class="content__followerImg" style="cursor:pointer;" >
+        <img :src="userImg" style="height:95px; width:95px; border-radius:50px" @click="gotostory(nickname)"/>
       </div>
       <div class="content__followerInfo box">
         <!-- <div class="followerInfo__name">{{userName}}</div> -->
@@ -12,7 +12,7 @@
       </div>
 
       <div v-if="projectList.length" v-for="item in projectList" class="content__followerPortfolioList box">
-        <MPortfolio v-bind:project="item" />
+        <MPortfolio :project="item" :nickname="nickname"/>
       </div>
       <div v-if="!projectList.length" >
         No project
@@ -62,6 +62,10 @@ export default {
       // console.log(this.user[0].userIntro);
       // this.userIntro = this.user[0].userIntro;
       // console.log(this.user[0].userImage);
+    },
+    gotostory(nickname) {
+      // console.log(`${document.location.origin}/story/${nickname}`, 1)
+      window.open(`${document.location.origin}/story/${nickname}`)
     }
   }
 };

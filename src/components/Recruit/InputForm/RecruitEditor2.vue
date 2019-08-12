@@ -252,6 +252,53 @@
           });
         },
         async submit() {
+          //프로젝트 제목, 프로젝트 책임자, 카테고리, 프로젝트 요약, 스킬, 프로젝트 예상기간,
+          // 예산, 위약금, 상세정보
+
+          if (!(this.projectTitle && this.chief && this.category && this.projectSummary && this.techList.length
+             && this.budget && this.penalty && this.projectContent && (this.endDay >= this.createDay))) {
+              // console.log('이건 안되는 상황이다.')
+              var reject_reason = ""
+              var reject_count = 0
+              if (!this.projectTitle) {
+                reject_reason += '프로젝트 제목 <br/>'
+                reject_count += 1
+              }
+              if (!this.chief) {
+                reject_reason += '프로젝트 책임자 <br/>'
+                reject_count += 1
+              }
+              if (!this.category) {
+                reject_reason += '카테고리 <br/>'
+                reject_count += 1
+              }
+              if (!this.projectSummary) {
+                reject_reason += '프로젝트 요약 <br/>'
+                reject_count += 1
+              }
+              if (!this.techList.length) {
+                reject_reason += '프로젝트 스킬 <br/>'
+                reject_count += 1
+              }
+              if (!this.budget) {
+                reject_reason += '예산 <br/>'
+                reject_count += 1
+              }
+              if (!this.penalty) {
+                reject_reason += '위약금 <br/>'
+                reject_count += 1
+              }
+              if (!this.projectContent) {
+                reject_reason += '상세정보 <br/>'
+                reject_count += 1
+              }
+              if (!(this.endDay >= this.createDay)) {
+                reject_reason += '시작일과 종료일 <br/>'
+                reject_count += 1
+              }
+
+              this.$swal("프로젝트 생성 실패!", `필수 정보들을 채워주세요 : ${reject_count}개` + `<br/>` + `${reject_reason}`, "error");
+          } else {
           this.$swal('Created!','공고가 등록되었습니다.','success')
 
           const recruitInfo = {
@@ -275,6 +322,9 @@
           } else {
             this.$swal('등록 실패!','권한이 없습니다.','error')
           }
+
+          }
+
         },
         deleteTech(index){
           this.techList.splice(index,1);
