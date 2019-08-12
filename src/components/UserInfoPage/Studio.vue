@@ -62,23 +62,27 @@
             <v-layout row wrap>
               <v-spacer/>
               <div v-if="recruit.UserComplete == 0 && recruit.CompanyComplete == 0">
-                <v-btn @click="complete(recruit)" style="margin-right:3px;" outlined color="blue">완료</v-btn>
+                <v-btn @click="complete(recruit,recruit.CompanyComplete)" style="margin-right:3px;" outlined color="blue">완료</v-btn>
                 <v-btn @click="popContract('test')" style="margin-right:3px;" outlined color="orange">계약서</v-btn>
                 <v-btn @click="popChat(recruit)" style="margin-right:3px;" outlined color="orange">채팅창</v-btn>
                 <v-btn @click="cancel(recruit)" style="margin-right:3px;" outlined color="red">계약파기</v-btn>
               </div>
               <div v-if="recruit.UserComplete == 2 && recruit.CompanyComplete == 0">
-                <!-- <p> 완료 처리됨 // 상대방의 처리를 기다리는중</p> -->
+                <p> 완료 처리됨 : 상대방의 처리를 기다리는중</p>
                 <v-btn @click="popContract('test')" style="margin-right:3px;" outlined color="orange">계약서</v-btn>
                 <v-btn @click="popChat(recruit)" style="margin-right:3px;" outlined color="orange">채팅창</v-btn>
               </div>
               <div v-if="recruit.UserComplete == 0 && recruit.CompanyComplete == 2">
-                <!-- <p> 상대방이 완료를 누른 상태입니다. 계약이 정상적으로 종료되었다면 완료를 눌러주세요.</p> -->
+                <p> 상대방이 완료를 누른 상태입니다. 계약이 정상적으로 종료되었다면 완료를 눌러주세요.</p>
+                <v-btn @click="complete(recruit,recruit.CompanyComplete)" style="margin-right:3px;" outlined color="blue">완료</v-btn>
                 <v-btn @click="popContract('test')" style="margin-right:3px;" outlined color="orange">계약서</v-btn>
                 <v-btn @click="popChat(recruit)" style="margin-right:3px;" outlined color="orange">채팅창</v-btn>
               </div>
-              <div v-if="recruit.UserComplete == 1 || recruit.CompanyComplete == 1">
-                <!-- <p> 이미 파기된 계약입니다. 이거 처리해주세용</p> -->
+              <div v-if="recruit.UserComplete == 1">
+                <p> 기업측의 사유로 파기된 계약입니다. </p>
+              </div>
+              <div v-if="recruit.CompanyComplete == 1">
+                <p> 기업측의 사유로 파기된 계약입니다. </p>
               </div>
             </v-layout>
           </v-container>
@@ -262,7 +266,7 @@ export default {
         }
         for(var j in userProceedList)
           for(var i in allChatRoom) {
-            if ( allChatRoom[i].recruitPK == userProceedList[j] && allChatRoom[i].userId == this.$session.get('session_id') &&  allChatRoom[i].UserComplete !== 1 && allChatRoom[i].CompanyComplete !== 1) {
+            if ( allChatRoom[i].recruitPK == userProceedList[j] && allChatRoom[i].userId == this.$session.get('session_id') &&  allChatRoom[i].UserComplete !== 1 && allChatRoom[i].CompanyComplete !== 1 && ( allChatRoom[i].UserComplete !== 2 || allChatRoom[i].CompanyComplete !== 2 ) ) {
               this.proceedList.push(allChatRoom[i]);
               break;
           }
@@ -287,7 +291,7 @@ export default {
         }
         for(var j in userProceedList)
           for(var i in allChatRoom) {
-            if ( allChatRoom[i].recruitPK == userProceedList[j] && allChatRoom[i].userId == this.$session.get('session_id') &&  allChatRoom[i].UserComplete !== 1 && allChatRoom[i].CompanyComplete !== 1 ) {
+            if ( allChatRoom[i].recruitPK == userProceedList[j] && allChatRoom[i].userId == this.$session.get('session_id') &&  allChatRoom[i].UserComplete !== 1 && allChatRoom[i].CompanyComplete !== 1 && ( allChatRoom[i].UserComplete !== 2 || allChatRoom[i].CompanyComplete !== 2 ) ) {
               this.proceedList.push(allChatRoom[i]);
               break;
           }
@@ -297,7 +301,7 @@ export default {
         console.log(this.completeList);
       });
     },
-    complete(recruit) {
+    complete(recruit,companyState) {
       this.$swal({
          title: '정말 계약을 완료하시겠습니까?',
          text: "한번 완료한 계약은 수정이 불가능합니다.",
@@ -310,7 +314,7 @@ export default {
         }).then((result) => {
          if (result.value) {
            this.$swal('프로젝트 완료!','성공적인 프로젝트이셨나요?','success')
-           FirebaseService.UPDATE_RecruitCompleteByUser(recruit.recruitPK,"success")
+           FirebaseService.UPDATE_RecruitCompleteByUser(recruit.recruitPK,"success",companyState)
            var dataRef = firebase.database().ref('/'+recruit.link);
            dataRef.update({
              UserComplete : 2,

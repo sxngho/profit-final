@@ -184,7 +184,7 @@ export default {
   },
   watch: {
     toFilter: function(newVal, oldVal) { // watch it
-      console.log('Prop changed: ', newVal, ' | was: ', oldVal)
+      // console.log('Prop changed: ', newVal, ' | was: ', oldVal)
       this.filterFunction();
     }
   }

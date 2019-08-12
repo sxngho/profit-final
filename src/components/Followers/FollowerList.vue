@@ -1,13 +1,14 @@
 <template>
   <div class="followList__container">
-    <div v-show="this.view1" class="followrList__container__content">
-      <div v-for="human in followers" class="content__follower">
-        <Follower v-bind:follower="human" />
+    <!-- followerlist :  {{view1}}, {{view2}}, {{this.$store.getters.getfollowerList}}, {{followings}} -->
+    <div  class="followrList__container__content" v-if="view1">
+      <div v-for="human in this.$store.getters.getfollowerList" class="content__follower" @click="gogo(human)" style="cursor:pointer;">
+        <Follower :follower="human" />
       </div>
     </div>
-    <div v-show="this.view2" class="followrList__container__content">
-      <div v-for="human in followings" class="content__follower">
-        <Follower v-bind:follower="human" />
+    <div class="followrList__container__content" v-if="view2">
+      <div v-for="human2 in followings" class="content__follower" @click="gogo(human2)" style="cursor:pointer;">
+        <Following :following="human2" />
       </div>
     </div>
   </div>
@@ -16,6 +17,7 @@
 <script>
 import FirebaseService from "@/services/FirebaseService";
 import Follower from "../Followers/Follower";
+import Following from "../Followers/Following";
 import { mapState } from "vuex";
 
 export default {
@@ -24,38 +26,55 @@ export default {
       userdata: "",
       followers: [],
       followings: [],
-      view1: false,
-      view2: false,
       level: ""
     };
   },
   components: {
-    Follower
+    Follower,
+    Following,
   },
+  props : {
+    view1 : {type:Boolean},
+    view2 : {type:Boolean},
+  },
+
   created() {
+    // console.log(this.$route.params.id)
+    this.userid = this.$route.params.id
     this.level = this.$session.get("level");
     this.SELECT_Userdata();
+
   },
   methods: {
     async SELECT_Userdata() {
-      if (this.level !== "") {
-        // 로그인한 경우
-        if (this.level == 3) {
-          // 회사인 경우
-          this.userdata = await FirebaseService.SELECT_Companynickname(
-            this.$session.get("session_id")
-          );
-          this.followers = this.userdata.followerlist;
-          this.followings = this.userdata.followinglist;
-        } else {
-          // 회사가 아닌 경우
-          this.userdata = await FirebaseService.SELECT_Userdata(
-            this.$route.params.id
-          );
-          this.followers = this.userdata[0].followerlist;
-          this.followings = this.userdata[0].followinglist;
-        }
-      }
+      this.userdata = await FirebaseService.SELECT_Userdata(this.$route.params.id)
+      this.followers = this.userdata[0].followerlist;
+      this.followings = this.userdata[0].followinglist;
+      this.$store.commit('setfollowerList', this.userdata[0].followerlist)
+      // console.log(this.$store.getters.getfollowerList, '현재 나의 상태는??')
+      // if (this.level !== "") {
+      //   // 로그인한 경우
+      //   if (this.level == 3) {
+      //     // 회사인 경우
+      //     this.userdata = await FirebaseService.SELECT_Companynickname(
+      //       this.$session.get("session_id")
+      //     );
+      //     this.followers = this.userdata.followerlist;
+      //     this.followings = this.userdata.followinglist;
+      //   } else {
+      //     // 회사가 아닌 경우
+      //     this.userdata = await FirebaseService.SELECT_Userdata(
+      //       this.$route.params.id
+      //     );
+      //     this.followers = this.userdata[0].followerlist;
+      //     this.followings = this.userdata[0].followinglist;
+      //   }
+      // }
+
+    },
+    gogo(human) {
+      this.$router.push(`/story/${human}`)
+      // console.log(11)
     }
   },
   mounted() {

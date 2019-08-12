@@ -279,7 +279,7 @@
                         <v-chip color="#4a77de" text-color="white" v-if="item.recruit.data.contract && item.recruit.data.UserComplete == 2 && item.recruit.data.CompanyComplete == 2">완료</v-chip>
                         <v-chip color="#692721" text-color="white" v-if="item.recruit.data.contract && (item.recruit.data.CompanyComplete ==1 || item.recruit.data.UserComplete ==1)" >파기</v-chip>
                         <v-chip color="#0e568a" text-color="white" v-if="item.recruit.data.contract && item.recruit.data.UserComplete !== 1 && item.recruit.data.CompanyComplete !== 1 && (item.recruit.data.UserComplete !== 2 || item.recruit.data.CompanyComplete !== 2)">진행</v-chip>
-                        <v-chip color="rgb(118, 199, 122)" text-color="white" v-if="!item.recruit.data.contract">모집중</v-chip>
+                        <v-chip color="rgb(118, 199, 122)" text-color="white" v-if="!item.recruit.data.contract">모집</v-chip>
                         &nbsp;&nbsp;
                         <span>{{item.recruit.data.projectTitle}}</span>
                         <v-badge color="red" v-if="item.length !== 0">
@@ -331,8 +331,18 @@
                                 </tr>
                               </tbody>
                             </v-simple-table>
-                          </v-flex>
 
+                            <v-layout justify-center v-if="$store.getters.getLevel == 2">
+                              <div v-if="!item.recruit.data.contract && isHaveSkills(item.recruit.data.requiredSkills)">
+                                <RecruitDetailForCompany
+                                 :recruit="item.recruit"
+                                 :userdata="currentUser"
+                                 :recruit_id="item.recruit.id"
+                                 />
+                              </div>
+                            </v-layout>
+
+                          </v-flex>
 
 
                           <!-- 2. 로그인한 사람이 해당 회사일 때 : 공고 상세 내용 -->
@@ -566,6 +576,7 @@
 import FirebaseService from "@/services/FirebaseService";
 import Vue from "vue";
 import Main from "../components/Manager/Main";
+import RecruitDetailForCompany from "../components/Recruit/RecruitDetailForCompany";
 
 var firebase = require("firebase/app");
 require("firebase/auth");
@@ -574,6 +585,7 @@ require("firebase/database");
 export default {
   name: "Company",
   components: {
+    RecruitDetailForCompany
   },
   created() {
 
@@ -585,8 +597,22 @@ export default {
     this.user = this.$session.get("session_id")
     this.$store.commit('setSession', this.user)
     this.loading = false;
+    console.log(this.MyRecruits, 12123)
   },
   methods: {
+    isHaveSkills(requiredSkills) {
+      console.log("실행이되나요??~????~?~?")
+      if ( requiredSkills.length == 0 ) {
+        return true;
+      }
+      for(var j in this.currentUser) {
+        if ( !requiredSkills.includes(this.currentUser.data.userSkills[j] ) ) {
+          return false;
+        }
+      }
+
+      return true;
+    },
     complete(recruitId,recruitData) {
       this.$swal({
          title: '정말 계약을 완료하시겠습니까?',
@@ -633,6 +659,14 @@ export default {
       this.$loading(true);
       this.dibsUsers = [];
       this.userData = await FirebaseService.SELECT_UserIdData();
+      if ( this.$store.getters.getLevel == 2 ) {
+        for(var i in this.userData) {
+            if ( this.userData[i].id == this.$store.getters.getSession ) {
+              this.currentUser = this.userData[i];
+              break;
+            }
+        }
+      }
       var recruitsbyCompany = await FirebaseService.SELECT_RecruitInfoById(this.$route.params.id);
       this.recruitsbyCompany = recruitsbyCompany;
       var chatRooms = "";
@@ -644,7 +678,7 @@ export default {
           var flag = 0;
           for (var i in chatRooms) {
             if (chatRooms[i].recruitPK == recruitsbyCompany[ii].id && recruitsbyCompany[ii].data.contract && recruitsbyCompany[ii].data.responsibility == chatRooms[i].userId) {
-              console.log("이미 계약된 공고는 단하나!",recruitsbyCompany[ii])
+              // console.log("이미 계약된 공고는 단하나!",recruitsbyCompany[ii])
               var unreadChat = chatRooms[i].chatting;
               var unreadLength = 0;
               for(var j=unreadChat.length-1; j>=0; j--) {
@@ -1007,6 +1041,7 @@ export default {
       userData : [],
       joinUserData : [],
       recruitsbyCompany:"",
+      currentUser : "",
     };
   }
 };

@@ -227,7 +227,7 @@
           projectdescription:"",
           projectterm:"",
           projectimage: "",
-          projectcontent: "<h1>Some initial content</h1>",
+          projectcontent: "",
           customToolbar: [
             ["bold", "italic", "underline"],
             [{ list: "ordered" }, { list: "bullet" }],
@@ -363,9 +363,9 @@
                }
         },
         async reload_userskill(session_id) {
-          // console.log('asdasd')
         var projects =  await FirebaseService.SELECT_Projects(session_id);
-        await FirebaseService.reload_userskill(session_id,projects);
+        var userSkill = await FirebaseService.SELECT_UserSkillByNickname(session_id);
+        await FirebaseService.reload_userskill(session_id,projects,userSkill[0].ss);
       },
         //// IMAGE UPLOAD
         removeImage(){
