@@ -11,16 +11,18 @@
 
     <!-- 여기서부터 슬기가 꾸미는 중 -->
     <v-layout row wrap>
+      <v-flex>
       <h1 class="headline">관리자 페이지</h1>
 
       <h2>Weblog</h2>
-      <br>
+      <br/>
       <h2>Users</h2>
       <br>
       <h2>Company</h2>
       <br>
       <h2>Siren</h2>
       <br>
+    </v-flex>
     </v-layout>
 
     <!-- 여기까지 슬기가 꾸미는 중 -->
