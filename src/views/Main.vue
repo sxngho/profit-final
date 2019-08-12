@@ -1,5 +1,5 @@
 <template>
-  <div class="MainPage">
+  <div class="MainPage" style="padding:0% 5%">
     <!-- <Banner />
     <Filters /> -->
     <!-- <PortfolioList /> -->
@@ -40,7 +40,7 @@ export default {
     return {
       options:{
         licenseKey: 'YOUR_KEY_HERE',
-        sectionsColor: ['#3c3a74', 'rgb(238,238,238)',  'rgb(238,238,238)', '#3c3a74'],
+        sectionsColor: ['#D0D9F2','#91A9D9','#99B1BF','#F2F2F2',],
       },
     }
   },

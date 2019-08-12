@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="margin-top:5%">
     <div class="searchBar__container">
       <div class="searchBar__content">
         <div class="searchBar__icon">
@@ -10,7 +10,8 @@
             type="text"
             v-model="inputKeyword"
             class="searchBar__input__box"
-            placeholder="회사명을 입력하세요."
+            placeholder=" 회사명을 입력하세요."
+            style="border:1px solid; border-radius: 10px; outline:none;"
             @keyup.enter="seacrh(inputKeyword)"
           />
           <button
@@ -70,10 +71,7 @@ export default {
       if (this.inputKeyword !== "") {
         this.showCompanyList = [];
         for (let i = 0; i < this.allCompanyList.length; i++) {
-          if (
-            this.allCompanyList[i].company_name.indexOf(this.inputKeyword) !==
-            -1
-          ) {
+          if (this.allCompanyList[i].company_name.indexOf(this.inputKeyword) !== -1) {
             this.showCompanyList.push(this.allCompanyList[i]);
           }
         }

@@ -78,21 +78,26 @@
     </div>
 
     <!-- 비 로그인 유저라면 아래 레이아웃 출력 -->
-    <div v-if="typeof(this.$store.getters.getLevel) =='string'">
-      <v-layout wrap row>
-        <router-link to="/" class="bannerBox" style="text-decoration:none">
-          <div class="studio contentBox">
-            <div class="iconBox">
-              <i class="fas fa-home fa-7x" style="color:blueviolet"></i>
+    <div v-if="typeof(this.$store.getters.getLevel) =='string'">" style="margin:10px;">
+      <v-layout row wrap justify-center style="margin:80px;">
+        <h1>로그인이 필요한 서비스입니다.</h1>
+      </v-layout>
+
+      <v-layout wrap row justify-center>
+          <router-link to="/" class="bannerBox" style="text-decoration:none">
+            <div class="bannerBtnBlack">
+              <div class="iconBox">
+                <i class="fas fa-home fa-7x" style=""></i>
+              </div>
+              <br />
+              <div class="studio_title titleBox">
+                <h1><span class="fontStyle">홈페이지로 돌아가기</span></h1>
+              </div>
             </div>
-            <br />
-            <div class="studio_title titleBox">
-              <h1><span class="fontStyle">홈페이지로 돌아가기</span></h1>
-            </div>
-          </div>
-        </router-link>
+          </router-link>
       </v-layout>
     </div>
+
 
   </v-container>
 </template>

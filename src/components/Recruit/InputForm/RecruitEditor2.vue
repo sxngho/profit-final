@@ -271,16 +271,9 @@
           // console.log(recruitInfo);
           if (this.$session.get("session_id")) {
             var result = await FirebaseService.INSERT_recruitInfo(recruitInfo);
-            this.showNotification(
-              "foo-css",
-              "success",
-              `${this.$session.get("session_id")}님`,
-              `recruitInfo 내용이 올라갔습니다.!`,
-              // console.log(recruitInfo)
-            );
             this.$router.push(`/company/${this.$session.get('session_id')}`)
           } else {
-            alert("권한이 없습니다.");
+            this.$swal('등록 실패!','권한이 없습니다.','error')
           }
         },
         deleteTech(index){
