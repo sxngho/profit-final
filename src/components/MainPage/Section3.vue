@@ -57,7 +57,7 @@
                 </v-layout>
 
                 <div class="text-center;">
-                  <v-btn @click="gogo(hotprojects[i][0])">보러가기</v-btn>
+                  <v-btn color="primary" @click="gogo(hotprojects[i][0])">보러가기</v-btn>
                 </div>
 
               </v-card>
