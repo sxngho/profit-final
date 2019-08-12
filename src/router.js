@@ -101,7 +101,7 @@ export default new Router({
       component: Company
     },
     {
-      path: "/companyListPage",
+      path: "/companys",
       name: "companyListPage",
       component: CompanyListPage
     },
