@@ -2,18 +2,18 @@ import Vue from "vue";
 import Router from "vue-router";
 import Main from "./views/Main.vue";
 import Story from "./views/Story.vue";
-import CompanyIntro from "./views/CompanyIntro.vue";
-import Git from "./views/Git.vue";
+// import CompanyIntro from "./views/CompanyIntro.vue";
+// import Git from "./views/Git.vue";
 import Followers from "./views/Followers.vue";
 import Project from "./views/Project.vue";
 import Vuex from "vuex";
 import store from "./store";
 import Manager from "./views/Manager.vue";
-import Chat from "./views/chat.vue";
+// import Chat from "./views/chat.vue";
 import Recruit from "./views/Recruit.vue";
 import RecruitDetail from "./components/Recruit/RecruitDetail.vue";
 import ReChat from "./components/Recruit/Chat.vue";
-import Consult from "./components/Recruit/Consult.vue";
+// import Consult from "./components/Recruit/Consult.vue";
 import Contract from "./components/Recruit/Contract.vue";
 import RecruitEditorPage from "./views/RecruitEditorPage.vue";
 import CompanyListPage from "./views/CompanyListPage.vue";
@@ -39,16 +39,6 @@ export default new Router({
       path: "/story/:id",
       name: "story",
       component: Story
-    },
-    {
-      path: "/companyIntro/",
-      name: "companyIntro",
-      component: CompanyIntro
-    },
-    {
-      path: "/git",
-      name: "git",
-      component: Git
     },
     {
       path: "/followers",
@@ -79,11 +69,6 @@ export default new Router({
       path: "/chat/:ccode",
       name: "chat",
       component: ReChat
-    },
-    {
-      path: "/consult/:ccode",
-      name: "consult",
-      component: Consult
     },
     {
       path: "/contract/:ccode",

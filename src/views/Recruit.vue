@@ -118,14 +118,14 @@
 
   <script>
   import FirebaseService from "@/services/FirebaseService";
-  import RecruitBanner from "../components/Recruit/InputForm/RecruitBanner";
-  import RecruitEditor from "../components/Recruit/InputForm/RecruitEditor";
+  // import RecruitBanner from "../components/Recruit/InputForm/RecruitBanner";
+  // import RecruitEditor from "../components/Recruit/InputForm/RecruitEditor";
   import RecruitDetail from "../components/Recruit/RecruitDetail";
   export default {
     name: "Recruit",
     components: {
-      RecruitBanner,
-      RecruitEditor,
+      // RecruitBanner,
+      // RecruitEditor,
       RecruitDetail,
     },
     data() {
