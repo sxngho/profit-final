@@ -6,7 +6,10 @@
     <v-layout row wrap>
       <v-toolbar-title class="font-weight-medium" style="padding-left:10px;">
          <span class="font-weight-bold title">{{project.projecttitle}} </span>
-         <span class="font-weight-thin font-italic subheading">{{project.developer}}</span><!-- TODO 이거 필드명 맞춰조라 -->
+         <span class="font-weight-thin font-italic subheading">{{project.session_id}}</span>
+         <v-flex class="caption">
+           {{ project.projectdescription }}
+         </v-flex>
        </v-toolbar-title>
 
        <v-btn text color="yellow" @click="submitObjection()" v-if="this.$route.params.id==this.$store.getters.getSession && project.state > 0">
@@ -127,6 +130,7 @@
                               </v-btn>
                           </template>
                         </v-text-field>
+                        <input style="width:0%; height:0%"></input>
                       </v-flex>
                   </div>
 
@@ -142,20 +146,6 @@
 
 
                   </form>
-
-
-                <!-- comment sort -->
-                <!-- <v-layout row ma-2>
-                  <v-spacer/>
-                  <div>
-                    <span>sort</span>&nbsp&nbsp&nbsp
-                    <v-btn-toggle>
-                      <v-btn text small>oldest</v-btn>
-                      <v-btn text small>newest</v-btn>
-                      <v-btn text small>liked</v-btn>
-                    </v-btn-toggle>
-                  </div>
-                </v-layout> -->
 
                 <!-- comment list -->
                 <v-layout row wrap justify-center>
@@ -374,6 +364,9 @@ export default {
     },
     // seulgi function
     async INSERT_Comment(real_taglist, comment){
+      if( comment == "" ) {
+        this.$swal('실패!','댓글내용을 입력해주세요.','error');
+      }
       if (this.user) {
         var listtext = ''
         for (var j in real_taglist) {

@@ -1,194 +1,175 @@
 <template>
-  <div>
-    <v-toolbar>
-      <!-- profile img -->
-      <v-btn icon to="/"/>
-      <v-toolbar-title class="font-weight-medium">
-         <span class="font-weight-bold">{{project.projecttitle}}</span>
-         <span class="font-weight-thin font-italic subheading">{{project.session_id}}</span>
-         <v-flex class="caption">
-           {{ project.projectdescription }}
-         </v-flex>
-       </v-toolbar-title>
-      <v-spacer/>
-
+  <v-container>
+    <v-layout row wrap>
+      <v-toolbar-title class="font-weight-medium" style="padding-left:10px;">
+        <span class="font-weight-bold">{{project.projecttitle}}</span>
+        <span class="font-weight-thin font-italic subheading">{{project.session_id}}</span>
+        <v-flex class="caption">
+          {{ project.projectdescription }}
+        </v-flex>
+      </v-toolbar-title>
       <v-btn text @click="submitObjection()" v-if="this.$route.params.id==this.$store.getters.getSession && project.state > 0">
         이의제기
       </v-btn>
 
-      <v-btn text icon color="pink">
-        <!-- 이미 좋아요 눌렀다면 다른 fa 를 보여주는 것도 좋겠다. -->
-        <i id="likecheck" class="far fa-heart fa-2x" @click="like_project()"></i>
-        {{likeit.length}}
-      </v-btn>
+      <v-spacer/>
+      <div>
+        <v-badge color="#E74C3C" overlap>
+          <template slot="badge"> {{likeit.length}} </template>
+          <v-btn text icon color="pink">
+            <!-- 이미 좋아요 눌렀다면 다른 fa 를 보여주는 것도 좋겠다. -->
+            <i id="likecheck" class="far fa-heart fa-2x" @click="like_project()"></i>
+          </v-btn>
+        </v-badge>
 
-      <v-btn text icon color="yellow">
-        <i class="fa fa-star fa-2x"></i>
-      </v-btn>
+        <!-- 신고하기 -->
+        <template>
+          <v-layout justify-center d-inline>
+            <v-dialog v-model="sirendialog" max-width="290">
+              <template v-slot:activator="{ on }">
+                <v-btn v-if="$store.getters.getSession" text color="primary" dark v-on="on"><i class="fas fa-bell fa-2x" style="color:orange"></i></v-btn>
+              </template>
 
-      <!-- 신고하기 -->
-      <template>
-      <v-layout justify-center d-inline>
-        <v-dialog v-model="sirendialog" max-width="290">
-          <template v-slot:activator="{ on }">
-            <v-btn v-if="$store.getters.getSession" text color="primary" dark v-on="on"><i class="fas fa-bell fa-2x" style="color:orange"></i></v-btn>
-          </template>
+              <v-card>
+                <v-card-title class="headline">
+                  <span class="headline">프로젝트 신고하기</span>
+                </v-card-title>
+                <v-card-text>
+                  <v-layout wrap>
+                    <v-flex xs12>
+                      <v-combobox
+                      v-model="reportSelect"
+                      :items="reportItems"
+                      label="신고 사유를 선택해주세요."
+                      readonly
+                      ></v-combobox>
+                    </v-flex>
+                    <v-flex xs12 v-if="reportSelect=='기타'">
+                      <v-text-field single-line outlined required v-model="reportText" placeholder="신고 사유를 입력해주세요."> </v-text-field>
+                    </v-flex>
+                    <v-flex xs12>
+                      <v-text-field v-model="reportDesc" required placeholder="신고 내용을 입력해주세요." @keyup.enter="sirendialog = false,  submitReport(reportSelect,reportText,reportDesc)"></v-text-field>
+                    </v-flex>
+                  </v-layout>
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="blue darken-1" text @click="sirendialog = false">취소</v-btn>
+                  <v-btn color="blue darken-1" text @click="sirendialog = false, submitReport(reportSelect,reportText,reportDesc)">신고하기</v-btn>
+                  <br />
+                </v-card-actions>
+              </v-card>
 
-          <v-card>
-            <v-card-title class="headline">
-              <span class="headline">프로젝트 신고하기</span>
-            </v-card-title>
-            <v-card-text>
-              <v-layout wrap>
-                <v-flex xs12>
-                  <v-combobox
-                  v-model="reportSelect"
-                  :items="reportItems"
-                  label="신고 사유를 선택해주세요."
-                  readonly
-                  ></v-combobox>
-                </v-flex>
-                <v-flex xs12 v-if="reportSelect=='기타'">
-                  <v-text-field single-line outlined required v-model="reportText" placeholder="신고 사유를 입력해주세요."> </v-text-field>
-                </v-flex>
-                <v-flex xs12>
-                  <v-text-field v-model="reportDesc" required placeholder="신고 내용을 입력해주세요." @keyup.enter="sirendialog = false,  submitReport(reportSelect,reportText,reportDesc)"></v-text-field>
-                </v-flex>
-              </v-layout>
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="sirendialog = false">취소</v-btn>
-              <v-btn color="blue darken-1" text @click="sirendialog = false, submitReport(reportSelect,reportText,reportDesc)">신고하기</v-btn>
-              <br />
-            </v-card-actions>
-          </v-card>
+            </v-dialog>
+          </v-layout>
+        </template>
+      </div>
+    </v-layout>
 
-        </v-dialog>
-      </v-layout>
-    </template>
-
-    </v-toolbar>
 
     <!-- card -->
     <v-layout>
-      <v-container grid-list-md>
+      <v-container>
         <v-layout wrap>
           <!-- Project Main Thumbnail -->
-          <v-flex xs10 offset-xs1>
+          <v-flex xs12>
             <BigImg v-bind:imgSrc="project.projectimage" />
           </v-flex>
           <!--  left detail -->
-          <v-flex xs12>
-            <v-layout column>
-              <!-- project description -->
-              <v-layout row style="padding: 2vw 0vw; border-bottom: 1px solid #cecece;">
+          <v-flex xs12 sm10 offset-sm1>
+            <!-- project description -->
+            <v-layout row style="padding: 2vw 0vw;">
 
               <!--comment -->
-                <v-flex>
-                  <span class="title"  style="margin-right:5px;">{{project.projecttitle}}</span>
-                  <v-chip outlined label small color="purple dark" style="margin-right:5px;">
-                    {{ project.projectterm }}
+              <v-flex xs12>
+                <span class="title"  style="margin-right:5px;">{{project.projecttitle}}</span>
+                <v-chip outlined label small color="purple dark" style="margin-right:5px;">
+                  {{ project.projectterm }}
+                </v-chip>
+                <v-chip outlined label small color="purple dark" style="margin-right:5px;">
+                  {{ project.projectrank }}
+                </v-chip>
+                <div style="padding:5px 0;">
+                  <v-chip v-for="tech in project.projecttech" outlined small color="grey dark" style="margin-right:5px;">
+                    {{ tech }}
                   </v-chip>
-                  <v-chip outlined label small color="purple dark" style="margin-right:5px;">
-                    {{ project.projectrank }}
-                  </v-chip>
-                  <div style="padding:5px 0;">
-                    <v-chip v-for="tech in project.projecttech" outlined small color="grey dark" style="margin-right:5px;">
-                      {{ tech }}
-                    </v-chip>
-                  </div>
-                  <v-divider/>
+                </div>
+                <v-divider/>
 
 
-                  <p v-html="project.projectcontent" />
-                </v-flex>
-              </v-layout>
+                <p v-html="project.projectcontent" />
+              </v-flex>
+            </v-layout>
 
             <!--comment -->
-              <v-flex xs12>
-                <form v-if="this.$store.getters.getSession">
-                  <!-- 언급한 사람, 댓글 입력 필드 -->
-                  <div>
-                    <span v-if="real_taglist.length >0">언급한 사람 :</span>
-                    <v-chip v-for="nickname in real_taglist"  @click="delete_taglist(nickname)" color="#2980B9" class="white--text" style="margin:0 2px;" small>
-                      <span><i class="fa fa-user-circle"/> {{nickname}}</span>
-                    </v-chip>
-                    <v-flex >
-                      <v-text-field
-                        style="width:100%;"
-                        placeholder="댓글을 입력해주세요"
-                        v-model="comment"
-                        v-on:keyup.enter="INSERT_Comment(real_taglist, comment)">
-                          <template v-slot:append-outer>
-                            <v-btn text outlined @click="INSERT_Comment(real_taglist, comment)">
-                              등록
-                              </v-btn>
-                          </template>
-                        </v-text-field>
-                      </v-flex>
-                  </div>
+            <v-flex xs12>
+              <form v-if="this.$store.getters.getSession" style="position:relative;">
+                <!-- 언급한 사람, 댓글 입력 필드 -->
+                <div>
+                  <span v-if="real_taglist.length >0">태그 : </span>
+                  <v-chip v-for="nickname in real_taglist" @click="delete_taglist(nickname)" color="#2980B9" class="white--text" style="margin:0 2px;" small>
+                    <span><i class="fa fa-user-circle"/> {{nickname}}</span>
+                  </v-chip>
+                  <v-flex >
+                    <v-text-field
+                    style="width:100%;"
+                    placeholder="댓글을 입력해주세요"
+                    v-model="comment"
+                    v-on:keyup.enter="INSERT_Comment(real_taglist, comment)"
+                    >
+                    <template v-slot:append>
+                      <v-btn text outlined @click="INSERT_Comment(real_taglist, comment)">
+                        등록
+                      </v-btn>
+                    </template>
+                  </v-text-field>
+                  <input style="width:0%; height:0%"></input>
+                </v-flex>
+              </div>
 
-                  <!-- 태그 검색어 관련 유저 리스트 -->
-                  <v-list-item-group v-if="tmp_taglist.length>0" style="position:absolute; z-index:1; background-color:#fff; border:1px solid; padding:10px 3px;">
-                    <v-list-item v-for="nickname in tmp_taglist">
-                        <v-list-item-title  @click="insert_taglist(nickname)"
-                          style="width:500px; padding:3px 0 3px 10px;">
-                          <i class="fa fa-user-circle"/> {{nickname}}
-                        </v-list-item-title>
-                    </v-list-item>
-                  </v-list-item-group>
+              <!-- 태그 검색어 관련 유저 리스트 -->
+              <v-list-item-group v-if="tmp_taglist.length>0" style="position:absolute; z-index:1; background-color:#fff; border:1px solid; padding:10px 3px;">
+                <v-list-item v-for="nickname in tmp_taglist">
+                  <v-list-item-title  @click="insert_taglist(nickname)"
+                  style="width:500px; padding:3px 0 3px 10px;">
+                  <i class="fa fa-user-circle"/> {{nickname}}
+                </v-list-item-title>
+              </v-list-item>
+            </v-list-item-group>
 
-                  </form>
+          </form>
 
-                <!-- comment sort -->
-                <!-- <v-flex>
-                  <span>sort</span>
-                  <v-btn text depressed small>oldest</v-btn>
-                  <v-btn text depressed small>newest</v-btn>
-                  <v-btn text depressed small>liked</v-btn>
-                </v-flex> -->
 
-                <!-- comment list -->
-                <v-list>
-                  <v-list-item name="1" v-for="(com, index) in comments" style="border-bottom: 1px solid #9E6E2E; margin:5px; padding:5px;">
-                    <!-- 수정 전에 보여주는 댓글리스트 -->
-                    <v-list-item-content v-bind:class="[`before_${index}`]" style="width:70%;" >
-                      <span v-if="com.state==3" style="color:red;" @click="seecomment(index)">이 댓글은 신고 누적으로 블라인드 처리</span>
-                      <div class="coment_content">
-                        <span class="overline grey--text"> {{com.User}} </span>
-                        <span class="overline grey--text" style="width:300px"> | {{com.date}} </span> <br/>
-                        <v-list-item-title v-if="com.state < 3" v-html="com.Comment"></v-list-item-title>
-                        <v-list-item-title v-html="com.Comment" v-bind:class="[`blind_${index}`]" style="display:none;"></v-list-item-title>
-                      </div>
+          <!-- comment list -->
+          <v-layout row wrap justify-center>
+            <v-flex xs12 v-for="(com, index) in comments">
+              <v-card outlined style="width:100%; padding:10px 25px; margin:2px 0;">
+                <div v-bind:class="[`before_${index}`]">
+                  <span v-if="com.state==3" style="color:red;" @click="seecomment(index)">이 댓글은 신고 누적으로 블라인드 처리</span>
+                  <span class="overline grey--text"> {{com.User}} </span>
+                  <span class="overline grey--text"> | {{com.date}} </span> <br/>
+                  <span v-if="com.state < 3" class="subtitle-1"> {{com.Comment}} </span>
+                  <span v-bind:class="[`blind_${index}`]" class="subtitle-1" style="display:none;"> {{com.Comment}} </span>
 
-                    </v-list-item-content>
-                    <!--  -->
-
-                    <!-- 수정 그림을 누르면 보여주는 구역 , 바로 비동기적으로 구현됨.-->
-                    <div v-bind:class="[`after_${index}`]" style="display:none; width:100%; margin:10px; padding:10px; ">
-                      <input v-bind:class="[`aftertext_${index}`]" style="display:inline-block; width:100%; border: 1px solid #ff0000;" v-model="update_commenttext"><br>
-                      <v-btn @click="change_comment(comments, index, update_commenttext)">수정</v-btn>
-                      <v-btn @click="cancel(project_id, comments, index)">취소</v-btn>
-                    </div>
-                    <!--  -->
+                  <!-- action btn -->
+                  <v-layout>
                     <v-spacer/>
-                    <v-list-item-action>
-                      <div style='display:flex; align-items:center'>
-                        <i v-bind:id="[`commentlike_${index}`]" class="far fa-heart" style="color:red; cursor:pointer;" @click="like_comment(com, index)"/>
-                        <span class="caption">{{com.like.length}}</span>
+                    <div style="display:inline;" class="caption">
+                      <i v-bind:id="[`commentlike_${index}`]" class="far fa-heart" style="color:red; cursor:pointer;" @click="like_comment(com, index)"/>
+                      <span class="caption">{{com.like.length}}</span>
 
-                        <i v-bind:id="[`commentunlike_${index}`]" class="far fa-heart" style="cursor:pointer;" @click="unlike_comment(com, index)"/>
-                        <span class="caption">{{com.unlike.length}}</span>
+                      <i v-bind:id="[`commentunlike_${index}`]" class="far fa-heart" style="cursor:pointer;" @click="unlike_comment(com, index)"/>
+                      <span class="caption">{{com.unlike.length}}</span>
 
-                        <v-icon class="fa fa-wrench" color="#8390b4" style="margin-right:2px;" v-if="com.User==$store.getters.getSession" @click="UPDATE_comment(comments, index)"/>
-                        <v-icon class="fa fa-trash" color="#777688"  style="margin-right:2px;" v-if="com.User==$store.getters.getSession" @click="DELETE_comment(comments, index)"/>
+                      <v-icon class="fa fa-wrench" color="#8390b4" style="margin-right:2px;" v-if="com.User==$store.getters.getSession" @click="UPDATE_comment(comments, index)"/>
+                      <v-icon class="fa fa-trash" color="#777688"  style="margin-right:2px;" v-if="com.User==$store.getters.getSession" @click="DELETE_comment(comments, index)"/>
 
-                        <template>
+                      <template>
                         <v-layout justify-center d-inline>
                           <v-dialog v-model="Commentdialog" max-width="290">
                             <template v-slot:activator="{ on }">
-                              <v-btn v-if="$store.getters.getSession" text color="primary" dark v-on="on" style=""><i class="fas fa-bell" style="color:orange;"></i></v-btn>
+                              <v-icon small class="fa fa-bell fa-1x" v-on="on" color="#ffa76a"></v-icon>
+                              <!-- <v-btn v-if="$store.getters.getSession" text color="primary" dark v-on="on"><i class="fa fa-bell" style="color:orange"></i></v-btn> -->
                             </template>
 
                             <v-card>
@@ -202,14 +183,13 @@
                                     v-model="reportCommentSelect"
                                     :items="reportCommentItems"
                                     label="댓글신고 사유를 선택해주세요."
-                                    readonly
                                     ></v-combobox>
                                   </v-flex>
                                   <v-flex xs12 v-if="reportCommentSelect=='기타'">
-                                      <v-text-field single-line outlined required v-model="reportCommentText" placeholder="신고 사유를 입력해주세요."> </v-text-field>
+                                    <input type="text" v-model="reportCommentText"/>
                                   </v-flex>
                                   <v-flex xs12>
-                                    <v-text-field v-model="reportCommentDesc" required placeholder="신고 내용을 입력해주세요." @keyup.enter="Commentdialog = false, submitCommentReport(reportCommentSelect,reportCommentText,reportCommentDesc)"></v-text-field>
+                                    <v-text-field v-model="reportCommentDesc" required @keyup.enter="Commentdialog = false, submitCommentReport(reportCommentSelect,reportCommentText,reportCommentDesc)"></v-text-field>
                                   </v-flex>
                                 </v-layout>
                               </v-card-text>
@@ -224,21 +204,26 @@
                           </v-dialog>
                         </v-layout>
                       </template>
-                      </div>
-                    </v-list-item-action>
-                    <br>
-                  </v-list-item>
-                </v-list>
+                    </div>
+                  </v-layout>
+                </div>
+                <!-- 수정 그림을 누르면 보여주는 구역 , 바로 비동기적으로 구현됨.-->
+                <div v-bind:class="[`after_${index}`]" style="display:none; width:100%; margin:10px; padding:10px; ">
+                  <input v-bind:class="[`aftertext_${index}`]" style="display:inline-block; width:100%; border: 1px solid #ff0000;" v-model="update_commenttext"><br>
+                  <v-btn @click="change_comment(comments, index, update_commenttext)">수정</v-btn>
+                  <v-btn @click="cancel(project_id, comments, index)">취소</v-btn>
+                </div>
+                <!--  -->
+              </v-card>
+            </v-flex>
+          </v-layout>
 
-              </v-flex>
-            </v-layout>
-          </v-flex>
-
-      </v-layout>
-    </v-container>
-  </v-layout>
-
-  </div>
+        </v-flex>
+      </v-flex>
+    </v-layout>
+  </v-container>
+</v-layout>
+</v-container>
 </template>
 
 
@@ -296,38 +281,38 @@ export default {
   },
   methods: {
     showNotification (group, type ,title, text) {
-       this.$notify({
-         group,
-         title,
-         text,
-         type,
-       })
-     },
-     async submitObjection() {
-       var objs = await FirebaseService.SELECT_Objections(this.project_id);
-       if ( objs.length == 0 ) { // 이의제기 신청을 하지 않았던 상태
-         FirebaseService.INSERT_Objection(this.project_id,this.project.projecttitle,this.project.state,"Objection");
-       } else {
+      this.$notify({
+        group,
+        title,
+        text,
+        type,
+      })
+    },
+    async submitObjection() {
+      var objs = await FirebaseService.SELECT_Objections(this.project_id);
+      if ( objs.length == 0 ) { // 이의제기 신청을 하지 않았던 상태
+        FirebaseService.INSERT_Objection(this.project_id,this.project.projecttitle,this.project.state,"Objection");
+      } else {
         this.showNotification('foo-css','error','이의제기 신청 오류','이미 이의제기 신청이 접수되어있습니다.')
-       }
-     },
-     isMineCheck() {
-       if ( this.user == this.project.session_id ) {
-         return true;
-       } else {
-         return false;
-       }
-     },
+      }
+    },
+    isMineCheck() {
+      if ( this.user == this.project.session_id ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     submitReport(reportSelect,reportText,reportDesc) {
       var upperUser = this.$session.get('session_id').toUpperCase();
       if ( !this.project.reportUserList.includes(upperUser) ) {
         if ( reportSelect !== "기타" ) {
           FirebaseService.INSERT_projectReport(reportSelect,reportDesc,this.project_id,this.$session.get('session_id')
-                                              ,this.project.session_id,this.project.projecttitle,this.project.state,"Siren_Project");
+          ,this.project.session_id,this.project.projecttitle,this.project.state,"Siren_Project");
           // FirebaseService.INSERT_alert_siren_project(this.project.session_id, this.project, this.userdata)
         } else {
           FirebaseService.INSERT_projectReport(reportText,reportDesc,this.project_id,this.$session.get('session_id')
-                                              ,this.project.session_id,this.project.projecttitle,this.project.state,"Siren_Project");
+          ,this.project.session_id,this.project.projecttitle,this.project.state,"Siren_Project");
           // FirebaseService.INSERT_alert_siren_project(this.project.session_id, this.project, this.userdata)
         }
         this.project.reportUserList.push(upperUser);
@@ -345,10 +330,10 @@ export default {
       if ( !this.comments[index].reportUserList.includes(upperUser) ) {
         if ( reportCommentSelect !== "기타" ) {
           FirebaseService.INSERT_commentReport(reportCommentSelect,reportCommentDesc,this.project_id,this.$session.get('session_id')
-                                              ,this.project.session_id,this.project.projecttitle,this.project.state,index,"Siren_Comment");
+          ,this.project.session_id,this.project.projecttitle,this.project.state,index,"Siren_Comment");
         } else {
           FirebaseService.INSERT_commentReport(reportCommentText,reportCommentDesc,this.project_id,this.$session.get('session_id')
-                                              ,this.project.session_id,this.project.projecttitle,this.project.state,index,"Siren_Comment");
+          ,this.project.session_id,this.project.projecttitle,this.project.state,index,"Siren_Comment");
         }
 
         this.comments[index].reportUserList.push(upperUser);
@@ -370,7 +355,9 @@ export default {
     },
     // seulgi function
     async INSERT_Comment(real_taglist, comment){
-
+      if( comment == "" ) {
+        this.$swal('실패!','댓글내용을 입력해주세요.','error');
+      }
       if (this.user) {
         var listtext = ''
         for (var j in real_taglist) {
@@ -400,12 +387,12 @@ export default {
         // 비동기적으로 댓글 추가
         // console.log(listtext + this.comment)
         const newcommnet = {
-        User : this.user,
-        Comment : listtext + this.comment,
-        like : [],
-        unlike : [],
-        state:0,
-        date: (date.getFullYear()-2000) + "." + (date.getMonth()+1) + "."  + date.getDate() + "." + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()
+          User : this.user,
+          Comment : listtext + this.comment,
+          like : [],
+          unlike : [],
+          state:0,
+          date: (date.getFullYear()-2000) + "." + (date.getMonth()+1) + "."  + date.getDate() + "." + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()
         };
         this.comments.push(newcommnet)
       } else {
@@ -532,24 +519,24 @@ export default {
     async select_user(nickname) {
       this.tmp_taglist=[]
       if (nickname) {
-      // answers 는 @ 이후로 붙은 문자에 대한 nickname을 순으로 4개 data를 묶어줌.
-      var answers = await FirebaseService.SELECT_Usersdata(nickname)
-      answers.docs.map(answer => {
-        if (answer.data().nickname.indexOf(nickname)===0) {
-          if (!this.tmp_taglist.includes(answer.data().nickname)) {
-          this.tmp_taglist.push(answer.data().nickname)
+        // answers 는 @ 이후로 붙은 문자에 대한 nickname을 순으로 4개 data를 묶어줌.
+        var answers = await FirebaseService.SELECT_Usersdata(nickname)
+        answers.docs.map(answer => {
+          if (answer.data().nickname.indexOf(nickname)===0) {
+            if (!this.tmp_taglist.includes(answer.data().nickname)) {
+              this.tmp_taglist.push(answer.data().nickname)
+            }
           }
-        }
-      })
+        })
       }
     },
     insert_taglist(nickname) {
       if (!this.real_taglist.includes(nickname)) {
         this.real_taglist.push(nickname)
-      var index = this.comment.indexOf(nickname)
-      var leng = nickname.length
-      this.comment = ''
-      this.tmp_taglist = []
+        var index = this.comment.indexOf(nickname)
+        var leng = nickname.length
+        this.comment = ''
+        this.tmp_taglist = []
       }
     },
     delete_taglist(nickname) {
