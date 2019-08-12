@@ -12,7 +12,7 @@
         <v-expansion-panels>
           <v-expansion-panel
           v-for="(user, index) in userlist"
-          v-if="user.userName.includes(input)"
+          v-if="user.nickname.includes(input)"
           >
             <v-expansion-panel-header>
               <div>
