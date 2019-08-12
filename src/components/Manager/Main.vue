@@ -12,16 +12,19 @@
     <!-- 여기서부터 슬기가 꾸미는 중 -->
     <v-layout row wrap>
       <v-flex>
-      <h1 class="headline">관리자 페이지</h1>
+        <div style="margin:10px;">
+          <h1 class="headline">관리자 페이지</h1>
+          <br>
 
-      <h2>Weblog</h2>
-      <br/>
-      <h2>Users</h2>
-      <br>
-      <h2>Company</h2>
-      <br>
-      <h2>Siren</h2>
-      <br>
+            <h2>Weblog</h2>
+
+            <h2>Users</h2>
+
+            <h2>Company</h2>
+
+            <h2>Siren</h2>
+
+        </div>
     </v-flex>
     </v-layout>
 
