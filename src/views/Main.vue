@@ -4,6 +4,7 @@
     <Filters /> -->
     <!-- <PortfolioList /> -->
     <!-- <button class="mainMoreBtn">MORE</button> -->
+
     <full-page ref="fullpage" :options="options" id="fullpage">
       <Section1/>
       <Section2/>
@@ -42,6 +43,7 @@ export default {
         licenseKey: 'YOUR_KEY_HERE',
         sectionsColor: ['#D0D9F2','#91A9D9','#99B1BF','#F2F2F2',],
       },
+      wallpaper:"https://i.imgur.com/8tFN1Zj.jpg",
     }
   },
   created() {},
@@ -72,3 +74,42 @@ export default {
   }
 };
 </script>
+
+
+<style>
+.arrow{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+.arrow span{
+    display: block;
+    width: 30px;
+    height: 30px;
+    border-bottom: 5px solid #fcffd2;
+    border-right: 5px solid #fcffd2;
+    transform: rotate(45deg);
+    margin: -10px;
+    animation: animate 2s infinite;
+}
+.arrow span:nth-child(2){
+    animation-delay: -0.2s;
+}
+.arrow span:nth-child(3){
+    animation-delay: -0.4s;
+}
+@keyframes animate {
+    0%{
+        opacity: 0;
+        transform: rotate(45deg) translate(-20px,-20px);
+    }
+    50%{
+        opacity: 1;
+    }
+    100%{
+        opacity: 0;
+        transform: rotate(45deg) translate(20px,20px);
+    }
+}
+      </style>
