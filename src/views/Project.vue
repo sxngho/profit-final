@@ -434,7 +434,7 @@ export default {
     },
     async like_project() {
       if (this.user) {
-        var result = await FirebaseService.like_project(this.user, this.project_id, this.project.likeit)
+        var result = await FirebaseService.like_project(this.user, this.project_id, this.project.likeit, this.project.likeitcount)
         var userdata = await FirebaseService.SELECT_Userdata(this.user)
         var heart = document.querySelector('#likecheck')
         // console.log()
