@@ -28,15 +28,15 @@
 </template>
 
 <script>
-import RecruitBanner from "../components/Recruit/InputForm/RecruitBanner";
-import RecruitEditor from "../components/Recruit/InputForm/RecruitEditor";
+// import RecruitBanner from "../components/Recruit/InputForm/RecruitBanner";
+// import RecruitEditor from "../components/Recruit/InputForm/RecruitEditor";
 import RecruitEditor2 from "../components/Recruit/InputForm/RecruitEditor2";
 import FirebaseService from "@/services/FirebaseService";
 
 export default {
   components: {
-    RecruitBanner,
-    RecruitEditor,
+    // RecruitBanner,
+    // RecruitEditor,
     RecruitEditor2,
   },
   data() {

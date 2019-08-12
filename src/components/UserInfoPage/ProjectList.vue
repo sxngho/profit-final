@@ -78,7 +78,7 @@ import Project from "../Project/Project";
 import ProjectDetail from "../Project/ProjectDetail";
 import ProjectDetail0 from "../Project/ProjectDetail0";
 import ProjectDetail1 from "../Project/ProjectDetail1";
-import ProjectUpdator from "./ProjectUpdator";
+// import ProjectUpdator from "./ProjectUpdator";
 
 export default {
   name: "ProjectList",
@@ -97,7 +97,7 @@ export default {
     ProjectDetail,
     ProjectDetail0,
     ProjectDetail1,
-    ProjectUpdator,
+    // ProjectUpdator,
   },
   mounted() {
     this.SELECT_Projects();
