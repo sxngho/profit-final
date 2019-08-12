@@ -6,29 +6,28 @@
     <div style="padding:3% 5%; border:2px solid grey; border-radius:15px; width:100%;" v-if="this.$store.getters.getLevel == 2">
       <v-layout wrap row>
         <v-flex xs12>
-          <h1>공고 리스트</h1>
+          <h1 class="text-center"><span class="fontHannaAir">공고 리스트</span></h1>
         </v-flex>
-        <v-flex xs12>
-          <p> 총 {{recruits.length}}개의 공고 중에 {{myRecruits.length}}개의 공고 지원가능합니다.</p>
-          <v-spacer/>
-          <div style="padding:15px; border:2px solid lightgrey; border-radius:15px; width:100%;" class="text-center">
-            <small class="font-weight-bold" > 내 기술정보 </small>
-            <v-chip-group multiple column active-class="primary--text primary">
-              <v-chip v-for="item in mySkills[0].userSkills" text-color="white" style="cursor:pointer;" v-on:click="Filter(item)" color="#cecece" outlined>
-                {{ item }}
-              </v-chip>
-            </v-chip-group>
+        <v-flex xs12 class="text-center">
+          <div class="text-center">
+            <span class="fontHannaAir"> 총 {{recruits.length}}개의 공고 중에 {{myRecruits.length}}개의 공고 지원가능합니다.</span>
+          </div>
+
+          <div style="padding:15px; border:2px solid lightgrey; border-radius:15px; width:100%; margin:15px 0px;" class="text-center">
+            <span class="font-weight-bold" ><span class="fontHannaAir"> 내 기술정보 </span></span>
+              <v-chip-group multiple column active-class="primary--text primary" style="padding:20px;" justify-center>
+                <v-chip v-for="item in mySkills[0].userSkills" text-color="white" style="cursor:pointer;" v-on:click="Filter(item)" color="#cecece" outlined>
+                  {{ item }}
+                </v-chip>
+              </v-chip-group>
            </div>
         </v-flex>
       </v-layout>
 
       <v-layout wrap row>
-        <v-flex xs12 sm6 md4 v-for="recruit in myRecruits" v-if="Filtering(recruit.data.requiredSkills) && !isEmpty" style="padding:10px;">
-          <RecruitDetail
-          :recruit="recruit"
-          :userdata="mySkills"
-          :recruit_id="recruit.id"
-          />
+        <v-flex xs12 sm6 md4 v-for="recruit in myRecruits" v-if="Filtering(recruit.data.requiredSkills) && !isEmpty" style="padding:10px; position:relative">
+          <img src="../assets/tape.png" v-if="recruit.flag" style="width: 136px; position: absolute; z-index: 2; transform: rotate(45deg); right: -43px;"/>
+          <RecruitDetail :recruit="recruit" :userdata="mySkills" onloadedmetadata="":recruit_id="recruit.id"/>
         </v-flex>
 
         <v-flex v-if="isEmpty">
