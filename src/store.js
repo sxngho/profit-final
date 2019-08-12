@@ -16,6 +16,8 @@ export default new Vuex.Store({
     no_header: false,
     followerView: false,
     followingView: false,
+    followerList:[],
+    followingList:[],
     techFilterList: [],
     allPortfolioList: [],
     showPortfolioList: [],
@@ -59,6 +61,12 @@ export default new Vuex.Store({
     getIsFetch : function(state) {
       return state.isFetch;
     },
+    getfollowerList: function (state) {
+      return state.followerList
+    },
+    getfollowingList: function (state) {
+      return state.followingList
+    },
   },
 
   // Mutations : 값변경 / 동기
@@ -81,6 +89,12 @@ export default new Vuex.Store({
     },
     setFollowingView: (state, val) => {
       state.followingView = val;
+    },
+    setfollowerList: function (state, payload) {
+      return state.followerList = payload;
+    },
+    setfollowingList: function (state, payload) {
+      return state.followingList = payload;
     },
     addFilterTech: function (state, payload) {
       state.techFilterList.push(payload);
