@@ -18,7 +18,6 @@ import VueFullPage from 'vue-fullpage.js'
 
 Vue.prototype.$http = axios
 Vue.config.productionTip = false
-Vue.config.silent = true
 
 import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
