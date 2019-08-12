@@ -119,7 +119,7 @@ export default {
       date: firebase.firestore.FieldValue.serverTimestamp(),
       comments: [],
       likeit: [],
-      likeitcount: 0,
+      // likeitcount: 0,
       state: 0,
       reportUserList: []
     });
