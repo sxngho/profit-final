@@ -772,10 +772,12 @@ export default {
       .collection("recruitInfo")
       .where("companyId", "==", id)
       .orderBy("contract")
+      .orderBy("touchLevel")
       .orderBy("createDay", 'desc')
       .get()
       .then(docSnapshots => {
         return docSnapshots.docs.map(doc => {
+          console.log(doc, 1)
           return { data: doc.data(), id: doc.id };
         });
       });
