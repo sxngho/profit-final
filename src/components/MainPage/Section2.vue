@@ -11,7 +11,7 @@
           <router-link :to="{ name: 'companyListPage' }" class="bannerBtn">
             <div class="bannerBtn sm-link sm-link_padding-all sm-link1">
               <div class="sm-link__label" @mouseover="showUpCompanyList=true" @mouseleave="showUpCompanyList=false">
-                <i class="far fa-building fa-7x"/><br/>
+                <i class="far fa-building fa-9x"/><br/>
                 <span>기업리스트</span>
               </div>
             </div>
@@ -19,8 +19,9 @@
         </v-flex>
       </v-flex>
       <v-flex xs6 v-show="showUpRecruit">
-        <v-flex xs12 text-center>
-        아휴
+        <v-flex xs12 text-center text-white>
+          다양한 기업들이 올린 외주 공고를 소개합니다.<br/>
+          내가 지원할 수 있는 외주 공고를 확인해보세요.
         </v-flex>
       </v-flex>
       <v-flex xs6 v-show="!showUpCompanyList">
@@ -31,9 +32,9 @@
         </v-flex>
         <v-flex xs12 text-center v-show="!showUpCompanyList">
           <router-link :to="{ name: 'recruits' }" class="bannerBtn">
-            <div class="bannerBtn sm-link sm-link_padding-all sm-link1">
-              <div class="sm-link__label"  @mouseover="showUpRecruit=true" @mouseleave="showUpRecruit=false">
-                <i class="far fa-handshake fa-7x"/><br/>
+            <div class="bannerBtn sm-link sm-link_padding-all sm-link1" @mouseover="showUpRecruit=true" @mouseleave="showUpRecruit=false">
+              <div class="sm-link__label">
+                <i class="far fa-handshake fa-9x"/><br/>
                 <span>공고페이지</span>
               </div>
             </div>
@@ -42,7 +43,8 @@
       </v-flex>
       <v-flex xs6 v-show="showUpCompanyList">
         <v-flex xs12 text-center>
-        어휴
+          사이트에서 활동중인 기업리스트입니다. <br/>
+          기업에 대한 자세한 정보를 확인할 수 있습니다.
         </v-flex>
       </v-flex>
     </v-layout>
