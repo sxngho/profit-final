@@ -1,5 +1,5 @@
 <template>
-  <div class="MainPage" style="padding:0% 5%">
+  <div class="MainPage">
     <!-- <Banner />
     <Filters /> -->
     <!-- <PortfolioList /> -->
