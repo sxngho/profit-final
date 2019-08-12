@@ -22,7 +22,7 @@ var provider = new auth.FacebookAuthProvider();
 var login_user; // 로그인 하면 email, 아니면 ''  처리
 var url = document.location.href;
 
-auth().onAuthStateChanged(function (user) {
+auth().onAuthStateChanged(function(user) {
   if (user) {
     login_user = user.email;
     // console.log(login_user)
@@ -46,7 +46,7 @@ export default {
   async SELECT_ALLProjects() {
     return firestore
       .collection("projects")
-      .orderBy('date')
+      .orderBy("date")
       .get()
       .then(docSnapshots => {
         return docSnapshots.docs.map(doc => {
@@ -63,21 +63,21 @@ export default {
   async SELECT_HOTProjects() {
     return firestore
       .collection("projects")
-      .orderBy("likeitcount", 'desc')
+      .orderBy("likeitcount", "desc")
       .limit(5)
       .get()
       .then(docSnapshots => {
-        return docSnapshots.docs
+        return docSnapshots.docs;
         // console.log(docSnapshots.docs, 1)
         // return docSnapshots.docs
         // return docSnapshots.docs.map(doc => {
-          // console.log(doc.data(), 1)
-          // let data = doc.data();
-          // return {
-          //   project_id: doc.id,
-          //   data: data,
-          //   projecttech: data.projecttech
-          // };
+        // console.log(doc.data(), 1)
+        // let data = doc.data();
+        // return {
+        //   project_id: doc.id,
+        //   data: data,
+        //   projecttech: data.projecttech
+        // };
         // });
       });
   },
@@ -98,7 +98,7 @@ export default {
     return firestore
       .collection("projects")
       .where("session_id", "==", id)
-      .orderBy('date', 'desc')
+      .orderBy("date", "desc")
       .get()
       .then(docSnapshots => {
         return docSnapshots.docs.map(doc => {
@@ -289,6 +289,15 @@ export default {
         userIntro: intro
       });
   },
+  // Function :: 유저의 휴대폰 공개/비공개 선택 정보를 업데이트합니다.
+  UPDATE_userOpenPhoneNumber(result, userId) {
+    return firestore
+      .collection("users")
+      .doc(userId)
+      .update({
+        showPhoneNumber: result
+      });
+  },
 
   // Function :: 유저의 기술 정보를 업데이트합니다.
   UPDATE_userSkill(skill, userId) {
@@ -440,7 +449,7 @@ export default {
       .get()
       .then(docSnapshots => {
         return docSnapshots.docs.map(doc => {
-          return {data : doc.data(), id :doc.id};
+          return { data: doc.data(), id: doc.id };
         });
       });
   },
@@ -451,7 +460,7 @@ export default {
       .get()
       .then(docSnapshots => {
         return docSnapshots.docs.map(doc => {
-          return {data : doc.data(), id :doc.id};
+          return { data: doc.data(), id: doc.id };
         });
       });
   },
@@ -769,7 +778,6 @@ export default {
       });
   },
 
-
   async SELECT_RecruitInfoByRecruitId(id) {
     return firestore
       .collection("recruitInfo")
@@ -796,7 +804,7 @@ export default {
       .where("companyId", "==", id)
       .orderBy("contract")
       .orderBy("touchLevel")
-      .orderBy("createDay", 'desc')
+      .orderBy("createDay", "desc")
       .get()
       .then(docSnapshots => {
         return docSnapshots.docs.map(doc => {
@@ -829,7 +837,10 @@ export default {
   },
 
   DELETE_RecruitById(id) {
-    firestore.collection("recruitInfo").doc(id).delete();
+    firestore
+      .collection("recruitInfo")
+      .doc(id)
+      .delete();
   },
   SELECT_AllCharRoom() {
     return firestore
@@ -867,7 +878,7 @@ export default {
       .doc(rcode)
       .update({
         contract: true,
-        touchLevel : 1,
+        touchLevel: 1,
         responsibility: user
       });
   },
@@ -882,10 +893,10 @@ export default {
     return firebase
       .auth()
       .signInWithEmailAndPassword(id, password)
-      .then(function () {
+      .then(function() {
         return true;
       })
-      .catch(function (error) {
+      .catch(function(error) {
         return false;
       });
   },
@@ -894,13 +905,13 @@ export default {
     return firebase
       .auth()
       .signInWithPopup(provider)
-      .then(function (result) {
+      .then(function(result) {
         var user = result.user.email;
         var time = String(Date.now()); // nickname을 임시로 넣기 위한 숫자변수 역할
         var answer = { user: user, result: true };
         return answer;
       })
-      .catch(function (error) {
+      .catch(function(error) {
         var errorCode = error.code;
         var errorMessage = error.message;
         var email = error.email;
@@ -914,95 +925,107 @@ export default {
     return firebase
       .auth()
       .signOut()
-      .then(function () {
+      .then(function() {
         return false;
       })
-      .catch(function (error) {
+      .catch(function(error) {
         alert(error);
         return true;
       });
   },
 
-  async SignupUser(id,password,phonenumber,userSkills,userImage,userName,
-    userIntro,userCareers,userEducations,nickname) {
-      return firebase
+  async SignupUser(
+    id,
+    password,
+    phonenumber,
+    userSkills,
+    userImage,
+    userName,
+    userIntro,
+    userCareers,
+    userEducations,
+    nickname,
+    showPhoneNumber
+  ) {
+    return firebase
       .auth()
       .createUserWithEmailAndPassword(id, password)
       .then(function() {
         firestore
-        .collection("users")
-        .doc(nickname)
-        .set({
-          email: id,
-          phonenumber: phonenumber,
-          userSkills: userSkills,
-          userImage: "https://i.imgur.com/aTI4OeZ.png?1",
-          storyBanner:"https://i.imgur.com/KnVfJVQ.png",
-          userName: userName,
-          userIntro: userIntro,
-          userCareers: userCareers,
-          userEducations: userEducations,
-          followerlist: [],
-          followinglist: [],
-          likeitProject: [],
-          nickname: nickname,
-          level: 2,
-          showSkillList: [],
-          dibs: [],
-          alertlist: [],
-          proceedList: [],
-        });
+          .collection("users")
+          .doc(nickname)
+          .set({
+            email: id,
+            phonenumber: phonenumber,
+            userSkills: userSkills,
+            userImage: "https://i.imgur.com/aTI4OeZ.png?1",
+            storyBanner: "https://i.imgur.com/KnVfJVQ.png",
+            userName: userName,
+            userIntro: userIntro,
+            userCareers: userCareers,
+            userEducations: userEducations,
+            followerlist: [],
+            followinglist: [],
+            likeitProject: [],
+            nickname: nickname,
+            level: 2,
+            showSkillList: [],
+            dibs: [],
+            alertlist: [],
+            proceedList: [],
+            showPhoneNumber: showPhoneNumber
+          });
         firestore
-        .collection("user_addon")
-        .doc(nickname)
-        .set({
-          toggleView: false
-        });
+          .collection("user_addon")
+          .doc(nickname)
+          .set({
+            toggleView: false
+          });
         return true;
       })
       .catch(function(error) {
         // alert(error);
         return false;
-      })
+      });
   },
 
   async SignupCompany(company_name, id, password) {
     return firebase
-     .auth()
-     .createUserWithEmailAndPassword(id, password)
-     .then(function () {
-       firestore
-         .collection("companys")
-         .doc(company_name)
-         .set({
-           company_name: company_name,
-           id: id,
-           followerlist: [],
-           followinglist: [],
-           level: 3,
-           company_logo: 'https://i.imgur.com/WmUIKlP.png',
-           company_banner : "https://i.imgur.com/KnVfJVQ.png",
-           industry: "",
-           mount: "",
-           comsize: "",
-           establishedDate: "",
-           represent: "",
-           homepage: "",
-           address: "",
-           descript: "",
-           annualsales : "",
-         });
-         firestore
-         .collection("user_addon")
-         .doc(company_name)
-         .set({
-           toggleView: false
-         });
-         return true;
-       })
-       .catch(function(error) {
-         return false;
-       })
+      .auth()
+      .createUserWithEmailAndPassword(id, password)
+      .then(function() {
+        firestore
+          .collection("companys")
+          .doc(company_name)
+          .set({
+            company_name: company_name,
+            id: id,
+            followerlist: [],
+            followinglist: [],
+            level: 3,
+            company_logo: "https://i.imgur.com/WmUIKlP.png",
+            company_banner: "https://i.imgur.com/KnVfJVQ.png",
+            industry: "",
+            mount: "",
+            comsize: "",
+            establishedDate: "",
+            represent: "",
+            homepage: "",
+            address: "",
+            descript: "",
+            annualsales: ""
+          });
+        firestore
+          .collection("user_addon")
+          .doc(company_name)
+          .set({
+            toggleView: false
+          });
+        return true;
+      })
+      .catch(function(error) {
+        return false;
+      });
   },
 
   // --------------------------------------------------------------------SIGN
@@ -1073,9 +1096,12 @@ export default {
       });
   },
   INSERT_alert_Chat(alert, userId) {
-    firestore.collection("users").doc(userId).update({
-      alertlist: alert
-    });
+    firestore
+      .collection("users")
+      .doc(userId)
+      .update({
+        alertlist: alert
+      });
   },
 
   // --------------------------------------------------------------------FOLLOW
@@ -1113,7 +1139,7 @@ export default {
             .doc(project_id)
             .update({
               likeit: like_users,
-              likeitcount : likeitcount -=1
+              likeitcount: (likeitcount -= 1)
             });
         });
     } else {
@@ -1136,7 +1162,7 @@ export default {
             .doc(project_id)
             .update({
               likeit: like_users,
-              likeitcount: likeitcount +=1
+              likeitcount: (likeitcount += 1)
             });
         });
     }
@@ -1359,42 +1385,60 @@ export default {
       responsibility: "",
       chief: recruitInfo.chief,
       penalty: recruitInfo.penalty,
-      touchLevel : 0,
+      touchLevel: 0
     });
   },
 
   UPDATE_RecruitCompleteByUser(recruitPK, state, companyState) {
-    if ( companyState == 2 && state === "success" ) {
-      firestore.collection("recruitInfo").doc(recruitPK).update({
-        UserComplete: 2,
-        touchLevel : 2,
-      })
+    if (companyState == 2 && state === "success") {
+      firestore
+        .collection("recruitInfo")
+        .doc(recruitPK)
+        .update({
+          UserComplete: 2,
+          touchLevel: 2
+        });
     } else if (state === "success") {
-      firestore.collection("recruitInfo").doc(recruitPK).update({
-        UserComplete: 2,
-      })
+      firestore
+        .collection("recruitInfo")
+        .doc(recruitPK)
+        .update({
+          UserComplete: 2
+        });
     } else {
-      firestore.collection("recruitInfo").doc(recruitPK).update({
-        UserComplete: 1,
-        touchLevel : 3,
-      })
+      firestore
+        .collection("recruitInfo")
+        .doc(recruitPK)
+        .update({
+          UserComplete: 1,
+          touchLevel: 3
+        });
     }
   },
-  UPDATE_RecruitCompleteByCompany(recruitPK, state,userState) {
-    if ( userState == 2 && state === "success" ) {
-      firestore.collection("recruitInfo").doc(recruitPK).update({
-        CompanyComplete: 2,
-        touchLevel : 2,
-      })
+  UPDATE_RecruitCompleteByCompany(recruitPK, state, userState) {
+    if (userState == 2 && state === "success") {
+      firestore
+        .collection("recruitInfo")
+        .doc(recruitPK)
+        .update({
+          CompanyComplete: 2,
+          touchLevel: 2
+        });
     } else if (state === "success") {
-      firestore.collection("recruitInfo").doc(recruitPK).update({
-        CompanyComplete: 2,
-      })
+      firestore
+        .collection("recruitInfo")
+        .doc(recruitPK)
+        .update({
+          CompanyComplete: 2
+        });
     } else {
-      firestore.collection("recruitInfo").doc(recruitPK).update({
-        CompanyComplete: 1,
-        touchLevel : 3,
-      })
+      firestore
+        .collection("recruitInfo")
+        .doc(recruitPK)
+        .update({
+          CompanyComplete: 1,
+          touchLevel: 3
+        });
     }
   },
   // --------------------------------------------------------------------recruit
@@ -1489,7 +1533,7 @@ export default {
         industry: companyInfo.industry,
         mount: companyInfo.mount,
         represent: companyInfo.represent,
-        annualsales: companyInfo.annualsales,
+        annualsales: companyInfo.annualsales
       });
   },
 
