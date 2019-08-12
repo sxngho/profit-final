@@ -2,7 +2,7 @@
   <div class="mportfolio__container">
     <div class="mportfolio__container__content">
       <div class="portfolio__box">
-        <button style="height:100%; width:100%;" @click="popdetail(projectId, user)">
+        <button style="height:100%; width:100%;" @click="popdetail(projectId)">
           <img :src="projectInfo|| 'http://design-ec.com/d/e_others_50/l_e_others_500.png'" style="height:140px; width:200px;" />
         </button>
       </div>
@@ -29,7 +29,7 @@ export default {
       this.projectInfo = info.projectimage;
       this.projectId = this.project;
     },
-    popdetail(pcode, user) {
+    popdetail(pcode) {
       // console.log(user)
       // window.open(`${document.location.origin}+`)
       window.open("../project/" + pcode, pcode,"titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=700,height=600");
