@@ -11,7 +11,7 @@
 
         <v-layout row wrap style="padding:10px 20px;">
           <v-spacer/>
-          <span class="font-weight-regular headline">로그인</span>
+          <span class="font-weight-regular headline" style="font-family: 'binggrae'!important;">로그인</span>
           <v-spacer/>
         </v-layout>
 
@@ -23,14 +23,22 @@
                 <v-text-field label="ID" required v-model="LoginId"></v-text-field>
               </v-flex>
 
-              <v-flex xs12>
+              <v-flex xs12  style="font-family: 'sans'!important;">
                 <v-text-field
                   label="Password"
                   type="password"
                   required
                   v-model="LoginPassword"
                   @keyup.enter="dialog = false, Signin(LoginId, LoginPassword)"
-                ></v-text-field>
+                />
+                <!-- <div class="v-input__control">
+                	<div class="v-input__slot">
+                      <div class="v-text-field__slot">
+                      	<label class="v-label v-label--active theme--light" style="left:0px; right:auto; position:absolute;"> Password</label>
+                      	<input required="required" type="password">
+                      </div>
+                	</div>
+                </div> -->
               </v-flex>
             </v-layout>
           </v-container>
