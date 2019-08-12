@@ -52,6 +52,10 @@
     text-shadow: -1px 0 #fff, 0 1px #fff, 1px 0 #fff, 0 -1px #fff;
     font-weight: bold!important;
   }
+
+  #vue2Editor .ql-editor {
+    min-height:400px
+  }
 </style>
 
 <!-- Custom Font -->
