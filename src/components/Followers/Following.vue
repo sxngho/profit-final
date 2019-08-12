@@ -26,15 +26,15 @@
 import FirebaseService from "@/services/FirebaseService";
 import MPortfolio from "../Followers/MPortfolio";
 export default {
-  name: "Follower",
-  props: ["follower"],
+  name: "Following",
+  props: ["following"],
   data() {
     return {
       user: "",
       projectList: [],
       userName: "",
       userImg: "",
-      nickname : "",
+      nickname: "",
       // userIntro: ""
     };
   },
@@ -42,20 +42,20 @@ export default {
     MPortfolio
   },
   created() {
-    // console.log(this.follower)
+    // console.log(this.following)
     this.SELECT_Projects();
     this.SELECT_Userdata();
   },
   methods: {
     async SELECT_Projects() {
-      this.user = await FirebaseService.SELECT_Projects(this.follower);
+      this.user = await FirebaseService.SELECT_Projects(this.following);
       for (let i = 0; i < this.user.length; i++) {
         this.projectList.push(this.user[i].project_id);
       }
       // console.log(this.projectList);
     },
     async SELECT_Userdata() {
-      this.user = await FirebaseService.SELECT_Userdata(this.follower);
+      this.user = await FirebaseService.SELECT_Userdata(this.following);
       this.userName = this.user[0].userName;
       this.userImg = this.user[0].userImage;
       this.nickname = this.user[0].nickname;
