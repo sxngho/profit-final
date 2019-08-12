@@ -845,6 +845,7 @@ export default {
       .doc(rcode)
       .update({
         contract: true,
+        touchLevel : 1,
         responsibility: user
       });
   },
@@ -1333,12 +1334,18 @@ export default {
       CompanyComplete: 0,
       responsibility: "",
       chief: recruitInfo.chief,
-      penalty: recruitInfo.penalty
+      penalty: recruitInfo.penalty,
+      touchLevel : 0,
     });
   },
 
-  UPDATE_RecruitCompleteByUser(recruitPK, state) {
-    if (state === "success") {
+  UPDATE_RecruitCompleteByUser(recruitPK, state, companyState) {
+    if ( companyState == 2 && state === "success" ) {
+      firestore.collection("recruitInfo").doc(recruitPK).update({
+        UserComplete: 2,
+        touchLevel : 2,
+      })
+    } else if (state === "success") {
       firestore.collection("recruitInfo").doc(recruitPK).update({
         UserComplete: 2,
       })
@@ -1348,8 +1355,13 @@ export default {
       })
     }
   },
-  UPDATE_RecruitCompleteByCompany(recruitPK, state) {
-    if (state === "success") {
+  UPDATE_RecruitCompleteByCompany(recruitPK, state,userState) {
+    if ( userState == 2 && state === "success" ) {
+      firestore.collection("recruitInfo").doc(recruitPK).update({
+        CompanyComplete: 2,
+        touchLevel : 2,
+      })
+    } else if (state === "success") {
       firestore.collection("recruitInfo").doc(recruitPK).update({
         CompanyComplete: 2,
       })
