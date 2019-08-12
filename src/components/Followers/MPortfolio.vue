@@ -16,7 +16,7 @@ export default {
   created() {
     this.SELECT_Project();
   },
-  props: ["project", "user"],
+  props: ["project"],
   data() {
     return {
       projectInfo: "",
