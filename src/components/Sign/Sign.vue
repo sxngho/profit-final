@@ -3,7 +3,7 @@
     <!-- 로그인 버튼 -->
     <v-dialog v-model="dialog" max-width="600px" v-if=" user== '' || user == undefined ">
       <template v-slot:activator="{ on }">
-        <v-btn text v-on="on" style="height:56px;">로그인</v-btn>
+        <v-btn text v-on="on" style="height:56px;" class="headerBtn">로그인</v-btn>
       </template>
 
 
@@ -11,7 +11,7 @@
 
         <v-layout row wrap style="padding:10px 20px;">
           <v-spacer/>
-          <span class="font-weight-regular headline">로그인</span>
+          <span class="font-weight-regular headline" style="font-family: 'binggrae'!important;">로그인</span>
           <v-spacer/>
         </v-layout>
 
@@ -23,14 +23,22 @@
                 <v-text-field label="ID" required v-model="LoginId"></v-text-field>
               </v-flex>
 
-              <v-flex xs12>
+              <v-flex xs12  style="font-family: 'sans'!important;">
                 <v-text-field
                   label="Password"
                   type="password"
                   required
                   v-model="LoginPassword"
                   @keyup.enter="dialog = false, Signin(LoginId, LoginPassword)"
-                ></v-text-field>
+                />
+                <!-- <div class="v-input__control">
+                	<div class="v-input__slot">
+                      <div class="v-text-field__slot">
+                      	<label class="v-label v-label--active theme--light" style="left:0px; right:auto; position:absolute;"> Password</label>
+                      	<input required="required" type="password">
+                      </div>
+                	</div>
+                </div> -->
               </v-flex>
             </v-layout>
           </v-container>
@@ -50,7 +58,7 @@
     <!-- 회원가입 버튼 -->
     <v-dialog v-model="signupmodal" max-width="500px" v-if=" user== '' || user == undefined ">
       <template v-slot:activator="{ on: { click } }">
-        <v-btn text v-on:click="click" style="height:56px;">회원가입</v-btn>
+        <v-btn text v-on:click="click" style="height:56px;" class="headerBtn">회원가입</v-btn>
       </template>
 
       <v-container class="signmodal">
@@ -76,21 +84,21 @@
     <div style="display:inline-block; height:100%" v-if="user !=='' && user !==undefined">
 
       <v-btn text v-if="(nowLevel == '0' || nowLevel =='1') && user !=='' && user !== undefined "
-        style="height:56px;">
+        style="height:56px;" class="headerBtn">
         {{user}}
       </v-btn>
 
       <v-btn text v-if="nowLevel == '2' && user !=='' && user !== undefined " :to="{ name: 'story', params: { id: user }}"
-        style="height:56px;" >
+        style="height:56px;"  class="headerBtn">
         {{user}}
       </v-btn>
 
       <v-btn text v-if="nowLevel == '3' && user !=='' && user !== undefined" :to="{ name: 'company', params: { id: user }}"
-        style="height:56px;">
+        style="height:56px;" class="headerBtn">
         {{user}}
       </v-btn>
 
-      <v-btn text @click="Logout()" v-if="user!=='' && user!==undefined" style="height:56px;">
+      <v-btn text @click="Logout()" v-if="user!=='' && user!==undefined" style="height:56px;" class="headerBtn">
         로그아웃
       </v-btn>
 
@@ -99,7 +107,7 @@
           <v-btn icon v-on="scope.on">
             <v-badge color="red" overlap v-if= " $store.getters.getalertList.unread.length > 0">
               <template slot="badge"> {{$store.getters.getalertList.unread.length}} </template>
-              <v-icon color="black"> notifications </v-icon>
+              <v-icon color="black" style="text-shadow: -1px 0 #fff, 0 1px #fff, 1px 0 #fff, 0 -1px #fff;"> notifications </v-icon>
             </v-badge>
               <v-icon color="black" v-else> notifications </v-icon>
           </v-btn>

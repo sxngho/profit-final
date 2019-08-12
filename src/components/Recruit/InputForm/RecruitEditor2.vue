@@ -1,14 +1,20 @@
 <template>
   <v-container>
     <v-layout row wrap style="margin:10vw 0 5vw 0;" text-center justify-center>
-      <span class="display-1">공고 Editor</span>
+      <span class="display-2 font-weight-bold">
+        <span class="fontNanum">공고 작성</span>
+      </span>
     </v-layout>
     <v-layout row wrap justify-center>
       <v-flex xs12 sm11 md10>
       <v-stepper v-model="subidx" vertical style="width:100%;">
         <v-stepper-step :complete="subidx > 1" step="1" style="display: inline-block;" editable>
-          프로젝트 기본 정보
-          <small>공고의 기본 정보를입력합니다.</small>
+          <span class="headline font-weight-bold">
+            <span class="fontNanum">
+              프로젝트 기본 정보
+            </span>
+          </span>
+          <small><span class="fontNanum">공고의 기본 정보를입력합니다.</span></small>
         </v-stepper-step>
 
         <v-stepper-content step="1">
@@ -30,27 +36,95 @@
                 <v-textarea rounded filled label="프로젝트 요약" v-model="projectSummary"/>
               </v-flex>
             </v-layout>
+
+            <v-layout row wrap justify-center>
+              <v-flex xs12 sm10 md8>
+                <div>
+                  <p style="width:100%;" class="title text-center font-weight-bold">
+                    <span class="fontHannaAir">
+                      필수 스킬 입력<br/>
+                      <small class="grey--text fontNanum caption">
+                        ※아래 입력창에 해당 공고 지원자가 필수적으로 갖춰야할 스킬들을 입력해 주세요!
+                      </small>
+                    </span>
+                  </p>
+                  <v-layout row wrap justify-center>
+                    <v-flex xs6>
+                      <v-text-field v-model="tech" v-on:keyup.enter="addNewTech()" hint="필수스킬 입력후 엔터!"/>
+                    </v-flex>
+                  </v-layout>
+                </div>
+                <div>
+                  <!-- <p style="width:100%;" class="title text-center font-weight-bold"><span class="fontHannaAir">필수스킬</span></p>
+                  <small class="grey--text fontNanum caption">※아래 입력창에 해당 공고 지원자가 필수적으로 갖춰야할 스킬들을 입력해 주세요!</small> -->
+                  <div style="padding:15px; border:2px solid #3f51b51a; border-radius:15px; margin-bottom:20px;" justify-center >
+                    <p style="width:100%;" class="text-center">
+                      <small v-if="techList.length==0" class="grey--text fontNanum">
+                        필수 스킬이 없습니다!
+                      </small>
+                    </p>
+                    <v-chip
+                       v-for="(item,index) in techList"
+                       text-color="white"
+                       color="indigo light-3"
+                       style="margin:3px;"
+                       small @click="deleteTech(index)"> <!-- @click:close="deleteTech(index) -->
+                       {{ item }}
+                     </v-chip>
+                   </div>
+                </div>
+
+              </v-flex>
+            </v-layout>
           </v-container>
 
-          <div>
-            <v-btn color="primary" @click="subidx = 2">다음</v-btn>
-          </div>
+          <v-layout row>
+            <v-spacer/>
+            <v-btn color="primary" rounded @click="subidx = 2" style="margin:2px 0;">다음</v-btn>
+            <v-spacer/>
+          </v-layout>
         </v-stepper-content>
 
         <v-stepper-step :complete="subidx > 2" step="2" style="display: inline-block;" editable>
-          프로젝트 규모
-          <small>공고에 책정된 규모를 입력합니다.</small>
+          <span class="headline font-weight-bold">
+            <span class="fontNanum">
+              프로젝트 규모
+            </span>
+          </span>
+          <small><span class="fontNanum">공고에 책정된 규모를 입력합니다.</span></small>
         </v-stepper-step>
 
         <v-stepper-content step="2">
           <div>
             <v-container>
               <v-layout row wrap justify-center>
-                <v-flex xs12 sm10 md8>
-                  프로젝트 예상기간 : {{this.createDay}}&nbsp;~&nbsp;{{this.endDay}}
-                  <br/>
-                  <v-date-picker v-model="endDay" color="green" full-width/>
+                <v-flex xs12 style="margin-bottom:20px;">
+                  <p class="text-center title font-weight-bold" style="width:100%;">
+                    <span class="fontHannaAir ">
+                      프로젝트 예상기간<br/>
+                    </span>
+                  </p>
+                  <p class="text-center headline font-weight-bold" style="width:100%;">
+                      {{this.createDay}}&nbsp;~&nbsp;{{this.endDay}}
+                  </p>
                 </v-flex>
+                <v-flex xs12 sm10 md5>
+                  <p class="text-center title font-weight-bold" style="width:100%;">
+                    <span class="fontHannaAir ">
+                      시작일
+                    </span>
+                  </p>
+                  <v-date-picker v-model="createDay" color="#91A9D9" full-width/>
+                </v-flex>
+                <v-flex xs12 sm10 md5 offset-md1>
+                  <p class="text-center title font-weight-bold" style="width:100%;">
+                    <span class="fontHannaAir ">
+                      종료일
+                    </span>
+                  </p>
+                  <v-date-picker v-model="endDay" color="#99b1bf" full-width/>
+                </v-flex>
+
                 <v-flex xs12 sm10 md8 style="margin-top:30px;">
                   <v-text-field rounded filled label="예산" v-model="budget" number suffix="원"/>
                   <v-text-field rounded filled label="위약금" v-model="penalty" number suffix="원"/>
@@ -59,54 +133,37 @@
             </v-container>
           </div>
 
-          <v-btn color="primary" @click="subidx = 1">이전</v-btn>
-          <v-btn color="primary" @click="subidx = 3">다음</v-btn>
+          <v-layout row>
+            <v-spacer/>
+            <v-btn color="primary" @click="subidx = 1" style="margin:2px 0;" rounded>이전</v-btn>
+            <v-btn color="primary" @click="subidx = 3" style="margin:2px 0;" rounded>다음</v-btn>
+            <v-spacer/>
+          </v-layout>
         </v-stepper-content>
 
         <v-stepper-step :complete="subidx > 3" step="3" style="display: inline-block;" editable>
-          상세정보 입력
-          <small>공고의 상세정보를 입력합니다</small>
+          <span class="headline font-weight-bold">
+            <span class="fontNanum">
+              상세정보 입력
+            </span>
+          </span>
+          <small><span class="fontNanum">공고의 상세정보를 입력합니다</span></small>
         </v-stepper-step>
 
         <v-stepper-content step="3">
           <v-container>
-            <v-layout row wrap justify-center>
-              <v-flex xs12 sm10 md8>
-                <div>
-                  <h3>현재 추가된 스킬</h3>
-                  <div style="padding:15px; border:2px solid #3f51b51a; border-radius:15px;" v-if="techList.length>0">
-                    <v-chip
-                     v-for="(item,index) in techList"
-                     text-color="white"
-                     color="indigo light-3"
-                     style="margin:3px;"
-                     small @click="deleteTech(index)"> <!-- @click:close="deleteTech(index) -->
-                     {{ item }}</v-chip>
-                   </div>
-                </div>
-                <v-divider/>
-                <div>
-                  <h3>직접 입력</h3>
-                  <v-flex xs6>
-                    <v-text-field
-                    v-model="tech"
-                    v-on:keyup.enter="addNewTech()"
-                    />
-                  </v-flex>
-                </div>
-              </v-flex>
-            </v-layout>
-          </v-container>
-          <v-divider/>
-          <div>
+            <div>
               <vue-editor v-model="projectContent"/>
-          </div>
-            <v-btn color="primary" @click="subidx = 2">이전</v-btn>
+            </div>
+          </v-container>
+
+
+            <v-layout row justify-center>
+              <v-btn color="primary" rounded @click="subidx = 2" style="margin:2px 0;">이전</v-btn>
+              <v-btn @click="submit" rounded color="success">완성하기</v-btn>
+            </v-layout>
         </div>
 
-        <v-layout row wrap justify-center>
-          <v-btn @click="submit" text outlined>완성하기</v-btn>
-        </v-layout>
         </v-stepper-content>
 
 
