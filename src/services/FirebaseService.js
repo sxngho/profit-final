@@ -59,6 +59,28 @@ export default {
       });
   },
 
+  async SELECT_HOTProjects() {
+    return firestore
+      .collection("projects")
+      .orderBy("likeit", 'desc')
+      .limit(5)
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.docs
+        // console.log(docSnapshots.docs, 1)
+        // return docSnapshots.docs
+        // return docSnapshots.docs.map(doc => {
+          // console.log(doc.data(), 1)
+          // let data = doc.data();
+          // return {
+          //   project_id: doc.id,
+          //   data: data,
+          //   projecttech: data.projecttech
+          // };
+        // });
+      });
+  },
+
   // Function :: 특정 프로젝트를 찾는 것입니다.
   async SELECT_Project(id) {
     return firestore
@@ -119,7 +141,7 @@ export default {
       date: firebase.firestore.FieldValue.serverTimestamp(),
       comments: [],
       likeit: [],
-      // likeitcount: 0,
+      likeitcount: 0,
       state: 0,
       reportUserList: []
     });
