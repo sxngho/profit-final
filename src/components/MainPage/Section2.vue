@@ -1,28 +1,21 @@
 <template>
   <div class="section">
-    <v-container>
-      <v-layout row wrap>
-        <v-flex xs12 text-center class="display-2">
+      <v-layout row wrap justify-center style="width:100%; height:80%">
+        <v-flex xs10 offset-xs1 text-center class="display-2">
           <span class="sm-link sm-link_padding-bottom sm-link3">
             <span class="sm-link__label">기업공고</span>
           </span>
-        </v-flex>
-        <v-flex xs12 text-center class=" grey--text">
-          여러 포트폴리오를 등록하고, 기업공고를 확인하세요!
-        </v-flex>
-        <v-flex xs12 text-center ma-12>
-          현재 n개의 공고가 등록되어있습니다!
-        </v-flex>
+        <img src="../../assets/companyListImg.png" style="position:absolute; left:25%; bottom:0%;"/>
 
-        <v-flex xs12 text-center>
-          <div v-if="this.$store.getters.getLevel==2">
-            유저에겐 어떻게하면 공고가 보이는지 알려주자
-          </div>
+        <!-- <v-flex xs12 text-center>
+            <div v-if="this.$store.getters.getLevel==2">
+              유저에겐 어떻게하면 공고가 보이는지 알려주자
+            </div>
           <div v-else-if="this.$store.getters.getLevel==3">
             기업에겐 공고를 어디서 작성하는지 알려주자
           </div>
-          <!-- 비로그인 유저에겐 국물도 없다 -->
-        </v-flex>
+          비로그인 유저에겐 국물도 없다
+        </v-flex> -->
 
         <v-flex xs12 text-center>
           <router-link :to="{ name: 'recruits' }" class="bannerBtn">
@@ -34,8 +27,8 @@
             </div>
           </router-link>
         </v-flex>
+      </v-flex>
       </v-layout>
-    </v-container>
   </div>
 </template>
 

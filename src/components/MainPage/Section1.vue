@@ -1,9 +1,8 @@
 <template>
   <div class="section">
-    <v-container>
-      <v-layout row wrap>
-        <v-flex xs12 sm6 v-if="this.$store.getters.getLevel==2 || this.$store.getters.getLevel==3">
-          <div v-if="this.$store.getters.getLevel==2">
+      <v-layout row wrap justify-center style="width:80%; height:80%">
+          <v-flex xs6 v-if="this.$store.getters.getLevel==2 || this.$store.getters.getLevel==3">
+          <div style="color:white" v-if="this.$store.getters.getLevel==2">
             <h1>Share your Portfolio!</h1>
               우리는 당신의 포트폴리오를 원한다<br/>
               내놔라 당신의 포트폴리오<br/>
@@ -17,7 +16,7 @@
             </div>
           </v-flex>
 
-          <v-flex xs12 v-else text-center>
+          <v-flex xs6 v-else text-center>
             <div>
               <h1>당신의 포트폴리오를 공유하세요!</h1>
               우리사이트는 멋진 사이트다~ 이말이야!
@@ -46,11 +45,12 @@
           </router-link>
 
         </v-flex>
+      </v-flex>
       </v-layout>
-      <!-- <img src="../../assets/office_user.jpg" style="position:absolute; bottom:0;"/> -->
+      <img src="../../assets/section1_img.png" style="position:absolute; left:29%; width:40%; bottom:0%;"/>
 
-      <!-- <div v-bind:style="{ 'backgroundImage': 'url(' + wallpaper   + ')'}" > -->
-        <!-- <div style="padding:100%;"></div>
+      <!-- <div v-bind:style="{ 'backgroundImage': 'url(' + wallpaper   + ')'}" >
+        <div style="padding:100%;"></div>
       </div> -->
     </v-container>
   </div>

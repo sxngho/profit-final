@@ -710,7 +710,7 @@ export default {
           });
           this.$swal({
              title: '계약 완료!',
-             html: "계약이 완료되었으므로 간이 계약페이지를 종료합니다. <br/> 계약페이지를 이용해주세요.",
+             html: "계약이 완료되었으므로 간이 계약페이지를 종료합니다. <br/> 진행페이지를 이용해주세요.",
              type: 'success',
              showCancelButton: false,
              confirmButtonColor: '#3085d6',
