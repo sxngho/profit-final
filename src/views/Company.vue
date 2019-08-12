@@ -13,7 +13,7 @@
       <div v-show="showUpImgBanner && this.$route.params.id==this.$store.getters.getSession && !showUpImgBtn"
         style="position: absolute; margin:0; z-index:2; bottom:0;"
         @click="setBanner()">
-        <p style="background: #ffffff91;border-radius:0 20px 20px 0; cursor:pointer; margin:0px; padding: 5px 45px 5px 20px;">
+        <p class="hannafont" style="background: #ffffff91;border-radius:0 20px 20px 0; cursor:pointer; margin:0px; padding: 5px 45px 5px 20px;">
           배경화면 수정하기
         </p>
         <input type="file" id="Banner" style="width:100%; display:none" @change="onFileChangeBanner" />
@@ -77,12 +77,12 @@
           <v-card style="width:100%" outlined>
             <v-card-title>기업정보 <v-spacer/>
               <div v-if="this.$route.params.id==this.$store.getters.getSession">
-              <v-btn v-if="!updatestate" @click="change_updatestate()">수정하기</v-btn>
+              <v-btn v-if="!updatestate" @click="change_updatestate()" text outlined small rounded color="success" style="margin-left:2px;">수정하기</v-btn>
               <v-btn v-if="updatestate" @click="submit(
                 company.industry, company.mount, company.comsize, company.homepage
                 , company.address, company.establishedDate,  company.represent, company.annualsales
-                )">저장</v-btn>
-              <v-btn v-if="updatestate" @click="cancel_updatestate()">취소</v-btn>
+                )" small rounded color="success" style="margin-left:1em;">저장</v-btn>
+              <v-btn v-if="updatestate" @click="cancel_updatestate()" small rounded color="warning" style="margin-left:2px;">취소</v-btn>
               </div>
             </v-card-title>
             <v-card-text id="company_detail">
@@ -221,9 +221,9 @@
             <v-card-title>회사소개 <v-spacer/>
 
               <div v-if="this.$route.params.id==this.$store.getters.getSession">
-              <v-btn v-if="!updatestate2" @click="change_updatestate2()">수정하기</v-btn>
-              <v-btn v-if="updatestate2" @click="submit2()">저장</v-btn>
-              <v-btn v-if="updatestate2" @click="cancel_updatestate2()">취소</v-btn>
+              <v-btn v-if="!updatestate2" @click="change_updatestate2()" text outlined small rounded color="success" style="margin-left:2px;">수정하기</v-btn>
+              <v-btn v-if="updatestate2" @click="submit2()" small rounded color="success" style="margin-left:2px;">저장</v-btn>
+              <v-btn v-if="updatestate2" @click="cancel_updatestate2()" small rounded color="warning" style="margin-left:2px;">취소</v-btn>
               </div>
             </v-card-title>
 

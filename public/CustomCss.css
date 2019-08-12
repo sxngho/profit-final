@@ -1,4 +1,4 @@
-.inputmodal{
+/* .inputmodal{
   background:white;
   border-top:8px solid #3498DB;
   border-bottom:8px solid #3498DB;
@@ -29,17 +29,62 @@
   color:black!important;
 }
 
-@font-face{
-  font-family: 'binggraeregular';
+/* Custom Font */
+
+/* @font-face{
+  font-family: 'binggrae';
   src:url('assets/font/Binggrae/binggrae-webfont.woff')  format('woff');
   font-weight: normal;
   font-style: normal;
 }
 
-*{
-  font-family: 'binggraeregular';
+@font-face{
+  font-family: 'hanna';
+  src:url('assets/font/bmhanna_11yrs.woff')  format('woff');
+  src:url('assets/font/bmhanna_11yrs.ttf' ) format('truetype');
+  font-weight: normal;
+  font-style: normal;
 }
 
+@font-face{
+  font-family: 'hannaair';
+  src:url('assets/font/bmhannaair.woff')  format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face{
+  font-family: 'jua';
+  src:url('assets/font/bmjua.woff')  format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face{
+  font-family: 'yanolja';
+  src:url('assets/font/yanolja.woff')  format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face{
+  font-family: 'bmyeonsung';
+  src:url('assets/font/bmyeonsung.woff')  format('woff');
+  font-weight: normal;
+  font-style: normal;
+} */
+
+/*
+*{
+  font-family: 'binggrae';
+  font-family: 'Jua'!important;
+  font-family: 'Poor Story'!important;
+  font-family: 'Nanum Myeongjo'!important;
+  font-family: 'Sunflower'!important;
+  font-family: 'Do Hyeon'!important;
+  font-family: 'Black Han Sans'!important;
+  font-family: 'Yeon Sung'!important;
+} */
 
 
 /* cursor event */
