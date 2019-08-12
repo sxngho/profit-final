@@ -6,7 +6,8 @@
         <img :src="userImg" style="height:95px; width:95px; border-radius:50px" />
       </div>
       <div class="content__followerInfo box">
-        <div class="followerInfo__name">{{userName}}</div>
+        <!-- <div class="followerInfo__name">{{userName}}</div> -->
+        <div class="followerInfo__name">{{nickname}}</div>
         <!-- <div class="followerInfo__intro">"{{userIntro}}"</div> -->
       </div>
 
@@ -33,6 +34,7 @@ export default {
       projectList: [],
       userName: "",
       userImg: "",
+      nickname: "",
       // userIntro: ""
     };
   },
@@ -40,21 +42,23 @@ export default {
     MPortfolio
   },
   created() {
+    // console.log(this.following)
     this.SELECT_Projects();
     this.SELECT_Userdata();
   },
   methods: {
     async SELECT_Projects() {
-      this.user = await FirebaseService.SELECT_Projects(this.follower);
+      this.user = await FirebaseService.SELECT_Projects(this.following);
       for (let i = 0; i < this.user.length; i++) {
         this.projectList.push(this.user[i].project_id);
       }
       // console.log(this.projectList);
     },
     async SELECT_Userdata() {
-      this.user = await FirebaseService.SELECT_Userdata(this.follower);
+      this.user = await FirebaseService.SELECT_Userdata(this.following);
       this.userName = this.user[0].userName;
       this.userImg = this.user[0].userImage;
+      this.nickname = this.user[0].nickname;
       // console.log(this.user[0].userIntro);
       // this.userIntro = this.user[0].userIntro;
       // console.log(this.user[0].userImage);

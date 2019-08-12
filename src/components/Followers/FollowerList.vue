@@ -1,14 +1,14 @@
 <template>
   <div class="followList__container">
-    <!-- {{view1}}, {{view2}}, {{this.$store.getters.getfollowerList}}, {{followings}} -->
+    <!-- followerlist :  {{view1}}, {{view2}}, {{this.$store.getters.getfollowerList}}, {{followings}} -->
     <div  class="followrList__container__content" v-if="view1">
       <div v-for="human in this.$store.getters.getfollowerList" class="content__follower" @click="gogo(human)" style="cursor:pointer;">
         <Follower :follower="human" />
       </div>
     </div>
     <div class="followrList__container__content" v-if="view2">
-      <div v-for="human in followings" class="content__follower" @click="gogo(human)" style="cursor:pointer;">
-        <Following :following="human" />
+      <div v-for="human2 in followings" class="content__follower" @click="gogo(human2)" style="cursor:pointer;">
+        <Following :following="human2" />
       </div>
     </div>
   </div>
@@ -30,13 +30,13 @@ export default {
     };
   },
   components: {
-    Follower
+    Follower,
+    Following,
   },
   props : {
     view1 : {type:Boolean},
     view2 : {type:Boolean},
   },
-
 
   created() {
     // console.log(this.$route.params.id)

@@ -108,6 +108,7 @@
       </v-layout>
 
       <!-- follower 명시 -->
+      <!-- story : {{this.viewFollower}} , {{this.viewFollowing}}, {{this.$store.getters.getfollowerList}} , {{this.$store.getters.getfollowingList}} -->
       <v-layout row wrap align-center justify-space-around style="margin:20px 0;">
         <div style="display:inline-block;">
           <button v-if="!this.viewFollower " @click="followerTest">Follower : {{this.$store.getters.getfollowerList.length}}</button>
@@ -212,7 +213,7 @@ import LeftSide from "../components/UserInfoPage/LeftSide";
 import ProjectList from "../components/UserInfoPage/ProjectList";
 import ProjectEditor from "../components/UserInfoPage/ProjectEditor";
 import Project from "../components/Project/Project";
-import ProjectUpdator from "../components/UserInfoPage/ProjectUpdator";
+// import ProjectUpdator from "../components/UserInfoPage/ProjectUpdator";
 import Studio from "../components/UserInfoPage/Studio";
 import { mapState } from "vuex";
 import { Slide } from "vue-burger-menu";
@@ -308,7 +309,7 @@ export default {
       this.$store.commit("convertPVT", this.toggleView);
     },
     changeComponent() {
-      var v_button = document.getElementById("toggletext");
+      // var v_button = document.getElementById("toggletext");
       this.stateAdd = !this.stateAdd;
       this.showAddProject = false;
     },
@@ -585,7 +586,7 @@ export default {
     ProjectList,
     ProjectEditor,
     Project,
-    ProjectUpdator,
+    // ProjectUpdator,
     FollowerList,
     Slide,
     IntroEditor,

@@ -14,8 +14,8 @@ export default new Vuex.Store({
     check_true: true,
     projectViewToggle: false,
     no_header: false,
-    // followerView: false,
-    // followingView: false,
+    followerView: false,
+    followingView: false,
     followerList:[],
     followingList:[],
     techFilterList: [],
@@ -77,12 +77,12 @@ export default new Vuex.Store({
     convertPVT: function (state, payload) {
       return (state.projectViewToggle = payload);
     },
-    // setFollowerView: (state, val) => {
-    //   state.followerView = val;
-    // },
-    // setFollowingView: (state, val) => {
-    //   state.followingView = val;
-    // },
+    setFollowerView: (state, val) => {
+      state.followerView = val;
+    },
+    setFollowingView: (state, val) => {
+      state.followingView = val;
+    },
     setfollowerList: function (state, payload) {
       return state.followerList = payload;
     },
