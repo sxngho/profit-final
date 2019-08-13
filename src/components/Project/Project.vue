@@ -18,7 +18,6 @@
 
       <v-spacer/>
       <div>
-        <v-btn>가자가자</v-btn>
         <v-badge color="#E74C3C" overlap>
           <template slot="badge"> {{likeit.length}} </template>
           <v-btn text icon color="pink">

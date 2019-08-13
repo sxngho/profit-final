@@ -206,35 +206,38 @@ export default {
     async SELECT_Userdata() {
       this.toStory(true);
       this.userdata = await FirebaseService.SELECT_Userdata(this.$route.params.id);
+      if (this.userdata.length!=0) {
+        this.selectList = this.userdata[0].showSkillList
 
-      this.selectList = this.userdata[0].showSkillList
+        if ( this.userdata[0].userIntro == "" ) {
+          this.userdata[0].userIntro = "소개말이 없습니다."
+        }
+        if ( this.userdata[0].userImage == "" ) {
+          this.imageToggle = true;
+          this.image = "";
+        } else {
+          this.imageToggle = false;
+          this.image = this.userdata[0].userImage;
+        }
+        if ( this.userdata[0].userEducations.length == 0 ) {
+          this.educationToggle = true;
+        } else {
+          this.educationToggle = false;
+        }
+        if ( this.userdata[0].userCareers.length == 0 ) {
+          this.careerToggle = true;
+        } else {
+          this.careerToggle = false;
+        }
+        if ( this.userdata[0].userSkills.length == 0 ) {
+          this.skillToggle = true;
+        } else {
+          this.skillToggle = false;
+        }
+        this.toStory(false);
+      }
 
-      if ( this.userdata[0].userIntro == "" ) {
-        this.userdata[0].userIntro = "소개말이 없습니다."
-      }
-      if ( this.userdata[0].userImage == "" ) {
-        this.imageToggle = true;
-        this.image = "";
-      } else {
-        this.imageToggle = false;
-        this.image = this.userdata[0].userImage;
-      }
-      if ( this.userdata[0].userEducations.length == 0 ) {
-        this.educationToggle = true;
-      } else {
-        this.educationToggle = false;
-      }
-      if ( this.userdata[0].userCareers.length == 0 ) {
-        this.careerToggle = true;
-      } else {
-        this.careerToggle = false;
-      }
-      if ( this.userdata[0].userSkills.length == 0 ) {
-        this.skillToggle = true;
-      } else {
-        this.skillToggle = false;
-      }
-      this.toStory(false);
+
     },
     receiveSkill(selectList,unselectList) {
       FirebaseService.UPDATE_userSkill(selectList,this.$route.params.id);
@@ -293,8 +296,11 @@ export default {
     },
     async isFollowCheck() {
       var following = await FirebaseService.SELECT_Userdata(this.$route.params.id);
-      var tmp = following[0].followerlist.includes(this.$session.get('session_id'));
-      this.isFollow=tmp;
+      if (following.length!=0) {
+        var tmp = following[0].followerlist.includes(this.$session.get('session_id'));
+        this.isFollow=tmp;
+      }
+
     },
     toStory(load) {
       this.$emit('toStory',load);

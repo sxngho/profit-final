@@ -112,7 +112,7 @@ export default {
       for (var item in result) {
         this.hotprojects.push([result[item].id, result[item].data()])
       }
-      console.log(this.hotprojects, 'final')
+      // console.log(this.hotprojects, 'final')
     },
     gogo(project_id) {
       window.open("../project/" + project_id, project_id,"titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=700,height=600");

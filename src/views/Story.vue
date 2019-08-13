@@ -380,10 +380,7 @@ export default {
   created() {
     // 컴포넌트 생성시 데이터를 패치한다
     this.fetchData();
-    // this.setStoryBanner();
-    this.isFollowCheck();
-    this.$store.commit("setSession", this.$session.get("session_id"));
-    this.toggleViewPhoneNumber = this.$store.state.pToggle;
+
   },
   methods: {
     showNotification(group, type, title, text) {
@@ -395,23 +392,33 @@ export default {
       });
     },
     async fetchData() {
-      this.userid = this.$route.params.id;
-      this.session_id = this.$session.get("session_id");
-      this.$store.commit("setSession", this.$session.get("session_id"));
-      if (this.$session.get("session_id") !== "") {
-        this.toggleView = await FirebaseService.SELECT_userAddon(
-          this.$session.get("session_id")
-        );
-      }
       var result = await FirebaseService.SELECT_Userdata(this.$route.params.id);
-      this.user = result[0];
-      this.image = result[0].userImage;
-      this.storyBanner = result[0].storyBanner;
-      this.email = result[0].email;
-      this.phoneNumber = result[0].phonenumber;
-      this.showPhoneNumber = result[0].showPhoneNumber;
-      this.this.$store.commit("setfollowerList", result[0].followerlist);
-      this.$store.commit("setfollowingList", result[0].followinglist);
+      if (result.length==0) {
+        this.$loading(false)
+        this.$router.push({name: 'errorPage'})
+      } else {
+        this.userid = this.$route.params.id;
+        this.session_id = this.$session.get("session_id");
+        this.$store.commit("setSession", this.$session.get("session_id"));
+        if (this.$session.get("session_id") !== "") {
+          this.toggleView = await FirebaseService.SELECT_userAddon(
+            this.$session.get("session_id")
+          );
+        }
+
+        this.user = result[0];
+        this.image = result[0].userImage;
+        this.storyBanner = result[0].storyBanner;
+        this.email = result[0].email;
+        this.phoneNumber = result[0].phonenumber;
+        this.showPhoneNumber = result[0].showPhoneNumber;
+        this.$store.commit("setfollowerList", result[0].followerlist);
+        this.$store.commit("setfollowingList", result[0].followinglist);
+        this.isFollowCheck();
+        this.$store.commit("setSession", this.$session.get("session_id"));
+        this.toggleViewPhoneNumber = this.$store.state.pToggle;
+      }
+
     },
     updateToggle() {
       if (this.$session.get("session_id") !== "") {
