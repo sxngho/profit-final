@@ -1,13 +1,15 @@
 <template>
   <v-container>
-    <v-layout row wrap>
+    <v-layout row wrap >
       <v-toolbar-title class="font-weight-medium" style="padding-left:10px;">
-        <span class="font-weight-bold">{{project.projecttitle}}</span>
-        <span class="font-weight-thin font-italic subheading">{{project.session_id}}</span>
-
-        <v-flex class="caption">
-          {{ project.projectdescription }}
-        </v-flex>
+        <div>
+          <span class="font-weight-bold">{{project.projecttitle}}</span>
+          <span class="font-weight-thin font-italic caption">({{project.session_id}})</span>&nbsp;
+          <v-chip color="primary" @click="gogo(project.session_id)">Story가기</v-chip>
+          <v-flex class="caption">
+            <span style="white-space: pre;">{{ project.projectdescription }}</span>
+          </v-flex>
+        </div>
       </v-toolbar-title>
       <v-btn text @click="submitObjection()" v-if="this.$route.params.id==this.$store.getters.getSession && project.state > 0">
         이의제기
@@ -17,7 +19,7 @@
       <div>
         <v-badge color="#E74C3C" overlap>
           <template slot="badge"> {{likeit.length}} </template>
-          <v-btn color="primary" @click="gogo(project.session_id)">Story가기</v-btn>
+
           <v-btn text icon color="pink">
             <!-- 이미 좋아요 눌렀다면 다른 fa 를 보여주는 것도 좋겠다. -->
             <i id="likecheck" class="far fa-heart fa-2x" @click="like_project()"></i>
