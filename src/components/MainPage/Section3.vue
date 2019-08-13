@@ -52,14 +52,14 @@
 
                   </v-flex>
                   <v-flex xs12 offset-sm1 sm5 style="padding:20px 0;">
-                    <span class="grey--text caption">{{hotprojects[i][1].projectdescription}}</span>
-                    <br/><br/>
+                    <span class="grey--text caption txtBox2">{{hotprojects[i][1].projectdescription}}</span>
+
                     <div style="display:inline;" justify-center>
-                      <v-chip v-for="item in hotprojects[i][1].projecttech" color="indigo" small outlined style="margin:2px; color:black;">
+                      <v-chip v-for="item in hotprojects[i][1].projecttech" color="indigo" x-small outlined style="margin:2px; color:black;">
                         {{item}}
                       </v-chip>
                       <br/><br/>
-                      상세내용<br/><br/>
+                      <!-- <span>상세내용</span><br/> -->
                       <p v-html="hotprojects[i][1].projectcontent" class="txtBox2"></p>
                     </div>
 
