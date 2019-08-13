@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-layout row wrap>
-      <v-flex>
+      <v-flex >
 
         <h1 class="fontjua">유저 관리 페이지</h1>
         <v-chip v-if="level==0" color="red" small class="subtitle-1 white--text"><span class="fontYanolja "> 운영자 </span></v-chip>
@@ -16,7 +16,7 @@
 
           <v-expansion-panel
           v-for="(user, index) in userlist"
-          v-if="user.nickname.includes(input)"
+          v-if="user.nickname.includes(input) && user.level != 0"
           >
             <v-expansion-panel-header>
               <div>

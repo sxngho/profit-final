@@ -60,7 +60,7 @@
                       </v-chip>
                       <br/><br/>
                       상세내용<br/><br/>
-                      <p v-html="hotprojects[i][1].projectcontent"></p>
+                      <p v-html="hotprojects[i][1].projectcontent" class="txtBox2"></p>
                     </div>
 
 
@@ -103,7 +103,7 @@ export default {
     }
   },
   created() {
-    // this.fetchData()
+    this.fetchData()
   },
   methods: {
     async fetchData() {

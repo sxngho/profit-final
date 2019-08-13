@@ -1,52 +1,28 @@
 <!-- UserSideInfo -->
 <template>
   <div>
-    <template>
-      <v-layout row wrap>
-        <v-flex xs12 sm10 offset-sm1>
-          <h1> 신고리스트 !! </h1>
-          <v-btn @click="setTag('Siren_Project')">
-            Siren_Project
-          </v-btn>
-          <v-btn @click="setTag('Siren_Comment')">
-            Siren_Comment
-          </v-btn>
-          <v-btn @click="setTag('Objection')">
-            Objection
-          </v-btn>
-          <!-- 프로젝트를 신고한 경우 -->
-          <v-list v-if="tag =='Siren_Project'">
-          <v-list-item
-            v-for="(report) in reportList"
-            v-if="report.data.tag == tag"
-          >
-
-            <v-list-item-content>
-             {{ report.data.reportUser }} 가 신고한  {{ report.data.reportedUser }} 의 {{ report.data.projecttitle }} 프로젝트
-             {{ report.data.reportTitle }} {{ report.data.reportContent }} 의 사유로 신고가 접수되었습니다.
-            </v-list-item-content>
-
-            <v-list-item-action>
-              <div>
-                <v-btn text outlined color="#00f" small @click="greenBtn(report, tag)">기각</v-btn>
-                <v-btn text outlined color="#ff0" small @click="oragneBtn(report, tag)">경고</v-btn>
-                <v-btn text outlined color="#f00" small @click="redBtn(report, tag)">블라인드</v-btn>
-              </div>
-            </v-list-item-action>
-
-          </v-list-item>
-        </v-list>
-
-        <!-- 댓글신고를 한 경우 -->
-        <v-list v-if="tag =='Siren_Comment'">
+    <v-layout row wrap>
+      <v-flex >
+        <h1 class="fontjua"> 신고리스트 !! </h1>
+        <v-btn class="subtitle-1" depressed rounded color="success" @click="setTag('Siren_Project')">
+          <span class="fontHannaAir ">Siren_Project</span>
+        </v-btn>
+        <v-btn class="subtitle-1" depressed rounded color="success" @click="setTag('Siren_Comment')">
+          <span class="fontHannaAir ">Siren_Comment</span>
+        </v-btn>
+        <v-btn class="subtitle-1" depressed rounded color="success" @click="setTag('Objection')">
+          <span class="fontHannaAir ">Objection</span>
+        </v-btn>
+        <!-- 프로젝트를 신고한 경우 -->
+        <v-list v-if="tag =='Siren_Project'">
         <v-list-item
           v-for="(report) in reportList"
           v-if="report.data.tag == tag"
         >
 
           <v-list-item-content>
-            {{ report.data.reportUser }} 가 신고한  {{ report.data.reportedUser }} 의 {{ report.data.projecttitle }} 프로젝트의
-             {{ report.data.reportContent }} 내용이 {{report.data.reportTitle}} 사유로 신고가 접수되었습니다.
+           {{ report.data.reportUser }} 가 신고한  {{ report.data.reportedUser }} 의 {{ report.data.projecttitle }} 프로젝트
+           {{ report.data.reportTitle }} {{ report.data.reportContent }} 의 사유로 신고가 접수되었습니다.
           </v-list-item-content>
 
           <v-list-item-action>
@@ -60,33 +36,56 @@
         </v-list-item>
       </v-list>
 
-        <!-- 이의제기를 한 경우 -->
-        <v-list v-if="tag =='Objection'">
-        <v-list-item
-          v-for="(report) in reportList"
-          v-if="report.data.tag == tag"
-        >
+      <!-- 댓글신고를 한 경우 -->
+      <v-list v-if="tag =='Siren_Comment'">
+      <v-list-item
+        v-for="(report) in reportList"
+        v-if="report.data.tag == tag"
+      >
 
-          <v-list-item-content>
-          {{ report.data.projectTitle }}
-          </v-list-item-content>
+        <v-list-item-content>
+          {{ report.data.reportUser }} 가 신고한  {{ report.data.reportedUser }} 의 {{ report.data.projecttitle }} 프로젝트의
+           {{ report.data.reportContent }} 내용이 {{report.data.reportTitle}} 사유로 신고가 접수되었습니다.
+        </v-list-item-content>
 
-          <v-list-item-action>
-            <div>
-              <v-btn text outlined color="#0ff" small @click="goProject(report.data.projectId)"> 확인하러 가기 </v-btn>
-              <v-btn text outlined color="#00f" small @click="greenBtn2(report.data.projectId,report.data.state,report.id)">이의제기 받아들이기</v-btn>
-              <v-btn text outlined color="#f00" small @click="redBtn2(report.data.projectId,report.data.state,report.id)">기각</v-btn>
-            </div>
-          </v-list-item-action>
+        <v-list-item-action>
+          <div>
+            <v-btn text outlined color="#00f" small @click="greenBtn(report, tag)">기각</v-btn>
+            <v-btn text outlined color="#ff0" small @click="oragneBtn(report, tag)">경고</v-btn>
+            <v-btn text outlined color="#f00" small @click="redBtn(report, tag)">블라인드</v-btn>
+          </div>
+        </v-list-item-action>
 
-        </v-list-item>
-      </v-list>
+      </v-list-item>
+    </v-list>
+
+      <!-- 이의제기를 한 경우 -->
+      <v-list v-if="tag =='Objection'">
+      <v-list-item
+        v-for="(report) in reportList"
+        v-if="report.data.tag == tag"
+      >
+
+        <v-list-item-content>
+        {{ report.data.projectTitle }}
+        </v-list-item-content>
+
+        <v-list-item-action>
+          <div>
+            <v-btn text outlined color="#0ff" small @click="goProject(report.data.projectId)"> 확인하러 가기 </v-btn>
+            <v-btn text outlined color="#00f" small @click="greenBtn2(report.data.projectId,report.data.state,report.id)">이의제기 받아들이기</v-btn>
+            <v-btn text outlined color="#f00" small @click="redBtn2(report.data.projectId,report.data.state,report.id)">기각</v-btn>
+          </div>
+        </v-list-item-action>
+
+      </v-list-item>
+    </v-list>
 
 
 
-        </v-flex>
-      </v-layout>
-    </template>
+      </v-flex>
+    </v-layout>
+
   </div>
 </template>
 
