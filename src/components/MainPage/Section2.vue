@@ -3,14 +3,14 @@
     <v-layout row wrap justify-center style="height:60%; padding:0% 20%">
       <v-flex xs6 v-show="!showUpRecruit">
         <v-flex xs12 text-center v-show="!showUpRecruit">
-          <span class="sm-link sm-link_padding-bottom sm-link3" style="height:7%" @mouseover="showUpCompanyList=true" @mouseleave="showUpCompanyList=true">
+          <span class="sm-link sm-link_padding-bottom sm-link3" style="height:7%" @mouseover="showUpCompanyList=true" @mouseleave="showUpCompanyList=false">
             <span class="sm-link__label">  <span class="display-1"> <span class="fontjua"> 기업 정보</span> </span> </span>
           </span>
         </v-flex>
         <v-flex xs12 text-center v-show="!showUpRecruit">
           <router-link :to="{ name: 'companyListPage' }" class="bannerBtn">
             <div class="bannerBtn sm-link sm-link_padding-all sm-link1">
-              <div class="sm-link__label" @mouseover="showUpCompanyList=true" @mouseleave="showUpCompanyList=true">
+              <div class="sm-link__label" @mouseover="showUpCompanyList=true" @mouseleave="showUpCompanyList=false">
                 <i class="far fa-building fa-9x"/><br/>
                 <span class="content"> <span class="fontjua">기업리스트</span></span>
               </div>
