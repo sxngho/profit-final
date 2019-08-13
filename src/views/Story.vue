@@ -128,7 +128,7 @@
             text
             outlined
             small
-            v-if="this.$store.getters.getSession && this.$route.params.id!=this.$store.getters.getSession && !isFollow"
+            v-if="this.$store.getters.getSession && this.$route.params.id!=this.$store.getters.getSession && !isFollow && this.$store.getters.getLevel==2 "
             @click="follow()"
           >
             <img
@@ -143,7 +143,7 @@
             text
             outlined
             small
-            v-if="this.$store.getters.getSession && this.$route.params.id!=this.$store.getters.getSession && isFollow"
+            v-if="this.$store.getters.getSession && this.$route.params.id!=this.$store.getters.getSession && isFollow && this.$store.getters.getLevel==2"
             @click="unfollow()"
           >
             <img
