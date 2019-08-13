@@ -236,7 +236,7 @@
 
             <v-flex xs12 sm8 md9>
               <!-- btn Toolbar -->
-              <v-container>
+              <v-container v-if="!statedetail">
                 <v-layout wrap style="padding:0px 5px;">
                   <div
                     @click="changeComponent()"

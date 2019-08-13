@@ -29,10 +29,22 @@
               지금 작성하러 가볼까요?<br/>
             </div>
           </v-flex>
-          <v-flex sm5 xs10 offset-sm1 xs2 v-else text-center>
+          <v-flex xs10 v-else text-center>
             <div>
-              <h1>당신의 포트폴리오를 공유하세요!</h1>
-              우리사이트는 멋진 사이트다~ 이말이야!
+              <v-layout row wrap justify-center>
+                <v-flex class="text-xs-center">
+                  <span class="text-xs-center display-2"> <span class="fontjua"> 개발자 포트폴리오를 위한 [prof:it] <br/><br/></span> </span>
+                  <span class="title">
+                    <span class="fontjua">
+                      모든 프로젝트를 등록하고, 당신의 이력을 작성할 수 있습니다. <br/>
+                      다양한 개발자들의 폭넓은 스펙트럼을 확인하세요! <br/><br/>
+                    </span>
+                  </span>
+                  <span class="content">
+                    #발전하는 #열정적인 #개발자
+                  </span>
+                </v-flex>
+              </v-layout>
             </div>
           </v-flex>
 
@@ -127,4 +139,4 @@ export default {
         transform: rotate(45deg) translate(20px,20px);
     }
 }
-      </style>
+</style>
