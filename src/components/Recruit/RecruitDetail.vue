@@ -2,21 +2,31 @@
   <div>
   <v-dialog v-model="dialog" max-width="600px">
     <template v-slot:activator="{ on }">
-      <v-card outlined class="text-center" style="padding:25px 10px 5px 10px;">
-          <p class="display-1" style="font-size: 24px; font-weight: bold;">{{ recruit.data.projectTitle }}</p>
+      <v-card outlined class="text-center" style="padding:25px 10px 5px 10px;position:relative; height:320px;">
+        <p>
+          <span class="font-weight-light txtline" style="font-size: 36px;">
+            <span class="fontDoHyeon">{{ recruit.data.projectTitle }}</span>
+          </span>
+          <span class="caption">{{recruit.data.companyId}}</span>
+        </p>
         <div>
-          <div>
-            <v-chip v-for="skill in recruit.data.requiredSkills" outlined small class="pa-2" color="indigo">{{skill}}</v-chip>
+          <div style="margin-bottom:10px;">
+            <v-chip v-for="skill in recruit.data.requiredSkills"
+            outlined small class="pa-2" color="indigo" style="margin:2px;">
+              {{skill}}
+            </v-chip>
           </div>
-          <span class="indigo--text headline">{{recruit.data.closingDate}}</span>
-          <p class="grey--text">{{recruit.data.projectSummary}}</p>
-          <span class="caption">
-            {{recruit.data.companyId}}
-            {{recruit.data.endDay}}</span>
+          <!-- <span class="indigo--text headline">{{recruit.data.endDay}}</span> -->
+          <p class="grey--text txtBox font-weight-thin">
+            <span class="fontDoHyeon ">{{recruit.data.projectSummary}}</span>
+          </p>
+          <span class="caption"> {{recruit.data.createDay}} ~ {{recruit.data.endDay}}</span>
         </div>
-        <v-card-actions justify-center>
-          <v-spacer/>
-          <v-btn text outlined v-on="on">자세히보기</v-btn>
+
+        <v-card-actions style="width:100%; position:absolute; bottom:10px;">
+          <v-layout row justify-center>
+            <v-btn outlined text rounded v-on="on">자세히보기</v-btn>
+          </v-layout>
         </v-card-actions>
       </v-card>
     </template>
@@ -65,7 +75,6 @@
 
     </v-container>
   </div>
-
   </v-dialog>
   </div>
 </template>
@@ -84,6 +93,7 @@ export default {
     dib(recruit_id) {
       if ( !this.userdata[0].dibs.includes(recruit_id) ) {
         this.userdata[0].dibs.push(recruit_id);
+        this.$emit('Checkflag',recruit_id,true)
         FirebaseService.UPDATE_userDibs(this.userdata[0].dibs, this.$session.get('session_id'));
         this.$swal.fire({
           title: '찜목록에 추가되었습니다.',
@@ -102,8 +112,10 @@ export default {
             this.dialog = false;
           }
         })
+
       } else {
         this.userdata[0].dibs.splice(this.userdata[0].dibs.indexOf(recruit_id),1);
+        this.$emit('Checkflag',recruit_id,false)
         FirebaseService.UPDATE_userDibs(this.userdata[0].dibs, this.$session.get('session_id'));
         this.$swal(
            '찜 목록에서 삭제',
@@ -118,17 +130,6 @@ export default {
     return {
       dialog : false,
       alreadyDibs : false,
-      // recruit : {
-      //   id:"",
-      //   data:{
-      //     projectTitle:"",
-      //     projectSummary:"",
-      //     category:"",
-      //     closingDate:"",
-      //     budget:"",
-      //     projectContent:"",
-      //   }
-      // },
     };
   },
   props: {

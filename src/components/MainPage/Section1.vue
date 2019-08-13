@@ -8,15 +8,19 @@
       </div>
     </button>
 
-      <v-layout row wrap justify-center style="height:46%">
+      <v-layout row wrap justify-center style="height:55%">
           <v-flex sm5 xs10 offset-sm1 xs2 v-if="this.$store.getters.getLevel==2 || this.$store.getters.getLevel==3">
           <div style="color:black" v-if="this.$store.getters.getLevel==2">
-            <h1>당신의 프로젝트를 공유해보세요!</h1>
-              <br/>
-              간단한 프로젝트 작성을 통해 <br/>
-              포트폴리오를 만들 수 있고 <br/>
-              포트폴리오를 기반으로 외주를 구할 수도 있습니다.<br/>
-              지금 프로젝트를 작성하러 가세요!<br/>
+            <span class="display-2"> <span class="fontjua"> 당신의 프로젝트를 공유해보세요!</span> </span>
+            <span class="title">
+              <span class="fontjua">
+                <br/><br/>
+                간단한 프로젝트 작성을 통해 <br/>
+                포트폴리오를 만들 수 있고 <br/>
+                포트폴리오를 기반으로 외주를 구할 수도 있습니다.<br/>
+                지금 프로젝트를 작성하러 가세요!<br/>
+              </span>
+            </span>
             </div>
             <div v-else-if="this.$store.getters.getLevel==3">
               <h1>Take users Portfolio!</h1>
@@ -32,13 +36,14 @@
             </div>
           </v-flex>
 
-        <v-flex sm5 xs10 offset-sm1 xs2 style="text-align: center;">
+        <v-flex sm5 xs12 style="text-align: center;">
           <!-- 유저일때 -->
           <router-link :to="{ name: 'story', params: { id: this.$session.get('session_id') }}" v-if="this.$store.getters.getLevel==2" class="bannerBtn">
-            <div class="bannerBtn sm-link sm-link_padding-all sm-link1">
+            <div class="bannerBtn sm-link sm-link_padding-all sm-link1" style="float: left;  margin-left: 20%; margin-top: 6%;">
                 <div class="sm-link__label">
-                <i class="far fa-keyboard fa-7x"/><br/>
-                <span>Stroy</span>
+                  <i class="fas fa-user-edit fa-7x"></i>
+                  <br/><br/>
+                  <span class="headline"><span class="fontjua">스토리</span></span>
               </div>
             </div>
           </router-link>
@@ -47,17 +52,20 @@
           <router-link :to="{ name: 'company', params: { id: this.$session.get('session_id') }}" v-if="this.$store.getters.getLevel==3"  class="bannerBtn">
             <div class="bannerBtn sm-link sm-link_padding-all sm-link1">
                 <div class="sm-link__label">
-                <i class="far fa-keyboard fa-7x"/><br/>
-                <span>Company</span>
-              </div>
+                <i class="far fa-keyboard fa-7x"/>
+                <br/><br/>
+                <span>기업</span>
+                </div>
             </div>
           </router-link>
 
         </v-flex>
       </v-flex>
       </v-layout>
-      <img src="../../assets/section1_img.png" style="position:absolute; left:29%; width:40%; bottom:0%;"/>
-
+      <v-layout row justify-center>
+        <img src="../../assets/section1_img.png" style="position:absolute; width:30%; bottom:0%;"/>
+      </v-layout>
+<!-- <img src="../../assets/section1_img.png" style="position:absolute; left:29%; width:40%; bottom:0%;"/> -->
       <!-- <div v-bind:style="{ 'backgroundImage': 'url(' + wallpaper   + ')'}" >
         <div style="padding:100%;"></div>
       </div> -->

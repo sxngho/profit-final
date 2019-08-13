@@ -99,7 +99,7 @@
         <div>
           <p class="text-center display-1 font-weight-bold">찜리스트</p>
         </div>
-        <v-layout row wrap v-for="recruit in Dibs" style="margin:20px 0;">
+        <v-layout row wrap v-for="(recruit,index) in Dibs" style="margin:20px 0;">
             <v-card outlined style="width:100%; padding:12px;">
               <div class="subtitle-1">
                 <span class="headline font-weight-bold">{{recruit.data.projectTitle}}</span>
@@ -123,6 +123,7 @@
               <v-container>
                 <v-layout row wrap>
                   <v-spacer/>
+                  <v-btn  @click="dib(recruit.id,index)" outlined color="red"> 찜 취소 </v-btn>
                   <v-btn style="margin-right:3px;" @click="popDibChat(recruit)" outlined color="orange">채팅방</v-btn>
                 </v-layout>
               </v-container>
@@ -345,6 +346,20 @@ export default {
          }
        })
     },
+
+
+    dib(recruit_id,index) {
+      this.userdata[0].dibs.splice(this.userdata[0].dibs.indexOf(recruit_id),1);
+      FirebaseService.UPDATE_userDibs(this.userdata[0].dibs, this.$session.get('session_id'));
+      this.$swal(
+        '찜 목록에서 삭제',
+        '해당 공고가 찜목록에서 삭제되었습니다.',
+        'success'
+      )
+      this.Dibs.splice(index,1);
+    },
+
+
     popChat(ccode){
       this.createChatRoom(ccode);
       var curl = ccode.link
