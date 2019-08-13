@@ -30,7 +30,7 @@
                   <span class="fontHannaAir" style="margin:0 10px;">내 기술 정보</span>
                 </legend>
                 <v-chip-group
-                  v-if="mySkills[0].userSkills > 0"
+                  v-if="mySkills[0].userSkills.length > 0"
                   multiple
                   column
                   active-class="primary--text primary"
@@ -293,7 +293,7 @@ export default {
       this.mySkills = await FirebaseService.SELECT_Userdata(
         this.$session.get("session_id")
       );
-      console.log(this.mySkills[0].userSkills, 1)
+      console.log(this.mySkills[0].userSkills, 1);
       if (this.$store.getters.getLevel === 2) {
         //일단 모든 나의 스킬을 대문자로 만들어준다.
         for (var ii in this.mySkills[0].userSkills) {
