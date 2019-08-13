@@ -44,7 +44,7 @@
                     v-on:click="Filter(item)"
                     color="#cecece"
                     outlined
-                  >{{ item }}</v-chip>
+                  >{{ item }} </v-chip>
                 </v-chip-group>
                 <!-- 기술이 하나도 없을때, 기술창에 출력할 문구 -->
                 <v-layout
@@ -149,7 +149,7 @@
       </div>
 
       <!-- 회사라면 아래 레이아웃 출력 -->
-      <div
+      <!-- <div
         v-if="this.$store.getters.getLevel === 0 || this.$store.getters.getLevel === 1 || this.$store.getters.getLevel === 3"
       >
         <v-layout wrap row>
@@ -183,7 +183,7 @@
             </v-card>
           </v-flex>
         </v-layout>
-      </div>
+      </div> -->
 
       <!-- 비 로그인 유저라면 아래 레이아웃 출력 -->
       <div v-if="typeof(this.$store.getters.getLevel) =='string'">
