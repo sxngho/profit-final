@@ -1,8 +1,10 @@
 <template>
   <div>
 
-    <v-layout>
-      현재 비활성화된 상태입니다.
+    <v-layout row wrap>
+      <v-flex>
+        <h1 class="fontjua">현재 비활성화된 상태입니다.</h1>
+      </v-flex>
     </v-layout>
 
     <!-- <template>
