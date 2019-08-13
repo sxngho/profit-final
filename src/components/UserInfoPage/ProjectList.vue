@@ -39,7 +39,6 @@
           :projectcontent="projects[i-1].data.projectcontent"
           >
         </ProjectDetail0>
-        <v-divider></v-divider>
       </v-flex>
 
       <v-flex v-for="i in projects.length > max_project ? max_project : projects.length" xs12 v-if="( projects[i-1].data.state < 3 || projects[i-1].data.session_id==$store.getters.getSession ) && filtering(i,techfilter) && layout==3">
@@ -55,7 +54,6 @@
           :projectcontent="projects[i-1].data.projectcontent"
           >
         </ProjectDetail1>
-        <v-divider></v-divider>
       </v-flex>
     </v-layout>
 <!--

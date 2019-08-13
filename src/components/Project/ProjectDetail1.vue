@@ -1,29 +1,38 @@
 <template>
-  <div>
-    <v-flex class="text-xs-center">
+  <v-layout row wrap justify-center>
+    <v-flex xs11 style="padding:2px;">
+      <v-layout row wrap @click="popdetail(project_id)" style="padding:10px 30px; cursor:pointer; background:white;border: 1px solid #cecece; border-radius: 9px;">
+        <!-- <v-avatar size="150" class="squareImg" style="margin:18px 0;"><v-img :src="projectimage"/></v-avatar> -->
+        <div style="display:inline;margin:18px 0;"><v-img :src="projectimage" height="13vw" width="13vw"></v-img></div>
+        <v-spacer/>
+        <v-flex class="text-center" style="width:70%;">
+          <span class="title"><span class="fontDoHyeon">{{projecttitle}}</span></span><br/>
+          <v-chip outlined color="indigo" x-small label><span>{{projectterm}}</span></v-chip>&nbsp;&nbsp;<v-chip outlined color="success" x-small label><span>{{projectrank}}</span></v-chip><br/>
+          <p class="grey--text caption" v-html="projectcontent" style="height:100px; width:100%; overflow: hidden; text-overflow: ellipsis;" />
+          <v-chip v-for="tech in projecttech" color="#cecece" outlined style="margin:0 2px;" x-small>{{ tech }}</v-chip>
+        </v-flex>
+      </v-layout>
+    </v-flex>
+  </v-layout>
+  <!-- <div>
+    <v-flex xs12>
       <v-btn text class="white--text" @click="popdetail(project_id)" style="height:80%;width:80%;">
         <v-layout align-center>
-          <v-flex xs2 hidden-xs-only>
+          <v-flex xs2>
             <v-img :src="projectimage" height="5vw" width="100%"></v-img>
           </v-flex>
           <v-flex xs12>
             <div>
               <div class="black--text" style="font-weight:900">{{projecttitle}}</div>
               <div class="black--text">{{projectterm}} {{projectrank}}</div>
-              <p
-                class="grey--text"
-                v-html="projectcontent"
-                style="height:100px; width:100%; overflow: hidden; 
-  text-overflow: ellipsis; font-size:8px"
-              />
+              <p class="grey--text" v-html="projectcontent" style="height:100px; width:100%; overflow: hidden; text-overflow: ellipsis; font-size:8px" />
               <v-chip v-for="tech in projecttech" class="tech d-inline-block caption">{{ tech }}</v-chip>
             </div>
           </v-flex>
         </v-layout>
       </v-btn>
-      <!-- <ProjectList v-if="!stateAdd"></ProjectList> -->
     </v-flex>
-  </div>
+  </div> -->
 </template>
 
 

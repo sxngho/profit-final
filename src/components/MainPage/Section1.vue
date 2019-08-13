@@ -51,19 +51,19 @@
         <v-flex sm5 xs12 style="text-align: center;">
           <!-- 유저일때 -->
           <router-link :to="{ name: 'story', params: { id: this.$session.get('session_id') }}" v-if="this.$store.getters.getLevel==2" class="bannerBtn">
-            <div class="bannerBtn sm-link sm-link_padding-all sm-link1" style="float: left;  margin-left: 20%; margin-top: 6%;">
-                <div class="sm-link__label">
-                  <i class="fas fa-user-edit fa-7x"></i>
-                  <br/><br/>
-                  <span class="headline"><span class="fontjua">스토리</span></span>
+            <div class="bannerBtn bl-link bl-link_padding-all bl-link1" style="float: left;  margin-left: 20%; margin-top: 6%;">
+                <div class="bl-link__label">
+                  <i class="fas fa-user-edit fa-7x" style="color:black"></i>
+                  <br/>
+                  <span class="headline"><span class="fontjua" style="color:black">스토리</span></span>
               </div>
             </div>
           </router-link>
 
           <!-- 기업일때 -->
           <router-link :to="{ name: 'company', params: { id: this.$session.get('session_id') }}" v-if="this.$store.getters.getLevel==3"  class="bannerBtn">
-            <div class="bannerBtn sm-link sm-link_padding-all sm-link1">
-                <div class="sm-link__label">
+            <div class="bannerBtn bl-link bl-link_padding-all bl-link1">
+                <div class="bl-link__label">
                 <i class="far fa-keyboard fa-7x"/>
                 <br/><br/>
                 <span>기업</span>

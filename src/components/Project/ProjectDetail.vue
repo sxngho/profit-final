@@ -3,10 +3,16 @@
     <div @click="popdetail(project_id)">
       <v-img :src="projectimage" height="20vw"></v-img>
       <div>
-        <div class="black--text text-center"><span v-if="projectstate==3" style="color:red;" class="txtBox2">블라인드 처리됨</span>&nbsp; {{projecttitle}}</div>
-        <div class="grey--text text-center"><span class="txtBox2">{{projectdescription}}</span></div>
+        <div class="black--text text-center txtline title">
+          <span v-if="projectstate==3" style="color:red;">블라인드 처리됨&nbsp;</span>
+          <span class="fontDoHyeon ">{{projecttitle}}</span>
+        </div>
+        <div class="grey--text text-center txtline ">
+          <span class="fontDoHyeon " style="font-weight:lighter">{{projectdescription}}</span>
+        </div>
       </div>
     </div>
+
     <div style="float:right; margin-right:1vw;">
       <v-flex
         v-if="this.$store.getters.getSession==this.$route.params.id"

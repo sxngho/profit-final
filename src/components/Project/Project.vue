@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-btn @click="goBackpage()" text outlined> 뒤로가기 </v-btn>
+    <v-btn @click="goBackpage()" text outlined style="margin-bottom:1%"> 뒤로가기 </v-btn>
     <v-divider/>
 
     <v-layout row wrap>
@@ -151,6 +151,7 @@
                 <!-- comment list -->
                 <v-layout row wrap justify-center>
                   <v-flex xs12 v-for="(com, index) in comments">
+                    {{index}}
                     <v-card outlined style="width:100%; padding:10px 25px; margin:2px 0;">
                       <div v-bind:class="[`before_${index}`]">
                         <span v-if="com.state==3" style="color:red;" @click="seecomment(index)">이 댓글은 신고 누적으로 블라인드 처리</span>
@@ -171,47 +172,13 @@
 
                               <v-icon class="fa fa-wrench" color="#8390b4" style="margin-right:2px;" v-if="com.User==$store.getters.getSession" @click="UPDATE_comment(comments, index)"/>
                               <v-icon class="fa fa-trash" color="#777688"  style="margin-right:2px;" v-if="com.User==$store.getters.getSession" @click="DELETE_comment(comments, index)"/>
-
-                              <template>
-                                <v-layout justify-center d-inline>
-                                  <v-dialog v-model="Commentdialog" max-width="290">
-                                    <template v-slot:activator="{ on }">
-                                      <v-icon small class="fa fa-bell fa-1x" v-on="on" color="#ffa76a"></v-icon>
-                                      <!-- <v-btn v-if="$store.getters.getSession" text color="primary" dark v-on="on"><i class="fa fa-bell" style="color:orange"></i></v-btn> -->
-                                    </template>
-
-                                    <v-card>
-                                      <v-card-title class="headline">
-                                        <span class="headline">신고하기</span>
-                                      </v-card-title>
-                                      <v-card-text>
-                                        <v-layout wrap>
-                                          <v-flex xs12>
-                                            <v-combobox
-                                            v-model="reportCommentSelect"
-                                            :items="reportCommentItems"
-                                            label="댓글신고 사유를 선택해주세요."
-                                            ></v-combobox>
-                                          </v-flex>
-                                          <v-flex xs12 v-if="reportCommentSelect=='기타'">
-                                            <input type="text" v-model="reportCommentText"/>
-                                          </v-flex>
-                                          <v-flex xs12>
-                                            <v-text-field v-model="reportCommentDesc" required @keyup.enter="Commentdialog = false, submitCommentReport(reportCommentSelect,reportCommentText,reportCommentDesc)"></v-text-field>
-                                          </v-flex>
-                                        </v-layout>
-                                      </v-card-text>
-                                      <v-card-actions>
-                                        <v-spacer></v-spacer>
-                                        <v-btn color="blue darken-1" text @click="Commentdialog = false">취소</v-btn>
-                                        <v-btn color="blue darken-1" text @click="Commentdialog = false, submitCommentReport(reportCommentSelect,reportCommentText,reportCommentDesc, comments, index)">신고하기</v-btn>
-                                        <br />
-                                      </v-card-actions>
-                                    </v-card>
-
-                                  </v-dialog>
-                                </v-layout>
-                              </template>
+                              <Comments
+                                :com="com"
+                                :project_id="project_id"
+                                :project="project"
+                                :index="index"
+                                :comments="comments"
+                              />
                           </div>
                         </v-layout>
                       </div>
@@ -239,6 +206,7 @@
 <script>
 import FirebaseService from "@/services/FirebaseService";
 import BigImg from "../Common/BigImg";
+import Comments from "./Comments";
 
 
 export default {
@@ -281,6 +249,7 @@ export default {
   },
   components: {
     BigImg,
+    Comments,
   },
   created(){
     this.user = this.$session.get('session_id')
@@ -401,6 +370,7 @@ export default {
         like : [],
         unlike : [],
         state:0,
+        reportUserList:[],
         date: (date.getFullYear()-2000) + "." + (date.getMonth()+1) + "."  + date.getDate() + "." + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()
         };
         this.comments.push(newcommnet)
@@ -412,6 +382,7 @@ export default {
       this.real_taglist = []
       this.tmp_taglist = []
     },
+
     async get_comments() {
       this.comments = await FirebaseService.SELECT_Comments(this.project_id)
     },
@@ -500,8 +471,6 @@ export default {
           }
         }
       }
-
-
 
     },
     async like_comment(com, index) {

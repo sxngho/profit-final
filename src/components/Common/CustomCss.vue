@@ -111,6 +111,10 @@ fieldset  .v-slide-group__content{
   justify-content: center;
 }
 
+img .squareImg .v-avatar .v-icon .v-avatar .v-image .v-avatar{
+  border-radius: 0!important;
+}
+
 </style>
 
 <!-- Custom Font -->
