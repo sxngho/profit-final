@@ -27,7 +27,7 @@
       <v-layout wrap row>
         <v-flex xs12 sm6 md4 v-for="recruit in myRecruits" v-if="Filtering(recruit.data.requiredSkills) && !isEmpty" style="padding:10px; position:relative">
           <img src="../assets/tape.png" v-if="recruit.flag" style="width: 136px; position: absolute; z-index: 2; transform: rotate(45deg); right: -43px;"/>
-          <RecruitDetail :recruit="recruit" :userdata="mySkills" onloadedmetadata="":recruit_id="recruit.id"/>
+          <RecruitDetail :recruit="recruit" :userdata="mySkills" onloadedmetadata="":recruit_id="recruit.id" v-on:Checkflag="flagCheck"/>
         </v-flex>
 
         <v-flex v-if="isEmpty">
@@ -64,7 +64,7 @@
     </div>
 
     <!-- 회사라면 아래 레이아웃 출력 -->
-    <div v-if="this.$store.getters.getLevel ===0 || this.$store.getters.getLevel ===1 || this.$store.getters.getLevel ===3">
+    <div v-if="this.$store.getters.getLevel === 0 || this.$store.getters.getLevel === 1 || this.$store.getters.getLevel === 3">
       <v-layout wrap row>
         <v-flex xs12 sm6 md4 v-for="recruit in recruits" style="padding:10px;">
           <v-card outlined class="text-center" style="padding:25px 10px 5px 10px;">
@@ -157,6 +157,15 @@
       this.fetchData();
     },
     methods: {
+      flagCheck(recruitId,state) {
+        console.log("플래그체크함수실행이오",recruitId,state)
+        for(var i in this.myRecruits) {
+          if (this.myRecruits[i].id == recruitId) {
+              this.myRecruits[i].flag = state;
+              break;
+          }
+        }
+      },
       Filter(item) {
         var i = item.toUpperCase();
         if( !this.myFilter.includes(i)) {
@@ -218,7 +227,6 @@
           }
         }
       },
-
       dib(recruit_id) {
         if ( !this.mySkills[0].dibs.includes(recruit_id) ) {
           this.mySkills[0].dibs.push(recruit_id);

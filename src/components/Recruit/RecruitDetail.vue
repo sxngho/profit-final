@@ -65,7 +65,6 @@
 
     </v-container>
   </div>
-
   </v-dialog>
   </div>
 </template>
@@ -84,6 +83,7 @@ export default {
     dib(recruit_id) {
       if ( !this.userdata[0].dibs.includes(recruit_id) ) {
         this.userdata[0].dibs.push(recruit_id);
+        this.$emit('Checkflag',recruit_id,true)
         FirebaseService.UPDATE_userDibs(this.userdata[0].dibs, this.$session.get('session_id'));
         this.$swal.fire({
           title: '찜목록에 추가되었습니다.',
@@ -102,8 +102,10 @@ export default {
             this.dialog = false;
           }
         })
+
       } else {
         this.userdata[0].dibs.splice(this.userdata[0].dibs.indexOf(recruit_id),1);
+        this.$emit('Checkflag',recruit_id,false)
         FirebaseService.UPDATE_userDibs(this.userdata[0].dibs, this.$session.get('session_id'));
         this.$swal(
            '찜 목록에서 삭제',
