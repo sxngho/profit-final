@@ -17,11 +17,26 @@
            <div>
              <fieldset style="padding:10px; border:2px solid lightgrey; border-radius:15px; " justify-center>
                <legend align="center" class="font-weight-bold" ><span class="fontHannaAir" style="margin:0 10px;">내 기술 정보</span></legend>
-               <v-chip-group multiple column active-class="primary--text primary" style="padding:20px;" justify-center>
+               <v-chip-group  v-if="mySkills[0].userSkills > 0" multiple column active-class="primary--text primary" style="padding:20px;" justify-center>
                  <v-chip v-for="item in mySkills[0].userSkills" text-color="white" style="cursor:pointer;" v-on:click="Filter(item)" color="#cecece" outlined>
                    {{ item }}
                  </v-chip>
                </v-chip-group>
+               <!-- 기술이 하나도 없을때, 기술창에 출력할 문구 -->
+                 <v-layout row wrap justify-center v-if="mySkills[0].userSkills == 0" style="margin:20px 0;">
+                     <span class="small grey--text">
+                       <span class="fontHannaAir">
+                         * 등록된 기술이 없습니다 *<br/>
+                         <span style="color:#1976d2 !important" class="fontHannaAir">마이 페이지 &nbsp;&nbsp;</span>
+                         <v-chip color="primary" small :to="{ name: 'story', params: { id: user }}">바로가기</v-chip>&nbsp;&nbsp;에서
+                         <span class="fontHannaAir" style="font-weight: bold;">프로젝트</span>를 등록하면
+                         <br/>해당 프로젝트에 올라간 기술이 등록됩니다.
+                         <br/>
+                         <br/>
+                         기업들이 올린 공고를 보기 위해서는<br/> 해당 <span class="fontHannaAir" style="font-weight: bold;">공고가 요구하는 최소 기술들</span>을 가지고 있어야 합니다.
+                       </span>
+                     </span>
+                 </v-layout>
              </fieldset>
            </div>
         </v-flex>
@@ -34,9 +49,13 @@
           <RecruitDetail :recruit="recruit" :userdata="mySkills" onloadedmetadata="":recruit_id="recruit.id"/>
         </v-flex>
 
-        <v-flex v-if="isEmpty">
-          <p> 지원 할 수 있는 공고가 존재하지 않습니다. </p>
-          <v-btn :to="{ name: 'story', params: { id: user }}" style="height:100%;"> 프로젝트 작성하러가기 </v-btn>
+        <v-flex v-if="isEmpty && mySkills[0].userSkills > 0" style="margin:20px;">
+          <v-layout row wrap justify-center>
+            <div style="display:inline;" class="text-center">
+              <span class="small grey--text"><span class="fontHannaAir">*지원 할 수 있는 공고가 존재하지 않습니다.*</span></span><br/>
+              <v-btn :to="{ name: 'story', params: { id: user }}" style="height:100%;margin-top:10px;" depressed class="title" rounded color="success"><span class="fontHannaAir"> 프로젝트 작성하러가기 </span></v-btn>
+            </div>
+          </v-layout>
         </v-flex>
       </v-layout>
 
