@@ -74,12 +74,12 @@
 
             <tr @click="changeProjectTerm(nowChatRoom.projectTerm)" v-if="toggleProjectTerm" v-bind:style="{ 'color': ProjectTermColor }">
               <td>프로젝트 기간</td>
-              <td>{{nowChatRoom.projectTerm}}</td>
+              <td>{{nowChatRoom.projectTerm}}일</td>
             </tr>
             <tr v-if="!toggleProjectTerm">
               <td>프로젝트 기간</td>
               <td>
-                <input class="chatinput" type="date" v-model="inputProjectTerm"  v-on:keyup.esc="cancelProjectTerm()" v-on:keyup.enter="completeProjectTerm(inputProjectTerm)" ref="ProjectTermRef" />
+                <input class="chatinput" type="number" v-model="inputProjectTerm"  v-on:keyup.esc="cancelProjectTerm()" v-on:keyup.enter="completeProjectTerm(inputProjectTerm)" ref="ProjectTermRef" />
                 <!-- <v-text-field single-line outlined type="date" required v-model="inputProjectTerm" ref="ProjectTermRef" v-on:keyup.esc="cancelProjectTerm()" v-on:keyup.enter="completeProjectTerm(inputProjectTerm)" > </v-text-field> -->
               </td>
             </tr>
@@ -248,7 +248,7 @@
               </tr>
               <tr>
                 <th class="text-center">계약일</th>
-                <td class="text-center">{{nowChatRoom.contractDate}}</td>
+                <td class="text-center" colspan="2">{{nowDate}}</td>
               </tr>
             </tbody>
           </v-simple-table>
@@ -374,6 +374,8 @@ export default {
 
       OlduserVerification : false,
       OldcompanyVerification : false,
+
+      nowDate : new Date().getFullYear() + "." +(new Date().getMonth()+1) + "." + new Date().getDate(),
     };
   },
 
@@ -484,7 +486,7 @@ export default {
     completeProjectTerm() {
       var tmp = this.nowChatRoom.chatting;
         if ( this.tmpData !== this.inputProjectTerm ) {
-        tmp.push({ chatMsg : this.$session.get('session_id')+"님이 프로젝트 기간을 ["+this.tmpData+"]에서 ["+this.inputProjectTerm+"]로 변경하였습니다.",
+        tmp.push({ chatMsg : this.$session.get('session_id')+"님이 프로젝트 기간을 ["+this.tmpData+"]일에서 ["+this.inputProjectTerm+"]일로 변경하였습니다.",
         chatId : "!SYSTEM", isReadCompany : false, isReadUser : false });
       }
       this.toggleProjectTerm = !this.toggleProjectTerm;

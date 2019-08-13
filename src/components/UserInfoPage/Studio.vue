@@ -23,8 +23,8 @@
               <p style="width:100%;" class="text-center display-1 purple--text">
                 D-{{recruit.projectTerm}}
               </p>
-              <p style="width:100%;" class="text-center title">
-                {{recruit.pay}}
+              <p style="width:100%;" class="text-center headline">
+                {{recruit.pay | wonfilter }}원
               </p>
             </div>
           </div>
@@ -113,7 +113,7 @@
                 </div>
                 <div>
                   <p style="width:100%;" class="text-center headline">
-                    <span> {{recruit.data.budget}}</span><br/>
+                    <span> {{recruit.data.budget}}원 </span><br/>
                     <span class="overline grey--text">{{recruit.data.endDay}}</span>
                     <br/>
                     <span class="caption grey--text">{{recruit.data.projectSummary}}</span>
@@ -237,6 +237,22 @@ export default {
   },
   mounted() {
     this.fetchData();
+  },
+  filters: {
+    wonfilter: function (value) {
+      if (!value) return ''
+      var arr = value.split('');
+      var str = "";
+      var cnt = 0;
+      for(var i=arr.length-1; i>=0; i--) {
+        if( cnt % 3 == 0 && cnt!==0 ) {
+          str=","+str;
+        }
+        str = arr[i] + str;
+        cnt++;
+      }
+      return str;
+    }
   },
   methods: {
     async fetchData() {
