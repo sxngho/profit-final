@@ -3,9 +3,9 @@
     <v-flex hidden-xs-only>
       <v-btn text class="white--text" @click="popdetail(project_id)" style="height:80%;width:80%;">
         <v-layout align-center>
-          <div class="black--text">
-            <v-flex style="width:330px">{{projecttitle}}</v-flex>
-          </div>
+          <!-- <div class="black--text"> -->
+          <span style="color:black; margin-left:50px">{{projecttitle}}</span>
+          <!-- </div> -->
           <v-layout justify-start>
             <v-chip
               small
