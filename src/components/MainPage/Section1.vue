@@ -1,6 +1,6 @@
 <template>
   <div class="section">
-    <button class="next" @click="$refs.fullpage.api.moveSectionDown()" style="position: absolute; bottom: 15%; z-index: 999; right: 3%; cursor:pointer;">
+    <button class="next" @click="$refs.fullpage.api.moveSectionDown()" style="position: absolute; bottom: 15%; z-index: 999; right: 3%; cursor:pointer; text-decoration:none;">
       <div class="arrow">
         <span></span>
         <span></span>
