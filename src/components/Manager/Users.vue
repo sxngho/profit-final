@@ -1,14 +1,15 @@
 <template>
   <div>
     <v-layout row wrap>
-      <v-flex xs12 sm10 offset-sm1>
-        당신의 level은 {{level}}
+      <v-flex>
+
+        <h1 class="fontjua">유저 관리 페이지</h1>
         <v-text-field v-model="input" placeholder="유저의 닉네임으로 검색할 수 있습니다."/>
       </v-flex>
     </v-layout>
 
     <v-layout row wrap>
-      <v-flex xs12 sm10 offset-sm1>
+      <v-flex>
         <v-expansion-panels>
 
           <v-expansion-panel

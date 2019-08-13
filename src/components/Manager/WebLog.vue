@@ -2,8 +2,10 @@
 <!-- 정말 많은 도움이 된 사이트: http://bitly.kr/e2faEb -->
 <template>
   <div>
-    <v-layout>
-      현재 비활성화된 상태입니다.
+    <v-layout row wrap>
+      <v-flex>
+        <h1 class="fontjua">현재 비활성화된 상태입니다.</h1>
+      </v-flex>
     </v-layout>
 
     <!-- <v-layout row wrap>

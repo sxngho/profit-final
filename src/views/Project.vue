@@ -4,6 +4,7 @@
       <v-toolbar-title class="font-weight-medium" style="padding-left:10px;">
         <span class="font-weight-bold">{{project.projecttitle}}</span>
         <span class="font-weight-thin font-italic subheading">{{project.session_id}}</span>
+
         <v-flex class="caption">
           {{ project.projectdescription }}
         </v-flex>
@@ -16,6 +17,7 @@
       <div>
         <v-badge color="#E74C3C" overlap>
           <template slot="badge"> {{likeit.length}} </template>
+          <v-btn color="primary" @click="gogo(project.session_id)">Story가기</v-btn>
           <v-btn text icon color="pink">
             <!-- 이미 좋아요 눌렀다면 다른 fa 를 보여주는 것도 좋겠다. -->
             <i id="likecheck" class="far fa-heart fa-2x" @click="like_project()"></i>
@@ -548,6 +550,11 @@ export default {
         var blindtext = document.querySelector(`.blind_${index}`)
         blindtext.style.display = 'block';
       }
+    },
+    gogo(session_id) {
+      // console.log(session_id)
+      window.open(`${document.location.origin}/story/${session_id}`)
+      // this.$router.push({name: 'story', params: {id : session_id}});
     }
   },
   watch : {

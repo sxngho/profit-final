@@ -12,7 +12,7 @@
     <!-- 여기서부터 슬기가 꾸미는 중 -->
     <v-layout row wrap>
       <v-flex>
-        <div class="fontjua" style="margin:10px;">
+        <div class="fontjua">
           <h1 class="fontjua">관리자 페이지</h1>
           <br>
 
