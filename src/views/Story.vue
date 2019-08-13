@@ -185,6 +185,7 @@
           </i>
         </div>&nbsp;&nbsp;&nbsp;
         <toggle-button
+          v-if="userid===session_id"
           v-model="toggleViewPhoneNumber"
           :labels="{checked: '비공개', unchecked: '공개'}"
           :width="60"
@@ -372,7 +373,8 @@ export default {
       showPhoneNumber: "",
       toggleViewPhoneNumber: "",
       email: "",
-      phoneNumber: ""
+      phoneNumber: "",
+      session_id: ""
     };
   },
   created() {
@@ -394,6 +396,7 @@ export default {
     },
     async fetchData() {
       this.userid = this.$route.params.id;
+      this.session_id = this.$session.get("session_id");
       this.$store.commit("setSession", this.$session.get("session_id"));
       if (this.$session.get("session_id") !== "") {
         this.toggleView = await FirebaseService.SELECT_userAddon(
