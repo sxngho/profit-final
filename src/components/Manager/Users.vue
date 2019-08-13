@@ -14,20 +14,26 @@
 
           <v-expansion-panel
           v-for="(user, index) in userlist"
-          v-if="user.nickname.includes(input)"
+          v-if="user.nickname.includes(input) && user.level != 0"
           >
             <v-expansion-panel-header>
               <div>
                 <v-avatar>
                   <img :src="user.userImage || 'http://design-ec.com/d/e_others_50/l_e_others_500.png'" />
                 </v-avatar>
-                {{user.nickname}} , level : {{user.level}}
+                {{user.nickname}}
               </div>
             </v-expansion-panel-header>
 
             <v-expansion-panel-content>
-              회원 관리 :
-              <v-btn v-for="(item, index2) in change_state_0" v-if="user.level===1 && level==0" text outlined @click="change_userlevel(user, index2, item)">
+              <span class="fontjua">현재 등급 : </span>
+
+              <span v-if="user.level==1" class="fontjua">관리자</span>
+              <span v-if="user.level==2" class="fontjua">일반유저</span><br>
+
+              <span class="fontjua">등급 변경 : </span>
+
+              <v-btn v-for="(item, index2) in change_state_0" v-if="user.level===1 && level==0" text outlined @click="change_userlevel(user, index2, item)" >
                 {{item}}
               </v-btn>
               <v-btn v-for="(item, index2) in change_state_1" v-if="user.level===2 && level==0" text outlined @click="change_userlevel(user, index2, item)">
@@ -36,6 +42,7 @@
               <v-btn v-for="(item, index2) in change_state_2" v-if="user.level===2 && level==1" text outlined @click="change_userlevel(user, index2, item)">
                 {{item}}
               </v-btn>
+
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-expansion-panels>
