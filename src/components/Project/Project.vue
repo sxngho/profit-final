@@ -18,6 +18,7 @@
 
       <v-spacer/>
       <div>
+        <v-btn>가자가자</v-btn>
         <v-badge color="#E74C3C" overlap>
           <template slot="badge"> {{likeit.length}} </template>
           <v-btn text icon color="pink">
@@ -87,6 +88,7 @@
               <!--comment -->
                 <v-flex xs12>
                   <span class="title"  style="margin-right:5px;">{{project.projecttitle}}</span>
+
                   <v-chip outlined label small color="purple dark" style="margin-right:5px;">
 
                     {{ project.projectterm }}
