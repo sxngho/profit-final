@@ -17,7 +17,7 @@
       <v-btn text class="font-bold-light title" to="/" style="height:56px; color:black; margin-left: 7% ;text-shadow: -1px 0 #fff, 0 1px #fff, 1px 0 #fff, 0 -1px #fff;    font-weight: bolder;">Sharefolio</v-btn>
       <v-spacer />
       <div style=" display: flex; margin-right:7%">
-        <v-btn text style="height:56px;" class="font-bold-light" to="/Manager" v-if="this.$store.getters.getLevel===0 || this.$store.getters.getLevel===1">Manager</v-btn>
+        <v-btn text style="height:56px;" class="headerBtn" to="/Manager" v-if="this.$store.getters.getLevel===0 || this.$store.getters.getLevel===1">Manager</v-btn>
         <Sign v-on:login_success="login_success" v-on:logout_success="logout_success"/>
       </div>
     </v-layout>
