@@ -1,5 +1,5 @@
 <template>
-  <!-- 이 개같은 css vue에 넣기위해 -->
+  <!-- css vue에 넣기위해 -->
 </template>
 
 <!-- css -->
@@ -56,6 +56,33 @@
   #vue2Editor .ql-editor {
     min-height:400px
   }
+
+  .txtline{
+    width:100%;
+    padding:0 5px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+
+  .txtBox{
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: box;
+    margin-top:1px;
+    max-height:80px;
+    overflow:hidden;
+    vertical-align:top;
+    text-overflow: ellipsis;
+    word-break:break-all;
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:3;
+  }
+
+fieldset  .v-slide-group__content{
+  justify-content: center;
+}
+
 </style>
 
 <!-- Custom Font -->
