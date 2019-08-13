@@ -1,41 +1,15 @@
 <template>
-  <v-flex class="text-xs-center">
-    <v-flex hidden-xs-only>
-      <v-btn text class="white--text" @click="popdetail(project_id)" style="height:80%;width:80%;">
-        <v-layout align-center>
-          <!-- <div class="black--text"> -->
-          <span style="color:black; margin-left:50px">{{projecttitle}}</span>
-          <!-- </div> -->
-          <v-layout justify-start>
-            <v-chip
-              small
-              color="lightgrey"
-              v-for="tech in projecttech"
-              class="tech d-inline-block caption"
-            >{{ tech }}</v-chip>
-          </v-layout>
-        </v-layout>
-      </v-btn>
+  <v-layout row wrap justify-center>
+    <v-flex xs11 style="padding:2px;">
+      <v-layout row wrap @click="popdetail(project_id)" style="padding:10px 20px;; cursor:pointer; background:white;border: 1px solid #cecece; border-radius: 9px;">
+        <span class="fontDoHyeon">{{projecttitle}}</span>
+        <v-spacer/>
+        <div style="display:inline;">
+          <v-chip style="margin:0 2px;" x-small outlined v-for="tech in projecttech" color="#cecece" label >{{ tech }}</v-chip>
+        </div>
+      </v-layout>
     </v-flex>
-
-    <v-flex hidden-sm-and-up>
-      <v-btn text class="white--text" @click="popdetail(project_id)" style="height:80%;width:80%;">
-        <v-layout align-center>
-          <div class="black--text">
-            <v-flex style="width:300px">{{projecttitle}}</v-flex>
-          </div>
-          <v-layout justify-start>
-            <v-chip
-              small
-              color="lightgrey"
-              v-for="tech in projecttech"
-              class="tech d-inline-block caption"
-            >{{ tech }}</v-chip>
-          </v-layout>
-        </v-layout>
-      </v-btn>
-    </v-flex>
-  </v-flex>
+  </v-layout>
 </template>
 
 
