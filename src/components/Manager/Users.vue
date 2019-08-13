@@ -3,13 +3,14 @@
     <v-layout row wrap>
       <v-flex xs12 sm10 offset-sm1>
         당신의 level은 {{level}}
-        <v-text-field v-model="input"/>
+        <v-text-field v-model="input" placeholder="유저의 닉네임으로 검색할 수 있습니다."/>
       </v-flex>
     </v-layout>
 
     <v-layout row wrap>
       <v-flex xs12 sm10 offset-sm1>
         <v-expansion-panels>
+
           <v-expansion-panel
           v-for="(user, index) in userlist"
           v-if="user.nickname.includes(input)"
