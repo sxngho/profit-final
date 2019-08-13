@@ -68,20 +68,29 @@ export default {
   }),
   methods: {
     sendCar(carcompany, carposition, carstartday, carendday, cardescription) {
-      var Json = new Object();
-      Json.Company = carcompany;
-      Json.Position = carposition;
-      Json.Startday = carstartday;
-      Json.Endday = carendday;
-      Json.Description = cardescription;
-      this.$emit("sendCar", Json);
+      if (this.carstartday > this.carendday)
+        this.$swal({
+          title: "종료일은 시작일 이후로 선택해주세요.",
+          type: "warning",
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33"
+        });
+      else {
+        var Json = new Object();
+        Json.Company = carcompany;
+        Json.Position = carposition;
+        Json.Startday = carstartday;
+        Json.Endday = carendday;
+        Json.Description = cardescription;
+        this.$emit("sendCar", Json);
 
-      this.carcompany = "";
-      this.carposition = "";
-      this.carstartday = "";
-      this.carendday = "";
-      this.cardescription = "";
-      this.careermodal = false;
+        this.carcompany = "";
+        this.carposition = "";
+        this.carstartday = "";
+        this.carendday = "";
+        this.cardescription = "";
+        this.careermodal = false;
+      }
     },
     clearCar() {
       this.carcompany = "";
@@ -90,14 +99,6 @@ export default {
       this.carendday = "";
       this.cardescription = "";
       this.careermodal = false;
-    }
-  },
-  watch: {
-    carendday() {
-      if (this.carstartday > this.carendday) {
-        alert("종료일은 시작일 이후로 선택해주세요.");
-        this.carendday = this.carstartday;
-      }
     }
   }
 };
