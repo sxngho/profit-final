@@ -116,7 +116,10 @@ export default {
       .then(docSnapshots => {
         // console.log(docSnapshots.data())
         return docSnapshots.data();
-      });
+      })
+      .catch(function(error) {
+        console.log(1279346718274981237)
+      })
   },
 
   // Function :: 프로젝트를 작성합니다.

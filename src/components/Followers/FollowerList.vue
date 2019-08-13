@@ -48,9 +48,13 @@ export default {
   methods: {
     async SELECT_Userdata() {
       this.userdata = await FirebaseService.SELECT_Userdata(this.$route.params.id)
-      this.followers = this.userdata[0].followerlist;
-      this.followings = this.userdata[0].followinglist;
-      this.$store.commit('setfollowerList', this.userdata[0].followerlist)
+      if (this.userdata.length!=0) {
+        this.followers = this.userdata[0].followerlist;
+        this.followings = this.userdata[0].followinglist;
+        this.$store.commit('setfollowerList', this.userdata[0].followerlist)
+
+      }
+
       // console.log(this.$store.getters.getfollowerList, '현재 나의 상태는??')
       // if (this.level !== "") {
       //   // 로그인한 경우

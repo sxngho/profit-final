@@ -18,6 +18,7 @@ import Contract from "./components/Recruit/Contract.vue";
 import RecruitEditorPage from "./views/RecruitEditorPage.vue";
 import CompanyListPage from "./views/CompanyListPage.vue";
 import Company from "./views/Company.vue";
+import ErrorPage from "./views/ErrorPage.vue";
 
 Vue.use(Vuex);
 Vue.use(store);
@@ -90,5 +91,10 @@ export default new Router({
       name: "companyListPage",
       component: CompanyListPage
     },
+    {
+      path: "/error",
+      name: "errorPage",
+      component: ErrorPage,
+    }
   ]
 });
