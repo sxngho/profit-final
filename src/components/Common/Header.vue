@@ -14,7 +14,9 @@
 
   <v-layout  style="flex:0; padding:0 10px; z-index:4; position:absolute; width:100%;">
     <v-layout row wrap>
-      <v-btn text class="font-bold-light title" to="/" style="height:56px; color:black; margin-left: 7% ;text-shadow: -1px 0 #fff, 0 1px #fff, 1px 0 #fff, 0 -1px #fff;    font-weight: bolder;">Sharefolio</v-btn>
+      <router-link :to="{ name: 'main' }" style="margin-left:8%; margin-top:12px;text-decoration:none;">
+        <img src="../../assets/logo_std.png" style="width:160px;"/>
+      </router-link>
       <v-spacer />
       <div style=" display: flex; margin-right:7%">
         <v-btn text style="height:56px;" class="headerBtn" to="/Manager" v-if="this.$store.getters.getLevel===0 || this.$store.getters.getLevel===1">Manager</v-btn>

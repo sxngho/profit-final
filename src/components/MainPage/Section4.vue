@@ -2,7 +2,7 @@
   <div class="section">
     <v-container>
       <v-layout row wrap justify-center>
-        <v-flex xs12 text-center class="display-2">CONTACT US</v-flex>
+        <v-flex xs12 text-center class="display-2">  <span class="fontjua"> CONTACT US </span> </v-flex>
         <v-flex xs6 text-center class="title" ma-9>
           <div class="members fontjua" v-for="member in members">
             <v-avatar size="90" class="grey lighten-2 avatarStyle">
