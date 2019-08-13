@@ -17,8 +17,8 @@
 
 <script>
 import FirebaseService from "@/services/FirebaseService";
-import Banner from "../components/MainPage/Banner";
-import Filters from "../components/MainPage/Filters";
+// import Banner from "../components/MainPage/Banner";
+// import Filters from "../components/MainPage/Filters";
 // import PortfolioList from "../components/MainPage/PortfolioList";
 import Vue from "vue";
 import Section1 from "../components/MainPage/Section1";
@@ -29,8 +29,8 @@ import Section4 from "../components/MainPage/Section4";
 export default {
   name: "Main",
   components: {
-    Filters,
-    Banner,
+    // Filters,
+    // Banner,
     // PortfolioList,
     Section1,
     Section2,
