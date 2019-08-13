@@ -14,17 +14,27 @@
 
               <v-card height="100%" class="black--text" style="background:white; padding:50px;">
 
-                  <!-- <v-layout row wrap justify-center>
-                    <v-btn @click="gogo(hotprojects[i][0])" text outlined>완1성하기</v-btn>
-                  </v-layout> -->
-                  <div style="padding:5px; position:absolute; top:3%; right:5%; border:2px solid red; border-radius:30px;" >
-                    <span>LIKE : {{hotprojects[i][1].likeitcount}}</span>
+                  <div v-if="i<3" style="position:absolute; left:30px; top:20px;">
+                    <img src="https://i.imgur.com/ZqeqPI2.png"  width="100px" height="100px" />
+                    <span style="position:absolute; top:39px; left:45px;">{{i+1}}</span>
                   </div>
-                  <div class="mainProjectTitle" style="display:inline-block;">
+
+                  <div class="mainProjectTitle" style="display:inline-block;  text-overflow: ellipsis; overflow:hidden;">
                     <h2 style="display:inline">{{hotprojects[i][1].projecttitle}}</h2>
                     {{hotprojects[i][1].session_id}}
+                  </div>
 
+                  <div style="display:inline-block; position:absolute; right:5%;">
+                    <!-- <v-badge color="#E74C3C" overlap> -->
+                      <!-- <template slot="badge">  </template> -->
+                        <!-- 이미 좋아요 눌렀다면 다른 fa 를 보여주는 것도 좋겠다. -->
+                        <i class="fa fa-heart fa-2x" style="color:red;">
+                          <div style="position:relative; top:-23px; font-size:15px; color:white;">
+                            <span style="font-weight:bold;">{{hotprojects[i][1].likeitcount}}</span>
+                          </div>
+                        </i>
 
+                    <!-- </v-badge> -->
                   </div>
 
                 <v-layout row wrap justify-center style="padding:20px; width:100%; height:90%;">
@@ -55,6 +65,8 @@
 
 
                   </v-flex>
+
+
 
                 </v-layout>
 
@@ -91,7 +103,7 @@ export default {
     }
   },
   created() {
-    // this.fetchData()
+    this.fetchData()
   },
   methods: {
     async fetchData() {
