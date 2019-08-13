@@ -111,9 +111,9 @@ fieldset  .v-slide-group__content{
   justify-content: center;
 }
 
-img .squareImg .v-avatar .v-icon .v-avatar .v-image .v-avatar{
-  border-radius: 0!important;
-}
+  #headtoggle .v-switch-core{
+    background-color:rgb(102, 151, 224);
+  }
 
 </style>
 
