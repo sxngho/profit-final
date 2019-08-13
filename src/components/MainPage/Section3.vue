@@ -4,8 +4,9 @@
       <v-layout row wrap justify-center>
         <v-flex xs9 text-center>
           <div style="width:100%" text-center class="display-3">
-            Hot Portfolio!
-            <!-- {{this.hotprojects}} -->
+            <span class="fontjua" style="color:white;">
+              Hot Portfolio!
+            </span>
           </div>
 
           <v-carousel hide-delimiters style="height:100%; margin:50px 0;">
@@ -149,5 +150,8 @@ export default {
 .mainProjectTitle {
   display: flex;
   justify-content: space-around;
+}
+.v-btn .v-btn__content .v-icon {
+  font-size:30px !important;
 }
 </style>

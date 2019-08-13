@@ -293,6 +293,7 @@ export default {
       this.mySkills = await FirebaseService.SELECT_Userdata(
         this.$session.get("session_id")
       );
+      console.log(this.mySkills[0].userSkills, 1)
       if (this.$store.getters.getLevel === 2) {
         //일단 모든 나의 스킬을 대문자로 만들어준다.
         for (var ii in this.mySkills[0].userSkills) {
