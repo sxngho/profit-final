@@ -1,12 +1,6 @@
 <!-- UserSideInfo -->
 <template>
-  <div>
-    <!-- <v-layout wrap  justify-space-around  align-center>
-      <v-flex justify-center>
-        <img src="../../assets/icon_set/delete.png"/>
-      </v-flex>
-    </v-layout> -->
-
+  <div style="margin-top:7%;">
 
 
     <!-- 여기서부터 슬기가 꾸미는 중 -->
