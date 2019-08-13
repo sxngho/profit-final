@@ -79,6 +79,20 @@
     -webkit-line-clamp:3;
   }
 
+  .txtBox2{
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: box;
+    margin-top:1px;
+    max-height:80px;
+    overflow:hidden;
+    vertical-align:top;
+    text-overflow: ellipsis;
+    word-break:break-all;
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:4;
+  }
+
 fieldset  .v-slide-group__content{
   justify-content: center;
 }
