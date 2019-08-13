@@ -1,25 +1,28 @@
 <template>
   <div>
-  <v-flex class="text-xs-center">
+    <v-flex class="text-xs-center">
       <button text class="white--text" @click="popdetail(project_id)" style="height:80%;width:80%;">
-        <v-layout>
-        <v-flex xs4 hidden-xs-only >
-        <v-img :src="projectimage" height="20vw" width="100%"></v-img>
-        </v-flex>
-        <v-flex xs8>
-        <div>
-          <div class="black--text"> {{projecttitle}} / {{project_writer}} / {{projectterm}} / {{projectrank}} </div>
-          <p class="black--text" v-html="projectcontent" />
-          <v-flex
-            v-for="tech in projecttech"
-            class="tech d-inline-block caption"
-          >{{ tech }} </v-flex>
-        </div>
-        </v-flex>
+        <v-layout align-center>
+          <v-flex xs2 hidden-xs-only>
+            <v-img :src="projectimage" height="5vw" width="100%"></v-img>
+          </v-flex>
+          <v-flex xs12>
+            <div>
+              <div class="black--text" style="font-weight:900">{{projecttitle}}</div>
+              <div class="black--text">{{projectterm}} {{projectrank}}</div>
+              <p
+                class="grey--text"
+                v-html="projectcontent"
+                style="height:100px; width:100%; overflow: hidden; 
+  text-overflow: ellipsis; font-size:8px"
+              />
+              <v-flex v-for="tech in projecttech" class="tech d-inline-block caption">{{ tech }}</v-flex>
+            </div>
+          </v-flex>
         </v-layout>
       </button>
       <!-- <ProjectList v-if="!stateAdd"></ProjectList> -->
-  </v-flex>
+    </v-flex>
   </div>
 </template>
 
@@ -30,19 +33,19 @@ import BigImg from "../Common/BigImg";
 
 export default {
   components: {
-    BigImg,
+    BigImg
   },
   props: {
     projectimage: { type: String }, //프로젝트 메인 이미지
     projecttitle: { type: String }, // 프로젝트 이름
     projectdescription: { type: String }, //프로젝트 간단 설명
     project_id: { type: String },
-    project_writer: {type: String},
-    projectrank : {type: String},
-    projectcontent : {type: String},
-    projecttech : {type: Array},
-    projectterm : {type: String},
-    projectcontent : {type: String},
+    project_writer: { type: String },
+    projectrank: { type: String },
+    projectcontent: { type: String },
+    projecttech: { type: Array },
+    projectterm: { type: String },
+    projectcontent: { type: String }
   },
   data: () => ({
     popol: false,
@@ -52,10 +55,10 @@ export default {
     projectThumbnail: "../assets/logo.png",
     date: "",
     // description: "여기에는 프로젝트 디스크립션이 들어갈 공간입니다ㅏㅏㅏㅏ",
-    projectData : '',
-    user:'',
-    login:'',
-    isMine: '',
+    projectData: "",
+    user: "",
+    login: "",
+    isMine: ""
   }),
   methods: {
     popdetail(pcode) {
@@ -68,8 +71,9 @@ export default {
         );
       } else {
         // console.log(pcode, '첫단계 옴??')
-        this.$emit('popdetail',pcode);
-      }},
+        this.$emit("popdetail", pcode);
+      }
+    }
   },
 
   created() {

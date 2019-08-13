@@ -2,15 +2,30 @@
   <v-flex class="text-xs-center">
     <v-flex hidden-xs-only>
       <button text class="white--text" @click="popdetail(project_id)" style="height:80%;width:80%;">
-        <div>
-          <div class="black--text"> {{projecttitle}} / {{project_writer}} / {{projectterm}} / {{projectrank}}</div>
-          <span class="grey--text">{{projectdescription}} /
-            <v-flex
+        <v-layout align-center>
+          <div class="black--text">
+            <v-flex xs1 hidden-xs-only>
+              <v-img :src="projectimage" height="1vw" width="100%"></v-img>
+            </v-flex>
+            <v-flex style="width:200px">{{projecttitle}}</v-flex>
+            <!-- <v-flex style="width:200px">{{projectterm}}</v-flex> -->
+            <!-- {{projectrank}} -->
+          </div>
+          <v-layout justify-center>
+            <!-- <span class="grey--text"> -->
+            <v-flex style="text-align:left" class="grey--text">
+              <span class="grey--text">{{projectdescription}}</span>
+            </v-flex>
+            <v-chip
+              small
+              color="lightgrey"
               v-for="tech in projecttech"
               class="tech d-inline-block caption"
-            >{{ tech }}</v-flex> </span>
-              <p class="black--text" v-html="projectcontent" />
-        </div>
+            >{{ tech }}</v-chip>
+            <!-- </span> -->
+          </v-layout>
+          <!-- <p class="black--text" v-html="projectcontent" /> -->
+        </v-layout>
       </button>
 
       <!-- <ProjectList v-if="!stateAdd"></ProjectList> -->
@@ -19,17 +34,17 @@
     <v-flex hidden-sm-and-up>
       <button text class="white--text" @click="popdetail(project_id)" style="height:80%;width:80%;">
         <div>
-          <div class="black--text">{{projecttitle}} / {{project_writer}} / {{projectterm}} / {{projectrank}}</div>
-          <span class="grey--text">{{projectdescription}} / {{projecttech}}
-            <v-flex v-for="tech in projecttech" class="tech d-inline-block caption">{{ tech }}</v-flex> </span>
-              <p class="black--text" v-html="projectcontent" />
+          <div
+            class="black--text"
+          >{{projecttitle}} / {{project_writer}} / {{projectterm}} / {{projectrank}}</div>
+          <span class="grey--text">
+            {{projectdescription}} / {{projecttech}}
+            <v-flex v-for="tech in projecttech" class="tech d-inline-block caption">{{ tech }}</v-flex>
+          </span>
+          <p class="black--text" v-html="projectcontent" />
         </div>
       </button>
-
-
     </v-flex>
-
-
   </v-flex>
 </template>
 
@@ -40,19 +55,19 @@ import BigImg from "../Common/BigImg";
 
 export default {
   components: {
-    BigImg,
+    BigImg
   },
   props: {
     projectimage: { type: String }, //프로젝트 메인 이미지
     projecttitle: { type: String }, // 프로젝트 이름
     projectdescription: { type: String }, //프로젝트 간단 설명
     project_id: { type: String },
-    project_writer: {type: String},
-    projectrank : {type: String},
-    projectcontent : {type: String},
-    projecttech : {type: Array},
-    projectterm : {type: String},
-    projectcontent : {type: String},
+    project_writer: { type: String },
+    projectrank: { type: String },
+    projectcontent: { type: String },
+    projecttech: { type: Array },
+    projectterm: { type: String },
+    projectcontent: { type: String }
   },
   data: () => ({
     popol: false,
@@ -62,10 +77,10 @@ export default {
     projectThumbnail: "../assets/logo.png",
     date: "",
     // description: "여기에는 프로젝트 디스크립션이 들어갈 공간입니다ㅏㅏㅏㅏ",
-    projectData : '',
-    user:'',
-    login:'',
-    isMine: '',
+    projectData: "",
+    user: "",
+    login: "",
+    isMine: ""
   }),
   methods: {
     popdetail(pcode) {
@@ -78,8 +93,9 @@ export default {
         );
       } else {
         // console.log(pcode, '첫단계 옴??')
-        this.$emit('popdetail',pcode);
-      }},
+        this.$emit("popdetail", pcode);
+      }
+    }
   },
 
   created() {
