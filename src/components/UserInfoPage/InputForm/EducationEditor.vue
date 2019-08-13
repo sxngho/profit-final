@@ -58,18 +58,27 @@ export default {
   }),
   methods: {
     sendEdu(eduagency, edudegree, edustartday, eduendday) {
-      var Json = new Object();
-      Json.Agency = eduagency;
-      Json.Degree = edudegree;
-      Json.Startday = edustartday;
-      Json.Endday = eduendday;
-      this.$emit("sendEdu", Json);
+      if (this.edustartday > this.eduendday) {
+        this.$swal({
+          title: "종료일은 시작일 이후로 선택해주세요.",
+          type: "warning",
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33"
+        });
+      } else {
+        var Json = new Object();
+        Json.Agency = eduagency;
+        Json.Degree = edudegree;
+        Json.Startday = edustartday;
+        Json.Endday = eduendday;
+        this.$emit("sendEdu", Json);
 
-      this.eduagency = "";
-      this.edudegree = "";
-      this.edustartday = "";
-      this.eduendday = "";
-      this.edumodal = false;
+        this.eduagency = "";
+        this.edudegree = "";
+        this.edustartday = "";
+        this.eduendday = "";
+        this.edumodal = false;
+      }
     },
     clearEdu() {
       this.eduagency = "";
@@ -77,14 +86,6 @@ export default {
       this.edustartday = "";
       this.eduendday = "";
       this.edumodal = false;
-    }
-  },
-  watch: {
-    eduendday() {
-      if (this.edustartday > this.eduendday) {
-        alert("교육 종료일은 시작일 이후로 선택해주세요.");
-        this.eduendday = this.edustartday;
-      }
     }
   }
 };
