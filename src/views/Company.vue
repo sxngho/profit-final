@@ -227,18 +227,19 @@
               </div>
             </v-card-title>
 
-            <v-card-text v-if="!company.descript" style="margin-left:12px;">
+            <v-card-text v-if="!company.descript && !updatestate2" style="margin-left:12px;">
               <br>현재 등록된 회사소개가 없습니다.
             </v-card-text>
-
             <div v-if="this.$route.params.id==this.$store.getters.getSession" style="margin-left:12px;">
             <v-card-text v-if="this.$route.params.id!==this.$store.getters.getSession"><p v-html="company.descript"></p></v-card-text>
             <v-card-text v-if="!updatestate2 && this.$route.params.id==this.$store.getters.getSession"><p v-html="company.descript"></p></v-card-text>
             <v-card-text v-if="updatestate2 && this.$route.params.id==this.$store.getters.getSession">
               <textarea
+                ref="company_descript"
                 id="company_descript"
                 v-html="company.descript"
                 style="width:100%; height:150px"
+                placeholder="회사 소개를 적어주세요"
               />
             </v-card-text>
             </div>
@@ -1002,6 +1003,7 @@ export default {
       var str = this.company.descript
       str = str.replace(/(<br>|<br\/>|<br \/>)/g, '\r\n');
       this.company.descript = str
+      this.$nextTick(() => this.$refs.company_descript.focus());
     },
     cancel_updatestate() {
 
