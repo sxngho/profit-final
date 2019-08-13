@@ -114,7 +114,7 @@
       </div>
 
       <!-- 비 로그인 유저라면 아래 레이아웃 출력 -->
-      <div v-if="typeof(this.$store.getters.getLevel) =='string'">" style="margin:10px;">
+      <div v-if="typeof(this.$store.getters.getLevel) =='string'">
         <v-layout row wrap justify-center style="margin:80px;">
           <h1>로그인이 필요한 서비스입니다.</h1>
         </v-layout>

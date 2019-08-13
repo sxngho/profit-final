@@ -681,102 +681,108 @@ export default {
     async fetchData() {
       this.$loading(true);
       this.dibsUsers = [];
-      this.userData = await FirebaseService.SELECT_UserIdData();
-      if ( this.$store.getters.getLevel == 2 ) {
-        for(var i in this.userData) {
-            if ( this.userData[i].id == this.$store.getters.getSession ) {
-              this.currentUser = this.userData[i];
-              break;
-            }
-        }
-      }
-      var recruitsbyCompany = await FirebaseService.SELECT_RecruitInfoById(this.$route.params.id);
-      this.recruitsbyCompany = recruitsbyCompany;
-      var chatRooms = "";
-      var ChatRef = firebase.database().ref("/chat/");
-      ChatRef.once("value",snapshot => {
-        this.AllChat = snapshot.val();
-        chatRooms = snapshot.val();
-        for (var ii in recruitsbyCompany) {
-          var flag = 0;
-          for (var i in chatRooms) {
-            if (chatRooms[i].recruitPK == recruitsbyCompany[ii].id && recruitsbyCompany[ii].data.contract && recruitsbyCompany[ii].data.responsibility == chatRooms[i].userId) {
-              // console.log("이미 계약된 공고는 단하나!",recruitsbyCompany[ii])
-              var unreadChat = chatRooms[i].chatting;
-              var unreadLength = 0;
-              for(var j=unreadChat.length-1; j>=0; j--) {
-                if(unreadChat[j].isReadCompany) {
-                  break;
-                } else {
-                  unreadLength++;
-                }
-              }
-              this.MyRecruits.push({ recruit : recruitsbyCompany[ii], length : unreadLength})
-              flag = 1;
-              break;
-            }
-          }
-          var tmpLength = 0;
-          for (var i in chatRooms) {
-            if (!recruitsbyCompany[ii].data.contract && chatRooms[i].recruitPK == recruitsbyCompany[ii].id ) {
-              var user = "";
-              for( var u in this.userData) {
-                if ( this.userData[u].id == chatRooms[i].userId ) {
-                  user = this.userData[u]
-                }
-              }
-              var unreadChat = chatRooms[i].chatting;
-              var unreadLength = 0;
-              for(var j=unreadChat.length-1; j>=0; j--) {
-                if(unreadChat[j].isReadCompany) {
-                  break;
-                } else {
-                  unreadLength++;
-                  tmpLength++;
-                }
-              }
-              this.dibsUsers.push({
-                userData : user,
-                recruit: recruitsbyCompany[ii].id,
-                chat: chatRooms[i],
-                length : unreadLength,
-              });
-            }
-            if( flag !== 1 ) {
-              flag = 2;
-            }
-          }
-          if ( flag == 2 ) {
-            this.MyRecruits.push({ recruit : recruitsbyCompany[ii], length : tmpLength })
-          } else if ( flag == 0 ) {
-            this.MyRecruits.push({ recruit : recruitsbyCompany[ii], length : 0 })
-          }
-        }
-
-        },
-        function(error) {
-          // console.error(error, "유저리스트 불러오기 에러");
-        }
-      );
-
       const comInfo = await FirebaseService.SELECT_CompanyInfo(this.$route.params.id);
-      this.comInfo = comInfo[0]
-      this.company.id = comInfo[0].id;
-      this.company.level = comInfo[0].level;
-      this.company.company_banner = comInfo[0].company_banner;
-      this.company.company_logo = comInfo[0].company_logo;
-      this.company.company_name = comInfo[0].company_name;
-      this.company.industry = comInfo[0].industry;
-      this.company.mount = comInfo[0].mount;
-      this.company.comsize = comInfo[0].comsize;
-      this.company.establishedDate = comInfo[0].establishedDate;
-      this.company.represent = comInfo[0].represent;
-      this.company.homepage = comInfo[0].homepage;
-      this.company.address = comInfo[0].address;
-      this.company.annualsales = comInfo[0].annualsales;
-      this.company.descript = comInfo[0].descript;
+      if (comInfo.length==0) {
+        this.$loading(false)
+        this.$router.push({name: 'errorPage'})    
+      } else {
+        this.comInfo = comInfo[0]
+        this.company.id = comInfo[0].id;
+        this.company.level = comInfo[0].level;
+        this.company.company_banner = comInfo[0].company_banner;
+        this.company.company_logo = comInfo[0].company_logo;
+        this.company.company_name = comInfo[0].company_name;
+        this.company.industry = comInfo[0].industry;
+        this.company.mount = comInfo[0].mount;
+        this.company.comsize = comInfo[0].comsize;
+        this.company.establishedDate = comInfo[0].establishedDate;
+        this.company.represent = comInfo[0].represent;
+        this.company.homepage = comInfo[0].homepage;
+        this.company.address = comInfo[0].address;
+        this.company.annualsales = comInfo[0].annualsales;
+        this.company.descript = comInfo[0].descript;
 
-      this.$loading(false);
+
+        this.userData = await FirebaseService.SELECT_UserIdData();
+
+        if ( this.$store.getters.getLevel == 2 ) {
+          for(var i in this.userData) {
+              if ( this.userData[i].id == this.$store.getters.getSession ) {
+                this.currentUser = this.userData[i];
+                break;
+              }
+          }
+        }
+        var recruitsbyCompany = await FirebaseService.SELECT_RecruitInfoById(this.$route.params.id);
+        this.recruitsbyCompany = recruitsbyCompany;
+        var chatRooms = "";
+        var ChatRef = firebase.database().ref("/chat/");
+        ChatRef.once("value",snapshot => {
+          this.AllChat = snapshot.val();
+          chatRooms = snapshot.val();
+          for (var ii in recruitsbyCompany) {
+            var flag = 0;
+            for (var i in chatRooms) {
+              if (chatRooms[i].recruitPK == recruitsbyCompany[ii].id && recruitsbyCompany[ii].data.contract && recruitsbyCompany[ii].data.responsibility == chatRooms[i].userId) {
+                // console.log("이미 계약된 공고는 단하나!",recruitsbyCompany[ii])
+                var unreadChat = chatRooms[i].chatting;
+                var unreadLength = 0;
+                for(var j=unreadChat.length-1; j>=0; j--) {
+                  if(unreadChat[j].isReadCompany) {
+                    break;
+                  } else {
+                    unreadLength++;
+                  }
+                }
+                this.MyRecruits.push({ recruit : recruitsbyCompany[ii], length : unreadLength})
+                flag = 1;
+                break;
+              }
+            }
+            var tmpLength = 0;
+            for (var i in chatRooms) {
+              if (!recruitsbyCompany[ii].data.contract && chatRooms[i].recruitPK == recruitsbyCompany[ii].id ) {
+                var user = "";
+                for( var u in this.userData) {
+                  if ( this.userData[u].id == chatRooms[i].userId ) {
+                    user = this.userData[u]
+                  }
+                }
+                var unreadChat = chatRooms[i].chatting;
+                var unreadLength = 0;
+                for(var j=unreadChat.length-1; j>=0; j--) {
+                  if(unreadChat[j].isReadCompany) {
+                    break;
+                  } else {
+                    unreadLength++;
+                    tmpLength++;
+                  }
+                }
+                this.dibsUsers.push({
+                  userData : user,
+                  recruit: recruitsbyCompany[ii].id,
+                  chat: chatRooms[i],
+                  length : unreadLength,
+                });
+              }
+              if( flag !== 1 ) {
+                flag = 2;
+              }
+            }
+            if ( flag == 2 ) {
+              this.MyRecruits.push({ recruit : recruitsbyCompany[ii], length : tmpLength })
+            } else if ( flag == 0 ) {
+              this.MyRecruits.push({ recruit : recruitsbyCompany[ii], length : 0 })
+            }
+          }
+
+          },
+          function(error) {
+            // console.error(error, "유저리스트 불러오기 에러");
+          }
+        );
+        this.$loading(false);
+      }
     },
     showNotification(group, type, title, text) {
       this.$notify({

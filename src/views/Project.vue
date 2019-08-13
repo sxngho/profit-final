@@ -278,8 +278,7 @@ export default {
     this.project_id = this.$route.params.pcode;
     this.bindData();
     this.$store.state.no_header = true;
-    this.get_comments();
-    this.like_check();
+
   },
   methods: {
     showNotification (group, type ,title, text) {
@@ -351,9 +350,17 @@ export default {
     async bindData(){
       this.$loading(true)
       this.project = await FirebaseService.SELECT_ProjectsByPcode(this.$route.params.pcode);
-      this.likeit = this.project.likeit
-      this.$loading(false)
-      this.userdata = await FirebaseService.SELECT_Userdata(this.user)
+      if (this.project == undefined) {
+        this.$loading(false)
+        this.$router.push({name:'errorPage'})
+      } else {
+        this.likeit = this.project.likeit
+        this.$loading(false)
+        this.userdata = await FirebaseService.SELECT_Userdata(this.user)
+        this.get_comments();
+        this.like_check();
+      }
+
     },
     // seulgi function
     async INSERT_Comment(real_taglist, comment){
