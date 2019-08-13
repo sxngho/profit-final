@@ -1,6 +1,6 @@
 <template>
   <div class="section">
-    <button class="next" @click="$refs.fullpage.api.moveSectionDown()" style="position: absolute; bottom: 15%; z-index: 999; right: 3%; cursor:pointer;">
+    <button class="next" @click="$refs.fullpage.api.moveSectionDown()" style="position: absolute; bottom: 15%; z-index: 999; right: 3%; cursor:pointer; text-decoration:none;">
       <div class="arrow">
         <span></span>
         <span></span>
@@ -33,7 +33,11 @@
             <div>
               <v-layout row wrap justify-center>
                 <v-flex class="text-xs-center">
-                  <span class="text-xs-center display-2"> <span class="fontjua"> 개발자 포트폴리오를 위한 [prof:it] <br/><br/></span> </span>
+                  <span class="text-xs-center display-2">
+                    <span class="fontjua"> 개발자 포트폴리오를 위한 &nbsp;
+                      <span class="fontYanolja  ">[prof:<span style="color:#00ae9d" class="fontYanolja  ">it</span>]</span> <br/><br/>
+                    </span>
+                  </span>
                   <span class="title">
                     <span class="fontjua">
                       모든 프로젝트를 등록하고, 당신의 이력을 작성할 수 있습니다. <br/>
@@ -41,7 +45,7 @@
                     </span>
                   </span>
                   <span class="content">
-                    #발전하는 #열정적인 #개발자
+                    <span class="fontDoHyeon">#발전하는&nbsp;&nbsp; #열정적인 &nbsp;&nbsp;#개발자</span>
                   </span>
                 </v-flex>
               </v-layout>

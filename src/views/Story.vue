@@ -187,10 +187,10 @@
         <toggle-button
           v-if="userid===session_id"
           v-model="toggleViewPhoneNumber"
-          :labels="{checked: '비공개', unchecked: '공개'}"
+          :labels="{checked: '공개', unchecked: '비공개'}"
           :width="60"
           :sync="false"
-        />
+          id="headtoggle"        />
       </div>
 
       <!-- follower 명시 -->
