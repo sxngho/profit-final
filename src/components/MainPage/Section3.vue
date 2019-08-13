@@ -103,7 +103,7 @@ export default {
     }
   },
   created() {
-    this.fetchData()
+    // this.fetchData()
   },
   methods: {
     async fetchData() {
