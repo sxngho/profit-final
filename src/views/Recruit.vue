@@ -7,6 +7,7 @@
         style="padding:3% 5%; border:2px solid grey; border-radius:15px; width:100%;"
         v-if="this.$store.getters.getLevel == 2"
       >
+
         <v-layout wrap row justify-center style="margin-bottom:20px;">
           <v-flex xs12>
             <h1 class="text-center">
@@ -44,7 +45,7 @@
                     v-on:click="Filter(item)"
                     color="#cecece"
                     outlined
-                  >{{ item }}</v-chip>
+                  >{{ item }} </v-chip>
                 </v-chip-group>
                 <!-- 기술이 하나도 없을때, 기술창에 출력할 문구 -->
                 <v-layout
@@ -131,10 +132,7 @@
       <div
         v-if="this.$store.getters.getLevel ===0 || this.$store.getters.getLevel ===1 || this.$store.getters.getLevel ===3"
       >
-        <v-layout wrap row>
-          <h1>지원할 수 있는 공고 리스트</h1>
-          <p>총 {{recruits.length}}개의 공고 중에 {{myRecruits.length}}개의 공고 지원가능합니다.</p>
-        </v-layout>
+
 
         <v-layout wrap row>
           <v-flex xs12 sm6 md4 v-for="recruit in recruits" style="padding:10px;" v-if="!isEmpty">
@@ -149,7 +147,7 @@
       </div>
 
       <!-- 회사라면 아래 레이아웃 출력 -->
-      <div
+      <!-- <div
         v-if="this.$store.getters.getLevel === 0 || this.$store.getters.getLevel === 1 || this.$store.getters.getLevel === 3"
       >
         <v-layout wrap row>
@@ -183,7 +181,7 @@
             </v-card>
           </v-flex>
         </v-layout>
-      </div>
+      </div> -->
 
       <!-- 비 로그인 유저라면 아래 레이아웃 출력 -->
       <div v-if="typeof(this.$store.getters.getLevel) =='string'">

@@ -61,7 +61,8 @@
           <v-flex xs10 offset-xs1>
             <p v-html="recruit.data.projectContent"></p>
           </v-flex>
-          <v-flex style="width:100%; margin:20px;">
+
+          <v-flex style="width:100%; margin:20px;" v-if="level==2">
             <v-layout row justify-center>
                 <v-btn @click="dib(recruit_id)" v-if="!alreadyDibs" outlined color="red">
                 찜!
@@ -71,6 +72,7 @@
               </v-btn>
             </v-layout>
           </v-flex>
+
         </v-card>
       </v-layout>
 
@@ -89,6 +91,7 @@ export default {
   },
   mounted() {
     this.alreadyDibs = this.userdata[0].dibs.includes(this.recruit_id);
+    this.level = this.$session.get('level')
   },
   methods: {
     dib(recruit_id) {
@@ -131,6 +134,7 @@ export default {
     return {
       dialog : false,
       alreadyDibs : false,
+      level : "",
     };
   },
   props: {
