@@ -119,7 +119,7 @@
                     <v-chip v-for="nickname in real_taglist"  @click="delete_taglist(nickname)" color="#2980B9" class="white--text" style="margin:0 2px;" small>
                       <span><i class="fa fa-user-circle"/> {{nickname}}</span>
                     </v-chip>
-                    <v-flex >
+                    <v-flex v-if="this.$store.getters.getLevel==2">
                       <v-text-field
                         style="width:100%;"
                         placeholder="댓글을 입력해주세요"
@@ -444,18 +444,21 @@ export default {
       after.style.display = 'none';
     },
     async like_project() {
-      if (this.user) {
+      if (this.user && this.$store.getters.getLevel==2) {
         var result = await FirebaseService.like_project(this.user, this.pcode, this.project.likeit, this.project.likeitcount)
         // console.log(this.project.likeitcount, 'result')
         var userdata = await FirebaseService.SELECT_Userdata(this.user)
         var heart = document.querySelector('#likecheck')
         // console.log()
-        if (userdata[0].likeitProject.includes(this.project_id)) {
-          heart.classList.remove('fa')
-          heart.classList.add('far')
-        } else {
-          heart.classList.remove('far')
-          heart.classList.add('fa')
+
+        if (userdata.length!=0) {
+          if (userdata[0].likeitProject.includes(this.project_id)) {
+            heart.classList.remove('fa')
+            heart.classList.add('far')
+          } else {
+            heart.classList.remove('far')
+            heart.classList.add('fa')
+          }
         }
       }
     },
