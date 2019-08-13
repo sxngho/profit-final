@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-layout row wrap>
-      <v-flex>
+      <v-flex >
 
         <h1 class="fontjua">유저 관리 페이지</h1>
         <v-text-field v-model="input" placeholder="유저의 닉네임으로 검색할 수 있습니다."/>

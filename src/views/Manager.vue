@@ -2,7 +2,7 @@
   <v-container>
     <v-layout row wrap>
     <!-- TODO 여백 -->
-    <v-layout><v-flex style="margin:80px;" /></v-layout>
+    <v-layout><v-flex style="margin:50px;" /></v-layout>
 
     <div class="sidetoolbar white--text">
       <!-- <div href="m.naver.com" ><img src="../assets/icon_set/customer-support.svg" fill="yellow" /></div> -->
