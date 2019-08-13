@@ -3,10 +3,11 @@
   <v-dialog v-model="dialog" max-width="600px">
     <template v-slot:activator="{ on }">
       <v-card outlined class="text-center" style="padding:25px 10px 5px 10px;position:relative; height:320px;">
-        <p>
-          <span class="font-weight-light txtline" style="font-size: 36px;">
+        <p class="txtline">
+          <span class="font-weight-light" style="font-size: 36px;">
             <span class="fontDoHyeon">{{ recruit.data.projectTitle }}</span>
           </span>
+          <br/>
           <span class="caption">{{recruit.data.companyId}}</span>
         </p>
         <div>
