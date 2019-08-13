@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-flex class="text-xs-center">
-      <button text class="white--text" @click="popdetail(project_id)" style="height:80%;width:80%;">
+      <v-btn text class="white--text" @click="popdetail(project_id)" style="height:80%;width:80%;">
         <v-layout align-center>
           <v-flex xs2 hidden-xs-only>
             <v-img :src="projectimage" height="5vw" width="100%"></v-img>
@@ -16,11 +16,11 @@
                 style="height:100px; width:100%; overflow: hidden; 
   text-overflow: ellipsis; font-size:8px"
               />
-              <v-flex v-for="tech in projecttech" class="tech d-inline-block caption">{{ tech }}</v-flex>
+              <v-chip v-for="tech in projecttech" class="tech d-inline-block caption">{{ tech }}</v-chip>
             </div>
           </v-flex>
         </v-layout>
-      </button>
+      </v-btn>
       <!-- <ProjectList v-if="!stateAdd"></ProjectList> -->
     </v-flex>
   </div>

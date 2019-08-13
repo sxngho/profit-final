@@ -1,49 +1,39 @@
 <template>
   <v-flex class="text-xs-center">
     <v-flex hidden-xs-only>
-      <button text class="white--text" @click="popdetail(project_id)" style="height:80%;width:80%;">
+      <v-btn text class="white--text" @click="popdetail(project_id)" style="height:80%;width:80%;">
         <v-layout align-center>
           <div class="black--text">
-            <v-flex xs1 hidden-xs-only>
-              <v-img :src="projectimage" height="1vw" width="100%"></v-img>
-            </v-flex>
-            <v-flex style="width:200px">{{projecttitle}}</v-flex>
-            <!-- <v-flex style="width:200px">{{projectterm}}</v-flex> -->
-            <!-- {{projectrank}} -->
+            <v-flex style="width:330px">{{projecttitle}}</v-flex>
           </div>
-          <v-layout justify-center>
-            <!-- <span class="grey--text"> -->
-            <v-flex style="text-align:left" class="grey--text">
-              <span class="grey--text">{{projectdescription}}</span>
-            </v-flex>
+          <v-layout justify-start>
             <v-chip
               small
               color="lightgrey"
               v-for="tech in projecttech"
               class="tech d-inline-block caption"
             >{{ tech }}</v-chip>
-            <!-- </span> -->
           </v-layout>
-          <!-- <p class="black--text" v-html="projectcontent" /> -->
         </v-layout>
-      </button>
-
-      <!-- <ProjectList v-if="!stateAdd"></ProjectList> -->
+      </v-btn>
     </v-flex>
 
     <v-flex hidden-sm-and-up>
-      <button text class="white--text" @click="popdetail(project_id)" style="height:80%;width:80%;">
-        <div>
-          <div
-            class="black--text"
-          >{{projecttitle}} / {{project_writer}} / {{projectterm}} / {{projectrank}}</div>
-          <span class="grey--text">
-            {{projectdescription}} / {{projecttech}}
-            <v-flex v-for="tech in projecttech" class="tech d-inline-block caption">{{ tech }}</v-flex>
-          </span>
-          <p class="black--text" v-html="projectcontent" />
-        </div>
-      </button>
+      <v-btn text class="white--text" @click="popdetail(project_id)" style="height:80%;width:80%;">
+        <v-layout align-center>
+          <div class="black--text">
+            <v-flex style="width:300px">{{projecttitle}}</v-flex>
+          </div>
+          <v-layout justify-start>
+            <v-chip
+              small
+              color="lightgrey"
+              v-for="tech in projecttech"
+              class="tech d-inline-block caption"
+            >{{ tech }}</v-chip>
+          </v-layout>
+        </v-layout>
+      </v-btn>
     </v-flex>
   </v-flex>
 </template>
