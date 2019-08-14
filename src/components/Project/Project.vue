@@ -153,7 +153,7 @@
                   <v-flex xs12 v-for="(com, index) in comments">
                     <v-card outlined style="width:100%; padding:10px 25px; margin:2px 0;">
                       <div v-bind:class="[`before_${index}`]">
-                        <span v-if="com.state==3" style="color:red;" @click="seecomment(index)">이 댓글은 신고 누적으로 블라인드 처리</span>
+                        <span v-bind:class="[`blinding_${index}`]" v-if="com.state==3" style="color:red;" @click="seecomment(index)">이 댓글은 신고 누적으로 블라인드 처리(클릭으로 보기가능)</span>
                         <span class="overline grey--text"> {{com.User}} </span>
                         <span class="overline grey--text"> | {{com.date}} </span> <br/>
                         <span v-if="com.state < 3" class="subtitle-1"> {{com.Comment}} </span>
@@ -530,11 +530,42 @@ export default {
       this.real_taglist.splice(index, 1)
     },
     seecomment(index) {
-      if (confirm('블라인드 처리된 댓글을 보시겠습니까?')) {
-        var blindtext = document.querySelector(`.blind_${index}`)
-        blindtext.style.display = 'block';
-      }
+
+      this.$swal({
+         title: '블라인드 댓글?',
+         text: "블라인드 처리된 댓글을 보시겠습니까?",
+         type: 'warning',
+         showCancelButton: true,
+         confirmButtonColor: '#3085d6',
+         cancelButtonColor: '#d33',
+         confirmButtonText: '보기',
+         cancelButtonText: '취소',
+        }).then((result) => {
+         if (result.value) {
+           var blindtext = document.querySelector(`.blind_${index}`)
+           blindtext.style.display = 'block';
+
+           var blindtext2 = document.querySelector(`.blinding_${index}`)
+           blindtext2.style.display = 'none';
+           // "[`blinding_${index}`]"
+           // this.$swal('Deleted!','프로젝트 삭제가 완료되었습니다.','success')
+           // this.$emit('delete', project_id, index)
+           // FirebaseService.DELETE_project(project_id)
+           // this.reload_userskill(this.login)
+         }
+       })
+
+      //
+      // if (confirm('블라인드 처리된 댓글을 보시겠습니까?')) {
+      //   var blindtext = document.querySelector(`.blind_${index}`)
+      //   blindtext.style.display = 'block';
+      // }
+
     }
+
+
+
+
   },
   watch : {
     comment : function() {

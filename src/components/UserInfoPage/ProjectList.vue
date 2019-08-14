@@ -140,12 +140,12 @@ export default {
     if ( self.toFilter !== "" && this.techfilter.includes(self.toFilter) ) {
       this.techfilter.splice(this.techfilter.indexOf(self.toFilter), 1);
       if ( this.techfilter.length == 0 ) {
-        this.showNotification('foo-css','warn','스킬 필터링','프로젝트 필터링 기능이 비활성화되었습니다.')
+        // this.showNotification('foo-css','warn','스킬 필터링','프로젝트 필터링 기능이 비활성화되었습니다.')
       }
     } else if( self.toFilter !== "" && !this.techfilter.includes(self.toFilter) ) {
       this.techfilter.push(self.toFilter);
       if ( this.techfilter.length == 1 ) {
-        this.showNotification('foo-css','success','스킬 필터링','프로젝트 필터링 기능이 활성화되었습니다.')
+        // this.showNotification('foo-css','success','스킬 필터링','프로젝트 필터링 기능이 활성화되었습니다.')
       }
     }
 
