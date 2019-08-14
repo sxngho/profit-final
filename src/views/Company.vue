@@ -809,14 +809,14 @@ export default {
       window.open(
         "../" + link,
         link,
-        "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=1000,height=600"
+        "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=972,height=633"
       );
     },
     openContract(id, responsibility) {
       window.open(
         "../contract/" + id + responsibility,
         id + '' +responsibility,
-        "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=1000,height=600"
+        "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=1032,height=600"
       );
     },
     async submit(industry, mount, comsize, homepage, address, establishedDate, represent, annualsales) {
