@@ -98,6 +98,7 @@
     top: -35px"
             />
             <RecruitDetail
+              v-on:Checkflag="flagCheck"
               :recruit="recruit"
               :userdata="mySkills"
               onloadedmetadata
