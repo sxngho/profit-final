@@ -177,7 +177,7 @@
           <i class="fas fa-mobile-alt">
             &nbsp;
             <span
-              v-if="showPhoneNumber"
+              v-if="toggleViewPhoneNumber"
               class="subheading grey--text text-center"
             >{{this.phoneNumber}}</span>
             <span v-else class="subheading grey--text text-center">비공개</span>
@@ -188,8 +188,8 @@
           v-model="toggleViewPhoneNumber"
           :labels="{checked: '공개', unchecked: '비공개'}"
           :width="60"
-          :sync="false"
-          id="headtoggle"        />
+          :sync="true"
+          id="headtoggle"/>
       </div>
 
       <!-- follower 명시 -->
@@ -400,11 +400,11 @@ export default {
         this.session_id = this.$session.get("session_id");
         this.$store.commit("setSession", this.$session.get("session_id"));
         if (this.$session.get("session_id") !== "") {
-          this.toggleView = await FirebaseService.SELECT_userAddon(
-            this.$session.get("session_id")
-          );
+          this.toggleView = await FirebaseService.SELECT_userAddon(this.$session.get("session_id"));
         }
-
+        if (this.$session.get("session_id") !== "") {
+          this.toggleViewPhoneNumber = await FirebaseService.SELECT_userAddon2(this.$session.get("session_id"));
+        }
         this.user = result[0];
         this.image = result[0].userImage;
         this.storyBanner = result[0].storyBanner;
@@ -415,16 +415,12 @@ export default {
         this.$store.commit("setfollowingList", result[0].followinglist);
         this.isFollowCheck();
         this.$store.commit("setSession", this.$session.get("session_id"));
-        this.toggleViewPhoneNumber = this.$store.state.pToggle;
       }
 
     },
     updateToggle() {
       if (this.$session.get("session_id") !== "") {
-        FirebaseService.UPDATE_userAddon(
-          this.$session.get("session_id"),
-          this.toggleView
-        );
+        FirebaseService.UPDATE_userAddon(this.$session.get("session_id"),this.toggleView);
       }
       if (this.toggleView) {
         this.showNotification(
@@ -445,12 +441,10 @@ export default {
     },
     updateToggleViewPhoneNumber() {
       // alert("토글 값 변경감지");
-      this.$store.commit("pToggle", this.toggleViewPhoneNumber);
-      // alert("showPhoneNumber>>" + this.showPhoneNumber);
-      FirebaseService.UPDATE_userOpenPhoneNumber(
-        this.toggleViewPhoneNumber,
-        this.$route.params.id
-      );
+      if (this.$session.get("session_id") !== "") {
+        FirebaseService.UPDATE_userOpenPhoneNumber(this.toggleViewPhoneNumber,this.$route.params.id);
+      }
+      // this.$store.commit("pToggle", this.toggleViewPhoneNumber);
     },
     changeComponent() {
       // var v_button = document.getElementById("toggletext");
