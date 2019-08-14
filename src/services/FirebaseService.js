@@ -292,7 +292,7 @@ export default {
   // Function :: 유저의 휴대폰 공개/비공개 선택 정보를 업데이트합니다.
   UPDATE_userOpenPhoneNumber(result, userId) {
     return firestore
-      .collection("users")
+      .collection("user_addon")
       .doc(userId)
       .update({
         showPhoneNumber: result
@@ -429,6 +429,17 @@ export default {
         return docSnapshots.data().toggleView;
       });
   },
+
+  async SELECT_userAddon2(userId) {
+    return firestore
+      .collection("user_addon")
+      .doc(userId)
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.data().showPhoneNumber;
+      });
+  },
+
 
   // Function :: 유저의 정보를 가져옵니다.
   async SELECT_Userdata(id) {
@@ -1498,7 +1509,7 @@ export default {
         old_alertlist.push({
           check: false,
           url: "/project/" + project_id,
-          message: `${tag} 처리 : ${degree}, 스택 : ${reportStack}`,
+          message: `처리 : ${degree}, 스택 : ${reportStack}`,
           user: old.nickname
         });
         firestore
