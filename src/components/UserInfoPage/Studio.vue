@@ -382,7 +382,7 @@ export default {
       window.open(
         "../" + curl,
         curl,
-        "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=800,height=650"
+        "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=972,height=633"
       );
     },
 

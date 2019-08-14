@@ -624,16 +624,14 @@ export default {
   },
   methods: {
     isHaveSkills(requiredSkills) {
-      // console.log("실행이되나요??~????~?~?")
       if ( requiredSkills.length == 0 ) {
         return true;
       }
-      for(var j in this.currentUser) {
-        if ( !requiredSkills.includes(this.currentUser.data.userSkills[j] ) ) {
+      for(var j in requiredSkills) {
+        if ( !this.currentUser.data.userSkills.includes(requiredSkills[j] ) ) {
           return false;
         }
       }
-
       return true;
     },
     complete(recruitId,recruitData) {
@@ -796,7 +794,7 @@ export default {
       window.open(
         "../" + user.link,
         user.link,
-        "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=1000,height=600"
+        "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=972,height=633"
       );
     },
     openWorkChat(user, id) {
