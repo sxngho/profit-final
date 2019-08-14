@@ -151,7 +151,6 @@
                 <!-- comment list -->
                 <v-layout row wrap justify-center>
                   <v-flex xs12 v-for="(com, index) in comments">
-                    {{index}}
                     <v-card outlined style="width:100%; padding:10px 25px; margin:2px 0;">
                       <div v-bind:class="[`before_${index}`]">
                         <span v-if="com.state==3" style="color:red;" @click="seecomment(index)">이 댓글은 신고 누적으로 블라인드 처리</span>

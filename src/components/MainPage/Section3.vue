@@ -9,7 +9,10 @@
             </span>
           </div>
 
-          <v-carousel hide-delimiters style="height:100%; margin:50px 0;">
+          <v-carousel hide-delimiters
+          prev-icon="fas fa-chevron-left"
+          next-icon="fas fa-chevron-right"
+          style="height:100%; margin:50px 0;">
           <!-- <v-carousel cycle hide-delimiters style="height:100%; margin:50px 0;"> -->
             <v-carousel-item v-for="(item, i) in hotprojects">
 
