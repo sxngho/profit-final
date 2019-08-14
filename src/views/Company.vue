@@ -624,16 +624,16 @@ export default {
   },
   methods: {
     isHaveSkills(requiredSkills) {
-      // console.log("실행이되나요??~????~?~?")
+      console.log("실행이되나요??~????~?~?")
       if ( requiredSkills.length == 0 ) {
         return true;
       }
-      for(var j in this.currentUser) {
-        if ( !requiredSkills.includes(this.currentUser.data.userSkills[j] ) ) {
+      console.log(requiredSkills,"asdasd")
+      for(var j in requiredSkills) {
+        if ( !this.currentUser.data.userSkills.includes(requiredSkills[j] ) ) {
           return false;
         }
       }
-
       return true;
     },
     complete(recruitId,recruitData) {
