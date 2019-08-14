@@ -153,7 +153,7 @@
                   <v-flex xs12 v-for="(com, index) in comments">
                     <v-card outlined style="width:100%; padding:10px 25px; margin:2px 0;">
                       <div v-bind:class="[`before_${index}`]">
-                        <span v-bind:class="[`blinding_${index}`]" v-if="com.state==3" style="color:red;" @click="seecomment(index)">이 댓글은 신고 누적으로 블라인드 처리</span>
+                        <span v-bind:class="[`blinding_${index}`]" v-if="com.state==3" style="color:red;" @click="seecomment(index)">이 댓글은 신고 누적으로 블라인드 처리(클릭으로 보기가능)</span>
                         <span class="overline grey--text"> {{com.User}} </span>
                         <span class="overline grey--text"> | {{com.date}} </span> <br/>
                         <span v-if="com.state < 3" class="subtitle-1"> {{com.Comment}} </span>
