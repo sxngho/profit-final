@@ -32,7 +32,7 @@
           >
             <p
               style="background: #ffffff91;border-radius:0 20px 20px 0; cursor:pointer; margin:0px; padding: 5px 45px 5px 20px;"
-            >배경화면 수정하기</p>
+            ><span class="fontDoHyeon ">배경화면 수정하기</span></p>
             <input
               type="file"
               id="Banner"
@@ -48,7 +48,7 @@
           >
             <p
               style="background: #ff000039; cursor:pointer; margin:0px; padding: 5px 20px 5px 45px; border-radius: 20px 0 0 20px;"
-            >배경화면 삭제</p>
+            ><span class="fontDoHyeon ">배경화면 삭제</span></p>
           </div>
 
           <v-flex xs12 style="height:300px;"></v-flex>
@@ -76,10 +76,9 @@
               v-show="showUpImgBtn"
               style="position: absolute; top: 54px; z-index: 2"
             >
-              <p
-                class="text-center"
-                style="background: #ffffff91;padding: 10px 5px; cursor:pointer;"
-              >사진을 등록하세요!</p>
+              <p class="text-center" style="background: #ffffff91;padding: 10px 20px; cursor:pointer;">
+                <span class="fontDoHyeon ">사진을 등록하세요!</span>
+              </p>
             </div>
 
             <v-avatar size="150" class="grey lighten-2" @click="setFile()" style="cursor:pointer;">
@@ -234,7 +233,7 @@
               />
             </v-flex>
 
-            <v-flex xs12 sm8 md9>
+            <v-flex xs12 sm8 md9 style="border-left:1px solid #cecece;">
               <!-- btn Toolbar -->
               <v-container v-if="!statedetail">
                 <v-layout wrap style="padding:0px 5px;">
@@ -248,7 +247,7 @@
                       <div
                         v-if="!stateAdd"
                         style="cursor:pointer;background: rgb(117, 199, 145); padding: 5px 20px; border-radius: 20px; color: white;margin:3px;"
-                      >프로젝트 생성하기</div>
+                      ><span class="fontDoHyeon ">프로젝트 생성하기</span></div>
 
                       <img
                         src="../assets/icon_set/back.png"
