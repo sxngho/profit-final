@@ -241,7 +241,8 @@ export default {
   filters: {
     wonfilter: function (value) {
       if (!value) return ''
-      var arr = value.split('');
+      // console.log(typeof(value), value,"asdasdasd")
+      var arr = String(value).split('');
       var str = "";
       var cnt = 0;
       for(var i=arr.length-1; i>=0; i--) {

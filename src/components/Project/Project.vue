@@ -295,12 +295,13 @@ export default {
          }
          this.project.reportUserList.push(upperUser);
          FirebaseService.UPDATE_projectReportUserList(this.project_id,this.project.reportUserList);
+         this.$swal("프로젝트 신고 성공!", "성공적으로 신고내용이 접수되었습니다.", "success");
        } else {
-         this.showNotification('foo-css','error','프로젝트 신고 오류','이미 신고한 이력이 있는 프로젝트입니다.')
+         this.$swal("프로젝트 신고 오류!", "이미 신고한 이력이 있는 프로젝트입니다.", "error");
        }
-       this.reportSelect = "";
        this.reportText = "";
        this.reportDesc = "";
+
      },
      submitCommentReport(reportCommentSelect,reportCommentText,reportCommentDesc, comments, index) {
        // console.log(this.comments[index].reportUserList)
@@ -320,7 +321,6 @@ export default {
        } else {
          this.showNotification('foo-css','error','댓글 신고 오류','이미 신고한 이력이 있는 댓글입니다.')
        }
-       this.reportCommentSelect = "";
        this.reportCommentText = "";
        this.reportCommentDesc = "";
      },
