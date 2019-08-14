@@ -1,6 +1,6 @@
 <!-- UserSideInfo -->
 <template>
-  <div style="padding:3vw; border-right:1px #cecece solid;">
+  <div style="padding:3vw;">
 
     <!--USER SKILLS-->
     <v-layout wrap>

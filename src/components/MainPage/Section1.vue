@@ -1,6 +1,6 @@
 <template>
   <div class="section">
-    <button class="next" @click="$refs.fullpage.api.moveSectionDown()" style="position: absolute; bottom: 15%; z-index: 999; right: 3%; cursor:pointer;">
+    <button class="next" @click="$refs.fullpage.api.moveSectionDown()" style="position: absolute; bottom: 15%; z-index: 999; right: 3%; cursor:pointer; text-decoration:none;">
       <div class="arrow">
         <span></span>
         <span></span>
@@ -8,75 +8,100 @@
       </div>
     </button>
 
+    <div class="slide">
       <v-layout row wrap justify-center style="height:55%">
-          <v-flex sm5 xs10 offset-sm1 xs2 v-if="this.$store.getters.getLevel==2 || this.$store.getters.getLevel==3">
-          <div style="color:black" v-if="this.$store.getters.getLevel==2">
-            <span class="display-2"> <span class="fontjua"> 당신의 프로젝트를 공유해보세요!</span> </span>
-            <span class="title">
-              <span class="fontjua">
-                <br/><br/>
-                간단한 프로젝트 작성을 통해 <br/>
-                포트폴리오를 만들 수 있고 <br/>
-                포트폴리오를 기반으로 외주를 구할 수도 있습니다.<br/>
-                지금 프로젝트를 작성하러 가세요!<br/>
-              </span>
-            </span>
-            </div>
-            <div v-else-if="this.$store.getters.getLevel==3">
-              <h1>Take users Portfolio!</h1>
-              많은기업이 있다<br/>
-              기업에겐 뭐라 설명하지<br/>
-              지금 작성하러 가볼까요?<br/>
-            </div>
-          </v-flex>
-          <v-flex xs10 v-else text-center>
+          <v-flex xs10 text-center>
             <div>
               <v-layout row wrap justify-center>
                 <v-flex class="text-xs-center">
-                  <span class="text-xs-center display-2"> <span class="fontjua"> 개발자 포트폴리오를 위한 [prof:it] <br/><br/></span> </span>
+                  <span class="text-xs-center display-2"> <span class="fontjua"> 개발자 포트폴리오를 쉽고 빠르게 <br/><br/></span> </span>
                   <span class="title">
                     <span class="fontjua">
-                      모든 프로젝트를 등록하고, 당신의 이력을 작성할 수 있습니다. <br/>
-                      다양한 개발자들의 폭넓은 스펙트럼을 확인하세요! <br/><br/>
+                      나만의 포트폴리오 생성부터 아웃소싱 지원까지 손쉽게. <br/>
+                      [prof:it]을 통한 당신의 Profit이 시작됩니다. <br/><br/>
                     </span>
-                  </span>
-                  <span class="content">
-                    #발전하는 #열정적인 #개발자
+                    <!-- TODO -->
+                    <v-chip x-large style="background: white;border: 3px solid #primary;padding: 0 30px 0 20px;">
+                      지금 무료로 시작하기&nbsp;&nbsp;
+                      <i class="fas fa-arrow-alt-circle-right fa-2x"></i>
+                    </v-chip>
                   </span>
                 </v-flex>
               </v-layout>
             </div>
           </v-flex>
-
-        <v-flex sm5 xs12 style="text-align: center;">
-          <!-- 유저일때 -->
-          <router-link :to="{ name: 'story', params: { id: this.$session.get('session_id') }}" v-if="this.$store.getters.getLevel==2" class="bannerBtn">
-            <div class="bannerBtn bl-link bl-link_padding-all bl-link1" style="float: left;  margin-left: 20%; margin-top: 6%;">
-                <div class="bl-link__label">
-                  <i class="fas fa-user-edit fa-7x" style="color:black"></i>
-                  <br/>
-                  <span class="headline"><span class="fontjua" style="color:black">스토리</span></span>
-              </div>
-            </div>
-          </router-link>
-
-          <!-- 기업일때 -->
-          <router-link :to="{ name: 'company', params: { id: this.$session.get('session_id') }}" v-if="this.$store.getters.getLevel==3"  class="bannerBtn">
-            <div class="bannerBtn bl-link bl-link_padding-all bl-link1">
-                <div class="bl-link__label">
-                <i class="far fa-keyboard fa-7x"/>
-                <br/><br/>
-                <span>기업</span>
-                </div>
-            </div>
-          </router-link>
-
-        </v-flex>
-      </v-flex>
       </v-layout>
-      <v-layout row justify-center>
-        <img src="../../assets/section1_img.png" style="position:absolute; width:30%; bottom:0%;"/>
+    </div>
+
+    <div class="slide">
+      <v-layout row wrap justify-center style="height:55%">
+          <v-flex xs10 text-center>
+            <div>
+              <v-layout row wrap justify-center>
+                <v-flex class="text-xs-center">
+                  <span class="text-xs-center display-2">
+                    <span class="fontjua">
+                      [prof:it]은 개발자를 위한 무료 포트폴리오 플랫폼입니다
+                     <br/><br/></span>
+                   </span>
+                  <span class="title">
+                    <span class="fontjua">
+                      [prof:it]은 실제 프로젝트를 포트폴리오로 만드는데 어려움을 겪던<br/>
+                      4명의 개발자가 직접 만든 포트폴리오 플랫폼입니다. <br/>
+                      [prof:it]과 함께라면 포트폴리오를 손쉽게 만들고 편하게 관리할 수 있는 것은 물론, <br/>
+                      다양한 아웃소싱 작업에 이력서를 지원할 수도 있습니다.
+                    </span>
+                  </span>
+                </v-flex>
+              </v-layout>
+            </div>
+          </v-flex>
       </v-layout>
+    </div>
+
+    <div class="slide">
+      <v-layout row wrap justify-center style="height:55%">
+          <v-flex xs10 text-center>
+            <div>
+              <v-layout row wrap justify-center>
+                <v-flex class="text-xs-center">
+                  <span class="text-xs-center display-2">
+                    <span class="fontjua">
+                      <!-- TODO -->
+                      이미 0,000 명의 개발자가 [prof:it]하고 있습니다.
+                     <br/><br/></span>
+                   </span>
+                  <span class="title">
+                    <span class="fontjua">
+                      [prof:it]을 사용하면 여러 개발자들의 폭넓은 스펙트럼을 한 눈에 확인할 수 있습니다.<br/>
+                      지금 시작하세요.
+                    </span>
+                    <br/><br/>
+                    <span class="fontDoHyeon">
+                      #발전하는 &nbsp;&nbsp;#열정적인 &nbsp;&nbsp;#개발자
+                    </span>
+                  </span>
+                </v-flex>
+              </v-layout>
+            </div>
+          </v-flex>
+      </v-layout>
+    </div>
+
+    <v-layout row justify-center>
+      <img src="../../assets/section1_img.png" style="position:absolute; width:30%; bottom:0%;"/>
+    </v-layout>
+    <!-- <router-link :to="{ name: 'story', params: { id: this.$session.get('session_id') }}" v-if="this.$store.getters.getLevel==2" class="bannerBtn">
+    <div class="bannerBtn bl-link bl-link_padding-all bl-link1" style="float: left;">
+    <div class="bl-link__label">
+    <i class="fas fa-user-edit fa-7x" style="color:black"></i>
+    <br/>
+    <span class="content"> <span class="fontjua" style="color:black">마이 페이지</span></span>
+  </div>
+</div>
+</router-link> -->
+
+
 <!-- <img src="../../assets/section1_img.png" style="position:absolute; left:29%; width:40%; bottom:0%;"/> -->
       <!-- <div v-bind:style="{ 'backgroundImage': 'url(' + wallpaper   + ')'}" >
         <div style="padding:100%;"></div>
