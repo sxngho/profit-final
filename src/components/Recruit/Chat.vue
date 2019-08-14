@@ -1,6 +1,7 @@
 <template>
   <v-container>
-    <v-layout wrap row v-if="!isWork">
+    <div v-if="loading" style="position:relative; background:white; height:1000px; z-index:999" />
+    <v-layout wrap row v-if="!isWork && !loading">
       <!-- 채팅창 -->
       <v-flex xs12 sm7>
 
@@ -264,7 +265,7 @@
     </v-dialog>
     </v-layout>
 
-    <v-layout wrap v-if="isWork">
+    <v-layout wrap  v-if="isWork && !loading">
       <!-- 채팅창 -->
       <v-flex xs12>
           <v-divider/><h1 class="text-center"> 채팅창 </h1><v-divider/>
@@ -318,11 +319,15 @@ export default {
     this.$store.state.no_header = true;
   },
   mounted() {
+    this.$loading(true);
+    this.loading = true;
     this.user = this.$session.get("session_id");
     this.fetchData();
+
   },
   data() {
     return {
+      loading: false,
       procedureDialog:false,
       changeAllow : true,
       user : "",
@@ -407,6 +412,8 @@ export default {
           this.EnterChatRoom(index);
         }
       });
+
+
     },
 
     async EnterChatRoom(myChatRoom) {
@@ -452,6 +459,9 @@ export default {
       },function(error) {
         console.error(error,"채팅장 입장 에러입니다.");
       });
+
+      this.$loading(false);
+      this.loading = false;
     },
 
     pushMessage(myMessage) {

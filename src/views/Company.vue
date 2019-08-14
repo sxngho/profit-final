@@ -624,11 +624,9 @@ export default {
   },
   methods: {
     isHaveSkills(requiredSkills) {
-      console.log("실행이되나요??~????~?~?")
       if ( requiredSkills.length == 0 ) {
         return true;
       }
-      console.log(requiredSkills,"asdasd")
       for(var j in requiredSkills) {
         if ( !this.currentUser.data.userSkills.includes(requiredSkills[j] ) ) {
           return false;
@@ -796,7 +794,7 @@ export default {
       window.open(
         "../" + user.link,
         user.link,
-        "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=1000,height=600"
+        "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=972,height=633"
       );
     },
     openWorkChat(user, id) {
