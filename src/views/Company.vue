@@ -14,13 +14,13 @@
         style="position: absolute; margin:0; z-index:2; bottom:0;"
         @click="setBanner()">
         <p class="hannafont" style="background: #ffffff91;border-radius:0 20px 20px 0; cursor:pointer; margin:0px; padding: 5px 45px 5px 20px;">
-          배경화면 수정하기
+          <span class="fontDoHyeon ">배경화면 수정하기</span>
         </p>
         <input type="file" id="Banner" style="width:100%; display:none" @change="onFileChangeBanner" />
       </div>
 
       <div @click="removeImageBanner()" v-show="showUpImgBanner && this.$route.params.id==this.$store.getters.getSession && !showUpImgBtn && company.company_banner" style="z-index:2; right:0; position: absolute; bottom:0;" >
-      <p style="background: #ff000039; cursor:pointer; margin:0px; padding: 5px 20px 5px 45px; border-radius: 20px 0 0 20px;">배경화면 삭제</p>
+      <p style="background: #ff000039; cursor:pointer; margin:0px; padding: 5px 20px 5px 45px; border-radius: 20px 0 0 20px;"><span class="fontDoHyeon ">배경화면 삭제</span></p>
     </div>
 
 
@@ -36,8 +36,8 @@
               @mouseleave="showUpImgBtn=false"
             >
               <div @click="setFile()" v-show="showUpImgBtn" style="position: absolute; top: 54px; z-index: 2" >
-                <p class="text-center" style="background: #ffffff91;padding: 10px 5px; cursor:pointer;" >
-                  사진을 등록하세요!
+                <p class="text-center" style="background: #ffffff91;padding: 10px 20px; cursor:pointer;" >
+                  <span class="fontDoHyeon ">사진을 등록하세요!</span>
                 </p>
               </div>
               <v-avatar size="150" class="grey lighten-2" @click="setFile()" style="cursor:pointer;" >
@@ -684,7 +684,7 @@ export default {
       const comInfo = await FirebaseService.SELECT_CompanyInfo(this.$route.params.id);
       if (comInfo.length==0) {
         this.$loading(false)
-        this.$router.push({name: 'errorPage'})    
+        this.$router.push({name: 'errorPage'})
       } else {
         this.comInfo = comInfo[0]
         this.company.id = comInfo[0].id;
