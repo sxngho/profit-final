@@ -182,14 +182,15 @@
             >{{this.phoneNumber}}</span>
             <span v-else class="subheading grey--text text-center">비공개</span>
           </i>
-        </div>&nbsp;&nbsp;&nbsp;
+        </div >&nbsp;&nbsp;&nbsp;
         <toggle-button
-          v-if="userid===session_id"
+          v-if="this.$route.params.id==this.$store.getters.getSession"
           v-model="toggleViewPhoneNumber"
           :labels="{checked: '공개', unchecked: '비공개'}"
           :width="60"
           :sync="true"
-          id="headtoggle"/>
+          id="headtoggle"
+          />
       </div>
 
       <!-- follower 명시 -->

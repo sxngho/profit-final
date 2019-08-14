@@ -393,7 +393,7 @@ export default {
       window.open(
         "../chat/" + curl,
         curl,
-        "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=800,height=650"
+        "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=972,height=633"
       );
     },
     async createChatRoom(recruit) {
@@ -484,7 +484,7 @@ export default {
       window.open(
         "../contract/" + recruit.recruitPK + '' + recruit.userId,
         recruit.recruitPK + '' + recruit.userId,
-        "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=1000,height=600"
+        "titlebar=no,status=no,toolbar=no,resizable=yes,top=20,left=500,width=1032,height=600"
       );
     },
   },
