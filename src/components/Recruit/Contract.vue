@@ -124,18 +124,14 @@
                     </tr>
                 </tr>
                 <tr>
-                  <th class="text-center" rowspan="4">을</th>
+                  <th class="text-center" rowspan="3">을</th>
                   <tr>
                     <th class="text-center">이름</th>
                     <td class="text-center">{{recruit.userId}}</td>
                   </tr>
                   <tr>
-                    <th class="text-center">주민번호</th>
-                    <td class="text-center">{{recruit.rrn}}</td>
-                  </tr>
-                  <tr>
-                    <th class="text-center">주소</th>
-                    <td class="text-center">{{recruit.addr}}</td>
+                    <th class="text-center">전화번호</th>
+                    <td class="text-center">{{recruit.phonenumber}}</td>
                   </tr>
                 </tr>
               </tbody>

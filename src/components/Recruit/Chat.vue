@@ -190,7 +190,7 @@
         </v-card-title>
         <v-card-text>
         <v-flex row wrap justify-center>
-          <v-simple-table dense style="width:60%">
+          <v-simple-table dense style="width:80%">
             <tbody>
               <tr>
                 <th class="text-center" rowspan="4">갑</th>
@@ -208,14 +208,14 @@
                 <td class="text-center">{{nowChatRoom.companyAddr}}</td>
               </tr>
               <tr>
-                <th class="text-center" rowspan="4">을</th>
+                <th class="text-center" rowspan="3">을</th>
               </tr>
               <tr>
                 <th class="text-center">이름</th>
                 <td class="text-center">{{nowChatRoom.userId}}</td>
               </tr>
               <tr>
-                <th class="text-center">핸드폰번호</th>
+                <th class="text-center" style="width:120px;">핸드폰번호</th>
                 <td class="text-center">{{nowChatRoom.phonenumber}}</td>
               </tr>
 

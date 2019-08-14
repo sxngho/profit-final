@@ -24,7 +24,7 @@
                 D-{{recruit.projectTerm}}
               </p>
               <p style="width:100%;" class="text-center headline">
-                {{recruit.pay | wonfilter }}원
+                {{recruit.pay }}원
               </p>
             </div>
           </div>
